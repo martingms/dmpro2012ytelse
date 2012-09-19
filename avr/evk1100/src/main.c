@@ -1,7 +1,7 @@
 /********************************************************
  Name          : main.c
- Author        : Nomen Nescio
- Copyright     : Not really
+ Author        : 
+ Copyright     : Your copyright notice
  Description   : EVK1100 template
  **********************************************************/
 

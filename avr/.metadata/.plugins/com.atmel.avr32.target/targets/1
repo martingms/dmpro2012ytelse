@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<target clocksource="0" binary="" binary-date="0" cpu="" comport="" daisybitsafter="0" daisyenabled="false" adapter="JTAGICE mkII" board="Unspecified" daisydevsbefore="0" daisydevsafter="0" id="1" default="false" connection-type="usb" name="JTAGICE mkII" daisybitsbefore="0" serial="00B000000B55">
+	<description></description>
+</target>
