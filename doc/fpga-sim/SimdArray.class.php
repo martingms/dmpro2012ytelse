@@ -23,7 +23,7 @@ class SimdArray implements iSIMD
 	{
 		for ($row = 0; $row < self::$rows; $row++) {
 			for ($col = 0; $col < self::$cols; $col++) {
-				$this->nodes[$row][$col]->tick;
+				$this->nodes[$row][$col]->tick();
 			}
 		}
 		
@@ -33,7 +33,7 @@ class SimdArray implements iSIMD
 	{
 		for ($row = 0; $row < self::$rows; $row++) {
 			for ($col = 0; $col < self::$cols; $col++) {
-				$this->nodes[$row][$col]->run;
+				$this->nodes[$row][$col]->run();
 			}
 		}
 	}

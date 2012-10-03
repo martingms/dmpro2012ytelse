@@ -13,7 +13,7 @@ require_once "SimdControll.class.php";
 $sleep = 2;
 
 // Create SIMD nodes
-$nodes 	= new SimdArray(5, 5);
+$nodes 	= new SimdArray(4, 4);
 $ctrl 	= new SimdControll();
 $imem 	= new Memory("iMem", 1000, array(
 	array("ctrl" => true,  "fn" => "foo"),
@@ -33,14 +33,13 @@ while (true) {
 	
 	$imem	->tick();
 	$ctrl	->tick();
-	// $nodes->tick();
+	$nodes->tick();
 	
 	$imem	->run();
 	$ctrl	->run();
-	// $nodes->run();
+	$nodes->run();
 
-	echo "sleep " . $sleep . "\n";
-	sleep($sleep);
+	echo "----------\n";
 }
 
 ?>
