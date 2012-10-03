@@ -1,11 +1,8 @@
 #include "button.h"
 
-#include "gpio.h"
 #include "board.h"
+#include "gpio.h"
 #include "intc.h"
-
-
-
 
 #define B0_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_0)
 #define B1_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_1)
@@ -29,7 +26,7 @@ void notify_listeners(int buttons) {
 	}
 }
 
-void interrupt_routine(void) {
+__attribute__((__interrupt__)) void interrupt_routine(void) {
 	U8 buttons = 0;
 
 	if (B0_VALUE == BUTTON_PUSHED) buttons |= 1;
@@ -40,20 +37,6 @@ void interrupt_routine(void) {
 	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_0);
 	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_1);
 	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_2);
-}
-
-/*
- * Interrupt vector for button 0
- */
-__attribute__((__interrupt__)) void i0(void) {
-	interrupt_routine();
-}
-
-/*
- * Interrupt vector for button 1 and 2
- */
-__attribute__((__interrupt__)) void i1(void) {
-	interrupt_routine();
 }
 
 /*
@@ -83,8 +66,8 @@ int button_init(void) {
 	// Because the lines for button 1 and button 2 are equal,
 	// the same interrupt vector are used.
 
-	INTC_register_interrupt(&i0, b0_line, AVR32_INTC_INT0);
-	INTC_register_interrupt(&i1, b1_b2_line, AVR32_INTC_INT0);
+	INTC_register_interrupt(&interrupt_routine, b0_line, AVR32_INTC_INT0);
+	INTC_register_interrupt(&interrupt_routine, b1_b2_line, AVR32_INTC_INT0);
 
 
 	// GPIO enable interrupt of buttons on push
