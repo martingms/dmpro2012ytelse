@@ -1,3 +1,2 @@
-./evk1100/Debug
-./evk110/Release
-.gitignore.swp
+Debug/
+Release/
