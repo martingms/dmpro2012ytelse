@@ -47,5 +47,10 @@ class SimdArray implements iSIMD
 	{
 		return self::$rows;
 	}
+	
+	private function console($msg)
+	{
+		return $msg;
+	}
 }
 ?>

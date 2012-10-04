@@ -16,21 +16,21 @@ class SimdControll implements iSIMD
 	
 	public function run() {
 		if ($this->iMemData === null) {
-			$this->p("iMemData===null");
+			$this->console("iMemData===null");
 		} else {
-			$this->p("iMemData!==null");
+			$this->console("iMemData!==null");
 			
 			if ($this->iMemData['ctrl'] === true) {
 				$i = $this->iMemData;
 				switch($i['fn']) {
 					case "foo":
-						$this->p("fn = foo");
+						$this->console("fn = foo");
 						break;
 					case "bar":
-						$this->p("fn = bar");
+						$this->console("fn = bar");
 						break;
 					case "exit":
-						$this->p("fn = exit");
+						$this->console("fn = exit");
 						exit(0);
 				}
 			} else {
@@ -44,7 +44,7 @@ class SimdControll implements iSIMD
 		$this->pc++;
 	}
 	
-	private static function p($msg)
+	private static function console($msg)
 	{
 		echo "SimdControl.class: " . $msg . "\n";
 	}

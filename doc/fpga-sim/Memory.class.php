@@ -15,14 +15,14 @@ class Memory implements iSIMD
 		$this->name = $name;
 		$this->size = $size;
 
-		$this->p("construct(" . $name . ", " . $size . ")");
+		$this->console("construct(" . $name . ", " . $size . ")");
 		
 		if ($data !== null) { $this->ram = $data; }
 	}
 	
 	public function tick()
 	{
-		$this->p("tick()");
+		$this->console("tick()");
 
 		$this->adr 		= Signal::get($this->name, "adr");
 		$this->data 	= Signal::get($this->name, "data");
@@ -31,24 +31,24 @@ class Memory implements iSIMD
 	
 	public function run()
 	{
-		$this->p("run()");
+		$this->console("run()");
 
 		if ($this->adr !== null) {
-			$this->p("signal.adr=" . $this->adr);
+			$this->console("signal.adr=" . $this->adr);
 			if ($this->write === true) {
 				$this->ram[$this->adr] = $this->data;
-				$this->p("signal.write=true");
+				$this->console("signal.write=true");
 			} else {
 				$this->data = $this->ram[$this->adr];
-				$this->p("signal.write=false");
+				$this->console("signal.write=false");
 			}
 			Signal::set($this->name, "data", $this->data);
 		} else {
-			$this->p("signal.adr=false");
+			$this->console("signal.adr=false");
 		}
 	}
 		
-	private function p($msg)
+	private function console($msg)
 	{
 		echo $this->name . ".Memory.class: " . $msg . "\n";
 	}

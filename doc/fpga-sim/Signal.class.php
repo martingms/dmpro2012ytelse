@@ -17,87 +17,123 @@ class Signal
 		"data"			=> array(
 							"in"	=> null,
 							"out"	=> null
-		),
-		"ctrl" 			=> null
+		)
 	);
 	
 	// Empty node signals
 	private static $node = array(
-		"N" 			=> null, 
-		"S" 			=> null,
-		"W" 			=> null,
-		"E" 			=> null,
-		"ctlr" 			=> null
+		// Input com signals
+		"N-in" 		=> null, 
+		"S-in" 		=> null, 
+		"E-in" 		=> null, 
+		"W-in" 		=> null, 
+		
+		// Output com signals
+		"N-out" 	=> null, 
+		"S-out" 	=> null, 
+		"E-out" 	=> null,
+		"W-out" 	=> null,
+
+		// Data signals
+		"Data-in" 	=> null,
+		"Data-out" 	=> null,
+		
+		// Instruction
+		"instr-in" 	=> null,
 	);
 	
 	/**
-	 * Set SIMD output port signal
+	 * Set SIMD node output signal
 	 *
-	 * @param row - {@code String}
-	 * @param col - {@code String}
-	 * @param port - {@code binary} 4-bit binary port
-	 * @param value - {@code binary} value
+	 * @param row - {@code int} node row
+	 * @param col - {@code int} node col
+	 * @param signal - {@code String} signal name
+	 * @param value - {@code String} new signal value 
+	 *
+	 * @return {@code true} on success; {@code false} on out of bounds
 	 */
-	public static function setNodePorts($row, $col, $port, $value)
+	public static function setNodeSignal($row, $col, $signal, $value)
 	{
-		switch ($port) {
-			case "N": $row--; $ignal = "S"; break;
-			case "S": $row++; $ignal = "N"; break;
-			case "W": $col--; $ignal = "E"; break;
-			case "E": $col++; $ignal = "W"; break;
-			default: return false;
-		}
-		if ($row >= 0 && $row <= SimdArray::$rows && $col >= 0 &&  $col <= SimdArray::$cols) {
-			$tmpArr = array("N" => null, "S" => null, "E" => null, "W" => null);
-			
-			if (!isset(self::$inact[$row])) { self::$inact[$row] = array($col => $tmpArr); }
-			if (!isset(self::$inact[$row][$col])) { self::$inact[$row][$col] = $tmpArr; }
-			
-			self::$inact[$row][$col][$port] = $value;
-			
-			return true;
+		list($name, $dir) = explode("-", $signal);
+		if (isset($dir) && $dir == "out") {
+			switch ($name) {
+				case "N": $row--; $name = "S-in"; break;
+				case "S": $row++; $name = "N-in"; break;
+				case "W": $col--; $name = "E-in"; break;
+				case "E": $col++; $name = "W-in"; break;
+				default: return false;
+			}
+			if ($row >= 0 && $row <= SimdArray::$rows && $col >= 0 &&  $col <= SimdArray::$cols) {
+				if (!isset(self::$inact[$row])) { self::$inact[$row] = array($col => self::$node); }
+				if (!isset(self::$inact[$row][$col])) { self::$inact[$row][$col] = self::$node; }
+				
+				self::$inact[$row][$col][$name] = $value;
+				
+				return true;
+			} else {
+				// index out of bounds
+				return false;
+			}
 		} else {
-			return false;
+			throw new Exception('Can not write to read-only signal.');
 		}
 	}
 	
 	/**
-	 * Get SIMD input port
-	 * 
-	 * @param row - {@code int} 
-	 * @param col - {@code int}
+	 * Get SIMD node input singal
 	 *
-	 * @return {@code array}
+	 * @param row - {@code int} node row
+	 * @param col - {@code int} node col
+	 * @param signal - {@code String} signal name
+	 *
+	 * @return {@code String} signal value
 	 */
-	public static function getNodePorts($row, $col)
+	public static function getNodeSignal($row, $col, $signal)
 	{
-		if (isset(self::$act['node'][$row][$col])) {
-			$ports = self::$act['node'][$row][$col];
+		list($name, $dir) = explode("-", $signal);
+		if (isset($dir) && $dir == "in") {
+			if (!isset(self::$act[$row])) { self::$act[$row] = array($col => self::$node); }
+			if (!isset(self::$act[$row][$col])) { self::$act[$row][$col] = self::$node; }
+			if ($name == "instr") {
+				return self::get("iMem", "data"); 
+			} else {
+				return self::$act[$row][$col][$name];
+			}
 		} else {
-			$ports = self::$node;
+			throw new Exception('Can not read write-only signal.');
 		}
-		$ports['ctrl'] = self::$act['ctrl'];
+	}
+	
+	/**
+	 * Set arbitrary singal
+	 *
+	 * @param comp - {@code String} Component name
+	 * @param signal - {@code String} Signal name
+	 * @param val - {@code mixed} New signal value
+	 *
+	 * @return {@code false}
+	 */
+	public static function set($comp, $signal, $val)
+	{
+		self::$inact[$comp][$signal] = $val;
 		
-		return $ports;
-	}
-
-	/**
-	 *
-	 */
-	public static function set($type, $port, $val)
-	{
-		self::$inact[$type][$port] = $val;
+		return false;
 	}
 	
 	/**
+	 * Get arbitrary signal
 	 *
+	 * @param comp - {@code String} Component name
+	 * @param signal - {@code mixed} Signal name; if {@code null} returns an {@code array}
+	 *
+	 * @return {@code mixed}
 	 */
-	public static function get($type, $port = null)
+	public static function get($comp, $signal = null)
 	{
-		if ($port === null) {
-			return self::$act[$type];
+		if ($signal === null) {
+			return self::$act[$comp];
 		} else {
-			return self::$act[$type][$port];
+			return self::$act[$comp][$signal];
 		}
 	}	
 	
@@ -113,14 +149,19 @@ class Signal
 			self::$act = self::$inact = self::$empty;
 		}
 		
-		self::p("tick()");
+		self::console("tick()");
 		
 		self::$act 		= self::$inact;
 		self::$inact 	= self::$empty;
 		
 	}
 	
-	private static function p($msg)
+	/**
+	 * Debug console
+	 *
+	 * @param msg - {@code String} message to output
+	 */
+	private static function console($msg)
 	{
 		echo "Signal.class: " . $msg . "\n";
 	}

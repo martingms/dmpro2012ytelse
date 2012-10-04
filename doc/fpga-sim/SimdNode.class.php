@@ -1,85 +1,129 @@
 <?php
-class SimdNode
+class SimdNode implements iSIMD
 {
 	private $id;
 	private $row;
 	private $col;
 	
 	private $reg = array(
-		"zero" 	=> 0, 
+		"zero" 		=> 0, 
 		"rand"		=> 0,
-		"r00" 		=> "", 
-		"r01" 		=> "", 
-		"r02" 		=> "", 
-		"r03" 		=> "", 
-		"r04" 		=> "", 
-		"r04" 		=> "", 
-		"r06" 		=> "",
-		"t00" 		=> "",
-		"t01" 		=> "",
-		"t02" 		=> "",
-		"t03" 		=> "",
-		"north" 	=> null,
-		"south" 	=> null,
-		"east" 	=> null,
-		"west" 	=> null,
+		"R00" 		=> "", 
+		"R01" 		=> "", 
+		"R02" 		=> "", 
+		"R03" 		=> "", 
+		"R04" 		=> "", 
+		"R05" 		=> "", 
+		"R06" 		=> "",
+		"T00" 		=> "",
+		"T01" 		=> "",
+		"T02" 		=> "",
+		"T03" 		=> ""
 	);
-	private $ports = array();
-	
+		
 	public function __construct($row, $col)
 	{
-		$this->reg['rand'] = rand(1, 99);
-		$this->row = $row;
-		$this->col = $col;
-		$this->id = "SIMD-" . $row . "-" . $col;
+		$this->reg['rand'] 	= rand(1, 99);					// random value register
+		$this->row 			= $row;							// node row
+		$this->col 			= $col;							// node col
+		$this->id 			= "SIMD-" . $row . "-" . $col;	// node unique ID
 	}
 	
+	/**
+	 * Simulate clock tick
+	 *
+	 */
 	public function tick()
 	{
+		// Signals are handled in the background by Signal.class
 	}
 	
+	/**
+	 * Node logic
+	 *
+	 * Main logic for the node. This method will be triggered
+	 * when all input/putput signals has been distribuated.
+	 */
 	public function run()
 	{
-		$fn = $in['fn'];
-		$rs = $in['rs'];
+		// Get instruction signal
+		$in = $this->signal("instr-in");
 		
-		switch ($fn) {
-			case "send":
-				$this->_print("send");
-				break;
-			case "store":
-				$this->_print("store");
-				break;
-			case "storei":
-				$c = $in['c'];
-				$this->_set($rs, $c);
-				break;
-			case "add":
-				$rt = $in['rt'];
-				$rd = $in['rd'];
-				$this->_set($rd, ($this->_get($rs) + $this->_get($rt)));
-				break;
-			case "print":
-				$this->_print($this->_get($rs));
-				break;
+		// Only execute SIMD instructions
+		if ($in['ctrl'] = false) {
+			$fn = $in['fn'];
+			$rs = $in['rs'];
+			
+			switch ($fn) {
+				case "send":
+					$this->console("send");
+					break;
+				case "store":
+					$this->console("store");
+					break;
+				case "storei":
+					$c = $in['c'];
+					$this->set($rs, $c);
+					break;
+				case "add":
+					$rt = $in['rt'];
+					$rd = $in['rd'];
+					$this->set($rd, ($this->get($rs) + $this->get($rt)));
+					break;
+				case "print":
+					$this->console($this->get($rs));
+					break;
+			}
 		}
 	}
 	
-	private function _get($reg) {
+	/**
+	 * Node register handling
+	 *
+	 * @param addr - {@code String} register name
+	 * @param data - {@code String} write data
+	 * @param write - {@code boolean} write flag
+	 *
+	 * @return {@code String} content of register {@code addr}
+	 */
+	private function reg($addr, $data = "", $write = false) {
+		if ($write) {
+			$this->reg[$reg] = $data;
+		}
+		
 		return $this->reg[$reg];
 	}
 	
-	private function _set($reg, $val) {
-		$this->reg[$reg] = $val;
-		return true;
+	/**
+	 * Node input/output signals
+	 *
+	 * Only output signals can be written.
+	 *
+	 * @param name - {@code String} signal name
+	 * @param data - {@code String} data to write to signal 
+	 */
+	private function signal($name, $data = "", $write = false) {
+		if ($write) {
+			return Signal::setNodeSignal($this-row, $this->col, $name, $data);
+		} else {
+			return Signal::getNodeSignal($this->row, $this->col, $name);
+		}
 	}
 	
-	private function _print($val) {
-		echo $this->id . ": " . $val . "\n";
+	/**
+	 * Debug console
+	 *
+	 * @param msg - {@code String} message to write to console
+	 */
+	private function console($msg) {
+		echo $this->id . ": " . $msg . "\n";
 	}
 	
-	private function _getPort($dir) {
-		return ports:: get($this->row, $this->col, $dir);
+	/**
+	 * Get signal
+	 */
+	private function getPort($dir) {
+		return ports::get($this->row, $this->col, $dir);
 	}
 }
 ?>

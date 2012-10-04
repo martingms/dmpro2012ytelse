@@ -21,23 +21,24 @@ $imem 	= new Memory("iMem", 1000, array(
 	array("ctrl" => true,  "fn" => "exit"),
 	array("ctrl" => false, "fn" => "print", 	"rs" => "rand"),
 	array("ctrl" => false, "fn" => "storei",	"rs" => "r00", "c" => 100),
-	array("ctrl" => false, "fn" => "add", 		"rs" => "rand", "rt" => "r00", "rd" => "r01"),
-	array("ctrl" => false, "fn" => "print", 	"rs" => "r01")
+	array("ctrl" => false, "fn" => "add", 		"rs" => "rand", "rt" => "R00", "rd" => "R01"),
+	array("ctrl" => false, "fn" => "print", 	"rs" => "R01")
 ));
 
 // Simulate the processor
 echo "Starting simulation!\n";
+echo "----------\n";
 while (true) {
 	// Simulate clock tick
 	Signal::tick();
 	
 	$imem	->tick();
 	$ctrl	->tick();
-	$nodes->tick();
+	$nodes	->tick();
 	
 	$imem	->run();
 	$ctrl	->run();
-	$nodes->run();
+	$nodes	->run();
 
 	echo "----------\n";
 }
