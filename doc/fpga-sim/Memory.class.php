@@ -39,7 +39,11 @@ class Memory implements iSIMD
 				$this->ram[$this->adr] = $this->data;
 				$this->console("signal.write=true");
 			} else {
-				$this->data = $this->ram[$this->adr];
+				if (isset($this->ram[$this->adr])) {
+					$this->data = $this->ram[$this->adr];
+				} else {
+					$this->data = 0;
+				}
 				$this->console("signal.write=false");
 			}
 			Signal::set($this->name, "data", $this->data);
