@@ -49,7 +49,7 @@ class SimdNode implements iSIMD
 		$in = $this->signal("instr-in");
 		
 		// Only execute SIMD instructions
-		if ($in['ctrl'] = false) {
+		if ($in['ctrl'] == false) {
 			$fn = $in['fn'];
 			$rs = $in['rs'];
 			
@@ -77,21 +77,27 @@ class SimdNode implements iSIMD
 	}
 	
 	/**
-	 * Node register handling
+	 * Get node register value
 	 *
 	 * @param addr - {@code String} register name
-	 * @param data - {@code String} write data
-	 * @param write - {@code boolean} write flag
 	 *
 	 * @return {@code String} content of register {@code addr}
 	 */
-	private function reg($addr, $data = "", $write = false) {
-		if ($write) {
-			$this->reg[$reg] = $data;
-		}
-		
-		return $this->reg[$reg];
-	}
+        private function get($addr) {
+                return $this->reg[$addr];
+        }
+
+	/**
+	 * Set node register value
+	 *
+	 * @param addr - {@code String} register name
+	 * @param data - {@code String} write data
+	 *
+	 * @return {@code String} content of register {@code addr}
+	 */
+        private function set($addr, $data) {
+                return $this->reg[$addr] = $data;
+        }
 	
 	/**
 	 * Node input/output signals
