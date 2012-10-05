@@ -19,7 +19,7 @@ int n_listeners;
 /*
  * Notifies all listeners of a button push
  */
-void notify_listeners(int buttons) {
+void notify_listeners(U8 buttons) {
 	int i;
 	for (i = 0; i < n_listeners; ++i) {
 		listeners[i](buttons);
@@ -39,9 +39,6 @@ __attribute__((__interrupt__)) void interrupt_routine(void) {
 	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_2);
 }
 
-/*
- * Initializes the buttons with interrupts
- */
 int button_init(void) {
 	int rc;
 
@@ -80,7 +77,7 @@ int button_init(void) {
 
 
 	Enable_global_interrupt(); //TODO move this somewhere else
-	return 0;
+	return rc;
 }
 
 int button_reg_listener(void(*listener) (U8)) {
