@@ -18,11 +18,11 @@ $ctrl 	= new SimdControll();
 $imem 	= new Memory("iMem", 1000, array(
 	array("ctrl" => true,  "fn" => "foo"),
 	array("ctrl" => true,  "fn" => "bar"),
-	array("ctrl" => true,  "fn" => "exit"),
 	array("ctrl" => false, "fn" => "print", 	"rs" => "rand"),
 	array("ctrl" => false, "fn" => "storei",	"rs" => "r00", "c" => 100),
 	array("ctrl" => false, "fn" => "add", 		"rs" => "rand", "rt" => "R00", "rd" => "R01"),
-	array("ctrl" => false, "fn" => "print", 	"rs" => "R01")
+	array("ctrl" => false, "fn" => "print", 	"rs" => "R01"),
+	array("ctrl" => true,  "fn" => "exit"),
 ));
 
 // Simulate the processor
