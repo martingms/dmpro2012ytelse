@@ -6,19 +6,19 @@ class SimdNode implements iSIMD
 	private $col;
 	
 	private $reg = array(
-		"zero" 		=> 0, 
-		"rand"		=> 0,
-		"R00" 		=> "", 
-		"R01" 		=> "", 
-		"R02" 		=> "", 
-		"R03" 		=> "", 
-		"R04" 		=> "", 
-		"R05" 		=> "", 
-		"R06" 		=> "",
-		"T00" 		=> "",
-		"T01" 		=> "",
-		"T02" 		=> "",
-		"T03" 		=> ""
+		"zero" 				=> 0, 
+		"rand"				=> 0,
+		"R00" 				=> "", 
+		"R01" 				=> "", 
+		"R02" 				=> "", 
+		"R03" 				=> "", 
+		"R04" 				=> "", 
+		"R05" 				=> "", 
+		"R06" 				=> "",
+		"T00" 				=> "",
+		"T01" 				=> "",
+		"T02" 				=> "",
+		"T03" 				=> ""
 	);
 		
 	public function __construct($row, $col)
@@ -31,7 +31,6 @@ class SimdNode implements iSIMD
 	
 	/**
 	 * Simulate clock tick
-	 *
 	 */
 	public function tick()
 	{
@@ -100,7 +99,9 @@ class SimdNode implements iSIMD
 	 * Only output signals can be written.
 	 *
 	 * @param name - {@code String} signal name
-	 * @param data - {@code String} data to write to signal 
+	 * @param data - {@code String} data to write to signal
+	 *
+	 * @return {@code String} on get; otherwise {@code boolean}
 	 */
 	private function signal($name, $data = "", $write = false) {
 		if ($write) {
@@ -117,13 +118,6 @@ class SimdNode implements iSIMD
 	 */
 	private function console($msg) {
 		echo $this->id . ": " . $msg . "\n";
-	}
-	
-	/**
-	 * Get signal
-	 */
-	private function getPort($dir) {
-		return ports::get($this->row, $this->col, $dir);
-	}
+	}	
 }
 ?>
