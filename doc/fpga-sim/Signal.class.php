@@ -10,7 +10,7 @@ class Signal
 							"write" => false
 		),
 		"dMem"			=> array(
-							"addr"	=> null,
+							"adr"	=> null,
 							"data"	=> null,
 							"write"	=> false
 		),

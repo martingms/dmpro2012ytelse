@@ -1,7 +1,7 @@
 <?php
 class Memory implements iSIMD
 {
-	private $ram 	= array();
+	private $ram	= array();
 	
 	private $name	= "";
 	private $size	= "";
@@ -24,9 +24,9 @@ class Memory implements iSIMD
 	{
 		$this->console("tick()");
 
-		$this->adr 		= Signal::get($this->name, "adr");
-		$this->data 	= Signal::get($this->name, "data");
-		$this->write 	= Signal::get($this->name, "write");
+		$this->adr	= Signal::get($this->name, "adr");
+		$this->data	= Signal::get($this->name, "data");
+		$this->write	= Signal::get($this->name, "write");
 	}
 	
 	public function run()
@@ -55,6 +55,20 @@ class Memory implements iSIMD
 	private function console($msg)
 	{
 		echo $this->name . ".Memory.class: " . $msg . "\n";
+	}
+
+	public static function createFromImage($name, $filename)
+	{
+		$image = imagecreatefrompng($filename);
+
+		$data = array();
+		for ($y = 0; $y < imagesy($image); $y++) {
+			for ($x = 0; $x < imagesx($image); $x++) {
+				$data[] = imagecolorat($image, $x, $y);
+			}
+		}
+
+		return new Memory($name, count($data), $data);
 	}
 }
 ?>
