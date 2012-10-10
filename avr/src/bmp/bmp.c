@@ -103,10 +103,3 @@ uint8_t * read_file(const char fn[])
 	fclose(fp);
 	return in;
 }
-void print_memory(void *data, uint32_t len){
-	uint8_t *asd = (uint8_t*)data;
-	uint32_t i;
-	for(i = 0; i < len; i++){
-		printf("%d:\t%d\n",i,asd[i]);
-	}
-}

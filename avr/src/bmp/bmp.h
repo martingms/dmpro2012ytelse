@@ -28,4 +28,3 @@ uint8_t * read_BMP_from_file(const char fn[], bmiHeader_t *bmp_hdr);
 
 //Move this to some general utilities
 uint8_t * read_file(const char fn[]);
-void print_memory(void *data, uint32_t len);
