@@ -6,7 +6,7 @@ use ieee.std_logic_arith.all;
 entity toplevel is
 	port (
 		clk : in std_logic;
-		data : out std_logic);
+		data : out std_logic_vector(3 downto 0));
 end toplevel;
 
 architecture behavioral of toplevel is
@@ -40,7 +40,7 @@ begin
 			addr => memory_data_addr,
 			data => memory_data_data);
 	
-	data <= memory_data_data(0);
+	data <= memory_data_data(3 downto 0);
 	
 	increment_memory_data_addr: process (clk)
 	begin
