@@ -36,4 +36,8 @@ int bus_send_data(U32 word, int bus_offset, int bus_size);
  */
 U8 bus_receive_data(U8 *data);
 
+/*! \brief Notifies the FPGA to increment its address when writing data
+ */
+void bus_toggle_inc_clk();
+
 #endif /* BUS_H_ */

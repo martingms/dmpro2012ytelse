@@ -118,11 +118,11 @@ void bus_conf(void){
 }
 
 int bus_send_data(U32 word, int bus_offset, int bus_size) {
-	if ((bus_offset+bus_size) > FPGA_BUS_SIZE) return -1 // bus index will get out of bounds
+	if ((bus_offset+bus_size) > FPGA_BUS_SIZE) return -1; // bus index will get out of bounds
 	
 	int i,j;
 	for (i=bus_offset, j=0; i < bus_offset+bus_size; ++i, ++j) {
-		bool pin = word & power_of_two[j]);
+		bool pin = word & power_of_two[j];
 		if (pin == 0) {
 			gpio_clr_gpio_pin(fpga_bus[i]);
 		} else if (pin == 1) {
@@ -133,15 +133,18 @@ int bus_send_data(U32 word, int bus_offset, int bus_size) {
 }
 
 U8 bus_receive_data(U8 *data) {
-	data = 0;
+	*data = 0;
 	int i,j;
-	for (i=FPGA_IO_OFFSET, j=0; i < FPGA_IO_OFFSET+FPGA_IO_BUS_SIZE; ++i, ++j) {
+	for (i=FPGA_IO_BUS_OFFSET, j=0; i < FPGA_IO_BUS_OFFSET+FPGA_IO_BUS_SIZE; ++i, ++j) {
 		if (gpio_get_pin_value(fpga_bus[i]) == 1) {
-			data |= power_of_two[j];
+			*data |= power_of_two[j];
 		}
 	}
 	return gpio_get_pin_value(FPGA_IO_CTRL);
 }
 
+void bus_toggle_inc_clk() {
+	gpio_tgl_gpio_pin(fpga_bus[FPGA_INC_CLK_OFFSET]);
+}
 
 
