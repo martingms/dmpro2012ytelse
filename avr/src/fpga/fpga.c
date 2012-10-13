@@ -25,7 +25,7 @@ void fpga_send_data(U32 *words) {
 	while(word = words[i++] != '\0') {
 		bus_send_data(word, FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);
 		fpga_toggle_inc_clk();
-		usleep(1000); //TODO finn passende ventetid
+		//usleep(1000); //TODO finn passende ventetid
 	}
 	fpga_set_state(FPGA_STATE_GO); //TODO kanskje ikke være her
 }
