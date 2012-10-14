@@ -1,3 +1,5 @@
+# source https://raw.github.com/github/gitignore/master/Global/XilinxISE.gitignore
+
 # intermediate build files
 *.bgn
 *.bit
@@ -27,6 +29,12 @@
 *.ut
 *.xpi
 *.xst
+*.fdo
+*.udo
+*.map
+*.mrp
+-transcript
+*.wlf
 *_bitgen.xwbt
 *_envsettings.html
 *_map.map
@@ -44,10 +52,10 @@
 
 # project-wide generated files
 *.gise
-par_usage_statistics.html
-usage_statistics_webtalk.html
-webtalk.log
-webtalk_pn.xml
+*.html
+*.log
+*.xml
+*.xrpt
 
 # generated folders
 iseconfig/
@@ -55,3 +63,4 @@ xlnx_auto_0_xdb/
 xst/
 _ngo/
 _xmsgs/
+work/
