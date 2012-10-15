@@ -2,7 +2,7 @@
 #include "bus.h"
 #include "gpio.h"
 #include "compiler.h"
-
+#include "serial.h"
 
 extern int fpga_bus[];
 
@@ -23,16 +23,15 @@ int test_bus_send_data(void) {
 	bus_send_data(word, FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);
 	for (i = FPGA_DATA_IN_BUS_OFFSET; i < FPGA_DATA_IN_BUS_OFFSET+FPGA_DATA_IN_BUS_SIZE; ++i) {
 		if (gpio_get_gpio_pin_output_value(fpga_bus[i]) == 1) {
-			return TEST_FAILED_FIRST;
+			seprintf("Failed first test\n");
 		}
 	}
 
 	word = 0xFFFFFFFF;
 	bus_send_data(word, FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);
-
 	for (i = FPGA_DATA_IN_BUS_OFFSET; i < FPGA_DATA_IN_BUS_OFFSET+FPGA_DATA_IN_BUS_SIZE; ++i) {
 		if (gpio_get_gpio_pin_output_value(fpga_bus[i]) == 0) {
-			return TEST_FAILED_SECOND;
+			seprintf("Failed second test\n");
 		}
 	}
 
@@ -44,7 +43,8 @@ int test_bus_send_data(void) {
 			bus_value |= power(2,j);
 		}
 	}
-	if (word != bus_value) return TEST_FAILED_THIRD;
+	if (word != bus_value) seprintf("Failed third test");
 
+	seprintf("All tests succesfull");
 	return TEST_SUCCESS;
 }

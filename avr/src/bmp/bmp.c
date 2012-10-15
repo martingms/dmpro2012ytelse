@@ -2,7 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bmp.h"
-
+/*
+ * Parses the given buffer as if it were a rawly read file into bmp headers
+ * and returns a pointer to the start of the raw image data.
+ * The pointer returned is to the raw image data in the same buffer,
+ * NO new memory is allocated.
+ */
 uint8_t * read_BMP_from_buffer(uint8_t *buffer, bmiHeader_t *bmp_hdr){
 	BmpImageFileType bmp_type;
 	dibHeader_t	 bmp_dibhdr;
@@ -12,7 +17,7 @@ uint8_t * read_BMP_from_buffer(uint8_t *buffer, bmiHeader_t *bmp_hdr){
 	
 	if(bmp_type != BMPFILESIG)
 	{
-		printf("Error Not BMP\n");
+		printf("Error: Not a BMP\n");
 		return NULL;
 	}
 	memcpy(&bmp_dibhdr, buffer, sizeof(dibHeader_t));

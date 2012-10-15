@@ -96,6 +96,7 @@
  */
 //! @{
 
+												//[SHADES_OF_GRAY]
 //! Part header file of used SDRAM(s).
 #define SDRAM_PART_HDR  "MT48LC16M16A2TG7E/mt48lc16m16a2tg7e.h"
 
@@ -220,19 +221,6 @@
 #define LED7_PWM_FUNCTION   AVR32_PWM_3_FUNCTION
 //! @}
 
-/*! \name Color Identifiers of LEDs to Use with LED Functions
- */
-//! @{
-#define LED_MONO0_GREEN   LED0
-#define LED_MONO1_GREEN   LED1
-#define LED_MONO2_GREEN   LED2
-#define LED_MONO3_GREEN   LED3
-#define LED_BI0_GREEN     LED5
-#define LED_BI0_RED       LED4
-#define LED_BI1_GREEN     LED7
-#define LED_BI1_RED       LED6
-//! @}
-
 												//[SHADES_OF_GRAY]
 /*! \name GPIO Connections of Push Buttons
  */
@@ -245,49 +233,6 @@
 #define GPIO_PUSH_BUTTON_2_PRESSED    0
 #define GPIO_PUSH_BUTTON_3            AVR32_PIN_PB26
 #define GPIO_PUSH_BUTTON_3_PRESSED    0
-//! @}
-
-
-/*! \name GPIO Connections of the Joystick
- */
-//! @{
-#define GPIO_JOYSTICK_PUSH            AVR32_PIN_PA20
-#define GPIO_JOYSTICK_PUSH_PRESSED    0
-#define GPIO_JOYSTICK_LEFT            AVR32_PIN_PA25
-#define GPIO_JOYSTICK_LEFT_PRESSED    0
-#define GPIO_JOYSTICK_RIGHT           AVR32_PIN_PA28
-#define GPIO_JOYSTICK_RIGHT_PRESSED   0
-#define GPIO_JOYSTICK_UP              AVR32_PIN_PA26
-#define GPIO_JOYSTICK_UP_PRESSED      0
-#define GPIO_JOYSTICK_DOWN            AVR32_PIN_PA27
-#define GPIO_JOYSTICK_DOWN_PRESSED    0
-//! @}
-
-
-/*! \name ADC Connection of the Potentiometer
- */
-//! @{
-#define ADC_POTENTIOMETER_CHANNEL   1
-#define ADC_POTENTIOMETER_PIN       AVR32_ADC_AD_1_PIN
-#define ADC_POTENTIOMETER_FUNCTION  AVR32_ADC_AD_1_FUNCTION
-//! @}
-
-
-/*! \name ADC Connection of the Temperature Sensor
- */
-//! @{
-#define ADC_TEMPERATURE_CHANNEL     0
-#define ADC_TEMPERATURE_PIN         AVR32_ADC_AD_0_PIN
-#define ADC_TEMPERATURE_FUNCTION    AVR32_ADC_AD_0_FUNCTION
-//! @}
-
-
-/*! \name ADC Connection of the Light Sensor
- */
-//! @{
-#define ADC_LIGHT_CHANNEL           2
-#define ADC_LIGHT_PIN               AVR32_ADC_AD_2_PIN
-#define ADC_LIGHT_FUNCTION          AVR32_ADC_AD_2_FUNCTION
 //! @}
 
 

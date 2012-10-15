@@ -3,10 +3,11 @@
 /*This file is prepared for Doxygen automatic documentation generation.*/
 /*! \file *********************************************************************
  *
- * \brief Macros and functions dedicated to debug purposes.
+ * \brief SDRAMC on EBI driver for AVR32 UC3.
  *
  * - Compiler:           IAR EWAVR32 and GNU GCC for AVR32
- * - Supported devices:  All AVR32 devices with a USART module can be used.
+ * - Supported devices:  All AVR32 devices with an SDRAMC module can be used.
+ * - AppNote:
  *
  * \author               Atmel Corporation: http://www.atmel.com \n
  *                       Support and FAQ: http://support.atmel.no/
@@ -44,73 +45,46 @@
  *
  */
 
-#ifndef _DEBUG_H_
-#define _DEBUG_H_
+#ifndef _SDRAMC_H_
+#define _SDRAMC_H_
 
-#include "stringz.h"
+#include <avr32/io.h>
+#include "board.h"
 
-/*! \brief These macros are used to add traces memory.
- *
- * First, initialise the trace with Uc3_trace_init(pointer), giving the start address
- * of the memory location where will be stored the trace.
- * Use Uc3_trace(something) to store "something" into the memory. The end of the trace
- * is signaled by the "0xdeadbeef" pattern.
- */
-#define Uc3_trace_init(debug_addr)   \
-      *(U32*)(debug_addr)=debug_addr+4
-
-#define Uc3_trace(debug_addr, x)   \
-      *(U32*)(*(U32*)(debug_addr)  ) = (U32)(x)   ;\
-      *(U32*)(*(U32*)(debug_addr)+4) = 0xdeadbeef ;\
-      *(U32*)(debug_addr  ) = *(U32*)(debug_addr)+4
-
-/*! \brief This macro is used to insert labels into assembly output.
- *
- */
-#define Insert_label(name)         \
-    __asm__ __volatile__ (STRINGZ(name)":");
-
-#if (defined __GNUC__)
-/*! \brief Returns the number of total of used bytes allocated from the HEAP.
- *
- * \retval total number of used bytes.
- */
-U32 get_heap_total_used_size( void );
-
-/*! \brief Returns the number of bytes currently used from the HEAP.
- *
- * \retval total number of used bytes.
- */
-U32 get_heap_curr_used_size( void );
+#ifdef SDRAM_PART_HDR
+  #include SDRAM_PART_HDR
+#else
+  #error No SDRAM header file defined
 #endif
 
-/*! \brief Returns the number of free bytes in the HEAP.
+//! Pointer to SDRAM.
+#if BOARD == UC3C_EK
+#define SDRAM           ((void *)AVR32_EBI_CS1_0_ADDRESS)
+#else
+#define SDRAM           ((void *)AVR32_EBI_CS1_ADDRESS)
+#endif
+
+//! SDRAM size.
+#define SDRAM_SIZE      (1 << (SDRAM_BANK_BITS + \
+                               SDRAM_ROW_BITS  + \
+                               SDRAM_COL_BITS  + \
+                               (SDRAM_DBW >> 4)))
+
+
+/*! \brief Initializes the AVR32 SDRAM Controller and the connected SDRAM(s).
  *
- * This funtion tries to allocate the maximum number of bytes by dichotomical method.
+ * \param hsb_hz HSB frequency in Hz (the HSB frequency is applied to the SDRAMC
+ *               and to the SDRAM).
  *
- * \retval number of free bytes.
- */
-extern U32 get_heap_free_size( void );
-
-/*! \name Traces function using a round buffer
- */
-//! @{
-
-/*! \brief Initialize the trace using a round buffer.
+ * \note HMATRIX and SDRAMC registers are always read with a dummy load
+ *       operation after having been written to, in order to force write-back
+ *       before executing the following accesses, which depend on the values set
+ *       in these registers.
  *
- * \param buf   Base address of the buffer used for the trace.
- * \param size  Size of the round buffer. Must be a power of 2.
+ * \note Each access to the SDRAM address space validates the mode of the SDRAMC
+ *       and generates an operation corresponding to this mode.
  */
-void uc3_round_trace_init(void* buf, U32 size);
-
-/*! \brief Trace a data in the round buffer.
- *
- * The end of the trace is signaled by the "0xdeadbeef" pattern.
- * \param val   Data to trace;
- */
-void uc3_round_trace(U32 val);
-
-//! @}
+extern void sdramc_init(unsigned long hsb_hz);
 
 
-#endif  // _DEBUG_H_
+#endif  // _SDRAMC_H_

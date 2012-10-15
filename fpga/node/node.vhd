@@ -10,11 +10,11 @@
 -- Tool versions:		ISE V11
 -- Description: 
 --
--- Dependencies: 
+-- Dependencies:		WORK.FPGA_CONSTANT_PKG
 --
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
+-- Revisions
+-- 0.02:  		Added I/O Controller component
+-- 0.01:  		File Created
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -28,13 +28,23 @@ entity node is
 		clk 							: in  STD_LOGIC;
 		reset 						: in  STD_LOGIC;
 		
-		instr 						: in  STD_LOGIC_VECTOR (IDATA_BUS-1 downto 0);
+		instr 						: in  STD_LOGIC_VECTOR (NODE_IDATA_BUS-1 downto 0);
 		state 						: out STD_LOGIC_VECTOR (1 downto 0);
+		
+		n_in							: in STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+		s_in							: in STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+		e_in							: in STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+		w_in							: in STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+
+		n_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+		s_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+		e_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+		w_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
 		
 		-- SDATA
 		step 							: in  STD_LOGIC;
-		s_in							: in  STD_LOGIC_VECTOR (SDATA_BUS-1 downto 0);
-		s_out							: out STD_LOGIC_VECTOR (SDATA_BUS-1 downto 0)
+		s_in							: in  STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
+		s_out							: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0)
 	);
 end node;
 
@@ -45,6 +55,7 @@ architecture Behavioral of node is
 			reset 					: in  STD_LOGIC;			
 			op_code 					: in  STD_LOGIC_VECTOR (NODE_OP_CODE-1 downto 0);
 			alu_ctrl 				: out STD_LOGIC_VECTOR (1 downto 0);
+			set_state				: out STD_LOGIC;
 			alu_src 					: out STD_LOGIC;
 			reg_src 					: out STD_LOGIC;
 			com_out 					: out STD_LOGIC;
@@ -57,8 +68,9 @@ architecture Behavioral of node is
 			adr3 						: out STD_LOGIC_VECTOR (NODE_REG_ADDR-1 downto 0)
 		);
 	end component;
-	
+
 	signal ctrl_alu_ctrl 		: STD_LOGIC;
+	signal ctrl_set_state		: STD_LOGIC;
 	signal ctrl_alu_src 			: STD_LOGIC;
 	signal ctrl_reg_src 			: STD_LOGIC;
 	signal ctrl_com_out 			: STD_LOGIC;
@@ -69,14 +81,44 @@ architecture Behavioral of node is
 	signal ctrl_reg_adr0 		: STD_LOGIC_VECTOR (NODE_REG_ADDR-1 downto 0);
 	signal ctrl_reg_adr1 		: STD_LOGIC_VECTOR (NODE_REG_ADDR-1 downto 0);
 	signal ctrl_reg_adr2 		: STD_LOGIC_VECTOR (NODE_REG_ADDR-1 downto 0);
-	signal ctrl_reg_adr3 		: STD_LOGIC_VECTOR (NODE_REG_ADDR-1 downto 0);
+	signal ctrl_reg_adr3 		: STD_LOGIC_VECTOR (NODE_REG_ADDR-1 downto 0);	
+
+	component IO_CONTROLLER is
+		Port (
+			clk 						: in   STD_LOGIC;
+			reset						: in   STD_LOGIC;
+			set_state				: in   STD_LOGIC;
+			reg_src					: in   STD_LOGIC;
+			com_out					: in   STD_LOGIC;			
+			reg_data					: in   STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);		
+			n_in						: in   STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			s_in						: in   STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			e_in						: in   STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			w_in						: in   STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);		
+			n_out						: out  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			s_out						: out  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			e_out						: out  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			w_out						: out  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			state						: out  STD_LOGIC_VECTOR (1 downto 0);
+			data0						: out  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data1						: out  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data2						: out  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data3						: out  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)
+		);
+	end component;
+	
+	signal io_reg_data			: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0); -- to be replaced by mux output
+	signal io_data0				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	signal io_data1				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	signal io_data2				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	signal io_data3				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+
 
 begin
 	DECODER : INSTRUCTION_DECODER port map (
 		clk 							<= clk,
 		reset 						<= reset,
-		op_code 						<= instr(IDATA_BUS-1 downto IDATA_BUS-3),
-		
+		op_code 						<= instr(NODE_IDATA_BUS-1 downto NODE_IDATA_BUS-3),
 		alu_ctrl 					<= ctrl_alu_ctrl,
 		alu_src 						<= ctrl_alu_src,
 		reg_src 						<= ctrl_reg_src,
@@ -90,6 +132,26 @@ begin
 		adr3 							<= ctrl_reg_adr3
 	);
 
-
+	IO : IO_CONTROLLER port map (
+		clk 							<= clk,
+		reset							<= reset,
+		set_state					<= ctrl_set_state,
+		reg_src						<= ctrl_reg_src,
+		com_out						<= ctrl_com_out,
+		reg_data						<= io_reg_data, -- @todo: replace by mux output
+		n_in							<= n_in,
+		s_in							<= s_in,
+		e_in							<= e_in,
+		w_in							<= w_in,
+		n_out							<= n_out,
+		s_out							<= s_out,
+		e_out							<= e_out,
+		w_out							<= w_out,
+		state							<= state,
+		data0							<= io_data0,
+		data1							<= io_data1,
+		data2							<= io_data2,
+		data3							<= io_data3
+	);
 end Behavioral;
 
