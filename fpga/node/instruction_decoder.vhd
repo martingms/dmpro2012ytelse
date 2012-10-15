@@ -29,6 +29,7 @@ entity INSTRUCTION_DECODER is
 		
 		-- Node control signals
 		alu_ctrl 					: out  STD_LOGIC_VECTOR (1 downto 0)						:= (others => '0'); 	-- controls alu operation
+		set_state					: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
 		alu_src 						: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
 		reg_src 						: out  STD_LOGIC													:= '0';					-- 0 = alu res 	| 1 = n/s/e/w
 		com_out 						: out  STD_LOGIC													:= '0';					-- 0 = alu res		| 1 = n/s/e/w (algo)
@@ -52,11 +53,12 @@ begin
 		case op_code is
 			-- R-format instructions
 			when NODE_INSTR_OP_R =>
+				set_state			<= '0';
 				alu_ctrl				<= '0';
 				alu_src				<= '0';
 				reg_src				<= '0';
 				com_out				<= '0';
-				reg_write			<= '0';
+				reg_write			<= '1';
 				s_swap				<= '0';
 			when others =>
 				-- do nothing
