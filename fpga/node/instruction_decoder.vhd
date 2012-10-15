@@ -32,7 +32,7 @@ entity INSTRUCTION_DECODER is
 		set_state					: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
 		alu_src 						: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
 		reg_src 						: out  STD_LOGIC													:= '0';					-- 0 = alu res 	| 1 = n/s/e/w
-		com_out 						: out  STD_LOGIC													:= '0';					-- 0 = alu res		| 1 = n/s/e/w (algo)
+		reg_out 						: out  STD_LOGIC													:= '0';					-- 0 = alu res		| 1 = n/s/e/w (algo)
 		reg_write					: out  STD_LOGIC													:= '0';					-- 0 = no write	| 1 = write
 		s_swap 						: out  STD_LOGIC													:= '0';					-- 0 = no swap		| 1 = swap
 		
@@ -53,13 +53,20 @@ begin
 		case op_code is
 			-- R-format instructions
 			when NODE_INSTR_OP_R =>
-				set_state			<= '0';
-				alu_ctrl				<= '0';
-				alu_src				<= '0';
+				set_state			<= '0';			-- DON'T SET NEW STATE
+				alu_ctrl				<= "00";			-- USE INSTRUCTION FUNCT FIELD
+				alu_src				<= '1';			-- USE data1 AS ALU op2
+				reg_src				<= '0';			-- SAVE ALU RESULT
+				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT
+				reg_write			<= '1';			-- WRITE REGISTER
+				s_swap				<= '0';			-- DONT'T SWAP
+			
+			when NODE_INSTR_OP_S =>
+				set_state			<= '0';			-- DON'T SET NEW STATE
+				alu_ctrl				<= "10"			-- DO ADDITION (val + 0)
+				alu_src				<= '1';			-- USE data1 AS ALU op2
 				reg_src				<= '0';
-				com_out				<= '0';
-				reg_write			<= '1';
-				s_swap				<= '0';
+			
 			when others =>
 				-- do nothing
 		end case;

@@ -12,6 +12,7 @@ package FPGA_CONSTANT_PKG is
 	constant NODE_INSTR_OP			: integer	:= 4;
 	constant NODE_INSTR_OP_R		: STD_LOGIC_VECTOR(2 downto 0) := "000";
 	constant NODE_INSTR_OP_I		: STD_LOGIC_VECTOR(2 downto 0) := "001";
+	constant NODE_INSTR_OP_S		: STD_LOGIC_VECTOR(2 downto 0) := "010";
 	
 	 -- NODE BUS CONSTANTS
 	constant NODE_STATE_BUS			: integer	:= 2;			-- state bus from SIMD node
@@ -20,7 +21,10 @@ package FPGA_CONSTANT_PKG is
 	constant NODE_IDATA_BUS			: integer	:= 24;		-- instruction address
 	constant NODE_DDATA_BUS			: integer	:= 8;			-- data bus (north, south, east, west)
 	constant NODE_SDATA_BUS			: integer	:= 8;			-- s data bus (left, right)
-
+	
+	-- NODE ALU CONTROL
+	constant NODE_ALU_
+	
 --    -- BUS CONSTANTS
 --    constant IADDR_BUS         : integer := 32;
 --    constant IDATA_BUS         : integer := 32;
@@ -40,25 +44,25 @@ package FPGA_CONSTANT_PKG is
 --    -- RECORDS
 --    type ALU_OP_INPUT is
 --    record
---        Op0         : STD_LOGIC;
---        Op1         : STD_LOGIC;
---        Op2         : STD_LOGIC;
+--        Op0							: STD_LOGIC;
+--        Op1							: STD_LOGIC;
+--        Op2							: STD_LOGIC;
 --    end record;
 --
 --    type ALU_INPUT is
 --    record
---        Op0         : STD_LOGIC;
---        Op1         : STD_LOGIC;
---        Op2     : STD_LOGIC;
---        Op3         : STD_LOGIC;
+--        Op0							: STD_LOGIC;
+--        Op1							: STD_LOGIC;
+--        Op2							: STD_LOGIC;
+--        Op3							: STD_LOGIC;
 --    end record;
 --
 --    type ALU_FLAGS is
 --    record
---        Carry   : STD_LOGIC;
---        Overflow : STD_LOGIC;
---        Zero        : STD_LOGIC;
---        Negative : STD_LOGIC;
+--        Carry						: STD_LOGIC;
+--        Overflow					: STD_LOGIC;
+--        Zero							: STD_LOGIC;
+--        Negative					: STD_LOGIC;
 --    end record;
 --     
 --    -- PROCESSOR STATE
