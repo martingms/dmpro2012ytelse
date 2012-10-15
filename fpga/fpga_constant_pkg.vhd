@@ -9,15 +9,17 @@ use IEEE.STD_LOGIC_1164.all;
 package FPGA_CONSTANT_PKG is
 
 	-- INSTRUCTION SET
-	constant NODE_OP_CODE			: integer	:= 3;
-	constant NODE_REG_ADDR			: integer	:= 6;
+	constant NODE_INSTR_OP			: integer	:= 4;
+	constant NODE_INSTR_OP_R		: STD_LOGIC_VECTOR(2 downto 0) := "000";
+	constant NODE_INSTR_OP_I		: STD_LOGIC_VECTOR(2 downto 0) := "001";
 	
 	 -- NODE BUS CONSTANTS
-	constant IDATA_BUS				: integer	:= 24;
-	constant DDATA_BUS				: integer	:= 8;
-	constant SDATA_BUS				: integer	:= 8;
-	
-	
+	constant NODE_STATE_BUS			: integer	:= 2;			-- state bus from SIMD node
+	constant NODE_RDATA_BUS			: integer	:= 8;			-- register data size
+	constant NODE_RADDR_BUS			: integer	:= 6;			-- register address
+	constant NODE_IDATA_BUS			: integer	:= 24;		-- instruction address
+	constant NODE_DDATA_BUS			: integer	:= 8;			-- data bus (north, south, east, west)
+	constant NODE_SDATA_BUS			: integer	:= 8;			-- s data bus (left, right)
 
 --    -- BUS CONSTANTS
 --    constant IADDR_BUS         : integer := 32;
