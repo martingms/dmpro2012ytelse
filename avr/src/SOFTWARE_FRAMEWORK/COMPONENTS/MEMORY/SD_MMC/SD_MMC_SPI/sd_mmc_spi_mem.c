@@ -47,7 +47,7 @@
 
 //_____  I N C L U D E S ___________________________________________________
 
-#include "CONF/conf_access.h"
+#include "conf_access.h"
 
 
 #if SD_MMC_SPI_MEM == ENABLE

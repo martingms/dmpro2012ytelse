@@ -24,6 +24,16 @@
 <option id="gnu.cpp.compiler.option.optimization.level.1127781358" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.debugging.level.1803350826" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.include.paths.261692710" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/FLASHC"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/FAT"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI"/>
+<listOptionValue builtIn="false" value="../src/CONFIG"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SDRAM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/EBI/SDRAMC"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS"/>
@@ -40,19 +50,22 @@
 <listOptionValue builtIn="false" value="BOARD=EVK1100"/>
 </option>
 <option id="gnu.c.compiler.option.include.paths.1244666122" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DEBUG"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PDCA"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI/CONF"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/FLASHC"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/FAT"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI"/>
+<listOptionValue builtIn="false" value="../src/CONFIG"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SDRAM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/EBI/SDRAMC"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DEBUG"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI/CONF"/>
 <listOptionValue builtIn="false" value="/home/hakon/src/as4e-ide/plugins/com.atmel.avr.toolchains.linux.x86_64_3.0.0.201009140852/os/linux/x86_64/avr32/include"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/GPIO"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/INTC"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/BOARDS"/>
@@ -89,6 +102,16 @@
 <tool id="avr32.managedbuild.tool.gnu.assembler.exe.debug.271432886" name="32-bit AVR/GNU Assembler" superClass="avr32.managedbuild.tool.gnu.assembler.exe.debug">
 <option id="avr32.both.asm.option.debugging.level.626202480" name="Debug Level" superClass="avr32.both.asm.option.debugging.level" value="avr32.both.asm.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.both.asm.option.include.paths.639296751" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/FLASHC"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/FAT"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI"/>
+<listOptionValue builtIn="false" value="../src/CONFIG"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SDRAM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/EBI/SDRAMC"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS"/>
@@ -101,6 +124,16 @@
 <option id="avr32.both.preprocessor.option.debugging.level.1850124726" name="Debug Level" superClass="avr32.both.preprocessor.option.debugging.level" value="avr32.both.preprocessor.debugging.level.max" valueType="enumerated"/>
 <option id="avr32.both.preprocessor.option.flags.1689100667" name="Assembler flags" superClass="avr32.both.preprocessor.option.flags" value="-Wa,-g" valueType="string"/>
 <option id="avr32.both.preprocessor.option.paths.1700754346" name="Include paths (-I)" superClass="avr32.both.preprocessor.option.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/FLASHC"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/FAT"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI"/>
+<listOptionValue builtIn="false" value="../src/CONFIG"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SDRAM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/EBI/SDRAMC"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS"/>
@@ -112,26 +145,6 @@
 </tool>
 </toolChain>
 </folderInfo>
-<fileInfo id="avr32.managedbuild.config.gnu.exe.debug.1779696171.800553881" name="ctrl_access.c" rcbsApplicability="disable" resourcePath="src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS/ctrl_access.c" toolsToInvoke="avr32.managedbuild.tool.gnu.c.compiler.exe.debug.1433414712.79256016">
-<tool id="avr32.managedbuild.tool.gnu.c.compiler.exe.debug.1433414712.79256016" name="32-bit AVR/GNU C Compiler" superClass="avr32.managedbuild.tool.gnu.c.compiler.exe.debug.1433414712">
-<option id="gnu.c.compiler.option.include.paths.633187312" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI/CONF"/>
-<listOptionValue builtIn="false" value="/home/hakon/src/as4e-ide/plugins/com.atmel.avr.toolchains.linux.x86_64_3.0.0.201009140852/os/linux/x86_64/avr32/include"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/GPIO"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/INTC"/>
-<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/BOARDS"/>
-</option>
-<inputType id="avr32.managedbuild.tool.gnu.c.compiler.input.126365261" superClass="avr32.managedbuild.tool.gnu.c.compiler.input"/>
-</tool>
-</fileInfo>
 <fileInfo id="avr32.managedbuild.config.gnu.exe.debug.1779696171.486337462" name="spi.c" rcbsApplicability="disable" resourcePath="src/SOFTWARE_FRAMEWORK/DRIVERS/SPI/spi.c" toolsToInvoke="avr32.managedbuild.tool.gnu.c.compiler.exe.debug.1433414712.1181451353">
 <tool id="avr32.managedbuild.tool.gnu.c.compiler.exe.debug.1433414712.1181451353" name="32-bit AVR/GNU C Compiler" superClass="avr32.managedbuild.tool.gnu.c.compiler.exe.debug.1433414712">
 <option id="gnu.c.compiler.option.preprocessor.def.symbols.501301932" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
@@ -969,6 +982,7 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cconfiguration>
 <cconfiguration id="avr32.managedbuild.config.gnu.exe.release.287483493">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="avr32.managedbuild.config.gnu.exe.release.287483493" moduleId="org.eclipse.cdt.core.settings" name="Release">
@@ -992,6 +1006,16 @@
 <option id="gnu.cpp.compiler.option.debugging.level.1918004310" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 <option defaultValue="gnu.c.optimization.level.most" id="avr32.cpp.compiler.option.optimization.level.release.546746872" name="Optimization Level" superClass="avr32.cpp.compiler.option.optimization.level.release" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.include.paths.1691470853" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/FLASHC"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/FAT"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI"/>
+<listOptionValue builtIn="false" value="../src/CONFIG"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SDRAM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/EBI/SDRAMC"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS"/>
@@ -1006,6 +1030,16 @@
 <listOptionValue builtIn="false" value="BOARD=EVK1100"/>
 </option>
 <option id="gnu.c.compiler.option.include.paths.799287180" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/FLASHC"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/FAT"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI"/>
+<listOptionValue builtIn="false" value="../src/CONFIG"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SDRAM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/EBI/SDRAMC"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS"/>
@@ -1040,6 +1074,16 @@
 <tool id="avr32.managedbuild.tool.gnu.assembler.exe.release.1279001692" name="32-bit AVR/GNU Assembler" superClass="avr32.managedbuild.tool.gnu.assembler.exe.release">
 <option id="avr32.both.asm.option.debugging.level.881700630" name="Debug Level" superClass="avr32.both.asm.option.debugging.level" value="avr32.both.asm.debugging.level.none" valueType="enumerated"/>
 <option id="gnu.both.asm.option.include.paths.389593245" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/FLASHC"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/FAT"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI"/>
+<listOptionValue builtIn="false" value="../src/CONFIG"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SDRAM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/EBI/SDRAMC"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS"/>
@@ -1051,6 +1095,16 @@
 <option id="avr32.both.preprocessor.option.debugging.level.1277612297" name="Debug Level" superClass="avr32.both.preprocessor.option.debugging.level" value="avr32.both.preprocessor.debugging.level.none" valueType="enumerated"/>
 <option id="avr32.both.preprocessor.option.flags.1974245718" name="Assembler flags" superClass="avr32.both.preprocessor.option.flags" value="-Wa,-g" valueType="string"/>
 <option id="avr32.both.preprocessor.option.paths.179937311" name="Include paths (-I)" superClass="avr32.both.preprocessor.option.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/FLASHC"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/FAT"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI"/>
+<listOptionValue builtIn="false" value="../src/CONFIG"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SDRAM"/>
+<listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/EBI/SDRAMC"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS"/>
@@ -1884,6 +1938,7 @@
 </profile>
 </scannerConfigBuildInfo>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cconfiguration>
 </storageModule>
 <storageModule moduleId="cdtBuildSystem" version="4.0.0">

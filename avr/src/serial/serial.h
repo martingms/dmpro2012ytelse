@@ -4,6 +4,10 @@
 #include "usart.h"
 #include "compiler.h"
 
+#define seprintf(...)\
+	sprintf(sprintf_buf, __VA_ARGS__);\
+	serial_write(sprintf_buf);
+
 // Initializes the USART subsystem, selects USART as
 // the GPIO function of choice. Selects baud rate and RS232
 // as the protocol to use.
