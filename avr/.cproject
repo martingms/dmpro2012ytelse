@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?fileVersion 4.0.0?>
-
-<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 <storageModule moduleId="org.eclipse.cdt.core.settings">
 <cconfiguration id="avr32.managedbuild.config.gnu.exe.debug.1779696171">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="avr32.managedbuild.config.gnu.exe.debug.1779696171" moduleId="org.eclipse.cdt.core.settings" name="Debug">
@@ -41,6 +39,12 @@
 </option>
 <option id="gnu.c.compiler.option.include.paths.1244666122" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE"/>
+<listOptionValue builtIn="false" value="../src/fpga"/>
+<listOptionValue builtIn="false" value="../src/mmc"/>
+<listOptionValue builtIn="false" value="../src/serial"/>
+<listOptionValue builtIn="false" value="../src/bmp"/>
+<listOptionValue builtIn="false" value="../src/button"/>
+<listOptionValue builtIn="false" value="../src/bus"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DEBUG"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/SPI"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PDCA"/>
@@ -48,7 +52,7 @@
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/COMPONENTS/MEMORY/SD_MMC/SD_MMC_SPI/CONF"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/MEMORY/CTRL_ACCESS"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/SERVICES/FAT"/>
-<listOptionValue builtIn="false" value="/home/hakon/src/as4e-ide/plugins/com.atmel.avr.toolchains.linux.x86_64_3.0.0.201009140852/os/linux/x86_64/avr32/include"/>
+<listOptionValue builtIn="false" value="/home/erik/as4e-ide/plugins/com.atmel.avr.toolchains.linux.x86_64_3.0.0.201009140852/os/linux/x86_64/avr32/include"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/GPIO"/>
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/PM"/>
@@ -72,6 +76,7 @@
 <listOptionValue builtIn="false" value="newlib_addons-at32ucr2-speed_opt"/>
 </option>
 <option id="avr32.c.linker.option.mcu.94346408" name="Microcontroller Unit" superClass="avr32.c.linker.option.mcu" value="-mpart=uc3a0512" valueType="string"/>
+<option id="avr32.c.linker.option.ffast-math.1933584276" name="Enable fast math" superClass="avr32.c.linker.option.ffast-math" value="false" valueType="boolean"/>
 <inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1429787243" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>

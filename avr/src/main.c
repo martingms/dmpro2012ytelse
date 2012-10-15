@@ -3,17 +3,46 @@
 #include <stdio.h>
 #include "compiler.h"
 #include "board.h"
-#include "power_clocks_lib.h"
+#include "intc.h"
 #include "gpio.h"
+#include "power_clocks_lib.h"
 #include "fsaccess.h"
 #include "ctrl_access.h"
 
-#include "serial/serial.h"
-#include "mmc/mmc.h"
+#include "serial.h"
+#include "mmc.h"
+#include "bus.h"
+#include "fpga.h"
+#include "button.h"
+
+#include "test_bus.h"
 
 static char sprintf_buf[256];
 
+void init(void) {
+	pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);
+	serial_init();
+	button_init();
+	bus_init();
+	fpga_init_interrupt();
+	Enable_global_interrupt();
+}
+
+int tmp(void);
+
 int main(void)
+{
+	init();
+	int test = test_bus_send_data();
+	LED_On(test);
+
+
+
+
+	return 0;
+}
+
+int tmp(void)
 {
 	mmc_init(); // init SPI peripherals
 

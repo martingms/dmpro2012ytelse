@@ -6,12 +6,13 @@
  */
 
 #include "bus.h"
+
 #include "board.h"
 #include "gpio.h"
 #include "compiler.h"
 
 
-// TODO dette kan flyttes til 'shades_of_gray.h' e.l. under BOARDS når vi lager det
+// TODO dette ligger også 'shades_of_gray.h' under BOARDS som vi begynner å bruke når vi får PCBen
 // ------------------------------------ //
 #define FPGA_IO_00 AVR32_PIN_PA25
 #define FPGA_IO_01 AVR32_PIN_PA26
@@ -52,10 +53,9 @@
 #define FPGA_IN_26 AVR32_PIN_PX00
 #define FPGA_IN_27 AVR32_PIN_PX01
 #define FPGA_IN_28 AVR32_PIN_PX02
-// ------------------------------------ //
-
 
 #define FPGA_BUS_SIZE 38
+// ------------------------------------ //
 
 //24 pinner for data
 
@@ -107,9 +107,11 @@ int power_of_two[] =  	{1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,3
 
 void bus_init(void) {
 	int i;
-	// Enable pins
 	for (i = 0; i < FPGA_BUS_SIZE; ++i) {
+		// Enable pins
 		gpio_enable_gpio_pin(fpga_bus[i]);
+		// Pull bus down
+		gpio_clr_gpio_pin(fpga_bus[i]);
 	}
 }
 
@@ -119,16 +121,20 @@ void bus_conf(void){
 
 int bus_send_data(U32 word, int bus_offset, int bus_size) {
 	if ((bus_offset+bus_size) > FPGA_BUS_SIZE) return -1; // bus index will get out of bounds
-	
+	serial_write("sending data\n");
 	int i,j;
+	U32 pin;
 	for (i=bus_offset, j=0; i < bus_offset+bus_size; ++i, ++j) {
-		bool pin = word & power_of_two[j];
+		pin = word & power_of_two[j];
 		if (pin == 0) {
 			gpio_clr_gpio_pin(fpga_bus[i]);
-		} else if (pin == 1) {
+			serial_write("0");
+		} else if (pin == power_of_two[j]){
 			gpio_set_gpio_pin(fpga_bus[i]);
+			serial_write("1");
 		}
 	}
+	serial_write("\n\n");
 	return 0;
 }
 

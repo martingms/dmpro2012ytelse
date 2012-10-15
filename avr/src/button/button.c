@@ -7,6 +7,7 @@
 #define B0_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_0)
 #define B1_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_1)
 #define B2_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_2)
+//TODO #define B3_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_3)
 
 #define BUTTON_PUSHED 0
 #define BUTTON_RELEASED 1
@@ -26,17 +27,19 @@ void notify_listeners(U8 buttons) {
 	}
 }
 
-__attribute__((__interrupt__)) void interrupt_routine(void) {
+__attribute__((__interrupt__)) void button_interrupt_routine(void) {
 	U8 buttons = 0;
 
 	if (B0_VALUE == BUTTON_PUSHED) buttons |= 1;
 	if (B1_VALUE == BUTTON_PUSHED) buttons |= 2;
 	if (B2_VALUE == BUTTON_PUSHED) buttons |= 4;
+	//TODO if (B3_VALUE == BUTTON_PUSHED) buttons |= 8;
 	notify_listeners(buttons);
 
 	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_0);
 	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_1);
 	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_2);
+	//TODO gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_3);
 }
 
 int button_init(void) {
@@ -48,6 +51,7 @@ int button_init(void) {
 	gpio_enable_gpio_pin(GPIO_PUSH_BUTTON_0);
 	gpio_enable_gpio_pin(GPIO_PUSH_BUTTON_1);
 	gpio_enable_gpio_pin(GPIO_PUSH_BUTTON_2);
+	//TODO gpio_enable_gpio_pin(GPIO_PUSH_BUTTON_3);
 
 	// Enable glitch filter for all buttons
 	gpio_enable_pin_glitch_filter(GPIO_PUSH_BUTTON_0);
@@ -63,8 +67,8 @@ int button_init(void) {
 	// Because the lines for button 1 and button 2 are equal,
 	// the same interrupt vector are used.
 
-	INTC_register_interrupt(&interrupt_routine, b0_line, AVR32_INTC_INT0);
-	INTC_register_interrupt(&interrupt_routine, b1_b2_line, AVR32_INTC_INT0);
+	INTC_register_interrupt(&button_interrupt_routine, b0_line, AVR32_INTC_INT0);
+	INTC_register_interrupt(&button_interrupt_routine, b1_b2_line, AVR32_INTC_INT0);
 
 
 	// GPIO enable interrupt of buttons on push
@@ -76,7 +80,7 @@ int button_init(void) {
 	if (rc != GPIO_SUCCESS) return rc;
 
 
-	Enable_global_interrupt(); //TODO move this somewhere else
+
 	return rc;
 }
 

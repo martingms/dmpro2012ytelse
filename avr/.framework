@@ -23,7 +23,7 @@
     <file path="src/SOFTWARE_FRAMEWORK/UTILS/LINKER_SCRIPTS/AT32UC3A/0512/GCC/link_uc3a0512.lds" framework="com.atmel.avr32.sf.uc3" version="1.7.0" source="UTILS/LINKER_SCRIPTS/AT32UC3A/0512/GCC/link_uc3a0512.lds" changed="false"/>
     <file path="src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR/stringz.h" framework="com.atmel.avr32.sf.uc3a" version="1.7.0" source="UTILS/PREPROCESSOR/stringz.h" changed="false"/>
     <file path="src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR/mrepeat.h" framework="com.atmel.avr32.sf.uc3a" version="1.7.0" source="UTILS/PREPROCESSOR/mrepeat.h" changed="false"/>
-    <file path="src/SOFTWARE_FRAMEWORK/BOARDS/board.h" framework="com.atmel.avr32.sf.uc3" version="1.7.0" source="BOARDS/board.h" changed="false"/>
+    <file path="src/SOFTWARE_FRAMEWORK/BOARDS/board.h" framework="com.atmel.avr32.sf.uc3" version="1.7.0" source="BOARDS/board.h" changed="true"/>
     <file path="src/SOFTWARE_FRAMEWORK/UTILS/PREPROCESSOR/preprocessor.h" framework="com.atmel.avr32.sf.uc3a" version="1.7.0" source="UTILS/PREPROCESSOR/preprocessor.h" changed="false"/>
     <file path="src/SOFTWARE_FRAMEWORK/UTILS/compiler.h" framework="com.atmel.avr32.sf.uc3a" version="1.7.0" source="UTILS/compiler.h" changed="false"/>
     <file path="src/SOFTWARE_FRAMEWORK/UTILS/LIBS/NEWLIB_ADDONS/INCLUDE/nlao_io.h" framework="com.atmel.avr32.sf.uc3a" version="1.7.0" source="UTILS/LIBS/NEWLIB_ADDONS/INCLUDE/nlao_io.h" changed="false"/>
