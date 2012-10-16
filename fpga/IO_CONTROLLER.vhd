@@ -68,7 +68,7 @@ architecture Behavioral of IO_CONTROLLER is
 	signal tmp_data3				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)		:= (others => '0');	
 begin	CONTROLLER: process (clk, reset)
 	begin
-		if reset then
+		if (reset = '1') then
 			tmp_n						<= (others => '0');
 			tmp_s						<= (others => '0');
 			tmp_e						<= (others => '0');
@@ -83,17 +83,17 @@ begin	CONTROLLER: process (clk, reset)
 		elsif rising_edge(clk) then
 			-- write alu res to register
 			-- NB: alu res is written to data2!
-			if (reg_in == '1') then
+			if (reg_src = '1') then
 				tmp_data2			<= reg_data;			-- alu res
 			else
-				tmp_data2			<= e_in					-- east node data in
+				tmp_data2			<= e_in;					-- east node data in
 			end if;
 			
 			tmp_data0				<= n_in;
 			tmp_data1				<= s_in;
 			tmp_data3				<= w_in;
 			
-			if (com_out == '1') then
+			if (com_out = '1') then
 				-- send reg_data to all nodes
 				tmp_n					<= reg_data;
 				tmp_s					<= reg_data;
@@ -109,7 +109,7 @@ begin	CONTROLLER: process (clk, reset)
 			
 			-- set new state 
 			-- based on lower two bits of reg_data in
-			if (set_state == '1') then
+			if (set_state = '1') then
 				tmp_state 			<= reg_data(1 downto 0);
 			end if;
 			
@@ -127,7 +127,7 @@ begin	CONTROLLER: process (clk, reset)
 		data0							<= tmp_data2;
 		data0							<= tmp_data3;
 	
-	end process increment_memory_data_addr;
+	end process CONTROLLER;
 
 end Behavioral;
 
