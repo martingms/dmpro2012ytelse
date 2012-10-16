@@ -22,7 +22,12 @@ typedef struct {
         uint32_t  NumColorsUsed;
         uint32_t  NumSignificantColors;
 } bmiHeader_t;
-
+/*
+ * Parses the given buffer as if it were a rawly read file into bmp headers
+ * and returns a pointer to the start of the raw image data.
+ * The pointer returned is to the raw image data in the same buffer,
+ * NO new memory is allocated.
+ */
 uint8_t * read_BMP_from_buffer(uint8_t *buffer, bmiHeader_t *bmp_hdr);
 uint8_t * read_BMP_from_file(const char fn[], bmiHeader_t *bmp_hdr);
 

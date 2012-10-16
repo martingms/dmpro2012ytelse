@@ -18,6 +18,7 @@
 #define FPGA_STATE_OFFSET 35
 #define FPGA_STATE_SIZE 3
 
+
 /*! \brief Initializes the bus
  */
 void bus_init(void);

@@ -1,12 +1,15 @@
-/* This source file is part of the ATMEL AVR-UC3-SoftwareFramework-1.7.0 Release */
+/* This header file is part of the ATMEL AVR-UC3-SoftwareFramework-1.7.0 Release */
 
 /*This file is prepared for Doxygen automatic documentation generation.*/
 /*! \file *********************************************************************
  *
- * \brief Macros and functions dedicated to debug purposes.
+ * \brief SD/MMC configuration file.
+ *
+ * This file contains the possible external configuration of the SD/MMC.
  *
  * - Compiler:           IAR EWAVR32 and GNU GCC for AVR32
- * - Supported devices:  All AVR32 devices with a USART module can be used.
+ * - Supported devices:  All AVR32 devices with an SPI module can be used.
+ * - AppNote:
  *
  * \author               Atmel Corporation: http://www.atmel.com \n
  *                       Support and FAQ: http://support.atmel.no/
@@ -44,76 +47,27 @@
  *
  */
 
-#include "compiler.h"
-#include "debug.h"
+#ifndef _CONF_SD_MMC_SPI_H_
+#define _CONF_SD_MMC_SPI_H_
 
 
-#if (defined __GNUC__)
-#   include "malloc.h"
+#include "conf_access.h"
 
-U32 get_heap_curr_used_size( void )
-{
-  struct mallinfo my_info=mallinfo();
-  return my_info.uordblks;
-}
-
-U32 get_heap_total_used_size( void )
-{
-  struct mallinfo my_info=mallinfo();
-  return my_info.arena;
-}
+#if SD_MMC_SPI_MEM == DISABLE
+  #error conf_sd_mmc_spi.h is #included although SD_MMC_SPI_MEM is disabled
 #endif
 
-U32 get_heap_free_size( void )
-{
-  U32 high_mark= AVR32_SRAM_SIZE;
-  U32 low_mark = 0;
-  U32 size ;
-  void* p_mem;
 
-  size = (high_mark + low_mark)/2;
+#include "sd_mmc_spi.h"
 
-  do
-  {
-    p_mem = malloc(size);
-    if( p_mem != NULL)
-    { // Can allocate memory
-      free(p_mem);
-      low_mark = size;
-    }
-    else
-    { // Can not allocate memory
-      high_mark = size;
-    }
 
-    size = (high_mark + low_mark)/2;
-  }
-  while( (high_mark-low_mark) >1 );
+//_____ D E F I N I T I O N S ______________________________________________
 
-  return size;
-}
+//! SPI master speed in Hz.
+#define SD_MMC_SPI_MASTER_SPEED     12000000
 
-static void* round_trace_pbuf;
-static U32   round_trace_size;
+//! Number of bits in each SPI transfer.
+#define SD_MMC_SPI_BITS             8
 
-void uc3_round_trace_init(void* buf, U32 size)
-{
-  round_trace_pbuf = buf;
-  (*(U32*)round_trace_pbuf)=(U32)buf+4;
-  round_trace_size = size;
-}
 
-void uc3_round_trace(U32 val)
-{
-  //Disable_global_interrupt();
-
-  U32* p_wr = (U32*)(*(U32*)round_trace_pbuf);
-  *p_wr = val;
-  p_wr++;
-  if( ((U32)p_wr % round_trace_size) ==0 )
-    p_wr= (U32*)round_trace_pbuf+1;
-  *p_wr = 0xdeadbeef;
-  *(U32*)round_trace_pbuf = (U32)p_wr;
-
-  //Enable_global_interrupt();
-}
+#endif  // _CONF_SD_MMC_SPI_H_

@@ -25,22 +25,23 @@ use WORK.FPGA_CONSTANT_PKG.ALL;
 
 entity INSTRUCTION_DECODER is
 	Port (
-		op_code 						: in  STD_LOGIC_VECTOR (NODE_INST_OP-1 downto 0);
+		op_code 						: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
 		
 		-- Node control signals
 		alu_ctrl 					: out  STD_LOGIC_VECTOR (1 downto 0)						:= (others => '0'); 	-- controls alu operation
+		set_state					: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
 		alu_src 						: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
 		reg_src 						: out  STD_LOGIC													:= '0';					-- 0 = alu res 	| 1 = n/s/e/w
-		com_out 						: out  STD_LOGIC													:= '0';					-- 0 = alu res		| 1 = n/s/e/w (algo)
+		reg_out 						: out  STD_LOGIC													:= '0';					-- 0 = alu res		| 1 = n/s/e/w (algo)
 		reg_write					: out  STD_LOGIC													:= '0';					-- 0 = no write	| 1 = write
 		s_swap 						: out  STD_LOGIC													:= '0';					-- 0 = no swap		| 1 = swap
 		
 		-- Used for controlling the 4 way data exchange
 		reg_addr_src 				: out  STD_LOGIC													:= '0';
-		adr0 							: out  STD_LOGIC_VECTOR (NODE_INST_REG-1 downto 0)		:= (others => '0');
-		adr1 							: out  STD_LOGIC_VECTOR (NODE_INST_REG-1 downto 0)		:= (others => '0');
-		adr2 							: out  STD_LOGIC_VECTOR (NODE_INST_REG-1 downto 0)		:= (others => '0');
-		adr3 							: out  STD_LOGIC_VECTOR (NODE_INST_REG-1 downto 0)		:= (others => '0')
+		adr0 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
+		adr1 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
+		adr2 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
+		adr3 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0')
 	);
 end INSTRUCTION_DECODER;
 
@@ -52,12 +53,20 @@ begin
 		case op_code is
 			-- R-format instructions
 			when NODE_INSTR_OP_R =>
-				alu_ctrl				<= '0';
-				alu_src				<= '0';
+				set_state			<= '0';			-- DON'T SET NEW STATE
+				alu_ctrl				<= "00";			-- USE INSTRUCTION FUNCT FIELD
+				alu_src				<= '1';			-- USE data1 AS ALU op2
+				reg_src				<= '0';			-- SAVE ALU RESULT
+				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT
+				reg_write			<= '1';			-- WRITE REGISTER
+				s_swap				<= '0';			-- DONT'T SWAP
+			
+			when NODE_INSTR_OP_S =>
+				set_state			<= '0';			-- DON'T SET NEW STATE
+				alu_ctrl				<= "10";			-- DO ADDITION (val + 0)
+				alu_src				<= '1';			-- USE data1 AS ALU op2
 				reg_src				<= '0';
-				com_out				<= '0';
-				reg_write			<= '0';
-				s_swap				<= '0';
+			
 			when others =>
 				-- do nothing
 		end case;

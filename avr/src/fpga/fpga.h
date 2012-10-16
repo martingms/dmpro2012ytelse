@@ -12,9 +12,9 @@
 
 #define FPGA_STATE_STOP					0
 #define FPGA_STATE_RUN 					1
-#define FPGA_STATE_WRITE_DATA			2
-#define FPGA_STATE_READ_DATA			3
-#define FPGA_STATE_WRITE_INSTRUCTION	4
+#define FPGA_STATE_LOAD_DATA			2
+#define FPGA_STATE_STORE_DATA			3
+#define FPGA_STATE_LOAD_INSTRUCTION		4
 
 /*! \brief Sends a list of words to the FPGA
  * \param *words The list of 24 bit words to be sent
@@ -26,6 +26,7 @@ void fpga_send_data(U32 *words);
  */
 void fpga_set_state(U8 state);
 U8 fpga_get_state(void);
+int fpga_init_interrupt(void);
 
 
 #endif /* FPGA_H_ */
