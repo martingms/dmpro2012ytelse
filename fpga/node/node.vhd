@@ -105,7 +105,7 @@ architecture Behavioral of node is
 		);
 	end component;
 	
-	signal io_reg_data			: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0); -- to be replaced by mux output
+	signal io_reg_data			: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0); -- @todo: replace	by mux output
 	signal io_data0				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 	signal io_data1				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 	signal io_data2				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
