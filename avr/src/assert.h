@@ -9,26 +9,22 @@
 #define ASSERT_H_
 
 #define ALWAYS_TERMINATE_ON_ASSERTION_VIOLATION 0
+#define voice seprintf("I am at line %d in file <%s>\n", __LINE__,__FILE__);
 
-
+#include "serial/serial.h"
 
 //These necessarily need to be defines to get __LINE__ and __FILE__ right
 /*
  * Prints an error if the expression is not true in debug mode
  */
-#if DEBUG>0
+
 #define assert(expression) \
 {\
 	if(!(expression)){\
-		sprintf(sprintf_buf, violation_string, __LINE__,__FILE__);\
-		serial_write(sprintf_buf);\
+		seprintf(violation_string, __LINE__,__FILE__);\
 		if(ALWAYS_TERMINATE_ON_ASSERTION_VIOLATION)exit(-1);\
 	}\
 }
-#else
-//Undefine non-critical assertions in release build
-#define assert(expression)
-#endif
 
 /*
  * Prints an error and terminates if the expression is not true.
@@ -37,8 +33,7 @@
 #define assert_critical(expression) \
 {\
 	if(!(expression)){\
-		sprintf(sprintf_buf, critical_violation_string, __LINE__,__FILE__);\
-		serial_write(sprintf_buf);\
+		seprintf(critical_violation_string, __LINE__,__FILE__);\
 		exit(-1);\
 	}\
 }
@@ -46,7 +41,7 @@
 /*
  * String to print when an assertion is violated
  */
-const char *violation_string = ""
+static char *violation_string = ""
 		"\n"
 		"ASSERTION VIOLATION:\n"
 		"Line %d\n"
@@ -56,7 +51,7 @@ const char *violation_string = ""
 /*
  * String to print when a critical assertion is violated
  */
-const char *critical_violation_string = ""
+static char *critical_violation_string = ""
 		"\n"
 		"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
 		"CRITICAL ASSERTION VIOLATION:\n"
@@ -66,4 +61,7 @@ const char *critical_violation_string = ""
 		"RUNTIME WILL TERMINATE\n"
 		"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
 		"\n";
+
+
 #endif /* ASSERT_H_ */
+
