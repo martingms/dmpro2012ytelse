@@ -8,7 +8,7 @@
 #ifndef ASSERT_H_
 #define ASSERT_H_
 
-#define ALWAYS_TERMINATE_ON_ASSERTION_VIOLATION 0
+#define ALWAYS_TERMINATE_ON_ASSERTION_VIOLATION 1
 #define voice seprintf("I am at line %d in file <%s>\n", __LINE__,__FILE__);
 
 #include "serial/serial.h"
@@ -21,7 +21,7 @@
 #define assert(expression) \
 {\
 	if(!(expression)){\
-		seprintf(violation_string, __LINE__,__FILE__);\
+		seprintf(violation_string, __LINE__,__FILE__, #expression);\
 		if(ALWAYS_TERMINATE_ON_ASSERTION_VIOLATION)exit(-1);\
 	}\
 }
@@ -33,7 +33,7 @@
 #define assert_critical(expression) \
 {\
 	if(!(expression)){\
-		seprintf(critical_violation_string, __LINE__,__FILE__);\
+		seprintf(critical_violation_string, __LINE__,__FILE__, #expression);\
 		exit(-1);\
 	}\
 }
@@ -46,6 +46,7 @@ static char *violation_string = ""
 		"ASSERTION VIOLATION:\n"
 		"Line %d\n"
 		"File <%s>\n"
+		"Assertion: %s\n"
 		"\n";
 
 /*
@@ -57,6 +58,7 @@ static char *critical_violation_string = ""
 		"CRITICAL ASSERTION VIOLATION:\n"
 		"Line %d\n"
 		"File <%s>\n"
+		"Assertion: %s\n"
 		"\n"
 		"RUNTIME WILL TERMINATE\n"
 		"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
