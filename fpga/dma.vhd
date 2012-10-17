@@ -31,8 +31,6 @@ architecture behavioral of dma is
 
 	-- Configurable settings
 	
-	signal padding : std_logic := '0';
-	
 	signal read_active : std_logic := '0';
 	signal read_base_addr : std_logic_vector(mem_addr_width - 1 downto 0) := (others => '0');
 	signal read_horizontal_incr : std_logic_vector(mem_addr_width - 1 downto 0) := (others => '0');
@@ -45,22 +43,25 @@ architecture behavioral of dma is
 	
 	-- Internal state
 	
-	signal active : std_logic := '0';
-	signal row : natural range 0 to simd_rows := 0;
-	signal col : natural range 0 to simd_cols := 0;
-	signal read_addr : std_logic_vector(mem_addr_width - 1 downto 0) := (others => '0');
-	signal write_addr : std_logic_vector(mem_addr_width - 1 downto 0) := (others => '0');
-	signal secondary_action_phase : std_logic := '0';
-	signal memory_assert_phase : std_logic := '0';
+	type state_record is record
+		active : std_logic;
+		row : natural range 0 to simd_rows;
+		col : natural range 0 to simd_cols;
+		read_addr : std_logic_vector(mem_addr_width - 1 downto 0);
+		write_addr : std_logic_vector(mem_addr_width - 1 downto 0);
+		secondary_action_phase : std_logic;
+		memory_assert_phase : std_logic;
+	end record;
+	
+	signal state : state_record := ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0');
+	signal next_state : state_record;
 	
 begin
 
-	accept_commands: process (clk)
+	update_signals: process (clk, enable)
 	begin
 		if rising_edge(clk) and enable = '1' then
 			case command is
-				when "0000" => null;
-				when "0001" => padding <= parameter(0);
 				when "0010" => read_active <= parameter(0);
 				when "0011" => read_base_addr <= parameter(mem_addr_width - 1 downto 0);
 				when "0100" => read_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
@@ -69,32 +70,29 @@ begin
 				when "0111" => write_base_addr <= parameter(mem_addr_width - 1 downto 0);
 				when "1000" => write_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
 				when "1001" => write_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "1010" => null;
-				when "1011" => null;
-				when "1100" => null;
-				when "1101" => null;
-				when "1110" => null;
 				when "1111" =>
-					secondary_action_phase <= '0';
-					memory_assert_phase <= '0';
-					read_addr <= read_base_addr;
-					write_addr <= write_base_addr;
-					row <= 0;
-					col <= simd_cols - 1;
-					active <= '1';
+					state.secondary_action_phase <= '0';
+					state.memory_assert_phase <= '0';
+					state.read_addr <= read_base_addr;
+					state.write_addr <= write_base_addr;
+					state.row <= 0;
+					state.col <= simd_cols - 1;
+					state.active <= '1';
+				when others =>
+					state <= next_state;
 			end case;
 		end if;
-	end process accept_commands;
+	end process update_signals;
 	
-	run_dma: process (clk)
+	run_dma: process (clk, enable)
 		variable in_padding : std_logic;
 		variable should_read : std_logic;
 		variable should_write : std_logic;
 		variable action : std_logic_vector(1 downto 0); -- "00" for noop, "01" for read, "10" for write
 		variable cell_done : std_logic := '0';
 	begin
-		if rising_edge(clk) and enable = '1' then
-			if row = 0 or row = simd_rows - 1 or col = 0 or col = simd_cols - 1 then
+		if rising_edge(clk) and enable = '1' and state.active = '1' then
+			if state.row = 0 or state.row = simd_rows - 1 or state.col = 0 or state.col = simd_cols - 1 then
 				in_padding := '1';
 			else
 				in_padding := '0';
@@ -105,7 +103,7 @@ begin
 			
 			if should_read = '1' and should_write = '1' then
 				-- Use internal state to determine whether to read or to write
-				if secondary_action_phase = '0' then
+				if state.secondary_action_phase = '0' then
 					action := "01"; -- Read first
 					cell_done := '0'; -- Not done
 				else
@@ -125,59 +123,60 @@ begin
 			
 			-- Perform read action
 			if action(0) = '1' then
-				if memory_assert_phase = '0' then
-					mem_addr <= read_addr;
+				if state.memory_assert_phase = '0' then
+					mem_addr <= state.read_addr;
 					mem_data <= (others => 'Z');
 					mem_write <= '0';
 					
-					memory_assert_phase <= '1';
+					next_state.memory_assert_phase <= '1';
 				else
-					simd_addr <= conv_std_logic_vector(row, simd_addr_width);
+					simd_addr <= conv_std_logic_vector(state.row, simd_addr_width);
 					simd_data <= mem_data;
 					simd_write <= '1';
 					
-					memory_assert_phase <= '0';
-					secondary_action_phase <= '1';
+					next_state.memory_assert_phase <= '0';
+					next_state.secondary_action_phase <= '1';
 				end if;
 			end if;
 			
 			-- Perform write action
 			if action(1) = '1' then
-				if memory_assert_phase = '0' then
-					simd_addr <= conv_std_logic_vector(row, simd_addr_width);
+				if state.memory_assert_phase = '0' then
+					simd_addr <= conv_std_logic_vector(state.row, simd_addr_width);
 					simd_data <= (others => 'Z');
 					simd_write <= '0';
 					
-					mem_addr <= write_addr;
-					mem_data <= write_addr;
+					mem_addr <= state.write_addr;
+					mem_data <= simd_data;
 					mem_write <= '1';
 					
-					memory_assert_phase <= '1';
+					next_state.memory_assert_phase <= '1';
 				else
 					mem_addr <= (others => 'Z');
 					mem_write <= '0';
 					
-					memory_assert_phase <= '0';
+					next_state.memory_assert_phase <= '0';
 				end if;
 			end if;
 			
 			-- If done with the current cell, step counters and update addresses
-			if cell_done = '1' and memory_assert_phase = '0' then
-				row <= row + 1;
-				read_addr <= read_addr + read_horizontal_incr;
-				write_addr <= write_addr + write_horizontal_incr;
-				secondary_action_phase <= '0';
-				
-				if row = simd_rows then
-					if col = 0 then
-						active <= '0';
+			if cell_done = '1' and state.memory_assert_phase = '1' then
+				if state.row = simd_rows - 1 then
+					if state.col = 0 then
+						next_state.active <= '0';
+					else
+						next_state.row <= 0;
+						next_state.col <= state.col - 1;
+						next_state.read_addr <= state.read_addr - read_vertical_incr;
+						next_state.write_addr <= state.write_addr - write_vertical_incr;
 					end if;
-					
-					row <= 0;
-					col <= col - 1;
-					read_addr <= read_addr - read_vertical_incr;
-					write_addr <= write_addr - write_vertical_incr;
+				else
+					next_state.row <= state.row + 1;
+					next_state.read_addr <= state.read_addr + read_horizontal_incr;
+					next_state.write_addr <= state.write_addr + write_horizontal_incr;
 				end if;
+				
+				next_state.secondary_action_phase <= '0';
 			end if;
 		end if;
 	end process run_dma;
