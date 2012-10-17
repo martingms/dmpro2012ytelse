@@ -14,24 +14,53 @@
 #include "gpio.h"
 
 
-void(*listener) (U8);
+void(*listener) (void);
 
-#define FPGA_IO_CTRL AVR32_PIN_PB02 //TODO redundant, kan fjernes når pinouten i bus.h er flyttet til board
+#define FPGA_IO_CTRL AVR32_PIN_PB02 //TODO redundant, kan fjernes når vi får PCBen
 
 U8 fpga_current_state;
+bool acked;
 
+void receive_ack(void) {
+	acked = TRUE;
+}
 
-void fpga_send_data(U32 *words) {
-	int i = 0;
+void fpga_send_data(U32 *words, size_t length) {
+	// S.1 - S.6 refers to the stages in 'AVR sends data to the FPGA'
+	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
+
+	int i;
 	U32 word;
-	fpga_set_state(FPGA_STATE_LOAD_DATA);
-	
-	while((word = words[i++]) != '\0') {
-		bus_send_data(word, FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);
-		bus_toggle_inc_clk();
-		//usleep(1000); //TODO finn passende ventetid
-	}
-	fpga_set_state(FPGA_STATE_RUN); //TODO kanskje ikke være her
+	fpga_set_state(FPGA_STATE_LOAD_DATA);									// S.1
+	fpga_set_listener(&receive_ack);
+	for (i=0; i<length; i++) {
+		word = words[i];
+		acked = FALSE;
+		bus_send_data(word, FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);// S.2
+		bus_toggle_inc_clk();												// S.3
+		while (acked == FALSE);												// S.4
+	}																		// S.5
+	fpga_set_listener(DISABLED);
+	fpga_set_state(FPGA_STATE_STOP);										// S.6
+}
+
+void fpga_send_program(U32 *instructions, size_t length) {
+	// S.1 - S.6 refers to the stages in 'AVR sends program to the FPGA'
+	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
+
+	int i;
+	U32 instruction;
+	fpga_set_state(FPGA_STATE_LOAD_DATA);									// S.1
+	fpga_set_listener(&receive_ack);
+	for (i=0; i<length; i++) {
+		instruction = instructions[i];
+		acked = FALSE;
+		bus_send_data(instruction, FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);// S.2
+		bus_toggle_inc_clk();												// S.3
+		while (acked == FALSE);												// S.4
+	}																		// S.5
+	fpga_set_listener(DISABLED);
+	fpga_set_state(FPGA_STATE_STOP);										// S.6
 }
 
 void fpga_set_state(U8 state) {
@@ -43,20 +72,16 @@ U8 fpga_get_state(void) {
 	return fpga_current_state;
 }
 
-int fpga_reg_listener(void(*l) (U8)) {
+void fpga_set_listener(void(*l) (void)) {
 	listener = l;
-	return 0;
 }
 
 __attribute__((__interrupt__)) void fpga_interrupt_routine(void) {
-	listener(gpio_get_pin_value(FPGA_IO_CTRL));
+	if (listener) listener();
 	gpio_clear_pin_interrupt_flag(FPGA_IO_CTRL);
 }
 
 int fpga_init_interrupt(void) {
-	// Initializes the hardware interrupt controller driver
-	INTC_init_interrupts(); //TODO skal denne kalles flere ganger? (ligger også i button)
-
 	// Register interrupt
 	INTC_register_interrupt(&fpga_interrupt_routine, AVR32_GPIO_IRQ_0 + FPGA_IO_CTRL / 8, AVR32_INTC_INT0);
 

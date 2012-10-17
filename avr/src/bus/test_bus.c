@@ -14,7 +14,7 @@ U32 power(int base, int exp) {
 	return res;
 }
 
-int test_bus_send_data(void) {
+void test_bus_send_data(void) {
 	int i,j;
 	U32 word;
 	U32 bus_value;
@@ -43,8 +43,5 @@ int test_bus_send_data(void) {
 			bus_value |= power(2,j);
 		}
 	}
-	if (word != bus_value) seprintf("Failed third test");
-
-	seprintf("All tests succesfull");
-	return TEST_SUCCESS;
+	if (word != bus_value) seprintf("Failed third test\n");
 }

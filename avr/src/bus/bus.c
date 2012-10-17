@@ -12,7 +12,8 @@
 #include "compiler.h"
 
 
-// TODO dette ligger også 'shades_of_gray.h' under BOARDS som vi begynner å bruke når vi får PCBen
+// TODO dette ligger også i 'shades_of_gray.h' under BOARDS
+// når vi bytter til PCBen kan det under fjernes
 // ------------------------------------ //
 #define FPGA_IO_00 AVR32_PIN_PA25
 #define FPGA_IO_01 AVR32_PIN_PA26
@@ -57,7 +58,6 @@
 #define FPGA_BUS_SIZE 38
 // ------------------------------------ //
 
-//24 pinner for data
 
 int fpga_bus[] = {
 		FPGA_IO_00,
@@ -100,51 +100,44 @@ int fpga_bus[] = {
 		FPGA_IN_28  //37
 };
 
-int power_of_two[] =  	{1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,
-						65536,131072,262144,524288,1048576,2097152,4194304,8388608,16777216,
-						33554432,67108864,134217728,268435456,536870912,1073741824};
-						//TODO kan dette settes i en makro-liste?
-
 void bus_init(void) {
 	int i;
 	for (i = 0; i < FPGA_BUS_SIZE; ++i) {
 		// Enable pins
 		gpio_enable_gpio_pin(fpga_bus[i]);
-		// Pull bus down
-		gpio_clr_gpio_pin(fpga_bus[i]);
+		// Pull output bus down TODO nødvendig?
+		if (i >= FPGA_DATA_IN_BUS_OFFSET) {
+			gpio_clr_gpio_pin(fpga_bus[i]);
+		}
 	}
-}
-
-void bus_conf(void){
-	//TODO
 }
 
 int bus_send_data(U32 word, int bus_offset, int bus_size) {
 	if ((bus_offset+bus_size) > FPGA_BUS_SIZE) return -1; // bus index will get out of bounds
-	serial_write("sending data\n");
 	int i,j;
+	U32 power_of_two = 1;
 	U32 pin;
 	for (i=bus_offset, j=0; i < bus_offset+bus_size; ++i, ++j) {
-		pin = word & power_of_two[j];
+		pin = word & power_of_two;
 		if (pin == 0) {
 			gpio_clr_gpio_pin(fpga_bus[i]);
-			serial_write("0");
-		} else if (pin == power_of_two[j]){
+		} else if (pin == power_of_two){
 			gpio_set_gpio_pin(fpga_bus[i]);
-			serial_write("1");
 		}
+		power_of_two = power_of_two << 1;
 	}
-	serial_write("\n\n");
 	return 0;
 }
 
 U8 bus_receive_data(U8 *data) {
 	*data = 0;
 	int i,j;
+	U32 power_of_two = 1;
 	for (i=FPGA_IO_BUS_OFFSET, j=0; i < FPGA_IO_BUS_OFFSET+FPGA_IO_BUS_SIZE; ++i, ++j) {
 		if (gpio_get_pin_value(fpga_bus[i]) == 1) {
-			*data |= power_of_two[j];
+			*data |= power_of_two;
 		}
+		power_of_two = power_of_two << 1;
 	}
 	return gpio_get_pin_value(FPGA_IO_CTRL);
 }

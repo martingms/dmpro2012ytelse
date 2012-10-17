@@ -21,12 +21,23 @@
 
 
 void init(void) {
+	int rc;
+
+	// Serial
 	pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);
-	serial_init();
-	button_init();
-	bus_init();
-	fpga_init_interrupt();
+	rc = serial_init();
+	if (rc) seprintf("serial_init error %d\n", rc)
+
+	// Interrupts
+	INTC_init_interrupts();
+	rc = fpga_init_interrupt();
+	if (rc) seprintf("fpga_init_interrupt error %d\n", rc);
+	rc = button_init();
+	if (rc) seprintf("button_init error %d\n", rc);
 	Enable_global_interrupt();
+
+	// Bus
+	bus_init();
 }
 
 
@@ -56,10 +67,6 @@ int init_sram(unsigned long FSC){
 int main(void)
 {
 	init();
-	int test = test_bus_send_data();
-	LED_On(test);
-
-
 
 
 	return 0;

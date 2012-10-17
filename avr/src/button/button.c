@@ -26,6 +26,7 @@ void notify_listeners(U8 buttons) {
 		listeners[i](buttons);
 	}
 }
+#include "serial.h"
 
 __attribute__((__interrupt__)) void button_interrupt_routine(void) {
 	U8 buttons = 0;
@@ -44,7 +45,6 @@ __attribute__((__interrupt__)) void button_interrupt_routine(void) {
 
 int button_init(void) {
 	int rc;
-
 	n_listeners = 0;
 
 	// Enable GPIO button pins
@@ -57,9 +57,13 @@ int button_init(void) {
 	gpio_enable_pin_glitch_filter(GPIO_PUSH_BUTTON_0);
 	gpio_enable_pin_glitch_filter(GPIO_PUSH_BUTTON_1);
 	gpio_enable_pin_glitch_filter(GPIO_PUSH_BUTTON_2);
+	//TODO gpio_enable_pin_glitch_filter(GPIO_PUSH_BUTTON_3);
 
-	// Initializes the hardware interrupt controller driver
-	INTC_init_interrupts();
+	// Enable pull up resistors
+	gpio_enable_pin_pull_up(GPIO_PUSH_BUTTON_0);
+	gpio_enable_pin_pull_up(GPIO_PUSH_BUTTON_1);
+	gpio_enable_pin_pull_up(GPIO_PUSH_BUTTON_2);
+	//TODO gpio_enable_pin_pull_up(GPIO_PUSH_BUTTON_3);
 
 	// Register interrupt for buttons
 	int b0_line = AVR32_GPIO_IRQ_0 + GPIO_PUSH_BUTTON_0 / 8;
@@ -67,8 +71,8 @@ int button_init(void) {
 	// Because the lines for button 1 and button 2 are equal,
 	// the same interrupt vector are used.
 
-	INTC_register_interrupt(&button_interrupt_routine, b0_line, AVR32_INTC_INT0);
-	INTC_register_interrupt(&button_interrupt_routine, b1_b2_line, AVR32_INTC_INT0);
+	INTC_register_interrupt(&button_interrupt_routine, b0_line, AVR32_INTC_INT1);
+	INTC_register_interrupt(&button_interrupt_routine, b1_b2_line, AVR32_INTC_INT1);
 
 
 	// GPIO enable interrupt of buttons on push
@@ -79,17 +83,15 @@ int button_init(void) {
 	rc = gpio_enable_pin_interrupt(GPIO_PUSH_BUTTON_2, GPIO_FALLING_EDGE);
 	if (rc != GPIO_SUCCESS) return rc;
 
-
-
 	return rc;
 }
 
 int button_reg_listener(void(*listener) (U8)) {
-	if (++n_listeners >= MAX_LISTENERS){
+	if (n_listeners+1 >= MAX_LISTENERS){
 		return -1;
 	}
 
-	listeners[n_listeners-1] = listener;
+	listeners[n_listeners++] = listener;
 	return 0;
 }
 
