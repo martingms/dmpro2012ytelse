@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bmp.h"
+#include <fsaccess.h>
+#include "../serial/serial.h"
+
 /*
  * Parses the given buffer as if it were a rawly read file into bmp headers
  * and returns a pointer to the start of the raw image data.
@@ -34,77 +37,28 @@ uint8_t * read_BMP_from_buffer(uint8_t *buffer, bmiHeader_t *bmp_hdr){
 	return buffer_base + bmp_dibhdr.ImageDataOffset;
 }
 
-uint8_t * read_BMP_from_file(const char fn[], bmiHeader_t *bmp_hdr)
+void read_file(const char fn[], char *buffer)
 {
-	FILE *fp;
-	uint8_t *bmp_in;
-	BmpImageFileType bmp_type;
-	dibHeader_t      bmp_dibhdr;
-
-	if((fp = fopen(fn,"rb"))==NULL)
+	assert(buffer);
+	assert(fn);
+	int fd = open(fn,O_RDONLY);
+	assert(fd);
+	int len = 0, read_bytes = 0, total = 0;
+	if(!fd)
 	{
-	printf("Error Opening Bitmap File\n");
-	return NULL;
-	}
-
-	fread(&bmp_type,sizeof(BmpImageFileType),1,fp);
-
-	if(bmp_type != BMPFILESIG)
-	{
-	printf("Error Not a BMP file\n");
-	fclose(fp);
-	return NULL;
-	}
-
-	fread(&bmp_dibhdr,sizeof(dibHeader_t),1,fp);
-	fread(bmp_hdr,sizeof(bmiHeader_t),1,fp);
-
-	if(bmp_hdr->HeaderSize != sizeof(bmiHeader_t)) // sanity check
-	{
-	printf("BMP Error Incorrect Header Size\n");
-	fclose(fp);
-	return NULL;
-	}
-
-	if((bmp_in = (uint8_t *) malloc(bmp_hdr->SizeOfBitmap)) == NULL)
-	{
-	printf("Error Allocating Memory for BMP\n");
-	fclose(fp);
-	return NULL;
-	}
-
-	// locate & load the pixmap data
-	fseek(fp, bmp_dibhdr.ImageDataOffset, SEEK_SET);
-	fread(bmp_in,bmp_hdr->SizeOfBitmap,1,fp);
-
-	fclose(fp);
-	return bmp_in;
-} 
-uint8_t * read_file(const char fn[])
-{
-	FILE *fp;
-	uint8_t *in;
-	uint64_t len;
-
-	if((fp = fopen(fn,"rb"))==NULL)
-	{
-		printf("Error Opening Bitmap File\n");
-		return NULL;
+		seprintf("Error Opening Bitmap File\n");
 	}
 
 	//Get file length
-	fseek(fp, 0, SEEK_END);
-	len=ftell(fp);
-	fseek(fp, 0, SEEK_SET);
-	if(!(in = (uint8_t *) malloc(len)))
-	{
-		printf("Error Allocating Memory for File\n");
-		fclose(fp);
-		return NULL;
+	len = fsaccess_file_get_size(fd);
+	assert(len);
+	while(total<len&&read_bytes>=0){
+		read_bytes = read(fd, buffer+read_bytes, len);
+		assert(read_bytes);
+		total+=read_bytes;
+		seprintf("Read %d / %d\n",total,len);
 	}
-
-	fread(in,len,1,fp);
-
-	fclose(fp);
-	return in;
+	seprintf("Read %d / %d bytes\n",total,len);
+	assert(total==len);
+	close(fd);
 }

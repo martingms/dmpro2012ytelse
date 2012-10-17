@@ -10,9 +10,9 @@ package FPGA_CONSTANT_PKG is
 
 	-- INSTRUCTION SET
 	constant NODE_INSTR_OP			: integer	:= 4;
-	constant NODE_INSTR_OP_R		: STD_LOGIC_VECTOR(2 downto 0) := "000";
-	constant NODE_INSTR_OP_I		: STD_LOGIC_VECTOR(2 downto 0) := "001";
-	constant NODE_INSTR_OP_S		: STD_LOGIC_VECTOR(2 downto 0) := "010";
+	constant NODE_INSTR_OP_R		: STD_LOGIC_VECTOR(3 downto 0) := "0000";
+	constant NODE_INSTR_OP_I		: STD_LOGIC_VECTOR(3 downto 0) := "0001";
+	constant NODE_INSTR_OP_S		: STD_LOGIC_VECTOR(3 downto 0) := "0010";
 	
 	 -- NODE BUS CONSTANTS
 	constant NODE_STATE_BUS			: integer	:= 2;			-- state bus from SIMD node
@@ -23,7 +23,7 @@ package FPGA_CONSTANT_PKG is
 	constant NODE_SDATA_BUS			: integer	:= 8;			-- s data bus (left, right)
 	
 	-- NODE ALU CONTROL
-	constant NODE_ALU_
+	-- constant NODE_ALU_
 	
 --    -- BUS CONSTANTS
 --    constant IADDR_BUS         : integer := 32;
@@ -68,4 +68,4 @@ package FPGA_CONSTANT_PKG is
 --    -- PROCESSOR STATE
 --    type state_type is (FETCH, EXEC, STALL);
      
-end MIPS_CONSTANT_PKG;
+end FPGA_CONSTANT_PKG;

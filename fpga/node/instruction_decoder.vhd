@@ -25,7 +25,7 @@ use WORK.FPGA_CONSTANT_PKG.ALL;
 
 entity INSTRUCTION_DECODER is
 	Port (
-		op_code 						: in  STD_LOGIC_VECTOR (NODE_INST_OP-1 downto 0);
+		op_code 						: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
 		
 		-- Node control signals
 		alu_ctrl 					: out  STD_LOGIC_VECTOR (1 downto 0)						:= (others => '0'); 	-- controls alu operation
@@ -38,10 +38,10 @@ entity INSTRUCTION_DECODER is
 		
 		-- Used for controlling the 4 way data exchange
 		reg_addr_src 				: out  STD_LOGIC													:= '0';
-		adr0 							: out  STD_LOGIC_VECTOR (NODE_INST_REG-1 downto 0)		:= (others => '0');
-		adr1 							: out  STD_LOGIC_VECTOR (NODE_INST_REG-1 downto 0)		:= (others => '0');
-		adr2 							: out  STD_LOGIC_VECTOR (NODE_INST_REG-1 downto 0)		:= (others => '0');
-		adr3 							: out  STD_LOGIC_VECTOR (NODE_INST_REG-1 downto 0)		:= (others => '0')
+		adr0 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
+		adr1 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
+		adr2 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
+		adr3 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0')
 	);
 end INSTRUCTION_DECODER;
 
@@ -63,7 +63,7 @@ begin
 			
 			when NODE_INSTR_OP_S =>
 				set_state			<= '0';			-- DON'T SET NEW STATE
-				alu_ctrl				<= "10"			-- DO ADDITION (val + 0)
+				alu_ctrl				<= "10";			-- DO ADDITION (val + 0)
 				alu_src				<= '1';			-- USE data1 AS ALU op2
 				reg_src				<= '0';
 			
