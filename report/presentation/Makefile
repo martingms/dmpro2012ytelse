@@ -1,13 +1,15 @@
 PRESENTATION = presentation
 TEMPS = aux log nav out snm toc vrb
+PDFFLAGS = -shell-escape
+ENV = TEXINPUTS="./beamerntnu/:"
 
 .PHONY: clean remake purge
 
 all: $(PRESENTATION).pdf
 
 %.pdf:
-	pdflatex -shell-escape $(@:.pdf=.tex)
-	pdflatex -shell-escape $(@:.pdf=.tex)
+	$(ENV) pdflatex $(PDFFLAGS) $(@:.pdf=.tex)
+	$(ENV) pdflatex $(PDFFLAGS) $(@:.pdf=.tex)
 
 clean:
 	for s in $(TEMPS); do rm -f $(PRESENTATION).$$s; done
