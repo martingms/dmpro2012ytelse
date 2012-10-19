@@ -13,8 +13,8 @@
 -- Dependencies:		WORK.FPGA_CONSTANT_PKG
 --
 -- Revisions
--- 0.02:  		Added I/O Controller component
--- 0.01:  		File Created
+-- 0.02:  				Added I/O Controller component
+-- 0.01:  				File Created
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -49,6 +49,9 @@ entity node is
 end node;
 
 architecture Behavioral of node is
+----------------------------------------------------------------------------------
+--	INSTRUCTION DECODER
+----------------------------------------------------------------------------------
 	component INSTRUCTION_DECODER is
 		Port (
 			op_code 					: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
@@ -57,13 +60,9 @@ architecture Behavioral of node is
 			alu_src 					: out STD_LOGIC;
 			reg_src 					: out STD_LOGIC;
 			reg_out 					: out STD_LOGIC;
-			reg_write				: out STD_LOGIC;		
+			reg_write_0				: out STD_LOGIC;		
+			reg_write_all			: out STD_LOGIC;		
 			s_swap 					: out STD_LOGIC;			
-			reg_addr_src 			: out STD_LOGIC;
-			adr0 						: out STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
-			adr1 						: out STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
-			adr2 						: out STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
-			adr3 						: out STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)
 		);
 	end component;
 
@@ -72,15 +71,13 @@ architecture Behavioral of node is
 	signal ctrl_alu_src 			: STD_LOGIC;
 	signal ctrl_reg_src 			: STD_LOGIC;
 	signal ctrl_com_out 			: STD_LOGIC;
-	signal ctrl_reg_write 		: STD_LOGIC;
+	signal ctrl_reg_write_0		: STD_LOGIC;
+	signal ctrl_reg_write_all	: STD_LOGIC;
 	signal ctrl_s_swap 			: STD_LOGIC;
-	signal ctrl_reg_addr_src 	: STD_LOGIC;
 
-	signal ctrl_reg_adr0 		: STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
-	signal ctrl_reg_adr1 		: STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
-	signal ctrl_reg_adr2 		: STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
-	signal ctrl_reg_adr3 		: STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);	
-
+----------------------------------------------------------------------------------
+--	I/O CONTROLLER
+----------------------------------------------------------------------------------
 	component IO_CONTROLLER is
 		Port (
 			clk 						: in   STD_LOGIC;
@@ -110,7 +107,35 @@ architecture Behavioral of node is
 	signal io_data1				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 	signal io_data2				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 	signal io_data3				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+
+----------------------------------------------------------------------------------
+--	REGISTER BANK
+----------------------------------------------------------------------------------
+	entity REGISTER_BANK is
+		port(
+			clk 						:	in	 STD_LOGIC;
+			reset						:	in	 STD_LOGIC;
+			reg_write_0				:	in	 STD_LOGIC;
+			reg_write_all			:	in	 STD_LOGIC;
+			adr0 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+			adr1 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+			adr2 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+			adr3						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+			data0_in					:	in	 STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data1_in					:	in	 STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data2_in					:	in	 STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data3_in					:	in	 STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data1_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data2_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)
+		);
+	end REGISTER_BANK;
 	
+	reg_data1_out					:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	reg_data2_out					:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	
+----------------------------------------------------------------------------------
+--	SOURCE DATA REGISTER
+----------------------------------------------------------------------------------
 	component S_REG is
 		Port (
 			clk 						: in  STD_LOGIC;
@@ -128,21 +153,23 @@ architecture Behavioral of node is
 	signal sr_alu_res				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);  -- @todo: replace by correct mux output
 
 begin
+----------------------------------------------------------------------------------
+--	INSTRUCTION DECODER
+----------------------------------------------------------------------------------
 	DECODER : INSTRUCTION_DECODER port map (
 		op_code 						=> instr(NODE_IDATA_BUS-1 downto NODE_IDATA_BUS-NODE_INSTR_OP),
 		alu_ctrl 					=> ctrl_alu_ctrl,
 		alu_src 						=> ctrl_alu_src,
 		reg_src 						=> ctrl_reg_src,
 		reg_out 						=> ctrl_com_out,
-		reg_write					=> ctrl_reg_write,
+		reg_write_0					=> ctrl_reg_write_0,
+		reg_write_all				=> ctrl_reg_write_all,
 		s_swap 						=> ctrl_s_swap,
-		reg_addr_src 				=> ctrl_reg_addr_src,
-		adr0 							=> ctrl_reg_adr0,
-		adr1 							=> ctrl_reg_adr1,
-		adr2 							=> ctrl_reg_adr2,
-		adr3 							=> ctrl_reg_adr3
 	);
 
+----------------------------------------------------------------------------------
+--	I/O CONTROLLER
+----------------------------------------------------------------------------------
 	IO : IO_CONTROLLER port map (
 		clk 							=> clk,
 		reset							=> reset,
@@ -165,6 +192,31 @@ begin
 		data3							=> io_data3
 	);
 
+----------------------------------------------------------------------------------
+--	REGISTER BANK
+----------------------------------------------------------------------------------
+	entity REGISTER_BANK is
+		port(
+			clk 						=> clk,
+			reset						=> reset,
+			reg_write_0				=> 
+			reg_write_all			=> 
+			adr0 						=> 
+			adr1 						=> 
+			adr2 						=> 
+			adr3						=> 
+			data0_in					=> 
+			data1_in					=> 
+			data2_in					=> 
+			data3_in					=> 
+			data1_out				=> 
+			data2_out				=> 
+		);
+	end REGISTER_BANK;
+
+----------------------------------------------------------------------------------
+--	SOURCE DATA REGISTER
+----------------------------------------------------------------------------------
 	S : S_REG port map (
 		clk 							=> clk,
 		reset							=> reset,
@@ -175,5 +227,9 @@ begin
 		s_new							=> sr_new,
 		s_out							=> sr_out
 	);
-end Behavioral;
 
+----------------------------------------------------------------------------------
+-- START PROCESS
+----------------------------------------------------------------------------------
+
+end Behavioral;

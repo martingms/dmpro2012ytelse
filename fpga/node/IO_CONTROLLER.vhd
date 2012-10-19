@@ -12,9 +12,8 @@
 --
 -- Dependencies:		WORK.FPGA_CONSTANT_PKG
 --
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: Initial version of the I/O Controller
+-- Revisions
+-- 0.01:					Initial version of the I/O Controller
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;

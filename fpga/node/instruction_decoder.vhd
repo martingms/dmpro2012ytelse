@@ -12,9 +12,8 @@
 --
 -- Dependencies: 
 --
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
+-- Revisions
+-- 0.01:					Initial version of the Instruction Decoder
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -27,21 +26,15 @@ entity INSTRUCTION_DECODER is
 	Port (
 		op_code 						: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
 		
-		-- Node control signals
+		-- Control signals
 		alu_ctrl 					: out  STD_LOGIC_VECTOR (1 downto 0)						:= (others => '0'); 	-- controls alu operation
 		set_state					: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
 		alu_src 						: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
 		reg_src 						: out  STD_LOGIC													:= '0';					-- 0 = alu res 	| 1 = n/s/e/w
 		reg_out 						: out  STD_LOGIC													:= '0';					-- 0 = alu res		| 1 = n/s/e/w (algo)
-		reg_write					: out  STD_LOGIC													:= '0';					-- 0 = no write	| 1 = write
+		reg_write_0					: out  STD_LOGIC													:= '0';					-- 0 = no write	| 1 = write
+		reg_write_all				: out  STD_LOGIC													:= '0';					-- 0 = no write	| 1 = write
 		s_swap 						: out  STD_LOGIC													:= '0';					-- 0 = no swap		| 1 = swap
-		
-		-- Used for controlling the 4 way data exchange
-		reg_addr_src 				: out  STD_LOGIC													:= '0';
-		adr0 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
-		adr1 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
-		adr2 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
-		adr3 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0')
 	);
 end INSTRUCTION_DECODER;
 

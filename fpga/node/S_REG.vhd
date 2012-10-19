@@ -12,9 +12,8 @@
 --
 -- Dependencies:		WORK.FPGA_CONSTANT_PKG
 --
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: Initial version of the S REG
+-- Revisions
+-- 0.01:					Initial version of the S REG
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
