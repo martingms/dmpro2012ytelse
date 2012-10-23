@@ -9,18 +9,26 @@ use IEEE.STD_LOGIC_1164.all;
 package FPGA_CONSTANT_PKG is
 
 	-- INSTRUCTION SET
-	constant NODE_INSTR_OP			: integer	:= 4;
-	constant NODE_INSTR_OP_R		: STD_LOGIC_VECTOR(3 downto 0) := "0000";
-	constant NODE_INSTR_OP_I		: STD_LOGIC_VECTOR(3 downto 0) := "0001";
-	constant NODE_INSTR_OP_S		: STD_LOGIC_VECTOR(3 downto 0) := "0010";
+	constant NODE_INSTR_OP			: integer	:= 3;
+	constant NODE_INSTR_OP_R		: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "000";
+	constant NODE_INSTR_OP_I		: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "001";
+	constant NODE_INSTR_OP_S		: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "010";
+
+	constant NODE_INSTR_FN			: integer	:= 3;
+	constant NODE_INSTR_FN_ADD		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "100";
+	constant NODE_INSTR_FN_SUB		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "101";
 	
 	 -- NODE BUS CONSTANTS
 	constant NODE_STATE_BUS			: integer	:= 2;			-- state bus from SIMD node
 	constant NODE_RDATA_BUS			: integer	:= 8;			-- register data size
-	constant NODE_RADDR_BUS			: integer	:= 6;			-- register address
+	constant NODE_RADDR_BUS			: integer	:= 4;			-- register address
 	constant NODE_IDATA_BUS			: integer	:= 24;		-- instruction address
 	constant NODE_DDATA_BUS			: integer	:= 8;			-- data bus (north, south, east, west)
 	constant NODE_SDATA_BUS			: integer	:= 8;			-- s data bus (left, right)
+	
+	-- NODE ALU CONTROLL
+	constant NODE_ALU_CTRL_R		: STD_LOGIC_VECTOR(1 downto 0) := "00";
+	constant NODE_ALU_CTRL_BEQ		: STD_LOGIC_VECTOR(1 downto 0) := "10";
 	
 	-- NODE ALU CONTROL
 	-- constant NODE_ALU_
