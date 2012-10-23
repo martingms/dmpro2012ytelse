@@ -27,14 +27,14 @@ entity INSTRUCTION_DECODER is
 		op_code 						: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
 		
 		-- Control signals
-		alu_ctrl 					: out  STD_LOGIC_VECTOR (1 downto 0)						:= (others => '0'); 	-- controls alu operation
-		set_state					: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
-		alu_src 						: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
-		reg_src 						: out  STD_LOGIC													:= '0';					-- 0 = alu res 	| 1 = n/s/e/w
-		reg_out 						: out  STD_LOGIC													:= '0';					-- 0 = alu res		| 1 = n/s/e/w (algo)
-		reg_write_0					: out  STD_LOGIC													:= '0';					-- 0 = no write	| 1 = write
-		reg_write_all				: out  STD_LOGIC													:= '0';					-- 0 = no write	| 1 = write
-		s_swap 						: out  STD_LOGIC													:= '0';					-- 0 = no swap		| 1 = swap
+		alu_ctrl 					: out  STD_LOGIC_VECTOR (1 downto 0)	:= (others => '0'); 	-- controls alu operation
+		set_state					: out  STD_LOGIC								:= '0';					-- 0 = immidiate 	| 1 = reg data 1
+		alu_src 						: out  STD_LOGIC								:= '0';					-- 0 = immidiate 	| 1 = reg data 1
+		reg_src 						: out  STD_LOGIC								:= '0';					-- 0 = alu res 	| 1 = n/s/e/w
+		reg_out 						: out  STD_LOGIC								:= '0';					-- 0 = alu res		| 1 = n/s/e/w (algo)
+		reg_write_0					: out  STD_LOGIC								:= '0';					-- 0 = no write	| 1 = write
+		reg_write_all				: out  STD_LOGIC								:= '0';					-- 0 = no write	| 1 = write
+		s_swap 						: out  STD_LOGIC								:= '0'					-- 0 = no swap		| 1 = swap
 	);
 end INSTRUCTION_DECODER;
 

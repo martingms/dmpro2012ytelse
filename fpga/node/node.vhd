@@ -62,7 +62,7 @@ architecture Behavioral of node is
 			reg_out 					: out STD_LOGIC;
 			reg_write_0				: out STD_LOGIC;		
 			reg_write_all			: out STD_LOGIC;		
-			s_swap 					: out STD_LOGIC;			
+			s_swap 					: out STD_LOGIC
 		);
 	end component;
 
@@ -111,7 +111,7 @@ architecture Behavioral of node is
 ----------------------------------------------------------------------------------
 --	REGISTER BANK
 ----------------------------------------------------------------------------------
-	entity REGISTER_BANK is
+	component REGISTER_BANK is
 		port(
 			clk 						:	in	 STD_LOGIC;
 			reset						:	in	 STD_LOGIC;
@@ -128,10 +128,10 @@ architecture Behavioral of node is
 			data1_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 			data2_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)
 		);
-	end REGISTER_BANK;
+	end component;
 	
-	reg_data1_out					:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
-	reg_data2_out					:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	signal reg_data1_out			:	STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	signal reg_data2_out			:	STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 	
 ----------------------------------------------------------------------------------
 --	SOURCE DATA REGISTER
@@ -164,7 +164,7 @@ begin
 		reg_out 						=> ctrl_com_out,
 		reg_write_0					=> ctrl_reg_write_0,
 		reg_write_all				=> ctrl_reg_write_all,
-		s_swap 						=> ctrl_s_swap,
+		s_swap 						=> ctrl_s_swap
 	);
 
 ----------------------------------------------------------------------------------
@@ -195,24 +195,22 @@ begin
 ----------------------------------------------------------------------------------
 --	REGISTER BANK
 ----------------------------------------------------------------------------------
-	entity REGISTER_BANK is
-		port(
-			clk 						=> clk,
-			reset						=> reset,
-			reg_write_0				=> 
-			reg_write_all			=> 
-			adr0 						=> 
-			adr1 						=> 
-			adr2 						=> 
-			adr3						=> 
-			data0_in					=> 
-			data1_in					=> 
-			data2_in					=> 
-			data3_in					=> 
-			data1_out				=> 
-			data2_out				=> 
-		);
-	end REGISTER_BANK;
+	REG : REGISTER_BANK port map (
+		clk 							=> clk,
+		reset							=> reset,
+		reg_write_0					=> ctrl_reg_write_0,
+		reg_write_all				=> ctrl_reg_write_all,
+		adr0 							=> instr(18 downto 15),
+		adr1 							=> instr(14 downto 11),
+		adr2 							=> instr(10 downto 7),
+		adr3							=> instr(6 downto 3),
+		data0_in						=> io_data0,
+		data1_in						=> io_data1,
+		data2_in						=> io_data2,
+		data3_in						=> io_data3,
+		data1_out					=> reg_data1_out,
+		data2_out					=> reg_data2_out
+	);
 
 ----------------------------------------------------------------------------------
 --	SOURCE DATA REGISTER
