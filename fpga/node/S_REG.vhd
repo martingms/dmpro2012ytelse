@@ -26,19 +26,19 @@ entity S_REG is
 	Port (
 		clk 							: in  STD_LOGIC;
 		reset							: in  STD_LOGIC;
-		swap 							: in  STD_LOGIC;
-		step 							: in  STD_LOGIC;
+		s_swap 						: in  STD_LOGIC;
+		s_step 						: in  STD_LOGIC;
 		s_res 						: in  STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
 		s_in 							: in  STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
-		s_new 						: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
-		s_out 						: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0')
+		s_new 						: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
+		s_out 						: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0)
 	);
 end S_REG;
 
 architecture Behavioral of S_REG is
 
-	signal tmp_s_in				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) 		:= (others => '0');
-	signal tmp_s_out				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) 		:= (others => '0');
+	signal tmp_s_in				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
+	signal tmp_s_out				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
 
 begin
 
@@ -48,10 +48,10 @@ begin
 			tmp_s_out				<= (others => '0');		-- output buffer
 		elsif rising_edge(clk) then
 
-			if step = '1' then
+			if s_step = '1' then
 				tmp_s_out			<= tmp_s_in;
 				tmp_s_in				<= s_in;
-			elsif swap = '1' then
+			elsif s_swap = '1' then
 				tmp_s_out			<= tmp_s_in;
 				tmp_s_in				<= s_res;
 			end if;

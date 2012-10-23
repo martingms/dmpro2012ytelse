@@ -40,6 +40,10 @@ begin
 
 ALU : process(alu_op, op1, op2)
 	begin
-		res							<= op1 + op2;
+		if (alu_op=NODE_INSTR_FN_SUB) then
+			res						<= op1 + op2;
+		else
+			res						<= op1 - op2;
+		end if;
 	end process;
 end Behavioral;

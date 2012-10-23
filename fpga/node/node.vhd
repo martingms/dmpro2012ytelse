@@ -132,6 +132,16 @@ architecture Behavioral of node is
 ----------------------------------------------------------------------------------
 --	ALU
 ----------------------------------------------------------------------------------
+	component ALU_CONTROLL is
+		Port (
+			alu_ctrl 				: in  STD_LOGIC_VECTOR (1 downto 0);
+			alu_funct 				: in  STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0);
+			alu_op 					: out STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0)
+		);
+	end component;
+
+	signal alu_op					: STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0);
+
 	component ALU is
 		Port ( 
 			alu_op					: in  STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0);
@@ -143,16 +153,6 @@ architecture Behavioral of node is
 
 	signal alu_res					: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
 	
-	component ALU_CONTROLL is
-		Port (
-			alu_ctrl 				: in  STD_LOGIC_VECTOR (1 downto 0);
-			alu_funct 				: in  STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0);
-			alu_op 					: out STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0)
-		);
-	end component;
-
-	signal alu_op					: STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0);
-
 ----------------------------------------------------------------------------------
 --	SOURCE DATA REGISTER
 ----------------------------------------------------------------------------------
@@ -160,8 +160,8 @@ architecture Behavioral of node is
 		Port (
 			clk 						: in  STD_LOGIC;
 			reset						: in  STD_LOGIC;
-			swap 						: in  STD_LOGIC;
-			step 						: in  STD_LOGIC;
+			s_swap 					: in  STD_LOGIC;
+			s_step 					: in  STD_LOGIC;
 			s_res 					: in  STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
 			s_in 						: in  STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
 			s_new 					: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
@@ -190,7 +190,7 @@ begin
 ----------------------------------------------------------------------------------
 --	INSTRUCTION DECODER
 ----------------------------------------------------------------------------------
-	DECODER : INSTRUCTION_DECODER port map (
+	CONTROL : INSTRUCTION_DECODER port map (
 		op_code 						=> instr(21 downto 19),
 		alu_ctrl 					=> ctrl_alu_ctrl,
 		set_state					=> ctrl_set_state,
@@ -229,7 +229,7 @@ begin
 ----------------------------------------------------------------------------------
 --	REGISTER BANK
 ----------------------------------------------------------------------------------
-	REG : REGISTER_BANK port map (
+	REGISTERS : REGISTER_BANK port map (
 		clk 							=> clk,
 		reset							=> reset,
 		reg_write					=> ctrl_reg_write,
@@ -248,26 +248,26 @@ begin
 ----------------------------------------------------------------------------------
 --	ALU
 ----------------------------------------------------------------------------------
+	ALU_CTRL : ALU_CONTROLL port map (
+		alu_ctrl 					=> ctrl_alu_ctrl,
+		alu_funct 					=> instr(2 downto 0),
+		alu_op 						=> alu_op
+	);
+	
 	AUL : ALU port map ( 
 		alu_op						=> alu_op, 
 		op1 							=> reg_data1_out, 
 		op2 							=> alu_op2, 
 		res 							=> alu_res
 	);
-
-	ALU_CTRL : ALU_CONTROLL port map (
-		alu_ctrl 					=> ctrl_alu_ctrl,
-		alu_funct 					=> instr(2 downto 0),
-		alu_op 						=> alu_op
-	);
 ----------------------------------------------------------------------------------
 --	SOURCE DATA REGISTER
 ----------------------------------------------------------------------------------
-	S : S_REG port map (
+	S_DATA : S_REG port map (
 		clk 							=> clk,
 		reset							=> reset,
-		swap							=> ctrl_s_swap,
-		step							=> step,
+		s_swap						=> ctrl_s_swap,
+		s_step						=> step,
 		s_res							=> alu_res,
 		s_in							=> sr_in,
 		s_new							=> sr_new,

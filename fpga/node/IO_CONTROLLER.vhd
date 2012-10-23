@@ -54,17 +54,17 @@ end IO_CONTROLLER;
 
 architecture Behavioral of IO_CONTROLLER is
 
-	signal tmp_n					: STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0)		:= (others => '0');
-	signal tmp_s					: STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0)		:= (others => '0');
-	signal tmp_e					: STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0)		:= (others => '0');
-	signal tmp_w					: STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0)		:= (others => '0');
+	signal tmp_n					: STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+	signal tmp_s					: STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+	signal tmp_e					: STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+	signal tmp_w					: STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
 
-	signal tmp_state				: STD_LOGIC_VECTOR (1 downto 0)							:= "00";
+	signal tmp_state				: STD_LOGIC_VECTOR (1 downto 0);
 
-	signal tmp_data0				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)		:= (others => '0');
-	signal tmp_data1				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)		:= (others => '0');
-	signal tmp_data2				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)		:= (others => '0');
-	signal tmp_data3				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)		:= (others => '0');	
+	signal tmp_data0				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	signal tmp_data1				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	signal tmp_data2				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	signal tmp_data3				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);	
 begin	CONTROLLER: process (clk, reset)
 	begin
 		if (reset = '1') then
@@ -122,9 +122,9 @@ begin	CONTROLLER: process (clk, reset)
 		state							<= tmp_state;
 		
 		data0							<= tmp_data0;
-		data0							<= tmp_data1;
-		data0							<= tmp_data2;
-		data0							<= tmp_data3;
+		data1							<= tmp_data1;
+		data2							<= tmp_data2;
+		data3							<= tmp_data3;
 	
 	end process CONTROLLER;
 
