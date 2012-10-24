@@ -14,7 +14,8 @@
 #define FPGA_IO_BUS_SIZE 8
 #define FPGA_DATA_IN_BUS_OFFSET 9
 #define FPGA_DATA_IN_BUS_SIZE 24
-#define FPGA_INC_CLK_OFFSET 34
+#define FPGA_INC_CLK_LINE 33
+#define FPGA_SET_STATE_LINE 34
 #define FPGA_STATE_OFFSET 35
 #define FPGA_STATE_SIZE 3
 
@@ -35,10 +36,14 @@ int bus_send_data(U32 word, int bus_offset, int bus_size);
  * \param *data Pointer to where the data should be placed
  * \returns Ctrl pin
  */
-U8 bus_receive_data(U8 *data);
+U8 bus_receive_data(void);
 
 /*! \brief Notifies the FPGA to increment its address when writing data
  */
-void bus_toggle_inc_clk();
+void bus_toggle_inc_clk_line();
+
+/*! \brief Notifies the FPGA to set its state according to the state bus
+ */
+void bus_toggle_set_state_line();
 
 #endif /* BUS_H_ */

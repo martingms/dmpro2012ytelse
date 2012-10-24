@@ -16,12 +16,15 @@
 #define FPGA_STATE_STORE_DATA			3
 #define FPGA_STATE_LOAD_INSTRUCTION		4
 
+
 /*! \brief Sends a list of words to the FPGA
  * \param *words The list of 32 bit words to be sent (only 24 bits will be sent)
  * \param length how many words are to be sent
  */
-void fpga_send_data(U32 *words, size_t length);
-void fpga_send_program(U32 *instructions, size_t length);
+int fpga_send_data(char *program_path);
+int fpga_send_program(char *program_path);
+void fpga_receive_data(void);
+void fpga_run(void);
 
 /*! \brief Sets the FPGA to a given state
  * \param state
