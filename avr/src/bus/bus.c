@@ -93,7 +93,7 @@ int fpga_bus[] = {
 		FPGA_IN_21, //30
 		FPGA_IN_22,
 		FPGA_IN_23,
-		FPGA_IN_24,
+		FPGA_IN_24,	//33
 		FPGA_IN_25, //34
 		FPGA_IN_26, //35
 		FPGA_IN_27, //36
@@ -129,21 +129,24 @@ int bus_send_data(U32 word, int bus_offset, int bus_size) {
 	return 0;
 }
 
-U8 bus_receive_data(U8 *data) {
-	*data = 0;
+U8 bus_receive_data(void) {
+	U8 data = 0;
 	int i,j;
 	U32 power_of_two = 1;
 	for (i=FPGA_IO_BUS_OFFSET, j=0; i < FPGA_IO_BUS_OFFSET+FPGA_IO_BUS_SIZE; ++i, ++j) {
 		if (gpio_get_pin_value(fpga_bus[i]) == 1) {
-			*data |= power_of_two;
+			data |= power_of_two;
 		}
 		power_of_two = power_of_two << 1;
 	}
-	return gpio_get_pin_value(FPGA_IO_CTRL);
+	return data;
 }
 
-void bus_toggle_inc_clk() {
-	gpio_tgl_gpio_pin(fpga_bus[FPGA_INC_CLK_OFFSET]);
+void bus_toggle_inc_clk_line() {
+	gpio_tgl_gpio_pin(fpga_bus[FPGA_INC_CLK_LINE]);
 }
 
+void bus_toggle_set_state_line() {
+	gpio_tgl_gpio_pin(fpga_bus[FPGA_SET_STATE_LINE]);
+}
 
