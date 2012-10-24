@@ -3,139 +3,135 @@
 #include <stdio.h>
 #include "compiler.h"
 #include "board.h"
-#include "intc.h"
-#include "gpio.h"
 #include "power_clocks_lib.h"
+#include "gpio.h"
+#include "timer/timer.h"
 #include "fsaccess.h"
 #include "ctrl_access.h"
-#include "sdramc.h"
-
-#include "serial.h"
-#include "mmc.h"
-#include "bus.h"
-#include "fpga.h"
-#include "button.h"
-
-#include "test_bus.h"
-
-
-
-void init(void) {
-	int rc;
-
-	// Serial
-	// funker kun når krystall er koblet til
-	pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);
-
-	rc = serial_init();
-	if (rc) LED_On(1);
-
-	// Interrupts
-	INTC_init_interrupts();
-	rc = fpga_init_interrupt();
-	if (rc) seprintf("fpga_init_interrupt error %d\n", rc);
-	rc = button_init();
-	if (rc) seprintf("button_init error %d\n", rc);
-	Enable_global_interrupt();
-
-	// Bus
-	bus_init();
-}
-
-
 #include "serial/serial.h"
 #include "mmc/mmc.h"
-#include "bmp/bmp.h"
-#include "assert.h"
-
-#include "program_select.h"
-
-#define SDRAM_BASE_ADDRESS 0xD0000000
+#include "sd_mmc_spi.h"
 
 static char sprintf_buf[256];
 
-/*
- * Initializes the external sram control module and maps the external
- * sram to memory.
- * If possible: change return value to start of mapped memory?
- */
-int init_sram(unsigned long FSC){
-	serial_write("Trying to init sram... ");
-	sdramc_init(FSC);
-	serial_write("Done!\n");
-	int *test = 0xD0000000;
-	test[0] = 1;
-	return test[0]==1;
-}
-
-void btn(U8 b) {
-	serial_write("test");
-	LED_On(b);
-}
-
 int main(void)
 {
-	init();
-	button_reg_listener(&btn);
-	while(TRUE);
-	return 0;
-}
-
-int tmp(void)
-{
+	serial_init();
 	mmc_init(); // init SPI peripherals
 
-	const char *fname = "A:/test";
+	while (mmc_status() != CTRL_GOOD);
 
-	pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);
+	// read first 152 blocks (one lenna) five times blocks
+	int block;
+	int step=1;
+	char data[512*step];
+	LED_On(LED2);
+	serial_write("starting...\n");
+	sd_mmc_spi_read_open(0);
+	for(block=0;block<152*10;block+=step){
+		if ((block+1) % 152 == 0)
+			serial_write("doing something...\n");
+
+		Bool st = sd_mmc_spi_read_sector_to_ram(&data);
+		if (st != OK) {
+			serial_write("error!\n");
+		}
+	}
+//	sprintf(sprintf_buf, "Sum is %d\n", sum);
+	serial_write("finished!\n");
+//	serial_write(sprintf_buf);
+	LED_On(LED3);
+
+//	int i;
+//	for (i=0;i<512*step;i++)
+//	{
+//		sprintf(sprintf_buf, "%3x", data[i]);
+//		serial_write(sprintf_buf);
+//		if (i % 50 == 0)
+//				serial_putc('\n');
+//	}
+//	serial_putc('\n');
+//	serial_putc('\0');
+
+	return 1;
+
+	const char *fname = "A:/1.bmp";
 
 	b_fsaccess_init();
-	serial_init();
+
 
 	LED_On(LED2);
 
-	seprintf("waiting for SD...\n");
+	serial_write("waiting for SD...\n");
 	while (mmc_status() != CTRL_GOOD);
-	seprintf("SD card found! trying to get access..\n");
+	serial_write("SD card found! trying to get access..\n");
 
 	LED_On(LED3);
 
-	seprintf("The system has %d LUNs\n", get_nb_lun());
+	sprintf(sprintf_buf, "The system has %d LUNs\n", get_nb_lun());
+	serial_write(sprintf_buf);
 
-	seprintf("trying to open file...\n");
+	serial_write("trying to open file...\n");
 
 	int fd = open(fname, O_RDONLY);
 
 	if (fd >= 0) {
-		seprintf("we got a file!\n");
+		serial_write("we got a file!\n");
 
 		int fs = fsaccess_file_get_size(fd);
 		int read_bytes;
+		char buf[512];
 		if (fs < 512) {
-			char buf[512];
 
 			if ((read_bytes = read(fd, buf, fs)) == fs) {
-				seprintf("the file was %d bytes big\n", fs);
+				sprintf(sprintf_buf, "the file was %d bytes big\n", fs);
+				serial_write(sprintf_buf);
 
-				seprintf("This is the data we read:\n");
+				serial_write("This is the data we read:\n");
 
-				buf[fs] = '\0'; // lets assume fs != 512
-				seprintf(buf);
+				buf[fs] = '\0';
+				serial_write(buf);
 			} else {
-				seprintf("file is %d bytes, but I could only read %d!\n", fs, read_bytes);
+				sprintf(sprintf_buf, "file is %d bytes, but I could only read %d!\n", fs, read_bytes);
+				serial_write(sprintf_buf);
 			}
 		} else {
-			seprintf("file was bigger than 512b (%d), so not dumping over rs232\n", fs);
+			sprintf(sprintf_buf, "file was bigger than 512b (%d), so not dumping over rs232\n", fs);
+						serial_write(sprintf_buf);
+
+			int iterations = 5;
+			int transfer_size = 512;
+
+
+			int i;
+			for (i = 0; i < iterations; i++) {
+				if (i != 0)
+					fd = open(fname, O_RDONLY);
+
+				int rd = 0;
+				while (rd < fs) {
+					read_bytes = read(fd, buf, transfer_size);
+					rd += transfer_size;
+				}
+
+				close(fd);
+
+				sprintf(sprintf_buf, "read once!\n");
+				serial_write(sprintf_buf);
+
+			}
+			sprintf(sprintf_buf, "done! (%u bytes)\n", fs);
+									serial_write(sprintf_buf);
+
 		}
-		seprintf("========\ngoodbye\n========\n");
+		serial_write("========\ngoodbye\n=======\n");
 		close(fd);
 	} else {
-		seprintf("failed to open file\n");
+		serial_write("failed to open file\n");
 	}
 
 	while (mmc_status() == CTRL_GOOD);
-	seprintf("SD disconnected!\n");
-
+	serial_write("SD disconnected!\n");
 
 	while(1);
 }

@@ -89,9 +89,11 @@
 #define MMC_CMD2                          2               ///< illegal in SPI mode !
 #define MMC_SEND_CSD                      9    ///< get card's CSD
 #define MMC_SEND_CID                      10    ///< get card's CID
+#define MMC_STOP_MULTIPLE_BLOCK_READ      12
 #define MMC_SEND_STATUS                   13
 #define MMC_SET_BLOCKLEN                  16    ///< Set number of bytes to transfer per block
 #define MMC_READ_SINGLE_BLOCK             17    ///< read a block
+#define MMC_READ_MULTIPLE_BLOCKS          18    ///< read multiple blocks
 #define MMC_WRITE_BLOCK                   24    ///< write a block
 #define MMC_PROGRAM_CSD                   27
 #define MMC_SET_WRITE_PROT                28
@@ -183,6 +185,7 @@ bit     sd_mmc_spi_host_read_sector (U16);
 
 //! Functions to read/write one sector (512btes) with ram buffer pointer
 extern Bool sd_mmc_spi_read_sector_to_ram(void *ram);     // reads a data block and send it to a buffer (512b)
+extern Bool sd_mmc_spi_read_sectors_to_ram(U8 count, void *ram);
 extern Bool sd_mmc_spi_write_sector_from_ram(const void *ram);  // writes a data block from a buffer (512b)
 extern Bool sd_mmc_spi_erase_sector_group(U32, U32);    // erase a group of sectors defined by start and end address (details in sd_mmc_spi.c)
 
