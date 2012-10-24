@@ -46,7 +46,7 @@ begin
 			-- R-format instructions
 			when NODE_INSTR_OP_R =>
 				set_state			<= '0';			-- DON'T SET NEW STATE
-				alu_ctrl				<= "00";			-- USE INSTRUCTION FUNCT FIELD
+				alu_ctrl				<= NODE_ALU_CTRL_FN;
 				alu_const			<= '0';			-- DON'T USE CONSTANT FOR ALU OP2
 				reg_src				<= '0';			-- SAVE ALU RESULT
 				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT
@@ -55,7 +55,7 @@ begin
 			
 			when NODE_INSTR_OP_S =>
 				set_state			<= '0';			-- DON'T SET NEW STATE
-				alu_ctrl				<= "10";			-- DO ADDITION (val + 0)
+				alu_ctrl				<= NODE_ALU_CTRL_SUB;
 				alu_const			<= '0';			-- DON'T USE CONSTANT FOR ALU OP2
 				reg_src				<= '0';
 				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT
@@ -64,7 +64,7 @@ begin
 			
 			when others =>
 				set_state			<= '0';			-- DON'T SET NEW STATE
-				alu_ctrl				<= "10";			-- DO ADDITION (val + 0)
+				alu_ctrl				<= NODE_ALU_CTRL_SUB;
 				alu_const			<= '0';			-- DON'T USE CONSTANT FOR ALU OP2
 				reg_src				<= '0';
 				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT

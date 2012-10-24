@@ -37,7 +37,8 @@ begin
 
 	ALU_CONTROLL: process(alu_ctrl, alu_funct) begin	
 		case alu_ctrl is
-			when NODE_ALU_CTRL_BEQ => alu_op <= NODE_INSTR_FN_SUB;
+			when NODE_ALU_CTRL_SUB => alu_op <= NODE_INSTR_FN_SUB;
+			when NODE_ALU_CTRL_ADD => alu_op <= NODE_INSTR_FN_ADD;
 			when others => alu_op <= alu_funct;
 		end case;
 	end process;
