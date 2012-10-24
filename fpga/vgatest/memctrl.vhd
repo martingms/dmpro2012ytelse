@@ -4,12 +4,12 @@ use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
 entity memctrl is
-	Port (
-			clk : in std_logic;
-			x_coord : in std_logic_vector(9 downto 0); -- Enough to represent 640 pixels
-			y_coord : in std_logic_vector(8 downto 0); -- Enough to represent 480 pixels
-			pixel : out std_logic_vector(7 downto 0)
-			);
+	port (
+		clk : in std_logic;
+		x_coord : in std_logic_vector(9 downto 0); -- Enough to represent 640 pixels
+		y_coord : in std_logic_vector(8 downto 0); -- Enough to represent 480 pixels
+		pixel : out std_logic_vector(7 downto 0)
+		);
 end memctrl;
 
 architecture Behavioral of memctrl is

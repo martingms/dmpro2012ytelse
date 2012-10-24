@@ -19,7 +19,7 @@ architecture syn of memory_from_file is
 
 	constant word_count : natural := 2 ** address_width;
 	type ram_type is array(0 to word_count - 1) of bit_vector(word_width - 1 downto 0);
-	
+
 	impure function init_ram_from_file (file_name : in string) return ram_type is
 		file ram_file : text is in file_name;
 		variable ram_file_line : line;
@@ -31,9 +31,9 @@ architecture syn of memory_from_file is
 		end loop;
 		return ram;
 	end function;
-	
+
 	signal ram : ram_type := init_ram_from_file(file_name);
-	
+
 begin
 
 	process (clk)
@@ -47,5 +47,5 @@ begin
 			end if;
 		end if;
 	end process;
-	
+
 end syn;
