@@ -46,6 +46,8 @@ void init(void) {
 #include "bmp/bmp.h"
 #include "assert.h"
 
+#include "program_select.h"
+
 #define SDRAM_BASE_ADDRESS 0xD0000000
 
 static char sprintf_buf[256];

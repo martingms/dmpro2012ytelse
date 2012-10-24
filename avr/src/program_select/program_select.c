@@ -3,36 +3,61 @@
 #include "fpga.h"
 #include "serial.h"
 
-#define UP_BUTTON 1
-#define DOWN_BUTTON 2
-#define ENTER_BUTTON 4
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fsaccess.h>
 
-#define SELECT_PROGRAM_MENU 1
-#define SELECT_DATA_MENU 2
-#define UPLOADING_PROGRAM_MENU 3
-#define UPLOADING_DATA_MENU 4
+// PROGRAM STATES
+#define STATE_SELECT_PROGRAM 	1
+#define STATE_SELECT_DATA 		2
+#define STATE_UPLOADING_PROGRAM 3
+#define STATE_UPLOADING_DATA 	4
+
+// BUTTON VALUES
+#define UP_BUTTON 		1
+#define DOWN_BUTTON 	2
+#define ENTER_BUTTON 	4
+
+// FILE SUFFIXES
+#define DATA_FILE_SUFFIX 	".byte"
+#define SCRIPT_FILE_SUFFIX 	".script"
+
+// STRINGS AND ARRAY MAXIMUMS
+#define N_FILES_MAX_DIGITS 					20
+#define SCRIPT_TRANSFER_DELAY_MAX_LENGTH 	16
+#define DEFAULT_STRING_MAX_LENGTH 			256
+#define MAX_MENU_ITEMS 						64
+
+// SCRIPT LINES
+#define SCRIPT_LINE_DESCRIPTION 	0
+#define SCRIPT_LINE_FPGA_BIN_PATH 	1
+#define SCRIPT_LINE_DATA_TYPE_DIR 	2
+#define SCRIPT_LINE_TRANSFER_DELAY 	3
 
 struct menu_item {
-	char *name;		// Name of menu item
-	U32 *file;		// Pointer to file
-	size_t size;	// Size of file
-};
+	char name[DEFAULT_STRING_MAX_LENGTH];	// Name of menu item
+	char file[DEFAULT_STRING_MAX_LENGTH];	// File path
+} menu[MAX_MENU_ITEMS];
 
+struct script {
+	char description[DEFAULT_STRING_MAX_LENGTH];
+	char fpga_bin_path[DEFAULT_STRING_MAX_LENGTH];
+	char data_type_directory[DEFAULT_STRING_MAX_LENGTH];
+	int transfer_delay;
+}selected_script;
 
-U32 *selected_program;
-size_t selected_program_size;
-U32 *selected_data;
-size_t selected_data_size;
+char *selected_data_unit_path;
 
-int current_menu;
-struct menu_item *menu;
+int current_state;
 int menu_item_selected;
 int menu_size;
 
-bool uploading;
+bool busy;
+bool reset;
 
 void button_push(U8 button) {
-	if (uploading) return;
+	if (busy) return;
 
 	if ((button & UP_BUTTON) && (menu_item_selected > 0)) {
 		menu_item_selected--;
@@ -43,83 +68,173 @@ void button_push(U8 button) {
 		//TODO refresh screen
 	}
 	if (button & ENTER_BUTTON) {
-		enter_pushed();
+		next_state();
 	}
 }
 
 void program_select_start(void) {
-	uploading = FALSE;
-	current_menu = SELECT_PROGRAM_MENU;
-	button_reg_listener(&button_push);
-	load_menu();
+	while (TRUE) {
+		load_menu(STATE_SELECT_PROGRAM);
+		button_reg_listener(&button_push);
+		busy = FALSE;
+		reset = FALSE;
+		while (reset == FALSE);
+	}
 }
 
-void load_menu(void) {
-	switch (current_menu) {
-		case SELECT_PROGRAM_MENU:
+void load_menu(int state) {
+	switch (state) {
+		case STATE_SELECT_PROGRAM:
 		{
 			menu_item_selected = 0;
-			//TODO finn alle program og list dem opp
+			//TODO finn alle .script og list dem opp
 			break;
 		}
-		case SELECT_DATA_MENU:
+		case STATE_SELECT_DATA:
 		{
 			menu_item_selected = 0;
-			//TODO finn alle data og list dem opp
+			//TODO finn alle mapper i root og list dem opp
 			break;
 		}
-		case UPLOADING_PROGRAM_MENU:
+		case STATE_UPLOADING_PROGRAM:
 		{
 			//TODO skriv til skjermen "Loading program..."
 			seprintf("Loading program...\n");
 			break;
 		}
-		case UPLOADING_DATA_MENU:
+		case STATE_UPLOADING_DATA:
 		{
 			//TODO skriv til skjermen "Loading data..."
 			seprintf("Loading data...\n");
 			break;
 		}
 		default:
-			break;
+			return;
 	}
+	current_state = state;
 
 }
 
-void enter_pushed(void) {
-	if (current_menu == SELECT_PROGRAM_MENU) {
-		selected_program = menu[menu_item_selected].file;
-		selected_program_size = menu[menu_item_selected].size;
-
-		current_menu = SELECT_DATA_MENU;
-		load_menu();
+void next_state(void) {
+	int rc;
+	if (current_state == STATE_SELECT_PROGRAM) {
+		rc = load_script(menu[menu_item_selected].file);
+		if (!rc) {
+			load_menu(STATE_SELECT_DATA);
+		}
 		return;
 	}
 
-	if (current_menu==SELECT_DATA_MENU){
-		selected_data = menu[menu_item_selected].file;
-		selected_data_size = menu[menu_item_selected].size;
+	if (current_state == STATE_SELECT_DATA){
+		selected_data_unit_path = menu[menu_item_selected].file;
+		run_fpga_program();
+	}
+}
 
-		// Uploads to FPGA
-		uploading = TRUE;
+void run_fpga_program(void) {
+	busy = TRUE;
 
-		current_menu = UPLOADING_PROGRAM_MENU;
-		load_menu();
-		fpga_send_program(selected_program, selected_program_size);
+	load_menu(STATE_UPLOADING_PROGRAM);
+	fpga_send_program(selected_script.fpga_bin_path);
 
-		if (selected_data_size > 0) {
-			current_menu = UPLOADING_DATA_MENU;
-			load_menu();
-			fpga_send_data(selected_data, selected_data_size);
+	int i;
+	int path_size = strlen(selected_data_unit_path);
+	int n_data_files = 0; 									//TODO finn antall data-filer i pathen!
+
+	if (path_size > 0) {									// If there is data
+		for (i = 0; i < n_data_files; ++i) {
+			load_menu(STATE_UPLOADING_DATA);
+			char data_path[path_size + N_FILES_MAX_DIGITS + strlen(DATA_FILE_SUFFIX)]; //TODO Finn en lur måte å finne N_FILES_MAX_DIGITS
+			sprintf(data_path, "%s%d%s", selected_data_unit_path, i, DATA_FILE_SUFFIX);
+			fpga_send_data(data_path);						// Send data to FPGA
+			fpga_run();										// Run FPGA (waits for ACK)
+			usleep(selected_script.transfer_delay);			// Sleep
+		}
+	} else {
+		fpga_run();											// Fuck the system
+	}
+
+	busy = FALSE;
+	reset = TRUE; // Resets the AVR-program
+}
+
+
+int load_script(char *script_path) {
+	char c_buffer;
+	int i,fd,line;
+	char delay_buffer[SCRIPT_TRANSFER_DELAY_MAX_LENGTH];
+
+	// Open script file
+	fd = open(script_path, O_RDONLY);
+	if (fd < 0) {
+		seprintf("Could not open script: %s\n", script_path);
+		return fd;
+	}
+
+	// Read script file
+	for (i=0, line=0; read(fd, &c_buffer, 1) > 0; ++i) {
+
+
+		if (c_buffer == '\n') {
+			line++;			// Go to next line in script file
+			i=0; 			// Reset character counter
+			continue;		// Skip to next byte
 		}
 
-		// Runs FPGA
-		fpga_set_state(FPGA_STATE_RUN);
-
-		current_menu = SELECT_PROGRAM_MENU;
-		load_menu();
-
-		uploading = FALSE;
+		// Read lines in script file
+		switch (line) {
+			case SCRIPT_LINE_DESCRIPTION:
+			{
+				if (i >= DEFAULT_STRING_MAX_LENGTH) {
+					seprintf("Error: Description in script too long (max %d characters). Loading failed.\n", DEFAULT_STRING_MAX_LENGTH);
+					return -1;
+				}
+				selected_script.description[i] = c_buffer;
+				break;
+			}
+			case SCRIPT_LINE_FPGA_BIN_PATH:
+			{
+				if (i >= DEFAULT_STRING_MAX_LENGTH) {
+					seprintf("Error: FPGA binary file path in script too long (max %d characters). Loading failed.\n", DEFAULT_STRING_MAX_LENGTH);
+					return -1;
+				}
+				selected_script.fpga_bin_path[i] = c_buffer;
+				break;
+			}
+			case SCRIPT_LINE_DATA_TYPE_DIR:
+			{
+				if (i >= DEFAULT_STRING_MAX_LENGTH) {
+					seprintf("Error: Data type path in script too long (max %d characters). Loading failed.\n", DEFAULT_STRING_MAX_LENGTH);
+					return -1;
+				}
+				selected_script.data_type_directory[i] = c_buffer;
+				break;
+			}
+			case SCRIPT_LINE_TRANSFER_DELAY:
+			{
+				if (i >= DEFAULT_STRING_MAX_LENGTH) {
+					seprintf("Error: Transfer delay in script too long (max %d characters). Loading failed.\n", DEFAULT_STRING_MAX_LENGTH);
+					return -1;
+				}
+				delay_buffer[i] = c_buffer;
+			}
+			default: // Unexpected line
+			{
+				seprintf("Warning: Unexpected line detected in script %s\n", script_path);
+				goto no_more_lines;
+			}
+		}
 	}
-	return;
+	no_more_lines:
+	selected_script.transfer_delay = atoi(delay_buffer);
+	return 0;
+}
+
+void test_load_script(char *path) {
+	load_script(path);
+	seprintf("Loaded contents of %s:", path);
+	seprintf("Description: \t%s\n", selected_script.description);
+	seprintf("FPGA bin path:\t%s\n", selected_script.fpga_bin_path);
+	seprintf("Data type dir:\t%s\n", selected_script.data_type_directory);
+	seprintf("Transfer delay:\t%d\n", selected_script.transfer_delay);
 }
