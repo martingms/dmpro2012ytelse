@@ -29,7 +29,7 @@ entity REGISTER_BANK is
 		clk 						:	in	 STD_LOGIC;
 		reset						:	in	 STD_LOGIC;
 		
-		reg_write				:	in	 STD_LOGIC_VECTOR (1 downto 0);
+		write						:	in	 STD_LOGIC_VECTOR (1 downto 0);
 		
 		adr0 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
 		adr1 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
@@ -57,19 +57,19 @@ architecture Behavioral of REGISTER_BANK is
 
 begin
 
-	REGISTERS: process(clk, reset, reg_write)
+	REGISTERS: process(clk, reset, write)
 	begin
 		if reset='1' then
 			for i in 0 to NUM_REG-1 loop
 				REGS(i) <= (others => '0');
 			end loop;
 		elsif rising_edge(CLK) then
-			if reg_write="10" then
+			if write="10" then
 				REGS(to_integer(unsigned(adr0)))<=data0_in;
 				REGS(to_integer(unsigned(adr1)))<=data1_in;
 				REGS(to_integer(unsigned(adr2)))<=data2_in;
 				REGS(to_integer(unsigned(adr3)))<=data3_in;
-			elsif reg_write="01" then
+			elsif write="01" then
 				REGS(to_integer(unsigned(adr0)))<=data0_in;
 			end if;
 		end if;

@@ -25,15 +25,17 @@ use WORK.FPGA_CONSTANT_PKG.ALL;
 entity INSTRUCTION_DECODER is
 	Port (
 		op_code 						: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
+		addr0							: in  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+		state							: in  STD_LOGIC;
 		
-		-- Control signals
-		alu_ctrl 					: out  STD_LOGIC_VECTOR (1 downto 0);		-- controls alu operation
-		set_state					: out  STD_LOGIC;									-- 0 = immidiate 	| 1 = reg data 1
-		alu_const					: out  STD_LOGIC;									-- 0 = immidiate 	| 1 = reg data 1
-		reg_src 						: out  STD_LOGIC;									-- 0 = alu res 	| 1 = n/s/e/w
-		reg_out 						: out  STD_LOGIC;									-- 0 = alu res		| 1 = n/s/e/w (algo)
-		reg_write					: out  STD_LOGIC_VECTOR (1 downto 0);		-- 00 = none | 01 = write 0 | 10 = write all
-		s_swap 						: out  STD_LOGIC									-- 0 = no swap		| 1 = swap
+		-- Control signals out
+		alu_ctrl 					: out STD_LOGIC_VECTOR (1 downto 0);		-- controls alu operation
+		set_state					: out STD_LOGIC;									-- 0 = immidiate 	| 1 = reg data 1
+		alu_const					: out STD_LOGIC;									-- 0 = immidiate 	| 1 = reg data 1
+		reg_src 						: out STD_LOGIC;									-- 0 = alu res 	| 1 = n/s/e/w
+		reg_out 						: out STD_LOGIC;									-- 0 = alu res		| 1 = n/s/e/w (algo)
+		reg_write					: out STD_LOGIC_VECTOR (1 downto 0);		-- 00 = none | 01 = write 0 | 10 = write all
+		s_swap 						: out STD_LOGIC									-- 0 = no swap		| 1 = swap
 	);
 end INSTRUCTION_DECODER;
 

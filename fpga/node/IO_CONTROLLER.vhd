@@ -28,10 +28,10 @@ entity IO_CONTROLLER is
 		reset							: in  STD_LOGIC;
 		
 		set_state					: in  STD_LOGIC;
-		reg_src						: in  STD_LOGIC;
-		com_out						: in  STD_LOGIC;
+		reg							: in  STD_LOGIC; -- reg input control
+		com							: in  STD_LOGIC; -- com out control
 		
-		reg_data						: in  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+		reg_in						: in  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 		
 		n_in							: in  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
 		s_in							: in  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
@@ -43,7 +43,7 @@ entity IO_CONTROLLER is
 		e_out							: out  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
 		w_out							: out  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
 
-		state							: out  STD_LOGIC_VECTOR (1 downto 0);
+		state							: out  STD_LOGIC;
 
 		data0							: out  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 		data1							: out  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
