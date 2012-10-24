@@ -24,7 +24,9 @@ entity dma is
 		
 		simd_addr : out std_logic_vector(simd_addr_width - 1 downto 0);
 		simd_data : inout std_logic_vector(word_width - 1 downto 0);
-		simd_write : out std_logic);
+		simd_write : out std_logic;
+		
+		step_s : out std_logic);
 end dma;
 
 architecture behavioral of dma is
@@ -54,7 +56,7 @@ architecture behavioral of dma is
 	end record;
 	
 	signal state : state_record := ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0');
-	signal next_state : state_record;
+	signal next_state : state_record := ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0');
 	
 begin
 
@@ -62,15 +64,15 @@ begin
 	begin
 		if rising_edge(clk) and enable = '1' then
 			case command is
-				when "0010" => read_active <= parameter(0);
-				when "0011" => read_base_addr <= parameter(mem_addr_width - 1 downto 0);
-				when "0100" => read_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "0101" => read_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "0110" => write_active <= parameter(0);
-				when "0111" => write_base_addr <= parameter(mem_addr_width - 1 downto 0);
-				when "1000" => write_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "1001" => write_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "1111" =>
+				when "0100" => read_active <= parameter(0);
+				when "0101" => read_base_addr <= parameter(mem_addr_width - 1 downto 0);
+				when "0110" => read_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
+				when "0111" => read_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
+				when "1000" => write_active <= parameter(0);
+				when "1001" => write_base_addr <= parameter(mem_addr_width - 1 downto 0);
+				when "1010" => write_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
+				when "1011" => write_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
+				when "0001" =>
 					state.secondary_action_phase <= '0';
 					state.memory_assert_phase <= '0';
 					state.read_addr <= read_base_addr;
@@ -84,14 +86,20 @@ begin
 		end if;
 	end process update_signals;
 	
-	run_dma: process (clk, enable)
+	run_dma: process (state, enable)
 		variable in_padding : std_logic;
 		variable should_read : std_logic;
 		variable should_write : std_logic;
 		variable action : std_logic_vector(1 downto 0); -- "00" for noop, "01" for read, "10" for write
 		variable cell_done : std_logic := '0';
 	begin
-		if rising_edge(clk) and enable = '1' and state.active = '1' then
+		if enable = '1' and state.active = '1' then
+			-- Clear external signals
+			step_s <= '0';
+			
+			-- Update internal state
+			next_state <= state;
+			
 			if state.row = 0 or state.row = simd_rows - 1 or state.col = 0 or state.col = simd_cols - 1 then
 				in_padding := '1';
 			else
@@ -167,13 +175,15 @@ begin
 					else
 						next_state.row <= 0;
 						next_state.col <= state.col - 1;
-						next_state.read_addr <= state.read_addr - read_vertical_incr;
-						next_state.write_addr <= state.write_addr - write_vertical_incr;
+						next_state.read_addr <= state.read_addr - read_horizontal_incr;
+						next_state.write_addr <= state.write_addr - write_horizontal_incr;
 					end if;
+					
+					step_s <= '1';
 				else
 					next_state.row <= state.row + 1;
-					next_state.read_addr <= state.read_addr + read_horizontal_incr;
-					next_state.write_addr <= state.write_addr + write_horizontal_incr;
+					next_state.read_addr <= state.read_addr + read_vertical_incr;
+					next_state.write_addr <= state.write_addr + write_vertical_incr;
 				end if;
 				
 				next_state.secondary_action_phase <= '0';

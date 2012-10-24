@@ -12,9 +12,8 @@
 --
 -- Dependencies: 
 --
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
+-- Revisions
+-- 0.01:					Initial version of the Instruction Decoder
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -27,21 +26,14 @@ entity INSTRUCTION_DECODER is
 	Port (
 		op_code 						: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
 		
-		-- Node control signals
-		alu_ctrl 					: out  STD_LOGIC_VECTOR (1 downto 0)						:= (others => '0'); 	-- controls alu operation
-		set_state					: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
-		alu_src 						: out  STD_LOGIC													:= '0';					-- 0 = immidiate 	| 1 = reg data 1
-		reg_src 						: out  STD_LOGIC													:= '0';					-- 0 = alu res 	| 1 = n/s/e/w
-		reg_out 						: out  STD_LOGIC													:= '0';					-- 0 = alu res		| 1 = n/s/e/w (algo)
-		reg_write					: out  STD_LOGIC													:= '0';					-- 0 = no write	| 1 = write
-		s_swap 						: out  STD_LOGIC													:= '0';					-- 0 = no swap		| 1 = swap
-		
-		-- Used for controlling the 4 way data exchange
-		reg_addr_src 				: out  STD_LOGIC													:= '0';
-		adr0 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
-		adr1 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
-		adr2 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0');
-		adr3 							: out  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0)	:= (others => '0')
+		-- Control signals
+		alu_ctrl 					: out  STD_LOGIC_VECTOR (1 downto 0);		-- controls alu operation
+		set_state					: out  STD_LOGIC;									-- 0 = immidiate 	| 1 = reg data 1
+		alu_const					: out  STD_LOGIC;									-- 0 = immidiate 	| 1 = reg data 1
+		reg_src 						: out  STD_LOGIC;									-- 0 = alu res 	| 1 = n/s/e/w
+		reg_out 						: out  STD_LOGIC;									-- 0 = alu res		| 1 = n/s/e/w (algo)
+		reg_write					: out  STD_LOGIC_VECTOR (1 downto 0);		-- 00 = none | 01 = write 0 | 10 = write all
+		s_swap 						: out  STD_LOGIC									-- 0 = no swap		| 1 = swap
 	);
 end INSTRUCTION_DECODER;
 
@@ -55,22 +47,30 @@ begin
 			when NODE_INSTR_OP_R =>
 				set_state			<= '0';			-- DON'T SET NEW STATE
 				alu_ctrl				<= "00";			-- USE INSTRUCTION FUNCT FIELD
-				alu_src				<= '1';			-- USE data1 AS ALU op2
+				alu_const			<= '0';			-- DON'T USE CONSTANT FOR ALU OP2
 				reg_src				<= '0';			-- SAVE ALU RESULT
 				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT
-				reg_write			<= '1';			-- WRITE REGISTER
+				reg_write			<= "01";			-- WRITE REGISTER 0
 				s_swap				<= '0';			-- DONT'T SWAP
 			
 			when NODE_INSTR_OP_S =>
 				set_state			<= '0';			-- DON'T SET NEW STATE
 				alu_ctrl				<= "10";			-- DO ADDITION (val + 0)
-				alu_src				<= '1';			-- USE data1 AS ALU op2
+				alu_const			<= '0';			-- DON'T USE CONSTANT FOR ALU OP2
 				reg_src				<= '0';
+				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT
+				reg_write			<= "00";			-- WRITE REGISTER 0
+				s_swap				<= '0';			-- DONT'T SWAP
 			
 			when others =>
-				-- do nothing
-		end case;
+				set_state			<= '0';			-- DON'T SET NEW STATE
+				alu_ctrl				<= "10";			-- DO ADDITION (val + 0)
+				alu_const			<= '0';			-- DON'T USE CONSTANT FOR ALU OP2
+				reg_src				<= '0';
+				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT
+				reg_write			<= "00";			-- WRITE REGISTER 0
+				s_swap				<= '0';			-- DONT'T SWAP	
+			end case;
 	end process;
 
 end Behavioral;
-
