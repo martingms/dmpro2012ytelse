@@ -25,7 +25,7 @@ library WORK;
 use WORK.FPGA_CONSTANT_PKG.ALL;
 
 entity REGISTER_BANK is
-	port(
+	Port(
 		clk 						:	in	 STD_LOGIC;
 		reset						:	in	 STD_LOGIC;
 		
@@ -41,8 +41,10 @@ entity REGISTER_BANK is
 		data2_in					:	in	 STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 		data3_in					:	in	 STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 		
+		data0_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 		data1_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
-		data2_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)
+		data2_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+		data3_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)
 	);
 end REGISTER_BANK;
 
@@ -57,7 +59,7 @@ architecture Behavioral of REGISTER_BANK is
 
 begin
 
-	REGISTERS: process(clk, reset, write)
+	process(clk, reset, write)
 	begin
 		if reset='1' then
 			for i in 0 to NUM_REG-1 loop
@@ -75,8 +77,10 @@ begin
 		end if;
 	end process REGISTERS;
 
+	data0_out <= (others=>'0') when adr0=ZERO_ADDR else REGS(to_integer(unsigned(adr0)));
 	data1_out <= (others=>'0') when adr1=ZERO_ADDR else REGS(to_integer(unsigned(adr1)));
 	data2_out <= (others=>'0') when adr2=ZERO_ADDR else REGS(to_integer(unsigned(adr2)));
+	data3_out <= (others=>'0') when adr3=ZERO_ADDR else REGS(to_integer(unsigned(adr3)));
 
 end Behavioral;
 

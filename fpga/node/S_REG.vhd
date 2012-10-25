@@ -37,8 +37,8 @@ end S_REG;
 
 architecture Behavioral of S_REG is
 
-	signal tmp_s_in				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
-	signal tmp_s_out				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
+	signal tmp_s_in				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
+	signal tmp_s_out				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
 
 begin
 
