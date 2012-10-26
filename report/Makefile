@@ -15,6 +15,8 @@ clean:
 	for s in $(TEMPS); do rm -f $(REPORT).$$s; done
 
 purge: clean
-	rm -f $(REPORT).pdf
+	-rm -f $(REPORT).pdf
 
-remake: | purge all
+remake:
+	-rm -f $(REPORT).pdf
+	$(MAKE) all

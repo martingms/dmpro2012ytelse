@@ -40,10 +40,16 @@ begin
 
 ALU : process(alu_op, op1, op2)
 	begin
-		if (alu_op=NODE_INSTR_FN_SUB) then
-			res						<= op1 + op2;
-		else
-			res						<= op1 - op2;
-		end if;
+		case alu_op is
+			-- when NODE_INSTR_FN_ADD	=> res <= op1 + op2;
+			when NODE_INSTR_FN_SUB	=> res <= op1 - op2;
+			when NODE_INSTR_FN_AND	=> res <= op1 and op2;
+			when NODE_INSTR_FN_OR	=> res <= op1 or op2;
+			when NODE_INSTR_FN_SLT	=> if (op1 < op2) then res <= "00000001"; else res <= (others => '0'); end if;
+			when NODE_INSTR_FN_EQ	=> if (op1 = op2) then res <= "00000001"; else res <= (others => '0'); end if;
+			when NODE_INSTR_FN_SLL	=> res <= op1(NODE_RDATA_BUS-2 downto 0) & '0'; 
+			when NODE_INSTR_FN_SRL	=> res <= '0' & op1(NODE_RDATA_BUS-1 downto 1);
+			when others 				=> res <= op1 + op2;
+		end case;
 	end process;
 end Behavioral;

@@ -24,16 +24,19 @@ use WORK.FPGA_CONSTANT_PKG.ALL;
 
 entity INSTRUCTION_DECODER is
 	Port (
+		enable						: in  STD_LOGIC;
+		mask							: in  STD_LOGIC;
 		op_code 						: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
+		r0 							: in  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+		state							: in  STD_LOGIC;
 		
-		-- Control signals
-		alu_ctrl 					: out  STD_LOGIC_VECTOR (1 downto 0);		-- controls alu operation
-		set_state					: out  STD_LOGIC;									-- 0 = immidiate 	| 1 = reg data 1
-		alu_const					: out  STD_LOGIC;									-- 0 = immidiate 	| 1 = reg data 1
-		reg_src 						: out  STD_LOGIC;									-- 0 = alu res 	| 1 = n/s/e/w
-		reg_out 						: out  STD_LOGIC;									-- 0 = alu res		| 1 = n/s/e/w (algo)
-		reg_write					: out  STD_LOGIC_VECTOR (1 downto 0);		-- 00 = none | 01 = write 0 | 10 = write all
-		s_swap 						: out  STD_LOGIC									-- 0 = no swap		| 1 = swap
+		-- Control signals out
+		alu_const					: out STD_LOGIC;
+		reg_write					: out STD_LOGIC_VECTOR (1 downto 0);
+		set_state					: out STD_LOGIC;
+		com_in						: out STD_LOGIC;
+		s_swap 						: out STD_LOGIC;
+		com							: out STD_LOGIC_VECTOR (1 downto 0)
 	);
 end INSTRUCTION_DECODER;
 
@@ -41,36 +44,51 @@ architecture Behavioral of INSTRUCTION_DECODER is
 
 begin
 
-	PROCESSOR_CONTROL: process(op_code) begin	
-		case op_code is
-			-- R-format instructions
-			when NODE_INSTR_OP_R =>
-				set_state			<= '0';			-- DON'T SET NEW STATE
-				alu_ctrl				<= "00";			-- USE INSTRUCTION FUNCT FIELD
-				alu_const			<= '0';			-- DON'T USE CONSTANT FOR ALU OP2
-				reg_src				<= '0';			-- SAVE ALU RESULT
-				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT
-				reg_write			<= "01";			-- WRITE REGISTER 0
-				s_swap				<= '0';			-- DONT'T SWAP
+	process(op_code, enable, mask) begin	
+		
+		if (enable='0' OR (mask='1' AND state='0')) then
+			-- Control signals out
+			alu_const				<= '0';
+			reg_write				<= (others => '0');
+			set_state				<= '0';
+			com_in					<= '0';
+			s_swap 					<= '0';
+			com						<= (others => '0');
+		else
+			-- alu_const
+			if (op_code = NODE_INSTR_OP_I) then
+				alu_const			<= '1';
+			else 
+				alu_const			<= '0';
+			end if;
 			
-			when NODE_INSTR_OP_S =>
-				set_state			<= '0';			-- DON'T SET NEW STATE
-				alu_ctrl				<= "10";			-- DO ADDITION (val + 0)
-				alu_const			<= '0';			-- DON'T USE CONSTANT FOR ALU OP2
-				reg_src				<= '0';
-				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT
-				reg_write			<= "00";			-- WRITE REGISTER 0
-				s_swap				<= '0';			-- DONT'T SWAP
+			-- reg_write
+			if (op_code = NODE_INSTR_OP_M_SEND) then
+				reg_write			<= "00";
+			elsif (op_code = NODE_INSTR_OP_M_STOR OR op_code = NODE_INSTR_OP_M_FWRD) then
+				reg_write			<= "11";
+			else
+				reg_write			<= "01";
+			end if;
 			
-			when others =>
-				set_state			<= '0';			-- DON'T SET NEW STATE
-				alu_ctrl				<= "10";			-- DO ADDITION (val + 0)
-				alu_const			<= '0';			-- DON'T USE CONSTANT FOR ALU OP2
-				reg_src				<= '0';
-				reg_out				<= '0';			-- DON'T FORWARD ALU RESULT
-				reg_write			<= "00";			-- WRITE REGISTER 0
-				s_swap				<= '0';			-- DONT'T SWAP	
-			end case;
+			-- set_state
+			if (r0 = "1111" AND op_code /= NODE_INSTR_OP_M_SEND) then
+				set_state			<= '1';
+			else
+				set_state			<= '0';
+			end if;
+			
+			-- com_in
+			-- sets com in for all M-format instructions
+			com_in					<= op_code(NODE_INSTR_OP-1);
+			
+			-- s_swap
+			if (op_code = NODE_INSTR_OP_S) then
+				s_swap				<= '1';
+			else
+				s_swap				<= '0';
+			end if;
+		end if;
 	end process;
 
 end Behavioral;

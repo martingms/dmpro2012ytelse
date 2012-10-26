@@ -8,15 +8,26 @@ use IEEE.STD_LOGIC_1164.all;
 
 package FPGA_CONSTANT_PKG is
 
-	-- INSTRUCTION SET
+	-- NODE INSTRUCTION SET
 	constant NODE_INSTR_OP			: integer	:= 3;
 	constant NODE_INSTR_OP_R		: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "000";
 	constant NODE_INSTR_OP_I		: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "001";
 	constant NODE_INSTR_OP_S		: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "010";
-
+	
+	constant NODE_INSTR_OP_M_SEND	: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "100";
+	constant NODE_INSTR_OP_M_STOR	: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "101";
+	constant NODE_INSTR_OP_M_FWRD	: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "110";
+	
+	-- NODE ALU FUNCTIONS
 	constant NODE_INSTR_FN			: integer	:= 3;
-	constant NODE_INSTR_FN_ADD		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "100";
-	constant NODE_INSTR_FN_SUB		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "101";
+	constant NODE_INSTR_FN_ADD		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "000";
+	constant NODE_INSTR_FN_SUB		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "001";
+	constant NODE_INSTR_FN_SLT		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "010";
+	constant NODE_INSTR_FN_AND		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "011";
+	constant NODE_INSTR_FN_OR		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "100";
+	constant NODE_INSTR_FN_EQ		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "101";
+	constant NODE_INSTR_FN_SLL		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "110";
+	constant NODE_INSTR_FN_SRL		: STD_LOGIC_VECTOR(NODE_INSTR_FN-1 downto 0) := "111";
 	
 	 -- NODE BUS CONSTANTS
 	constant NODE_STATE_BUS			: integer	:= 2;			-- state bus from SIMD node
@@ -25,55 +36,5 @@ package FPGA_CONSTANT_PKG is
 	constant NODE_IDATA_BUS			: integer	:= 24;		-- instruction address
 	constant NODE_DDATA_BUS			: integer	:= 8;			-- data bus (north, south, east, west)
 	constant NODE_SDATA_BUS			: integer	:= 8;			-- s data bus (left, right)
-	
-	-- NODE ALU CONTROLL
-	constant NODE_ALU_CTRL_R		: STD_LOGIC_VECTOR(1 downto 0) := "00";
-	constant NODE_ALU_CTRL_BEQ		: STD_LOGIC_VECTOR(1 downto 0) := "10";
-	
-	-- NODE ALU CONTROL
-	-- constant NODE_ALU_
-	
---    -- BUS CONSTANTS
---    constant IADDR_BUS         : integer := 32;
---    constant IDATA_BUS         : integer := 32;
---    constant DADDR_BUS         : integer := 32;
---    constant DDATA_BUS         : integer := 32;
---    constant RADDR_BUS         : integer := 5;
---
---    constant MEM_ADDR_COUNT    : integer := 8;
---
---    constant ZERO1b            : STD_LOGIC                             := '0';
---    constant ONE1b             : STD_LOGIC                             := '1';
---    constant ZERO32b           : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
---    constant ZERO16b           : STD_LOGIC_VECTOR(15 downto 0) := "0000000000000000";
---    constant ONE32b            : STD_LOGIC_VECTOR(31 downto 0) := "11111111111111111111111111111111"; 
---    constant ONE16b            : STD_LOGIC_VECTOR(15 downto 0) := "1111111111111111"; 
---    
---    -- RECORDS
---    type ALU_OP_INPUT is
---    record
---        Op0							: STD_LOGIC;
---        Op1							: STD_LOGIC;
---        Op2							: STD_LOGIC;
---    end record;
---
---    type ALU_INPUT is
---    record
---        Op0							: STD_LOGIC;
---        Op1							: STD_LOGIC;
---        Op2							: STD_LOGIC;
---        Op3							: STD_LOGIC;
---    end record;
---
---    type ALU_FLAGS is
---    record
---        Carry						: STD_LOGIC;
---        Overflow					: STD_LOGIC;
---        Zero							: STD_LOGIC;
---        Negative					: STD_LOGIC;
---    end record;
---     
---    -- PROCESSOR STATE
---    type state_type is (FETCH, EXEC, STALL);
-     
+
 end FPGA_CONSTANT_PKG;

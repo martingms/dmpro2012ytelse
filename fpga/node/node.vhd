@@ -29,7 +29,7 @@ entity node is
 		reset 						: in  STD_LOGIC;
 		
 		instr 						: in  STD_LOGIC_VECTOR (NODE_IDATA_BUS-1 downto 0);
-		state 						: out STD_LOGIC_VECTOR (1 downto 0);
+		state 						: out STD_LOGIC;
 		
 		n_in							: in STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
 		s_in							: in STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
@@ -54,65 +54,72 @@ architecture Behavioral of node is
 ----------------------------------------------------------------------------------
 	component INSTRUCTION_DECODER is
 		Port (
+			enable					: in  STD_LOGIC;
+			mask						: in  STD_LOGIC;
 			op_code 					: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
-			alu_ctrl 				: out STD_LOGIC_VECTOR (1 downto 0);
+			r0 						: in  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+			state						: in  STD_LOGIC;
+			alu_const				: out STD_LOGIC;
+			reg_write				: out STD_LOGIC_VECTOR (1 downto 0);
 			set_state				: out STD_LOGIC;
-			alu_const 				: out STD_LOGIC;
-			reg_src 					: out STD_LOGIC;
-			reg_out 					: out STD_LOGIC;
-			reg_write				: out STD_LOGIC_VECTOR (1 downto 0);		
-			s_swap 					: out STD_LOGIC
+			com_in					: out STD_LOGIC;
+			s_swap 					: out STD_LOGIC;
+			com						: out STD_LOGIC_VECTOR (1 downto 0)
 		);
 	end component;
 
-	signal ctrl_alu_ctrl 		: STD_LOGIC_VECTOR (1 downto 0);
-	signal ctrl_set_state		: STD_LOGIC;
-	signal ctrl_alu_const 		: STD_LOGIC;
-	signal ctrl_reg_src 			: STD_LOGIC;
-	signal ctrl_com_out 			: STD_LOGIC;
+	signal ctrl_alu_const		: STD_LOGIC;
 	signal ctrl_reg_write		: STD_LOGIC_VECTOR (1 downto 0);
+	signal ctrl_set_state		: STD_LOGIC;
+	signal ctrl_com_in			: STD_LOGIC;
 	signal ctrl_s_swap 			: STD_LOGIC;
+	signal ctrl_com				: STD_LOGIC_VECTOR (1 downto 0);
 
 ----------------------------------------------------------------------------------
---	I/O CONTROLLER
+--	STATE REGISTER
 ----------------------------------------------------------------------------------
-	component IO_CONTROLLER is
+	component STATE_REG is
 		Port (
-			clk 						: in   STD_LOGIC;
-			reset						: in   STD_LOGIC;
-			set_state				: in   STD_LOGIC;
-			reg_src					: in   STD_LOGIC;
-			com_out					: in   STD_LOGIC;			
-			reg_data					: in   STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);		
-			n_in						: in   STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
-			s_in						: in   STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
-			e_in						: in   STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
-			w_in						: in   STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);		
-			n_out						: out  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
-			s_out						: out  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
-			e_out						: out  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
-			w_out						: out  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
-			state						: out  STD_LOGIC_VECTOR (1 downto 0);
-			data0						: out  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
-			data1						: out  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
-			data2						: out  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
-			data3						: out  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)
+			clk 						: in  STD_LOGIC;
+			reset 					: in  STD_LOGIC;
+			set_state				: in  STD_LOGIC;
+			new_state				: in  STD_LOGIC;
+			state_out 				: out STD_LOGIC
 		);
 	end component;
-	
-	signal io_data0				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
-	signal io_data1				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
-	signal io_data2				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
-	signal io_data3				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+
+	signal state_out				: STD_LOGIC;
+----------------------------------------------------------------------------------
+--	COMMUNICATION OUT
+----------------------------------------------------------------------------------
+	component COM is
+		Port (
+			clk 						: in  STD_LOGIC;
+			reset						: in  STD_LOGIC;
+			com_ctrl					: in  STD_LOGIC_VECTOR (1 downto 0); -- com out control
+			n_in						: in  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			s_in						: in  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			e_in						: in  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			w_in						: in  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);			
+			data0						: in  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data1						: in  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data2						: in  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data3						: in  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			n_out						: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			s_out						: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			e_out						: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			w_out						: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0)
+		);
+	end component;
 
 ----------------------------------------------------------------------------------
 --	REGISTER BANK
 ----------------------------------------------------------------------------------
 	component REGISTER_BANK is
-		port(
+		Port(
 			clk 						:	in	 STD_LOGIC;
 			reset						:	in	 STD_LOGIC;
-			reg_write				:	in	 STD_LOGIC_VECTOR (1 downto 0);
+			write						:	in	 STD_LOGIC_VECTOR (1 downto 0);
 			adr0 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
 			adr1 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
 			adr2 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
@@ -121,27 +128,21 @@ architecture Behavioral of node is
 			data1_in					:	in	 STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 			data2_in					:	in	 STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 			data3_in					:	in	 STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data0_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 			data1_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
-			data2_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)
+			data2_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+			data3_out				:	out STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0)
 		);
 	end component;
 	
+	signal reg_data0_out			:	STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 	signal reg_data1_out			:	STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 	signal reg_data2_out			:	STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	signal reg_data3_out			:	STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 	
 ----------------------------------------------------------------------------------
 --	ALU
 ----------------------------------------------------------------------------------
-	component ALU_CONTROLL is
-		Port (
-			alu_ctrl 				: in  STD_LOGIC_VECTOR (1 downto 0);
-			alu_funct 				: in  STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0);
-			alu_op 					: out STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0)
-		);
-	end component;
-
-	signal alu_op					: STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0);
-
 	component ALU is
 		Port ( 
 			alu_op					: in  STD_LOGIC_VECTOR (NODE_INSTR_FN-1 downto 0);
@@ -185,77 +186,85 @@ architecture Behavioral of node is
 
 	signal alu_op2					: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
 	signal reg_data				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
+	signal reg_data0				: STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 
 begin
 ----------------------------------------------------------------------------------
 --	INSTRUCTION DECODER
 ----------------------------------------------------------------------------------
-	CONTROL : INSTRUCTION_DECODER port map (
+	CTRL : INSTRUCTION_DECODER port map (
+		enable 						=> instr(23),
+		mask 							=> instr(22),
 		op_code 						=> instr(21 downto 19),
-		alu_ctrl 					=> ctrl_alu_ctrl,
-		set_state					=> ctrl_set_state,
+		r0 							=> instr(18 downto 15),
+		state							=> state_out,
 		alu_const 					=> ctrl_alu_const,
-		reg_src 						=> ctrl_reg_src,
-		reg_out 						=> ctrl_com_out,
 		reg_write					=> ctrl_reg_write,
-		s_swap 						=> ctrl_s_swap
+		set_state 					=> ctrl_set_state,
+		com_in 						=> ctrl_com_in,
+		s_swap 						=> ctrl_s_swap,
+		com 							=> ctrl_com
 	);
 
 ----------------------------------------------------------------------------------
---	I/O CONTROLLER
+--	STATE REGISTER
 ----------------------------------------------------------------------------------
-	IO : IO_CONTROLLER port map (
+	ST_R : STATE_REG port map (
+		clk 							=> clk,
+		reset 						=> reset,
+		set_state					=> ctrl_set_state,
+		new_state					=> reg_data0(0),
+		state_out 					=> state_out
+	);
+	
+	state								<= state_out;
+----------------------------------------------------------------------------------
+--	COMUNICATION OUT
+----------------------------------------------------------------------------------
+	CMO : COM port map (
 		clk 							=> clk,
 		reset							=> reset,
-		set_state					=> ctrl_set_state,
-		reg_src						=> ctrl_reg_src,
-		com_out						=> ctrl_com_out,
-		reg_data						=> reg_data,
+		com_ctrl						=> ctrl_com,
 		n_in							=> n_in,
 		s_in							=> s_in,
 		e_in							=> e_in,
 		w_in							=> w_in,
+		data0							=> reg_data0_out,
+		data1							=> reg_data1_out,
+		data2							=> reg_data2_out,
+		data3							=> reg_data3_out,
 		n_out							=> n_out,
 		s_out							=> s_out,
 		e_out							=> e_out,
-		w_out							=> w_out,
-		state							=> state,
-		data0							=> io_data0,
-		data1							=> io_data1,
-		data2							=> io_data2,
-		data3							=> io_data3
+		w_out							=> w_out
 	);
 
 ----------------------------------------------------------------------------------
 --	REGISTER BANK
 ----------------------------------------------------------------------------------
-	REGISTERS : REGISTER_BANK port map (
+	REGS : REGISTER_BANK port map (
 		clk 							=> clk,
 		reset							=> reset,
-		reg_write					=> ctrl_reg_write,
+		write							=> ctrl_reg_write,
 		adr0 							=> instr(18 downto 15),
 		adr1 							=> instr(14 downto 11),
 		adr2 							=> instr(10 downto 7),
 		adr3							=> instr(6 downto 3),
-		data0_in						=> io_data0,
-		data1_in						=> io_data1,
-		data2_in						=> io_data2,
-		data3_in						=> io_data3,
+		data0_in						=> reg_data0,
+		data1_in						=> s_in,
+		data2_in						=> e_in,
+		data3_in						=> w_in,
+		data0_out					=> reg_data0_out,
 		data1_out					=> reg_data1_out,
-		data2_out					=> reg_data2_out
+		data2_out					=> reg_data2_out,
+		data3_out					=> reg_data3_out
 	);
 
 ----------------------------------------------------------------------------------
 --	ALU
-----------------------------------------------------------------------------------
-	ALU_CTRL : ALU_CONTROLL port map (
-		alu_ctrl 					=> ctrl_alu_ctrl,
-		alu_funct 					=> instr(2 downto 0),
-		alu_op 						=> alu_op
-	);
-	
+----------------------------------------------------------------------------------	
 	AUL : ALU port map ( 
-		alu_op						=> alu_op, 
+		alu_op						=> instr(2 downto 0), 
 		op1 							=> reg_data1_out, 
 		op2 							=> alu_op2, 
 		res 							=> alu_res
@@ -263,7 +272,7 @@ begin
 ----------------------------------------------------------------------------------
 --	SOURCE DATA REGISTER
 ----------------------------------------------------------------------------------
-	S_DATA : S_REG port map (
+	S_R : S_REG port map (
 		clk 							=> clk,
 		reset							=> reset,
 		s_swap						=> ctrl_s_swap,
@@ -277,20 +286,26 @@ begin
 ----------------------------------------------------------------------------------
 --	MULTIPLEXORS
 ----------------------------------------------------------------------------------
-	MUX_ALU_IN : MUX port map ( 
+	MUX_ALU : MUX port map ( 
 		selector						=> ctrl_alu_const,
 		bus_in0 						=> reg_data2_out,
 		bus_in1 						=> instr(10 downto 3),
 		bus_out 						=> alu_op2
 	);
 
-	MUX_REG_IN : MUX port map ( 
+	MUX_S : MUX port map ( 
 		selector						=> ctrl_s_swap,
 		bus_in0 						=> alu_res,
 		bus_in1 						=> sr_new,
 		bus_out 						=> reg_data
 	);
 
+	MUX_N : MUX port map ( 
+		selector						=> ctrl_com_in,
+		bus_in0 						=> reg_data,
+		bus_in1 						=> n_in,
+		bus_out 						=> reg_data0
+	);
 ----------------------------------------------------------------------------------
 -- START PROCESS
 ----------------------------------------------------------------------------------
