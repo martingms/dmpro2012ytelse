@@ -45,7 +45,7 @@
 <option id="gnu.c.compiler.option.debugging.level.603366387" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.c.compiler.option.optimization.flags.447920545" name="Other optimization flags" superClass="gnu.c.compiler.option.optimization.flags" value="-fdata-sections" valueType="string"/>
 <option id="gnu.c.compiler.option.preprocessor.def.symbols.740569340" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-<listOptionValue builtIn="false" value="BOARD=EVK1100"/>
+<listOptionValue builtIn="false" value="BOARD=SHADES_OF_GRAY"/>
 </option>
 <option id="gnu.c.compiler.option.include.paths.1244666122" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="../src/SOFTWARE_FRAMEWORK/DRIVERS/USART"/>

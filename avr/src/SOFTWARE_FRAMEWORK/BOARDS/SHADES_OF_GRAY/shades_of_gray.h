@@ -221,6 +221,20 @@
 #define LED7_PWM_FUNCTION   AVR32_PWM_3_FUNCTION
 //! @}
 
+/*! \name Color Identifiers of LEDs to Use with LED Functions
+ */
+//! @{
+#define LED_MONO0_GREEN   LED0
+#define LED_MONO1_GREEN   LED1
+#define LED_MONO2_GREEN   LED2
+#define LED_MONO3_GREEN   LED3
+#define LED_BI0_GREEN     LED5
+#define LED_BI0_RED       LED4
+#define LED_BI1_GREEN     LED7
+#define LED_BI1_RED       LED6
+//! @}
+
+
 												//[SHADES_OF_GRAY]
 /*! \name GPIO Connections of Push Buttons
  */

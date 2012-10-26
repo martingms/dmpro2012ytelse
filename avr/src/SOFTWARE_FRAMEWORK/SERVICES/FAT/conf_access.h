@@ -158,6 +158,9 @@
 #elif BOARD == UC3C_EK
   #define READ_LED                              LED0
   #define WRITE_LED                             LED1
+#elif BOARD == SHADES_OF_GRAY		//TODO satt inn dette, men vet ikke helt hva det er
+  #define READ_LED                              LED0
+  #define WRITE_LED                             LED1
 #endif
 
 #define memory_start_read_action(nb_sectors)    LED_On(READ_LED)

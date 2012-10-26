@@ -221,7 +221,7 @@ int load_script(char *script_path) {
 			default: // Unexpected line
 			{
 				seprintf("Warning: Unexpected line detected in script %s\n", script_path);
-				goto no_more_lines;
+				goto no_more_lines; // Breaks out of for loop
 			}
 		}
 	}

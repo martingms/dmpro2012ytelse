@@ -69,7 +69,7 @@ int init_sram(unsigned long FSC){
 int main(void)
 {
 	init();
-
+	LED_On(1);
 
 	return 0;
 }
