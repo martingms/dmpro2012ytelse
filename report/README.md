@@ -347,4 +347,6 @@ snakker om.
 
 ### Siteringer
 
-... TODO!
+Siteringer gjøres ved å benytte seg av `\cite`, som
+f.eks. `\cite{potter1985mpp}`. Referanser legges til i `bibliography.bib`, snakk
+gjerne med JN for å få det på formatet det skal være på.

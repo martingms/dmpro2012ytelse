@@ -1,23 +1,72 @@
 \documentclass{report}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[hidelinks]{hyperref}
+
 \begin{document}
+\pagenumbering{alph}
 \title{256 Shades of gray}
-\author{Fill this in at some point in the future}
+\author{
+Christer Emil Haga Bru\\
+Vegard Edvardsen\\
+Sondre Andreas Engebråten\\
+Hans Kristian Flaatten\\
+Martin Gammelsæter\\
+Jean Niklas L'orange\\ % ' er før o i ASCII-tabellen
+Erik Lothe\\
+Andreas Steensnæs Morland\\
+Mads Buvik Sandvei\\
+Einar Johan Trøan Sømåen\\
+Lichao Tang\\
+Håkon Opsvik Wikene\\
+Trygve Aaberge\\
+}
+\date{November 21, 2012}
 
 \maketitle
 
-\begin{abstract}
-\input{abstract}
-\end{abstract}
+\newpage
+\thispagestyle{empty}
+\mbox{}
 
-\newpage
+\input{abstract}
+
+
+\chapter*{Acknowledgements}
+\begin{itemize} % TODO: Fancy bulletpoints - or definition list
+\item Magnus Jahre
+\item Stefano Nichele
+\item Gunnar Tufte
+\item Lars-Ivar Hesselberg Simonsen % (???)
+\end{itemize}
+
+
+\pagenumbering{roman}
 \tableofcontents
+\listoffigures
+\listoftables
 \newpage
+\pagenumbering{arabic}
 
 \input{ch/intro}
+% Background (?)
+\input{ch/sys-over}
+
+\input{ch/fpga}
+\input{ch/avr}
+\input{ch/pcb}
+
+\input{ch/sys-test}
+\input{ch/res}
+\input{ch/disc}
+\input{ch/conc}
+
+\appendix
+
 \input{ch/ordered-parts}
 
-\bibliographystyle{plain}
 
+\bibliographystyle{plain}
 \bibliography{bibliography}
 
 \end{document}

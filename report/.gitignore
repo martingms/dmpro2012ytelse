@@ -2,3 +2,6 @@
 *.pdf
 *.bbl
 *.blg
+*.lof
+*.lot
+*.out
