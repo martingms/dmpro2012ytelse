@@ -94,7 +94,9 @@ din implementert i TikZ, PGF eller andre `.tex`-alternativer.
 For ikke-tex-baserte figurer må du i tillegg plassere grafikkfilen i
 `figs/kapittelnavn/`. Om den allerede eksisterer i repoet kan du godt bare
 symlinke, men vær forsiktig med tanke på at filen kan endres. Hvis du har mange
-filer i mappa, kan du evt. plassere en symlink til mappa i `figs/kapittelnavn/`.
+filer i mappa, kan du evt. plassere en symlink til mappa i
+`figs/kapittelnavn/`. Husk på å gjøre symlinken relativ, for å unngå diverse
+krøll.
 
 For tex-baserte figurer kan man legge selve tex-koden direkte inn i
 `figs/kapittelnavn/figurnavn.tex`. Hvis tex-koden er stor, kan det være
@@ -135,6 +137,29 @@ forkortelse, som f.eks. `fig:dev-phases`. Bare sørg for at disse er unike:
 har mange forskjellige layouts av mange forskjellige deler av systemet). For
 referering til figurer, se *Referanser og siteringer*.
 
+### Generering av figurer on-demand
+
+Vanlig prosedyre for å unngå at repositorier blir unødvendig store er å ha
+filene som generer bildene i mappene i stedet. Da vi har brutt dette
+eksepsjonelt mye fra før av, tror jeg det blir mer ork enn verdi i å gjøre om
+på dette. Om det likevel skulle være ønske, fyr løs og ta kontakt: Å sette opp
+make-scripts tar ikke lang tid.
+
+### Kvalitet på rastergrafikk (bilder: png/jpg)
+
+Først og fremst: Om du kan unngå png/jpg/bmp eller lignende, unngå det. Vi er
+glade i vektorgrafikk, og alt fra ai-, ps-, eps-, svg- og pdf-filer mottas med
+stor glede. Kun pdf-filer kan inkluderes, men å konvertere over kan JN hjelpe
+deg med eller gjøre for deg.
+
+Om det er et bilde eller screenshot, eller annet som gjør at det må være
+rastergrafikk, sørg for at kvaliteten er høy! Få det mest høyoppløselige bildet,
+og legg det inn med skalering. Vi kan nedskalere senere med tanke på størrelsen
+på pdfen, men det er viktig å få kvalitet på bildene. Legg helst bilder med stor
+størrelse (over 1 MB) på
+[downloads-siden på github](https://github.com/martingamm/dmpro2012ytelse/downloads),
+og putt filen i `.gitignore` i den mappa den faktisk skal ligge i.
+
 ### Tabeller
 
 Tabeller skal også plasseres i `figs/kapittelnavn/`, på formen
@@ -170,10 +195,7 @@ med en dobbel pipe. Dette gjøres enkelt og greit ved å starte med
 Separer elementer med `&` og slutt hver linje med `\\ \hline`. Hvis tabellen har
 en header, skal denne slutte med `\\ \hline \hline`. Alle elementene i headeren
 må innkapsles i `{\sc }` - f.eks. hvis man har attributtnavnet `attr`, må
-headeren ha `{\sc attr}`. Om første element i tabellen er en identifikator,
-burde man benytte seg av `{\sc name}` eller `{\bf name}`. Her er jeg usikker på
-om vi skal gå for `\sc` eller `\bf`, så om noen har noen preferanser er det
-flott om de blir uttalt!
+headeren ha `{\sc attr}`.
 
 Eksempel med tabell som benytter seg av identifikatorer:
 
@@ -182,9 +204,9 @@ Eksempel med tabell som benytter seg av identifikatorer:
   \centering
   \begin{tabular}{| c | | r | c |} \hline
     {\sc Name} & {\sc Score} & {\sc Born}\\ \hline \hline
-    {\bf Rich} & 100 & 1958  \\ \hline
-	{\bf Paul} & 54  & 1975  \\ \hline
-	{\bf Fred} & 76  & 1967  \\ \hline
+    Rich & 100 & 1958 \\ \hline
+	Paul &  54 & 1975 \\ \hline
+	Fred &  76 & 1967 \\ \hline
   \end{tabular}
   \caption{List of players, scores and their birthyear}
   \label{tab:pscores}
@@ -201,11 +223,95 @@ For mer informasjon rundt tabellgenerering, ta en titt på
 
 ## Kode og pseudokode
 
-TODO
+All kode og pseudokode skal plasseres i `code/kapittelnavn/kodenavn.tex`,
+eventuelt også i `code/kapittelnavn/kodenavn.[suffiks]` om en egen kodefil er
+nødvendig. Som med figurer, kan disse symlinkes for å slippe redundans i
+repoet. Som med tidligere symlinker, pass på at disse er relative.
+
+Et eksempel på en kodesnutt som vises følger:
+
+```tex
+\begin{lstlisting}[float=h,language=VHDL,
+                   caption={ALU component in VHDL},label={lst:vhdl}]
+component alu is
+port (
+    num_A:  in std_logic_vector(15 downto 0);
+    num_B:  in std_logic_vector(15 downto 0);
+	jpsign: in std_logic;
+	ALUs:   in std_logic_vector(1 downto 0);
+	ALUz:   out std_logic;
+	ALUout: out std_logic_vector(15 downto 0)
+);
+end component;
+\end{lstlisting}
+```
+
+Her er float det samme som `[h]`-argumentet tidligere. `caption` og `label` er
+det samme som sine backslasha venner i figurer og tabeller. Vær litt påpasselig
+på å legge inn riktig språk: Se [manualen for listings][listings] for en liste
+over støttede språk. Andre argumenter som f.eks. `numbers`, `firstnumbers` og
+venner kan gjerne benyttes om det faller naturlig, men helst ikke endre på
+layouten til listingen.
+
+For kodesnutter eller kode fra andre filer, benytt deg av følgende:
+
+```tex
+\lstinputlisting[float=h,firstline=a,lastline=b,numbers=left,
+                 caption={Listingbeskrivelse},label={lst:listinglabel}]
+				 {inputfil.suffix}
+```
+
+Legg denne inn i en egen `tex`-fil, da det kan være ønskelig å få konsistent
+layout på koden. Det er lettere om vi har all kode på samme område.
+
+`firstline` og `lastline` kan unngås om hele filen skal puttes inn. Hvis ikke,
+velger man hvilke linjer man skal importere inn.
+
+For inline kode, benytt dere av `\lstinline[language=lang]|kode|`. For lengre
+inline kode, benytt dere av
+`\begin[nolol=true,language=lang]{lstlisting}...\end{lstlisting}` direkte i
+tex-koden, uten floats, captions eller labels.
+
+For mer informasjon, se pdf-manualen for [listings][].
+
+### Algoritmer
+
+Algoritmeseksjon kommer om det blir behov for det. Ellers ligger den på is.
+
+[listings]: http://mirror.hmc.edu/ctan/macros/latex/contrib/listings/listings.pdf "listings LaTeX manual"
+[algorithmicx]: http://mirrors.cicku.me/CTAN/macros/latex/contrib/algorithmicx/algorithmicx.pdf "algorithmicx LaTeX manual"
 
 ## Matematikk
 
-TODO
+Inline matematikk gjøres ved å plassere matten mellom dollartegn, slik som
+følgende: `Pythagoras tells us that $a^2 + b^2 = c^2$ ...`. Sentrerte ligninger
+på egen linje kan skrives på følgende måte:
+
+```tex
+\[
+    \rho\left( \partial_t \vec{u} + \vec{u} \cdot \nabla\vec{u} \right)
+	= - \nabla p + \mu \nabla^2 \vec{u}
+\]
+```
+
+Om man skal referere til ligninger, må man benytte seg av `equations`-settingen,
+slik som dette:
+
+```tex
+\begin{equation} \label{eq:ising}
+	E = -J \sum_{i=1}^N s_i s_{i+1}
+\end{equation}
+Equation~\eqref{eq:ising} expresses the energy of a configuration
+of spins in the Ising model.
+```
+
+Merk at en equation ikke er en float, så den plasseres direkte der du sier at
+den skal stå. For mer info om matematikk i LaTeX, sjekk ut wikibooks-siden til
+[matematikk i LaTeX][math-tutor]. [Mathurl.com](http://www.mathurl.com) er også
+en praktisk side som burde benyttes for å raskt sjekke om matteligningen man
+skriver ser korrekt ut.
+
+[math-tutor]: http://en.wikibooks.org/wiki/LaTeX/Mathematics "LaTeX Mathematics"
 
 ## Referering og sitering
 
@@ -218,7 +324,7 @@ det tidligere tabelleksempelet gjøres på følgende måte:
 ```tex
 The scores seemed to have a negative correlation with birthyear, as implied from
 table \ref{tab:pscore}. A reasonable assumption is that older players have more
-experience. [...]
+experience [...]
 ```
 
 Noter at man alltid skriver typen foran referering, da forskjellige elementtyper
@@ -236,7 +342,8 @@ referanse, som `Figuren \ref{fig:figurnavn} viser at...`.
 Referering av ligninger er helt likt som referering av andre elementer, så
 standard praksis skal fremdeles overholdes. Den eneste forskjellen er at man
 ikke benytter seg av `\ref`, men bruker `\eqref` i stedet. Man må fremdeles
-skrive `equation \eqref{eq:pythagoras}` for å fortelle hva man snakker om.
+skrive `equation \eqref{eq:pythagoras} tells us that` for å fortelle hva man
+snakker om.
 
 ### Siteringer
 

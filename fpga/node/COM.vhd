@@ -40,10 +40,10 @@ entity COM is
 		data2							: in  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 		data3							: in  STD_LOGIC_VECTOR (NODE_RDATA_BUS-1 downto 0);
 
-		n_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0) := (others => '0');
-		s_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0) := (others => '0');
-		e_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0) := (others => '0');
-		w_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0) := (others => '0')
+		n_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+		s_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+		e_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+		w_out							: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0)
 	);
 end COM;
 
@@ -73,4 +73,3 @@ begin	process (clk, reset)
 		end if;
 	end process;
 end Behavioral;
-
