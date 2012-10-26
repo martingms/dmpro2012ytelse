@@ -51,12 +51,13 @@ architecture behavioral of dma is
 		col : natural range 0 to simd_cols;
 		read_addr : std_logic_vector(mem_addr_width - 1 downto 0);
 		write_addr : std_logic_vector(mem_addr_width - 1 downto 0);
+		step_s : std_logic;
 		secondary_action_phase : std_logic;
 		memory_assert_phase : std_logic;
 	end record;
 	
-	signal state : state_record := ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0');
-	signal next_state : state_record := ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0');
+	signal state : state_record := ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0', '0');
+	signal next_state : state_record := ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0', '0');
 	
 begin
 
@@ -75,6 +76,7 @@ begin
 				when "0001" =>
 					state.secondary_action_phase <= '0';
 					state.memory_assert_phase <= '0';
+					state.step_s <= '0';
 					state.read_addr <= read_base_addr;
 					state.write_addr <= write_base_addr;
 					state.row <= 0;
@@ -92,13 +94,15 @@ begin
 		variable should_write : std_logic;
 		variable action : std_logic_vector(1 downto 0); -- "00" for noop, "01" for read, "10" for write
 		variable cell_done : std_logic := '0';
+		variable assert_done : std_logic := '0';
 	begin
 		if enable = '1' and state.active = '1' then
-			-- Clear external signals
-			step_s <= '0';
+			-- Set external signals
+			step_s <= state.step_s;
 			
 			-- Update internal state
 			next_state <= state;
+			next_state.step_s <= '0';
 			
 			if state.row = 0 or state.row = simd_rows - 1 or state.col = 0 or state.col = simd_cols - 1 then
 				in_padding := '1';
@@ -118,15 +122,19 @@ begin
 					action := "10"; -- Write second
 					cell_done := '1'; -- Done after this
 				end if;
+				assert_done := '0';
 			elsif should_read = '1' then
 				action := "01";
 				cell_done := '1';
+				assert_done := '0';
 			elsif should_write = '1' then
 				action := "10";
 				cell_done := '1';
+				assert_done := '0';
 			else
 				action := "00";
 				cell_done := '1';
+				assert_done := '1';
 			end if;
 			
 			-- Perform read action
@@ -144,6 +152,7 @@ begin
 					
 					next_state.memory_assert_phase <= '0';
 					next_state.secondary_action_phase <= '1';
+					assert_done := '1';
 				end if;
 			end if;
 			
@@ -164,11 +173,12 @@ begin
 					mem_write <= '0';
 					
 					next_state.memory_assert_phase <= '0';
+					assert_done := '1';
 				end if;
 			end if;
 			
 			-- If done with the current cell, step counters and update addresses
-			if cell_done = '1' and state.memory_assert_phase = '1' then
+			if cell_done = '1' and assert_done = '1' then
 				if state.row = simd_rows - 1 then
 					if state.col = 0 then
 						next_state.active <= '0';
@@ -179,7 +189,7 @@ begin
 						next_state.write_addr <= state.write_addr - write_horizontal_incr;
 					end if;
 					
-					step_s <= '1';
+					next_state.step_s <= '1';
 				else
 					next_state.row <= state.row + 1;
 					next_state.read_addr <= state.read_addr + read_vertical_incr;

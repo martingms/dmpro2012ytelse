@@ -149,6 +149,22 @@ BEGIN
 		command <= "0111"; -- set read_vertical_incr
 		parameter <= conv_std_logic_vector(82, 21);
 		wait for clk_period;
+
+		command <= "1000"; -- set write_active
+		parameter <= "000000000000000000001";
+		wait for clk_period;
+		
+		command <= "1001"; -- set write_base_addr
+		parameter <= conv_std_logic_vector(1004, 21);
+		wait for clk_period;
+		
+		command <= "1010"; -- set write_horizontal_incr
+		parameter <= conv_std_logic_vector(329, 21);
+		wait for clk_period;
+		
+		command <= "1011"; -- set write_vertical_incr
+		parameter <= conv_std_logic_vector(82, 21);
+		wait for clk_period;
 		
 		command <= "0001"; -- start
 		wait for clk_period;
