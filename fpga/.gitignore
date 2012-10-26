@@ -64,3 +64,12 @@ xst/
 _ngo/
 _xmsgs/
 work/
+
+# Added by Vegard
+dma.wcfg
+*.xmsgs
+*.cmd
+isim/
+*.exe
+*.wdb
+xilinxsim.ini
