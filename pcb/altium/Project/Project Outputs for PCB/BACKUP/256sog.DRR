@@ -1,0 +1,26 @@
+---------------------------------------------------------------------------
+NCDrill File Report For: 256sog.PcbDoc   09.10.2012  12:17:18
+---------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : 256sog-RoundHoles.TXT
+ASCII SlotHoles File : 256sog-SlotHoles.TXT
+EIA File   : 256sog.DRL
+
+Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
+---------------------------------------------------------------------------
+T1        0.3mm (11.811mil)        Round          561              3273.12 mm (128.86 Inch)
+T2        0.75mm (29.528mil)       Round          8                190.51 mm (7.50 Inch)
+T3        0.762mm (30mil)          Slot           3                7356.11 mm (289.61 Inch)
+T4        0.8mm (31.496mil)        Round          8                190.51 mm (7.50 Inch)
+T5        0.9mm (35.433mil)        Round          226              1506.17 mm (59.30 Inch)
+T6        1mm (39.37mil)           Round          26               399.14 mm (15.71 Inch)
+T7        1.09mm (42.913mil)       Round          9                22.94 mm (0.90 Inch)
+T8        1.19mm (46.85mil)        Round          1                0.00 mm (0.00 Inch)
+T9        3.2mm (125.984mil)       Round          2                24.92 mm (0.98 Inch)
+T10       3.26mm (128.346mil)      Round          2                24.99 mm (0.98 Inch)
+T11       1mm (39.37mil)           Round          2         NPTH   4.40 mm (0.17 Inch)
+---------------------------------------------------------------------------
+Totals                                            848              12992.79 mm (511.53 Inch)
+
+Total Processing Time (hh:mm:ss) : 00:00:01

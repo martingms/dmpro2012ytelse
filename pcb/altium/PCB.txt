@@ -1,0 +1,32 @@
+Field=Comment~String~Comment~100|Field=Description~String~Description~100|Field=Designator~String~Designator~100|Field=Footprint~String~Footprint~100|Field=LibRef~String~LibRef~100|Field=Quantity~Integer~Quantity~100|ReportField=Currency~<none>|ReportField=ProductionQuantity~1|ReportField=ProjectFileName~Free Documents|ReportField=ProjectFullPath~Free Documents|ReportField=Title~Bill of Materials For Schematic Document [PCB.SchDoc]|ReportField=TotalQuantity~217|ReportField=ReportTime~10:36:10|ReportField=ReportDate~07.10.2012|ReportField=ReportDateTime~07.10.2012 10:36:10|ReportField=OutputName~Bill of Materials|ReportField=OutputType~BOM_PartType|ReportField=GeneratorName~BOM|ReportField=GeneratorDescription~Bill of Materials|ReportField=VariantName~None|ReportField=Address1~|ReportField=Address2~|ReportField=Address3~|ReportField=Address4~|ReportField=ApprovedBy~|ReportField=Author~|ReportField=CheckedBy~|ReportField=CompanyName~|ReportField=CurrentDate~07.10.2012|ReportField=CurrentTime~10:36:04|ReportField=Date~|ReportField=DocumentFullPathAndName~Y:\PCB\PCB.SchDoc|ReportField=DocumentName~PCB.SchDoc|ReportField=DocumentNumber~|ReportField=DrawnBy~|ReportField=Engineer~|ReportField=ImagePath~|ReportField=ModifiedDate~06.10.2012|ReportField=Organization~|ReportField=ProjectName~|ReportField=Revision~|ReportField=Rule~|ReportField=SheetNumber~|ReportField=SheetTotal~|ReportField=Time~|ReportField=Title~|ReportField=DataSourceFileName~PCB.SchDoc|ReportField=DataSourceFullPath~Y:\PCB\PCB.SchDoc
+AT32UC3A0|AVR32 32-Bit Microcontroller|AVR|MY_TQFP144|AT32UC3A0|1
+CY7C1049DV33||AVR_MEM, VGA_MEM|TSOP80P1180X120-44N|CY7C1049DV33|2
+Button||B1, B2, B3, B4, B5, B6|Button|Button|6
+Cap Semi|Capacitor (Semiconductor SIM Model)|C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22, C23, C24, C25, C26, C27, C28, C29, C30, C31, C32, C33, C34, C35, C36, C37, C38, C39, C40, C41, C42, C43, C44, C45, C46, C47, C48, C49, C50, C51, C52, C53, C54, C55, C56, C57, C58, C59, C60, C61, C62, C63, C64, C65, C66, C67, C68, C69, C70, C71, C72, C73, C74, C75, C76, C77, C78, C79, C80, C81|CAPC3216L|Cap Semi|81
+Crystal||Crystal|Crystal|Crystal|1
+HSMC-C177|Low Profile Chip LED, Red|D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13|2.0X1.25X0.4|HSMC-C177|13
+Minne54P||DATA_MEM|TSOP80P1180X120-54N|Minne54P|1
+Cap Pol1|Polarized Capacitor (Radial)|E1, E2, E3, E4, E5, E6, E7, E8|CAPPR5-5x5|Cap Pol1|8
+XCF04SVOG20C|XCF00S Series, Platform Flash In-System Programmable Configuration 3.3V PROM, 20-Pin TSOP, 4-Megabit, Commercial Grade, Pb-Free|FLASH|VOG20_N|XCF04SVOG20C|1
+XC3S500E-4PQG208C|Spartan-3E 1.2V FPGA, 158 User I/Os, 208-Pin PQFP, Standard Performance, Commercial Grade, Pb-Free|FPGA_|PQG208_L|XC3S500E-4PQG208C|1
+FPGA-JTAG||FPGA_JTAG|HDR2X7|FPGA-JTAG|1
+JTAG|JTAG|JTAG1|HDR2X5|JTAG|1
+Mini_USB|USB 2.0, Right Angle, SMT, B Type, Receptacle, 5 Position, Black|Mini_USB|My_USB|Mini_USB|1
+Oscilator||O1|Oscilator|Oscilator|1
+Header 2|Header, 2-Pin|P1, P3, P6, P7, P8, P9, P17, P33|HDR1X2|Header 2|8
+Header 3|Header, 3-Pin|P2, P14, P15, P16, P18, P19, P20, P21, P22, P23, P24, P25, P26, P27, P28, P30, P32|HDR1X3|Header 3|17
+Header 3X2|Header, 3-Pin, Dual row|P4|HDR2X3|Header 3X2|1
+Header 4X2|Header, 4-Pin, Dual row|P5, P10, P11, P12|HDR2X4|Header 4X2|4
+Header 6X2|Header, 6-Pin, Dual row|P13|HDR2X6|Header 6X2|1
+Header 19X2|Header, 19-Pin, Dual row|P29|HDR2X19|Header 19X2|1
+Header 9X2|Header, 9-Pin, Dual row|P31|HDR2X9|Header 9X2|1
+CY7C1021DV33||PRO_MEM1, PRO_MEM2|TSOP80P1180X120-44N|CY7C1021DV33|2
+DC-10B||PW|DC-10B|DC-10B|1
+Res Semi|Semiconductor Resistor|R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21, R22, R23, R24, R25, R26, R27, R28, R29, R30, R31, R32, R33, R34, R35, R36, R37, R38, R39, R40, R41, R42, R43, R44, R45, R46, R47, R48, R49, R50, R51, R52, R53|RESC3216L|Res Semi|53
+MAX3232ECAE|±15kV ESD-Protected, 3.0V to 5.5V, Low-Power, up to 250kbps, True RS-232 Transceiver|RS-232_Driver|SSOP16_N|MAX3232ECAE|1
+SD_CARD||SD_CARD|SD_CARD|SD_CARD|1
+D Connector 9|Receptacle Assembly, 9 Position, Right Angle|Serial|DSUB1.385-2H9|D Connector 9|1
+VGAModul||VGA_Modul|VGAModul|VGAModul|1
+DE15F-VGA||VGA_PORT|DE15F-VGA|DE15F-VGA|1
+LM1084IT-ADJ|5A Low Dropout Positive Regulators|VR1, VR3, VR4|T03B|LM1084IT-ADJ|3
+LM1084IT-3.3|5A Low Dropout Positive Regulators|VR2|T03B|LM1084IT-3.3|1

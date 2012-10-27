@@ -27,7 +27,7 @@ PushECOToAnnotationFile=1
 DItemRevisionGUID=
 
 [Document1]
-DocumentPath=Project Outputs for VGAcomponents\VGAcomponents\VGAPlugg.PcbLib
+DocumentPath=VGAPlugg.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0

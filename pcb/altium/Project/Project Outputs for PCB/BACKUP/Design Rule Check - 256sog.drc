@@ -1,0 +1,81 @@
+Protel Design System Design Rule Check
+PCB File : \\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc
+Date     : 09.10.2012
+Time     : 15:07:05
+
+Processing Rule : SMD Neck-Down Constraint (Percent=100%) (All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=4.921mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=4.921mil) (Max=10mil) (Preferred=5.905mil) (All)
+Rule Violations :0
+
+Processing Rule : Net Antennae (Tolerance=0mil) (All)
+Rule Violations :0
+
+Processing Rule : Silk to Silk (Clearance=1.378mil) (All),(All)
+   Violation between Text "Einar Johan Troan Somaen" (7194.721mil,9209.974mil)  Top Overlay and 
+                     Track (8021.654mil,9208.662mil)(8067.913mil,9254.921mil)  Top Overlay
+   Violation between Text "Einar Johan Troan Somaen" (7194.721mil,9209.974mil)  Top Overlay and 
+                     Track (8320.866mil,9208.662mil)(8367.126mil,9254.921mil)  Top Overlay
+   Violation between Text "eter" (8404.528mil,8863.189mil)  Top Overlay and 
+                     Text "Martin Gammelsa" (7551.181mil,8863.189mil)  Top Overlay
+   Violation between Text "es Morland" (8032.48mil,9392.717mil)  Top Overlay and 
+                     Text "Andreas Steensna" (7102.362mil,9392.717mil)  Top Overlay
+Rule Violations :4
+
+Processing Rule : Silkscreen Over Component Pads (Clearance=7.874mil) (All),(All)
+   Violation between Track (6826.23mil,3072mil)(6826.23mil,3131.19mil)  Top Overlay and 
+                     Pad Mini_USB-5(6850.19mil,3186.89mil)  Top Layer
+   Violation between Track (6826.46mil,3241.88mil)(6826.46mil,3338mil)  Top Overlay and 
+                     Pad Mini_USB-5(6850.19mil,3186.89mil)  Top Layer
+   Violation between Track (6523.75mil,3072mil)(6523.76mil,3131.19mil)  Top Overlay and 
+                     Pad Mini_USB-5(6499.8mil,3186.89mil)  Top Layer
+   Violation between Track (6524mil,3241.88mil)(6524mil,3339.25mil)  Top Overlay and 
+                     Pad Mini_USB-5(6499.8mil,3186.89mil)  Top Layer
+   Violation between Track (6546mil,3380.76mil)(6573mil,3380.76mil)  Top Overlay and 
+                     Pad Mini_USB-5(6499.8mil,3419.17mil)  Top Layer
+   Violation between Track (6781.29mil,3382.43mil)(6804mil,3382.43mil)  Top Overlay and 
+                     Pad Mini_USB-5(6850.19mil,3419.17mil)  Top Layer
+   Violation between Track (6524mil,3339.25mil)(6824.46mil,3339.25mil)  Top Overlay and 
+                     Pad Mini_USB-(6588.386mil,3305mil)  Multi-Layer
+   Violation between Track (6524mil,3339.25mil)(6824.46mil,3339.25mil)  Top Overlay and 
+                     Pad Mini_USB-(6761.614mil,3305mil)  Multi-Layer
+   Violation between Track (2144.724mil,6320mil)(2470mil,6320mil)  Top Overlay and 
+                     Pad PW-2(2562.048mil,6323.15mil)  Multi-Layer
+   Violation between Track (7713.504mil,3403.228mil)(7964.488mil,3403.228mil)  Top Overlay and 
+                     Pad VGA_PORT-17(7828.858mil,3505mil)  Multi-Layer
+   Violation between Track (8640.669mil,3404.213mil)(8949.724mil,3404.213mil)  Top Overlay and 
+                     Pad VGA_PORT-16(8809.961mil,3505mil)  Multi-Layer
+Rule Violations :11
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=1.575mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=4.921mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=1mil) (Max=141.732mil) (All)
+Rule Violations :0
+
+Processing Rule : Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)
+Rule Violations :0
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+Rule Violations :0
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+Rule Violations :0
+
+Processing Rule : Room PCB (Bounding Region = (2030.512mil, 3024.606mil, 11819.882mil, 10258.858mil) (InComponentClass('PCB'))
+   Violation between Room Definition Between Component on TopLayer And Rule on TopLayer
+Rule Violations :1
+
+
+Violations Detected : 16
+Time Elapsed        : 00:00:30

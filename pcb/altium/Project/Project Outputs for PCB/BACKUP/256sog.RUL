@@ -1,0 +1,5 @@
+DRC Rules Export File for PCB: Z:\PCB\Project\256sog.PcbDoc
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=4.92
+RuleKind=Width|RuleName=Width|Scope=Board|Minimum=4.92
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=4.00
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0

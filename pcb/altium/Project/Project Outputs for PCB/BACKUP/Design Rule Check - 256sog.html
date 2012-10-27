@@ -1,0 +1,414 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-16">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : sans-serif;
+			color : white;
+			background-color : #21489e;
+			padding: 0.3em;
+		}
+		body {
+			font-family : verdana;
+		}
+		td, th {
+			padding: 0.5em;
+			text-align : center;
+			width : 18%;
+		}
+		th {
+			background-color : #A6CAF0;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+		}
+		
+		.DRC_summary_header {							
+			padding-bottom : 0.1em;
+			border : 0px solid black;							
+			width: 100%;
+                        align: right;
+                        
+		}
+
+		.DRC_summary_header_col1, 
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3
+		{
+			color : black;
+			font-size:150%;
+                        padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2: 0em;
+			border : 0px solid black;
+			width : auto;
+			vertical-align: top;
+			font-weight: bold;				
+		}
+		
+		.DRC_summary_header_col1 	
+		{		                       
+			text-align: right;
+                        width: auto;	
+		}
+
+		.DRC_summary_header_col2 	
+		{		
+			text-align: center;	
+		}
+
+		.DRC_summary_header_col3 	
+		{		
+			text-align: left;	
+		}
+
+
+		
+		.header_holder
+		{
+		Width = 100%;
+		border = 0px solid green;
+		padding = 0;
+		}
+		
+		
+		
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+                {
+			left:0;
+			top:0;
+			padding-top : 0.1em;			
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top
+
+		}
+		.front_matter {	
+			
+			margin-top: 5px;
+ 			margin-left: 0px;					 			
+ 			horizontal-align: left;
+		}
+				
+		
+		.front_matter_column1 {
+			width : 10em;	
+			text-align  : right;
+			padding-right:0.1em;
+			
+		}
+		
+		.front_matter_column2 {
+                        width: 0.1em;
+			align: center;
+			text-align : center;
+			margin-right  : 0.1em;	
+			margin-left   : 0.1em;
+		}
+		.front_matter_column3 {
+			width         : auto;  
+			text-align    : left;	
+			margin-right  : 0.5em;				
+		}
+		
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : right;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #EEEEE0 
+		}
+		tr.onmouseout_even { 
+			background-color : #F3F3E3   
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : lightYellow
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #008000 
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script></head>
+<body onload=""><img ALT="Altium" src="
+			file://C:\PROGRAM FILES (X86)\ALTIUM DESIGNER SUMMER 09\Templates\AD-rgb_logo_223x64.gif
+		"><a href="dxpprocess://Client:SetupPreferences?Server=PCB|PageName=Reports" class="customize"><acronym title="dxpprocess://Client:SetupPreferences?Server=PCB|PageName=Reports">customize</acronym></a><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td Style="width:70%">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date</td>
+<td class="front_matter_column2">:</td>
+<td class="front_matter_column3">09.10.2012</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time</td>
+<td class="front_matter_column2">:</td>
+<td class="front_matter_column3">15:07:05</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time</td>
+<td class="front_matter_column2">:</td>
+<td class="front_matter_column3">00:00:30</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename</td>
+<td class="front_matter_column2">:</td>
+<td class="front_matter_column3"><a href="file:///\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc" class="file"><acronym title="\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc">\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td Style="Width:30%">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings</td>
+<td class="DRC_summary_header_col2">:</td>
+<td class="DRC_summary_header_col3">0</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations</td>
+<td class="DRC_summary_header_col2">:</td>
+<td class="DRC_summary_header_col3" style="color : red">16</td></tr>
+</table>
+</td>
+</table>
+<hr><a name="IDA2CM2K"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">0</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDASDM2K">SMD Neck-Down Constraint (Percent=100%) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDA2DM2K">Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDAGEM2K">Clearance Constraint (Gap=4.921mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDAQEM2K">Width Constraint (Min=4.921mil) (Max=10mil) (Preferred=5.905mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDA0EM2K">Net Antennae (Tolerance=0mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDAEFM2K">Silk to Silk (Clearance=1.378mil) (All),(All)</a></td>
+<td class="column2">4</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDARAM2K">Silkscreen Over Component Pads (Clearance=7.874mil) (All),(All)</a></td>
+<td class="column2">11</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDAKZM2K">Minimum Solder Mask Sliver (Gap=1.575mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDAUZM2K">Hole To Hole Clearance (Gap=4.921mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDA4ZM2K">Hole Size Constraint (Min=1mil) (Max=141.732mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDAI0M2K">Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDAS0M2K">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDA20M2K">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDAG1M2K">Room PCB (Bounding Region = (2030.512mil, 3024.606mil, 11819.882mil, 10258.858mil) (InComponentClass('PCB'))</a></td>
+<td class="column2">1</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">16</td>
+</tr>
+</table><br><hr><a name="IDAEFM2K"><table>
+<tr>
+<th style="text-align : left" colspan="2" class="rule">Silk to Silk (Clearance=1.378mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7184.721mil|Location2.X=8614.265mil|Location1.Y=9199.974mil|Location2.Y=9279.954mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7184.721mil|Location2.X=8614.265mil|Location1.Y=9199.974mil|Location2.Y=9279.954mil|Absolute=True">Text "Einar Johan Troan Somaen" (7194.721mil,9209.974mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8016.654mil|Location2.X=8072.913mil|Location1.Y=9203.662mil|Location2.Y=9259.921mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8016.654mil|Location2.X=8072.913mil|Location1.Y=9203.662mil|Location2.Y=9259.921mil|Absolute=True">Track (8021.654mil,9208.662mil)(8067.913mil,9254.921mil)  Top Overlay</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7184.721mil|Location2.X=8614.265mil|Location1.Y=9199.974mil|Location2.Y=9279.954mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7184.721mil|Location2.X=8614.265mil|Location1.Y=9199.974mil|Location2.Y=9279.954mil|Absolute=True">Text "Einar Johan Troan Somaen" (7194.721mil,9209.974mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8315.866mil|Location2.X=8372.126mil|Location1.Y=9203.662mil|Location2.Y=9259.921mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8315.866mil|Location2.X=8372.126mil|Location1.Y=9203.662mil|Location2.Y=9259.921mil|Absolute=True">Track (8320.866mil,9208.662mil)(8367.126mil,9254.921mil)  Top Overlay</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8394.528mil|Location2.X=8614.463mil|Location1.Y=8853.189mil|Location2.Y=8923.173mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8394.528mil|Location2.X=8614.463mil|Location1.Y=8853.189mil|Location2.Y=8923.173mil|Absolute=True">Text "eter" (8404.528mil,8863.189mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7541.181mil|Location2.X=8410.906mil|Location1.Y=8853.189mil|Location2.Y=8933.17mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7541.181mil|Location2.X=8410.906mil|Location1.Y=8853.189mil|Location2.Y=8933.17mil|Absolute=True">Text "Martin Gammelsa" (7551.181mil,8863.189mil)  Top Overlay</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8022.48mil|Location2.X=8612.296mil|Location1.Y=9382.717mil|Location2.Y=9462.697mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8022.48mil|Location2.X=8612.296mil|Location1.Y=9382.717mil|Location2.Y=9462.697mil|Absolute=True">Text "es Morland" (8032.48mil,9392.717mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7092.362mil|Location2.X=8042.062mil|Location1.Y=9382.717mil|Location2.Y=9462.697mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7092.362mil|Location2.X=8042.062mil|Location1.Y=9382.717mil|Location2.Y=9462.697mil|Absolute=True">Text "Andreas Steensna" (7102.362mil,9392.717mil)  Top Overlay</acronym></a></td>
+</tr>
+</table></a><a href="#top">Back to top</a><br><br><a name="IDARAM2K"><table>
+<tr>
+<th style="text-align : left" colspan="2" class="rule">Silkscreen Over Component Pads (Clearance=7.874mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6822.73mil|Location2.X=6829.73mil|Location1.Y=3068.5mil|Location2.Y=3134.69mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6822.73mil|Location2.X=6829.73mil|Location1.Y=3068.5mil|Location2.Y=3134.69mil|Absolute=True">Track (6826.23mil,3072mil)(6826.23mil,3131.19mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6806.82mil|Location2.X=6893.56mil|Location1.Y=3133.677mil|Location2.Y=3240.102mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6806.82mil|Location2.X=6893.56mil|Location1.Y=3133.677mil|Location2.Y=3240.102mil|Absolute=True">Pad Mini_USB-5(6850.19mil,3186.89mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6822.96mil|Location2.X=6829.96mil|Location1.Y=3238.38mil|Location2.Y=3341.5mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6822.96mil|Location2.X=6829.96mil|Location1.Y=3238.38mil|Location2.Y=3341.5mil|Absolute=True">Track (6826.46mil,3241.88mil)(6826.46mil,3338mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6806.82mil|Location2.X=6893.56mil|Location1.Y=3133.677mil|Location2.Y=3240.102mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6806.82mil|Location2.X=6893.56mil|Location1.Y=3133.677mil|Location2.Y=3240.102mil|Absolute=True">Pad Mini_USB-5(6850.19mil,3186.89mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6520.25mil|Location2.X=6527.26mil|Location1.Y=3068.5mil|Location2.Y=3134.69mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6520.25mil|Location2.X=6527.26mil|Location1.Y=3068.5mil|Location2.Y=3134.69mil|Absolute=True">Track (6523.75mil,3072mil)(6523.76mil,3131.19mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6456.43mil|Location2.X=6543.17mil|Location1.Y=3133.677mil|Location2.Y=3240.102mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6456.43mil|Location2.X=6543.17mil|Location1.Y=3133.677mil|Location2.Y=3240.102mil|Absolute=True">Pad Mini_USB-5(6499.8mil,3186.89mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6520.5mil|Location2.X=6527.5mil|Location1.Y=3238.38mil|Location2.Y=3342.75mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6520.5mil|Location2.X=6527.5mil|Location1.Y=3238.38mil|Location2.Y=3342.75mil|Absolute=True">Track (6524mil,3241.88mil)(6524mil,3339.25mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6456.43mil|Location2.X=6543.17mil|Location1.Y=3133.677mil|Location2.Y=3240.102mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6456.43mil|Location2.X=6543.17mil|Location1.Y=3133.677mil|Location2.Y=3240.102mil|Absolute=True">Pad Mini_USB-5(6499.8mil,3186.89mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6542.5mil|Location2.X=6576.5mil|Location1.Y=3377.26mil|Location2.Y=3384.26mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6542.5mil|Location2.X=6576.5mil|Location1.Y=3377.26mil|Location2.Y=3384.26mil|Absolute=True">Track (6546mil,3380.76mil)(6573mil,3380.76mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6456.43mil|Location2.X=6543.17mil|Location1.Y=3350.209mil|Location2.Y=3488.131mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6456.43mil|Location2.X=6543.17mil|Location1.Y=3350.209mil|Location2.Y=3488.131mil|Absolute=True">Pad Mini_USB-5(6499.8mil,3419.17mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6777.79mil|Location2.X=6807.5mil|Location1.Y=3378.93mil|Location2.Y=3385.93mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6777.79mil|Location2.X=6807.5mil|Location1.Y=3378.93mil|Location2.Y=3385.93mil|Absolute=True">Track (6781.29mil,3382.43mil)(6804mil,3382.43mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6806.82mil|Location2.X=6893.56mil|Location1.Y=3350.209mil|Location2.Y=3488.131mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6806.82mil|Location2.X=6893.56mil|Location1.Y=3350.209mil|Location2.Y=3488.131mil|Absolute=True">Pad Mini_USB-5(6850.19mil,3419.17mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6520.5mil|Location2.X=6827.96mil|Location1.Y=3335.75mil|Location2.Y=3342.75mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6520.5mil|Location2.X=6827.96mil|Location1.Y=3335.75mil|Location2.Y=3342.75mil|Absolute=True">Track (6524mil,3339.25mil)(6824.46mil,3339.25mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6548.701mil|Location2.X=6628.071mil|Location1.Y=3265.315mil|Location2.Y=3344.685mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6548.701mil|Location2.X=6628.071mil|Location1.Y=3265.315mil|Location2.Y=3344.685mil|Absolute=True">Pad Mini_USB-(6588.386mil,3305mil)  Multi-Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6520.5mil|Location2.X=6827.96mil|Location1.Y=3335.75mil|Location2.Y=3342.75mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6520.5mil|Location2.X=6827.96mil|Location1.Y=3335.75mil|Location2.Y=3342.75mil|Absolute=True">Track (6524mil,3339.25mil)(6824.46mil,3339.25mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6721.929mil|Location2.X=6801.299mil|Location1.Y=3265.315mil|Location2.Y=3344.685mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6721.929mil|Location2.X=6801.299mil|Location1.Y=3265.315mil|Location2.Y=3344.685mil|Absolute=True">Pad Mini_USB-(6761.614mil,3305mil)  Multi-Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2139.724mil|Location2.X=2475mil|Location1.Y=6315mil|Location2.Y=6325mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2139.724mil|Location2.X=2475mil|Location1.Y=6315mil|Location2.Y=6325mil|Absolute=True">Track (2144.724mil,6320mil)(2470mil,6320mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2467.048mil|Location2.X=2657.048mil|Location1.Y=6278.15mil|Location2.Y=6368.15mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2467.048mil|Location2.X=2657.048mil|Location1.Y=6278.15mil|Location2.Y=6368.15mil|Absolute=True">Pad PW-2(2562.048mil,6323.15mil)  Multi-Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7708.504mil|Location2.X=7969.488mil|Location1.Y=3398.228mil|Location2.Y=3408.228mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7708.504mil|Location2.X=7969.488mil|Location1.Y=3398.228mil|Location2.Y=3408.228mil|Absolute=True">Track (7713.504mil,3403.228mil)(7964.488mil,3403.228mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7736.276mil|Location2.X=7921.441mil|Location1.Y=3412.417mil|Location2.Y=3597.583mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7736.276mil|Location2.X=7921.441mil|Location1.Y=3412.417mil|Location2.Y=3597.583mil|Absolute=True">Pad VGA_PORT-17(7828.858mil,3505mil)  Multi-Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8635.669mil|Location2.X=8954.724mil|Location1.Y=3399.213mil|Location2.Y=3409.213mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8635.669mil|Location2.X=8954.724mil|Location1.Y=3399.213mil|Location2.Y=3409.213mil|Absolute=True">Track (8640.669mil,3404.213mil)(8949.724mil,3404.213mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8717.378mil|Location2.X=8902.543mil|Location1.Y=3412.417mil|Location2.Y=3597.583mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=8717.378mil|Location2.X=8902.543mil|Location1.Y=3412.417mil|Location2.Y=3597.583mil|Absolute=True">Pad VGA_PORT-16(8809.961mil,3505mil)  Multi-Layer</acronym></a></td>
+</tr>
+</table></a><a href="#top">Back to top</a><br><br><a name="IDAG1M2K"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Room PCB (Bounding Region = (2030.512mil, 3024.606mil, 11819.882mil, 10258.858mil) (InComponentClass('PCB'))</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1814.842mil|Location2.X=11819.882mil|Location1.Y=3024.606mil|Location2.Y=10258.858mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=\\webedit.ntnu.no\groups\dmpro2012ytelse\PCB\Project\256sog.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1814.842mil|Location2.X=11819.882mil|Location1.Y=3024.606mil|Location2.Y=10258.858mil|Absolute=True">Room Definition Between Component on TopLayer And Rule on TopLayer</acronym></a><br></td>
+</tr>
+</table></a><a href="#top">Back to top</a><br><br></body>
+</html>
