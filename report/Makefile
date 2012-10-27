@@ -2,6 +2,7 @@ LATEX = pdflatex
 BIBTEX = bibtex
 REPORT = report
 TEMPS = toc bbl blg log out lof lot lol aux
+SUBDIRS = fb
 
 .PHONY: clean remake purge
 
@@ -15,6 +16,7 @@ all: $(REPORT).pdf
 
 clean:
 	for s in $(TEMPS); do rm -f $(REPORT).$$s; done
+	for dir in $(SUBDIRS); do $(MAKE) -C $$dir clean; done
 
 purge: clean
 	-rm -f $(REPORT).pdf
