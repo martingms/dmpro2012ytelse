@@ -1,50 +1,24 @@
-\documentclass{report}
+\documentclass[twoside,openright,titlepage,numbers=noenddot,headinclude,
+               footinclude=true,cleardoublepage=empty,
+               BCOR=5mm,paper=a4,fontsize=11pt]{scrreprt}
 
-\usepackage[utf8x]{inputenc}
-\usepackage[hidelinks]{hyperref}
+\input{config}
 
 \begin{document}
+\numberwithin{lstlisting}{chapter} % Must be defined after \begin{document}
+\frenchspacing
+\raggedbottom
 \pagenumbering{alph}
-\title{256 Shades of gray}
-\author{
-Christer Emil Haga Bru\\
-Vegard Edvardsen\\
-Sondre Andreas Engebråten\\
-Hans Kristian Flaatten\\
-Martin Gammelsæter\\
-Jean Niklas L'orange\\ % ' er før o i ASCII-tabellen
-Erik Lothe\\
-Andreas Steensnæs Morland\\
-Mads Buvik Sandvei\\
-Einar Johan Trøan Sømåen\\
-Lichao Tang\\
-Håkon Opsvik Wikene\\
-Trygve Aaberge\\
-}
-\date{November 21, 2012}
 
-\maketitle
-
-\newpage
-\thispagestyle{empty}
-\mbox{}
-
-\input{abstract}
-
-
-\chapter*{Acknowledgements}
-\begin{itemize} % TODO: Fancy bulletpoints - or definition list
-\item Magnus Jahre
-\item Stefano Nichele
-\item Gunnar Tufte
-\item Lars-Ivar Hesselberg Simonsen % (???)
-\end{itemize}
-
+\include{fb/front} \cleardoublepage
+\include{fb/abstract} \cleardoublepage
+\include{fb/acknowledgements} \cleardoublepage
 
 \pagenumbering{roman}
 \tableofcontents
 \listoffigures
 \listoftables
+\lstlistoflistings % meta
 \newpage
 \pagenumbering{arabic}
 
@@ -62,11 +36,11 @@ Trygve Aaberge\\
 \input{ch/conc}
 
 \appendix
+\appendixpage
+\addappheadtotoc
 
 \input{ch/ordered-parts}
 
-
-\bibliographystyle{plain}
-\bibliography{bibliography}
+\include{fb/bibliography}
 
 \end{document}

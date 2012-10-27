@@ -1,15 +1,17 @@
+LATEX = pdflatex
+BIBTEX = bibtex
 REPORT = report
-TEMPS = toc bbl blg log aux
+TEMPS = toc bbl blg log out lof lot lol aux
 
 .PHONY: clean remake purge
 
 all: $(REPORT).pdf
 
 %.pdf:
-	pdflatex $(@:.pdf=.tex)
-	bibtex $(@:.pdf=.aux)
-	pdflatex $(@:.pdf=.tex)
-	pdflatex $(@:.pdf=.tex)
+	$(LATEX) $*.tex
+	$(BIBTEX) $*.aux
+	$(LATEX) $*.tex
+	$(LATEX) $*.tex
 
 clean:
 	for s in $(TEMPS); do rm -f $(REPORT).$$s; done

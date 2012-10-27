@@ -1,0 +1,44 @@
+%%% Personal data.
+\usepackage[utf8x]{inputenc} % Fix æøå before they actually appear
+
+\newcommand{\ourTitle}{256 Shades of Gray}
+\newcommand{\ourNames}{
+Christer Emil Haga Bru\\
+Vegard Edvardsen\\
+Sondre Andreas Engebråten\\
+Hans Kristian Flaatten\\
+Martin Gammelsæter\\
+Jean Niklas L'orange\\ % "'" is before "o" in the ASCII-table :D
+Erik Lothe\\
+Andreas Steensnæs Morland\\
+Mads Buvik Sandvei\\
+Einar Johan Trøan Sømåen\\
+Lichao Tang\\
+Håkon Opsvik Wikene\\
+Trygve Aaberge\\
+}
+\newcommand{\ourDate}{November 21, 2012}
+\newcommand{\ourProject}{TDT4295 Computer Design, Project Work}
+\newcommand{\ourDept}{Department of Computer and Information Science}
+\newcommand{\ourFaculty}{Computer Architecture and Design}
+\newcommand{\ourUni}{Norwegian University of Science and Technology}
+
+%%% Packages
+
+\usepackage{scrextend}
+\usepackage{graphicx}
+
+\usepackage[hidelinks]{hyperref} % Links
+\usepackage{appendix}
+
+\usepackage{listings}
+
+\usepackage{amsmath, amssymb}
+\usepackage{classicthesis}
+
+%%% Setting up numbering based on chapters
+% (listings is numbered after \begin{document} because it's ugly)
+\numberwithin{table}{chapter}
+\numberwithin{figure}{chapter}
+%\numberwithin{equation}{chapter}
+%\numberwithin{algorithm}{chapter}

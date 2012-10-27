@@ -3,6 +3,15 @@
 Denne README-fila vil være en kombinasjon av tutorial samt en slags standard for
 hvordan ting skal skrives og formateres i rapporten.
 
+## Installering og kjøring
+
+For å kunne lage PDF-en må en ha følgende pakker og programmer tilgjengelig:
+`pdflatex`, `bibtex` og `make`.
+
+I tillegg må man ha følgende latex-pakker installert eller tilgjengelig for å
+lage selve pdf'en: classicthesis og scrextend (KOMA-script), graphicx, listings,
+inputenc, hyperref, appendix, amsmath og amssymb.
+
 ## Først og fremst
 
 Det smarteste for å vite hva vi burde ha med i rapporten er å se på tidligere
@@ -18,8 +27,9 @@ kapitler og seksjoner innad i kapitlene, figurer og grafikk, kode og algoritmer,
 samt bibliografi. Hver enkelt av disse enhetene ligger i forskjellige mapper,
 med følgende struktur:
 
-	layout og core -> report.tex
-	abstract -> abstract.tex
+	core -> report.tex
+	layout -> config.tex
+	front/back -> fb/*
 	kapitler -> ch/kapittelnavn.tex
 	seksjon -> ch/kapittelnavn/seksjonsnavn.tex
 	figurer og grafikk -> figs/kapittelnavn/figurnavn.tex
