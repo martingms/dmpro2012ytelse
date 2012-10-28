@@ -15,7 +15,7 @@
 
 #include <fsaccess.h>
 
-#define FPGA_IO_CTRL AVR32_PIN_PB02 //TODO redundant, kan fjernes når vi får PCBen
+//#define FPGA_IO_CTRL AVR32_PIN_PB02 //TODO redundant, kan fjernes når vi får PCBen
 #define DEFAULT_FPGA_LISTENER &fpga_receive_data
 #define DATA_WORD_LENGTH 		1
 #define INSTRUCTION_WORD_LENGTH 3

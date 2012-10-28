@@ -180,20 +180,19 @@
 
 												//[SHADES_OF_GRAY]
 //! Number of LEDs.
-#define LED_COUNT   8
+#define LED_COUNT   4
 
 /*! \name GPIO Connections of LEDs
  */
 //! @{
-#define LED0_GPIO   AVR32_PIN_PB27
-#define LED1_GPIO   AVR32_PIN_PB28
-#define LED2_GPIO   AVR32_PIN_PB29
-#define LED3_GPIO   AVR32_PIN_PB30
-#define LED4_GPIO   AVR32_PIN_PB19
-#define LED5_GPIO   AVR32_PIN_PB20
-#define LED6_GPIO   AVR32_PIN_PB21
-#define LED7_GPIO   AVR32_PIN_PB22
+#define LED0_GPIO   AVR32_PIN_PB20
+#define LED1_GPIO   AVR32_PIN_PB21
+#define LED2_GPIO   AVR32_PIN_PB22
+#define LED3_GPIO   AVR32_PIN_PB23
 //! @}
+
+
+//TODO hva er de tre neste blokkene?
 
 /*! \name PWM Channels of LEDs
  */
@@ -202,10 +201,10 @@
 #define LED1_PWM    (-1)
 #define LED2_PWM    (-1)
 #define LED3_PWM    (-1)
-#define LED4_PWM      0
+/*#define LED4_PWM      0
 #define LED5_PWM      1
 #define LED6_PWM      2
-#define LED7_PWM      3
+#define LED7_PWM      3*/
 //! @}
 
 /*! \name PWM Functions of LEDs
@@ -215,15 +214,16 @@
 #define LED1_PWM_FUNCTION   (-1)
 #define LED2_PWM_FUNCTION   (-1)
 #define LED3_PWM_FUNCTION   (-1)
-#define LED4_PWM_FUNCTION   AVR32_PWM_0_FUNCTION
+/*#define LED4_PWM_FUNCTION   AVR32_PWM_0_FUNCTION
 #define LED5_PWM_FUNCTION   AVR32_PWM_1_FUNCTION
 #define LED6_PWM_FUNCTION   AVR32_PWM_2_FUNCTION
-#define LED7_PWM_FUNCTION   AVR32_PWM_3_FUNCTION
+#define LED7_PWM_FUNCTION   AVR32_PWM_3_FUNCTION*/
 //! @}
 
 /*! \name Color Identifiers of LEDs to Use with LED Functions
  */
 //! @{
+/*
 #define LED_MONO0_GREEN   LED0
 #define LED_MONO1_GREEN   LED1
 #define LED_MONO2_GREEN   LED2
@@ -232,6 +232,7 @@
 #define LED_BI0_RED       LED4
 #define LED_BI1_GREEN     LED7
 #define LED_BI1_RED       LED6
+*/
 //! @}
 
 

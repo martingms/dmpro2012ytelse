@@ -15,6 +15,7 @@
 // TODO dette ligger også i 'shades_of_gray.h' under BOARDS
 // når vi bytter til PCBen kan det under fjernes
 // ------------------------------------ //
+/*
 #define FPGA_IO_00 AVR32_PIN_PA25
 #define FPGA_IO_01 AVR32_PIN_PA26
 #define FPGA_IO_02 AVR32_PIN_PA27
@@ -57,7 +58,7 @@
 
 #define FPGA_BUS_SIZE 38
 // ------------------------------------ //
-
+*/
 
 int fpga_bus[] = {
 		FPGA_IO_00,

@@ -24,7 +24,9 @@ void init(void) {
 	int rc;
 
 	// Serial
-	pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);
+	//TODO, denne får LEDene til å faile:
+	//pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);
+
 	rc = serial_init();
 	if (rc) seprintf("serial_init error %d\n", rc)
 
@@ -70,6 +72,9 @@ int main(void)
 {
 	init();
 	LED_On(1);
+	LED_On(2);
+	LED_On(4);
+	LED_On(8);
 
 	return 0;
 }
