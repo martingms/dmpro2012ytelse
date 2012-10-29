@@ -5,12 +5,19 @@ the Festina Lente report, we noticed that they mention that using multiple schem
 might give some interesting issues (which we never got any further into,
 as we never tried to use more than one schematic).
 
+A major downside of this approach was the fact that this completely serialized our
+work on the Schematic, since we couldn't make concurrent changes to our single document.
+This limited the paralellism of our work-flow to one person working on the schematic,
+and the other people in the PCB-group doing whatever could be done without touching the schematic.
+(Looking up components, making footprints etc). Since the schematic was the biggest amount
+of work, this produced a major bottle-neck for the schematic work. HOWEVER, having the overall
+control of the entire thing in one document did help to smooth out quite a few issues we met
+along the road. (TODO: Fill in a bit of details about pros for one-document vs multi).
+
 The overall layout of the schematic is logically grouped \"geographically\", to
 allow for easy reading of the schematic.
 
 \subsection {Buses/Wirelabels}
 (TODO: Noe om issues vi fikk med å navngi busser)
 
-Overordnet forklaring av hvordan
-
-Done in one page... (since they wrote about it last year)
+TODO: Overordnet forklaring av hvordan
