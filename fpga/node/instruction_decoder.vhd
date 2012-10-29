@@ -24,7 +24,7 @@ use WORK.FPGA_CONSTANT_PKG.ALL;
 
 entity INSTRUCTION_DECODER is
 	Port (
-		enable						: in  STD_LOGIC;
+		disable						: in  STD_LOGIC;
 		mask							: in  STD_LOGIC;
 		op_code 						: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
 		r0 							: in  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
@@ -44,9 +44,9 @@ architecture Behavioral of INSTRUCTION_DECODER is
 
 begin
 
-	process(op_code, enable, mask) begin	
+	process(op_code, disable, mask) begin	
 		
-		if (enable='0' OR (mask='1' AND state='0')) then
+		if (disable='1' OR (mask='1' AND state='0')) then
 			-- Control signals out
 			alu_const				<= '0';
 			reg_write				<= (others => '0');
@@ -66,7 +66,7 @@ begin
 			if (op_code = NODE_INSTR_OP_M_SEND) then
 				reg_write			<= "00";
 			elsif (op_code = NODE_INSTR_OP_M_STOR OR op_code = NODE_INSTR_OP_M_FWRD) then
-				reg_write			<= "11";
+				reg_write			<= "10";
 			else
 				reg_write			<= "01";
 			end if;
@@ -88,6 +88,16 @@ begin
 			else
 				s_swap				<= '0';
 			end if;
+			
+			-- com
+			if (op_code = NODE_INSTR_OP_M_SEND) then
+				com					<= "01";
+			elsif (op_code = NODE_INSTR_OP_M_FWRD) then
+				com					<= "10";
+			else 
+				com					<= "00";
+			end if;
+			
 		end if;
 	end process;
 

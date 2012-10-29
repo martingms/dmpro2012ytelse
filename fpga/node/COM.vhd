@@ -69,7 +69,7 @@ begin	process (clk, reset)
 				s_out					<= e_in;
 				e_out					<= n_in;
 				w_out					<= s_in;
-			end if;	
+			end if;
 		end if;
 	end process;
 end Behavioral;

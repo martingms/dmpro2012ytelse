@@ -7,7 +7,7 @@
 -- \   \   \/     Version: M.81d
 --  \   \         Application: netgen
 --  /   /         Filename: node_synthesis.vhd
--- /___/   /\     Timestamp: Fri Oct 26 11:00:23 2012
+-- /___/   /\     Timestamp: Mon Oct 29 08:18:01 2012
 -- \   \  /  \ 
 --  \___\/\___\
 --             

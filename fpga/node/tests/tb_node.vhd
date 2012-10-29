@@ -37,101 +37,122 @@ END tb_node;
  
 ARCHITECTURE behavior OF tb_node IS 
  
-    -- Component Declaration for the Unit Under Test (UUT)
+	-- Component Declaration for the Unit Under Test (UUT)
  
-    COMPONENT node
-    PORT(
-         clk : IN  std_logic;
-         reset : IN  std_logic;
-         instr : IN  std_logic_vector(23 downto 0);
-         state : OUT  std_logic_vector(1 downto 0);
-         n_in : IN  std_logic_vector(7 downto 0);
-         s_in : IN  std_logic_vector(7 downto 0);
-         e_in : IN  std_logic_vector(7 downto 0);
-         w_in : IN  std_logic_vector(7 downto 0);
-         n_out : OUT  std_logic_vector(7 downto 0);
-         s_out : OUT  std_logic_vector(7 downto 0);
-         e_out : OUT  std_logic_vector(7 downto 0);
-         w_out : OUT  std_logic_vector(7 downto 0);
-         step : IN  std_logic;
-         sr_in : IN  std_logic_vector(7 downto 0);
-         sr_out : OUT  std_logic_vector(7 downto 0)
-        );
-    END COMPONENT;
-    
+	COMPONENT node
+		PORT(
+			clk 						: in  std_logic;
+			reset 					: in  std_logic;
+			
+			instr 					: in  std_logic_vector(23 downto 0);
+			node_state 				: out std_logic;
+			
+			n_in 						: in  std_logic_vector(7 downto 0);
+			s_in 						: in  std_logic_vector(7 downto 0);
+			e_in 						: in  std_logic_vector(7 downto 0);
+			w_in 						: in  std_logic_vector(7 downto 0);
+			
+			n_out 					: out std_logic_vector(7 downto 0);
+			s_out 					: out std_logic_vector(7 downto 0);
+			e_out 					: out std_logic_vector(7 downto 0);
+			w_out 					: out std_logic_vector(7 downto 0);
+			
+			step 						: in  std_logic;
+			sr_in 					: in  std_logic_vector(7 downto 0);
+			sr_out 					: out std_logic_vector(7 downto 0)
+		);
+	END COMPONENT;
 
    --Inputs
-   signal clk : std_logic := '0';
-   signal reset : std_logic := '0';
-   signal instr : std_logic_vector(23 downto 0) := (others => '0');
-   signal n_in : std_logic_vector(7 downto 0) := (others => '0');
-   signal s_in : std_logic_vector(7 downto 0) := (others => '0');
-   signal e_in : std_logic_vector(7 downto 0) := (others => '0');
-   signal w_in : std_logic_vector(7 downto 0) := (others => '0');
-   signal step : std_logic := '0';
-   signal sr_in : std_logic_vector(7 downto 0) := (others => '0');
+   signal clk 						: std_logic := '0';
+   signal reset 					: std_logic := '0';
+   signal instr 					: std_logic_vector(23 downto 0) := (others => '0');
+   signal n_in 					: std_logic_vector(7 downto 0) := (others => '0');
+   signal s_in 					: std_logic_vector(7 downto 0) := (others => '0');
+   signal e_in 					: std_logic_vector(7 downto 0) := (others => '0');
+   signal w_in 					: std_logic_vector(7 downto 0) := (others => '0');
+   signal step 					: std_logic := '0';
+   signal sr_in 					: std_logic_vector(7 downto 0) := (others => '0');
 
  	--Outputs
-   signal state : std_logic_vector(1 downto 0);
-   signal n_out : std_logic_vector(7 downto 0);
-   signal s_out : std_logic_vector(7 downto 0);
-   signal e_out : std_logic_vector(7 downto 0);
-   signal w_out : std_logic_vector(7 downto 0);
-   signal sr_out : std_logic_vector(7 downto 0);
+   signal node_state 			: std_logic;
+   signal n_out 					: std_logic_vector(7 downto 0);
+   signal s_out 					: std_logic_vector(7 downto 0);
+   signal e_out 					: std_logic_vector(7 downto 0);
+   signal w_out 					: std_logic_vector(7 downto 0);
+   signal sr_out 					: std_logic_vector(7 downto 0);
 
    -- Clock period definitions
-   constant clk_period : time := 10 ns;
+   constant clk_period 			: time := 10 ns;
  
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
    uut: node PORT MAP (
-          clk => clk,
-          reset => reset,
-          instr => instr,
-          state => state,
-          n_in => n_in,
-          s_in => s_in,
-          e_in => e_in,
-          w_in => w_in,
-          n_out => n_out,
-          s_out => s_out,
-          e_out => e_out,
-          w_out => w_out,
-          step => step,
-          sr_in => sr_in,
-          sr_out => sr_out
-        );
+		clk 							=> clk,
+		reset 						=> reset,
+		instr 						=> instr,
+		node_state 					=> node_state,
+		n_in 							=> n_in,
+		s_in 							=> s_in,
+		e_in 							=> e_in,
+		w_in 							=> w_in,
+		n_out 						=> n_out,
+		s_out 						=> s_out,
+		e_out 						=> e_out,
+		w_out							=> w_out,
+		step 							=> step,
+		sr_in 						=> sr_in,
+		sr_out 						=> sr_out
+	);
 
    -- Clock process definitions
-   clk_process :process
+   clk_process : process
    begin
-		clk <= '0';
+		clk 							<= '0';
 		wait for clk_period/2;
-		clk <= '1';
+		clk 							<= '1';
 		wait for clk_period/2;
    end process;
  
 
    -- Stimulus process
-   stim_proc: process
+   stim_proc : process
    begin		
-      -- hold reset state for 100 ns.
-      
+		-- hold reset state for 100 ns.
+		
 		reset <= '1';		
 		wait for 100 ns;	
 		
 		reset <= '0';
-      wait for clk_period*10;
+		wait for clk_period*10;
 
 		-- ctrl mask  op   r0   r1   r2   r3   fn
-		--  0    0   000  0001 0010 0011 0100 100
-		--  0    0   00
-		-- instr <= '00'
+		--  0	0   000  0011 0001 0010 0000 100 - R3 <= R1 + R2
+		--  0	0   001  0001 0000 0000 0001 100 - R1 <= ZERO + 1
+		instr <= "000010001000000000001100";  -- R1 <= ZERO + 1
+		wait for clk_period;
+		
+		instr <= "000010010000000000010100";  -- R2 <= ZERO + 2
+		wait for clk_period;
 
-      -- insert stimulus here 
+		instr <= "000000011000100100000100";  -- R3 <= R1 + R2
+		wait for clk_period;
+		
+		instr <= "000010100000000000100100";  -- R4 <= ZERO + 4
+		wait for clk_period;
 
-      wait;
+		instr <= "001000001001000110100100";  -- SEND R1 R2 R3 R4
+		wait for clk_period;
+				
+		n_in <= n_out;
+		s_in <= s_out;
+		e_in <= e_out;
+		w_in <= w_out;
+		
+		instr <= "001011000100110101011100";  -- STORE R8 R9 R10 R11
+			
+		wait;
    end process;
 
 END;

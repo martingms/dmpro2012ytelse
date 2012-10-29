@@ -59,7 +59,7 @@ architecture Behavioral of REGISTER_BANK is
 
 begin
 
-	process(clk, reset, write)
+	REGISTERS : process(clk, reset, write)
 	begin
 		if reset='1' then
 			for i in 0 to NUM_REG-1 loop

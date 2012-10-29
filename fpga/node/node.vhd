@@ -29,7 +29,7 @@ entity node is
 		reset 						: in  STD_LOGIC;
 		
 		instr 						: in  STD_LOGIC_VECTOR (NODE_IDATA_BUS-1 downto 0);
-		state 						: out STD_LOGIC;
+		node_state 					: out STD_LOGIC;
 		
 		n_in							: in STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
 		s_in							: in STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
@@ -54,7 +54,7 @@ architecture Behavioral of node is
 ----------------------------------------------------------------------------------
 	component INSTRUCTION_DECODER is
 		Port (
-			enable					: in  STD_LOGIC;
+			disable					: in  STD_LOGIC;
 			mask						: in  STD_LOGIC;
 			op_code 					: in  STD_LOGIC_VECTOR (NODE_INSTR_OP-1 downto 0);
 			r0 						: in  STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
@@ -193,7 +193,7 @@ begin
 --	INSTRUCTION DECODER
 ----------------------------------------------------------------------------------
 	CTRL : INSTRUCTION_DECODER port map (
-		enable 						=> instr(23),
+		disable 						=> instr(23),
 		mask 							=> instr(22),
 		op_code 						=> instr(21 downto 19),
 		r0 							=> instr(18 downto 15),
@@ -217,7 +217,6 @@ begin
 		state_out 					=> state_out
 	);
 	
-	state								<= state_out;
 ----------------------------------------------------------------------------------
 --	COMUNICATION OUT
 ----------------------------------------------------------------------------------
@@ -309,5 +308,18 @@ begin
 ----------------------------------------------------------------------------------
 -- START PROCESS
 ----------------------------------------------------------------------------------
-
+	process (clk, reset)
+	begin
+		if (reset = '1') then
+			node_state				<= '0';
+--			n_out						<= '0';
+--			s_out						<= '0';
+--			e_out						<= '0';
+--			w_out						<= '0';
+--			sr_out					<= '0';
+		elsif rising_edge(clk) then
+			node_state				<= state_out;
+		end if;
+	end process;
+	
 end Behavioral;

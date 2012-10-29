@@ -1,0 +1,329 @@
+# //  ModelSim SE 6.6d Nov  1 2010 
+# //
+# //  Copyright 1991-2010 Mentor Graphics Corporation
+# //              All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND 
+# //  PROPRIETARY INFORMATION WHICH IS THE PROPERTY
+# //  OF MENTOR GRAPHICS CORPORATION OR ITS LICENSORS
+# //  AND IS SUBJECT TO LICENSE TERMS.
+# //
+# vsim -do \{do \{tb_node.fdo\}\} 
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Error: (vopt-19) Failed to access library 'work.{tb_node' at "work.{tb_node".
+# No such file or directory. (errno = ENOENT)
+# ** Error: Library work.{tb_node not found.
+# Error loading design
+vsim -novopt work.tb_node
+# vsim -novopt work.tb_node 
+# Loading std.standard
+# Loading ieee.std_logic_1164(body)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.tb_node(behavior)
+# Loading work.tb_node(behavior)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.fpga_constant_pkg
+# Loading work.fpga_constant_pkg
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.node(behavioral)
+# Loading work.node(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.instruction_decoder(behavioral)
+# Loading work.instruction_decoder(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.state_reg(behavioral)
+# Loading work.state_reg(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.com(behavioral)
+# Loading work.com(behavioral)
+# Loading ieee.numeric_std(body)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.register_bank(behavioral)
+# Loading work.register_bank(behavioral)
+# Loading ieee.std_logic_arith(body)
+# Loading ieee.std_logic_unsigned(body)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.alu(behavioral)
+# Loading work.alu(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.s_reg(behavioral)
+# Loading work.s_reg(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.mux(behavioral)
+# Loading work.mux(behavioral)
+restart -f
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+add wave sim:/tb_node/*
+restart -f
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+add wave sim:/tb_node/uut/aul/*
+restart -f
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+add wave sim:/tb_node/uut/regs/*
+restart -f
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/tests/tb_node.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Compiling entity tb_node
+# -- Compiling architecture behavior of tb_node
+restart -f
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.tb_node(behavior)
+# Loading work.tb_node(behavior)
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/tests/tb_node.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Compiling entity tb_node
+# -- Compiling architecture behavior of tb_node
+restart -f
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.tb_node(behavior)
+# Loading work.tb_node(behavior)
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/tests/tb_node.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Compiling entity tb_node
+# -- Compiling architecture behavior of tb_node
+restart -f
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.tb_node(behavior)
+# Loading work.tb_node(behavior)
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+add wave sim:/tb_node/uut/ctrl/*
+restart -f
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+restart -f
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/INSTRUCTION_DECODER.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity instruction_decoder
+# -- Compiling architecture behavioral of instruction_decoder
+# ** Error: C:/Users/hanskrfl/Desktop/dmpro/fpga/node/INSTRUCTION_DECODER.vhd(102): near "process": expecting "IF"
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/INSTRUCTION_DECODER.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity instruction_decoder
+# -- Compiling architecture behavioral of instruction_decoder
+restart -f
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.instruction_decoder(behavioral)
+# Loading work.instruction_decoder(behavioral)
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/INSTRUCTION_DECODER.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity instruction_decoder
+# -- Compiling architecture behavioral of instruction_decoder
+restart -f
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.instruction_decoder(behavioral)
+# Loading work.instruction_decoder(behavioral)
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/ALU.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package std_logic_arith
+# -- Loading package std_logic_unsigned
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity alu
+# -- Compiling architecture behavioral of alu
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/COM.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity com
+# -- Compiling architecture behavioral of com
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/INSTRUCTION_DECODER.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity instruction_decoder
+# -- Compiling architecture behavioral of instruction_decoder
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/MUX.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Compiling entity mux
+# -- Compiling architecture behavioral of mux
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/NODE.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity node
+# -- Compiling architecture behavioral of node
+vcom -reportprogress 30 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/REGISTER_BANK.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package numeric_std
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity register_bank
+# -- Compiling architecture behavioral of register_bank
+vcom -reportprogress 30 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/S_REG.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity s_reg
+# -- Compiling architecture behavioral of s_reg
+vcom -reportprogress 30 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/STATE.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity state_reg
+# -- Compiling architecture behavioral of state_reg
+restart -f
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.node(behavioral)
+# Loading work.node(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.instruction_decoder(behavioral)
+# Loading work.instruction_decoder(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.state_reg(behavioral)
+# Loading work.state_reg(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.com(behavioral)
+# Loading work.com(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.register_bank(behavioral)
+# Loading work.register_bank(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.alu(behavioral)
+# Loading work.alu(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.s_reg(behavioral)
+# Loading work.s_reg(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.mux(behavioral)
+# Loading work.mux(behavioral)
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/ALU.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package std_logic_arith
+# -- Loading package std_logic_unsigned
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity alu
+# -- Compiling architecture behavioral of alu
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/COM.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity com
+# -- Compiling architecture behavioral of com
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/INSTRUCTION_DECODER.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity instruction_decoder
+# -- Compiling architecture behavioral of instruction_decoder
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/MUX.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Compiling entity mux
+# -- Compiling architecture behavioral of mux
+vcom -reportprogress 300 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/NODE.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity node
+# -- Compiling architecture behavioral of node
+vcom -reportprogress 30 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/REGISTER_BANK.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package numeric_std
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity register_bank
+# -- Compiling architecture behavioral of register_bank
+vcom -reportprogress 30 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/S_REG.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity s_reg
+# -- Compiling architecture behavioral of s_reg
+vcom -reportprogress 30 -work work C:/Users/hanskrfl/Desktop/dmpro/fpga/node/STATE.vhd
+# Model Technology ModelSim SE vcom 6.6d Compiler 2010.11 Nov  1 2010
+# -- Loading package standard
+# -- Loading package std_logic_1164
+# -- Loading package fpga_constant_pkg
+# -- Compiling entity state_reg
+# -- Compiling architecture behavioral of state_reg
+restart -f
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.node(behavioral)
+# Loading work.node(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.instruction_decoder(behavioral)
+# Loading work.instruction_decoder(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.state_reg(behavioral)
+# Loading work.state_reg(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.com(behavioral)
+# Loading work.com(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.register_bank(behavioral)
+# Loading work.register_bank(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.alu(behavioral)
+# Loading work.alu(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.s_reg(behavioral)
+# Loading work.s_reg(behavioral)
+# Refreshing C:\Users\hanskrfl\Desktop\dmpro\fpga\work.mux(behavioral)
+# Loading work.mux(behavioral)
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+restart -f
+run 500ns
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
+# ** Warning: There is an 'U'|'X'|'W'|'Z'|'-' in an arithmetic operand, the result will be 'X'(es).
+#    Time: 0 ps  Iteration: 0  Instance: /tb_node/uut/aul
