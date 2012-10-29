@@ -1,24 +1,35 @@
 \section {Footprints}
-\subsection {We made}
-        \begin {itemize}
-        \item SD-card
-        \item VGA-plugg
-        \item Memory (TSOP54/TSOP44)
-        \end {itemize}
+Some of the components we chose didn't have footprints readily available,
+which meant we either had to look for them on the internet, or create some
+ourselves.
 
-        \subsection {Footprints from Festina Lente:
-                    }
-        \begin {itemize}
-        \item Button
-        \item USB
-        \item PowerConnector
-        \item Crystal
-        \item Oscillator (with modifications)
-        \end {itemize}
-        Molex?
-        VGA-module?
+(TODO: Reference data-sheets for the foot-prints)
 
-        \subsection {Stuff about AVR}
-        \subsection {Stuff about FPGA}
+\subsection {We made the following footprints ourselves}
+\begin {itemize}
+\item SD-card
+\item VGA-plugg
+\item Memory (TSOP54/TSOP44)
+\end {itemize}
+
+\subsection {Footprints from Festina Lente:}
+As Festina Lente used some components that we also ended up using, we decided,
+after talking to Gunnar, to use their Footprints (as they were known good) for these
+components:
+\begin {itemize}
+\item Button
+\item USB
+\item PowerConnector
+\item Crystal
+\item Oscillator
+The oscillator had one issue last year, namely that the footprint was mirrored,
+noting this from Festina Lente's report, we read through the datasheet (REFERENCE),
+and remapped the pin-numbering on the foot-print before using this footprint.
+\end {itemize}
+Molex?
+VGA-module?
+
+\subsection {Stuff about AVR-footprint}
+\subsection {Stuff about FPGA-footprint}
 
 
