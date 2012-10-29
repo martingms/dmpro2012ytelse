@@ -3,13 +3,27 @@ Some of the components we chose didn't have footprints readily available,
 which meant we either had to look for them on the internet, or create some
 ourselves.
 
+This usually meant either staring at datasheets and carefully placing pins relative
+to each other, or running the wizard (TODO: Find the ISO-standard name that the Wizard was
+named after)
+
 (TODO: Reference data-sheets for the foot-prints)
 
 \subsection {We made the following footprints ourselves}
+(TODO: Make the links into references)
 \begin {itemize}
-\item SD-card
-\item VGA-plugg
+\item SD-card \url{http://katalog.we-online.de/em/datasheet/693063010911.pdf}
+With the pin-designations selected by googling the pinouts for SD-cards in general, and
+comparing a few of those hits to make sure that the results agreed \url{http://pinouts.ru/Memory/sdcard_pinout.shtml}
+ended up being what we based the schematic-component based on. (Mention that this was
+particularly hard to decipher from the datasheet, and that we did need to ask Gunnar for
+help atleast once, just to read the datasheet?)
+\item VGA-plugg \url{http://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=82068_AMPLIMITE_Right-Angle_Posted_Conn&DocType=Catalog+Section&DocLang=English&PartCntxt=}
 \item Memory (TSOP54/TSOP44)
+TODO: Fill in a bit about the wizard used to generate this:
+Data-memory (2M x 8bit) CY7C1069DV33  54TSOP: \url{http://www.cypress.com/?docID=31945}
+Program-memory (64K x 16bit) CY7C1021DV33  44TSOP: \url{http://www.cypress.com/?docID=31965}
+VGA memory (512 x 8bit) CY7C1049DV33 TSOP44 : \url{http://www.farnell.com/datasheets/1468461.pdf}
 \end {itemize}
 
 \subsection {Footprints from Festina Lente:}
@@ -26,8 +40,8 @@ The oscillator had one issue last year, namely that the footprint was mirrored,
 noting this from Festina Lente's report, we read through the datasheet (REFERENCE),
 and remapped the pin-numbering on the foot-print before using this footprint.
 \end {itemize}
-Molex?
-VGA-module?
+Molex? (Still in the project, but wasn't used, but double-check this)
+VGA-module? (Double check, we DID use it, and I \_think\_ we got it from Festina Lente).
 
 \subsection {Stuff about AVR-footprint}
 \subsection {Stuff about FPGA-footprint}
