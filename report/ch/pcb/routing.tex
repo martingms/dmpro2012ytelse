@@ -5,6 +5,7 @@ the reason for the time span needed for this was a result of a couple of
 things.
 
 (TODO: Expand the following into text)
+Why we used so much time: (Or, what the other group did right, and we did wrong)
 \begin {itemize}
 \item We were the first group to start routing, and thus got to fall into all the gotcha-traps that
 exist for routing, with no-one to walk into them ahead of us.
@@ -13,6 +14,24 @@ exist for routing, with no-one to walk into them ahead of us.
 \item We didn't set limitations until a few days into the week.
 \end {itemize}
 
+Initially we attempted auto-routing, which took the better part of half an hour,
+even before the constraints were set, this showed us quite a few issues that needed
+to be handled (and even more so when we finally got the constraints in).
+
+TODO: Fill in about the types of errors/warnings we got.
+TODO: Silk-over-silk in USB/Lenna, errors we could ignore.
+TODO: Scaling of board.
+
 In the end we remapped some pins to increase physical proximity, and to untangle the
 amount of crossing wires. Finally we did some manual routing to reduce the amount of
 unneccessary vias.
+
+\subsection {Lenna and Text}
+In the top right corner of our board, we put the "Lenna"-picture, this image
+was produced by doing an edge-detection-pass on the image, then putting it through
+the image-converter-plugin in Altium: \url{http://wiki.altium.com/display/ADOH/How+to+import+a+graphic+onto+the+PCB+overlay}
+
+We also put our names, and the name of the project on the board, this was simply done
+with the Text-label tool in Altium's PCB-Designer. This didn't allow for norwegian letters,
+but this was fixed easily by adding lines and circles manually (as well as moving a's and e's together
+to form æ).
