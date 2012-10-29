@@ -192,7 +192,7 @@ begin
 ----------------------------------------------------------------------------------
 --	INSTRUCTION DECODER
 ----------------------------------------------------------------------------------
-	CTRL : INSTRUCTION_DECODER port map (
+	CONTROL : INSTRUCTION_DECODER port map (
 		disable 						=> instr(23),
 		mask 							=> instr(22),
 		op_code 						=> instr(21 downto 19),
@@ -209,18 +209,18 @@ begin
 ----------------------------------------------------------------------------------
 --	STATE REGISTER
 ----------------------------------------------------------------------------------
-	ST_R : STATE_REG port map (
+	STATE : STATE_REG port map (
 		clk 							=> clk,
 		reset 						=> reset,
 		set_state					=> ctrl_set_state,
 		new_state					=> reg_data0(0),
 		state_out 					=> state_out
 	);
-	
+	node_state						<= state_out;
 ----------------------------------------------------------------------------------
 --	COMUNICATION OUT
 ----------------------------------------------------------------------------------
-	CMO : COM port map (
+	NODE_COM : COM port map (
 		clk 							=> clk,
 		reset							=> reset,
 		com_ctrl						=> ctrl_com,
@@ -241,7 +241,7 @@ begin
 ----------------------------------------------------------------------------------
 --	REGISTER BANK
 ----------------------------------------------------------------------------------
-	REGS : REGISTER_BANK port map (
+	NODE_REG : REGISTER_BANK port map (
 		clk 							=> clk,
 		reset							=> reset,
 		write							=> ctrl_reg_write,
@@ -262,7 +262,7 @@ begin
 ----------------------------------------------------------------------------------
 --	ALU
 ----------------------------------------------------------------------------------	
-	AUL : ALU port map ( 
+	NODE_ALU : ALU port map ( 
 		alu_op						=> instr(2 downto 0), 
 		op1 							=> reg_data1_out, 
 		op2 							=> alu_op2, 
@@ -271,7 +271,7 @@ begin
 ----------------------------------------------------------------------------------
 --	SOURCE DATA REGISTER
 ----------------------------------------------------------------------------------
-	S_R : S_REG port map (
+	NODE_S_REG : S_REG port map (
 		clk 							=> clk,
 		reset							=> reset,
 		s_swap						=> ctrl_s_swap,
@@ -308,18 +308,19 @@ begin
 ----------------------------------------------------------------------------------
 -- START PROCESS
 ----------------------------------------------------------------------------------
-	process (clk, reset)
-	begin
-		if (reset = '1') then
-			node_state				<= '0';
+
+--	process (clk, reset)
+--	begin
+--		if (reset = '1') then
+--			node_state				<= '0';
 --			n_out						<= '0';
 --			s_out						<= '0';
 --			e_out						<= '0';
 --			w_out						<= '0';
 --			sr_out					<= '0';
-		elsif rising_edge(clk) then
-			node_state				<= state_out;
-		end if;
-	end process;
+--		elsif rising_edge(clk) then
+--			
+--		end if;
+--	end process;
 	
 end Behavioral;

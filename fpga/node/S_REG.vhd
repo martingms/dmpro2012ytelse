@@ -37,28 +37,30 @@ end S_REG;
 
 architecture Behavioral of S_REG is
 
-	signal tmp_s_in				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
+	signal tmp_s					: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
+	signal tmp_s_new				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
 	signal tmp_s_out				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
 
 begin
 
-	S: process(clk, reset) begin	
+	S: process(clk, reset, s_in, s_res) begin	
 		if reset = '1' then
-			tmp_s_in					<= (others => '0');		-- input buffer
+			tmp_s						<= (others => '0');		-- input buffer
+			tmp_s_new				<= (others => '0');		-- input buffer
 			tmp_s_out				<= (others => '0');		-- output buffer
 		elsif rising_edge(clk) then
 
 			if s_step = '1' then
-				tmp_s_out			<= tmp_s_in;
-				tmp_s_in				<= s_in;
+				tmp_s_out			<= tmp_s;
+				tmp_s					<= s_in;
 			elsif s_swap = '1' then
-				tmp_s_out			<= tmp_s_in;
-				tmp_s_in				<= s_res;
+				tmp_s_new			<= tmp_s;
+				tmp_s					<= s_res;
 			end if;
 			
 		end if;
 		
-		s_new							<= tmp_s_out;
+		s_new							<= tmp_s_new;
 		s_out							<= tmp_s_out;
 	
 	end process S;
