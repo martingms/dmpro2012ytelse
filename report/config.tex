@@ -22,6 +22,7 @@ Trygve Aaberge\\
 \newcommand{\ourDept}{Department of Computer and Information Science}
 \newcommand{\ourFaculty}{Computer Architecture and Design}
 \newcommand{\ourUni}{Norwegian University of Science and Technology}
+\newcommand{\myVersion}{0.1.0-alpha03}
 
 %%% Packages
 
@@ -31,15 +32,13 @@ Trygve Aaberge\\
 \usepackage[hidelinks]{hyperref} % Links
 \usepackage{appendix}
 
-\usepackage{listings}
-\renewcommand{\lstlistlistingname}{List of Listings}
+%\usepackage{listings} % loaded by classicthesis
 
 \usepackage{amsmath, amssymb}
-\usepackage[dottedtoc]{classicthesis}
+%% Note: eulermath is sweet for equations, but requires a 500 mb font bundle
+%% installed. Better leave it off and remember to flip it on before sending.
+\usepackage[dottedtoc,listings,%eulermath,
+            floatperchapter,drafting % remember to remove this one
+            ]{classicthesis}
 
-%%% Setting up numbering based on chapters
-% (listings is numbered after \begin{document} because it's ugly)
-\numberwithin{table}{chapter}
-\numberwithin{figure}{chapter}
-%\numberwithin{equation}{chapter}
-%\numberwithin{algorithm}{chapter}
+\renewcommand{\lstlistlistingname}{List of Listings}
