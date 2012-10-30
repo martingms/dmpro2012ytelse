@@ -27,6 +27,7 @@ uint8_t * read_BMP_from_buffer(uint8_t *buffer, bmiHeader_t *bmp_hdr){
 	buffer+=sizeof(dibHeader_t);
 	memcpy(bmp_hdr,buffer, sizeof(bmiHeader_t));
 	buffer+=sizeof(bmiHeader_t);
+	assert(bmp_hdr->BitsPerPixel==8);
 
 	if(bmp_hdr->HeaderSize != sizeof(bmiHeader_t)) // sanity check
 	{
