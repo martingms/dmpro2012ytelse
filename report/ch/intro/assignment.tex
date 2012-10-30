@@ -1,0 +1,48 @@
+\section{Assignment}
+The task given was to create an {\em array-based} parallel image processor with
+focus on performance. After some ideas and calculations, we decided to escalate
+the goal to an image processor performant enough to run video. Fast image
+processing is essential in robots and in artificial intelligence in order to
+work in the real world. Autonomous cars and robots need to process images from
+image sensors fast enough to react and e.g. prevent accidents. Image processing
+in general is also highly applicable in the medical field and in the petroleum
+industry.
+% Last sentence = pasta. Should tweak it a bit.
+
+An array processor is a grid of processing elements, where each of the
+processing elements are only able to communicate with its north, south, east and
+west neighbours. All the processing elements must perform the same instruction
+at all times.
+
+\TODO{Fill in some more here}
+
+\subsection{Original Assignment Text}
+
+The performance increase available from harvesting Instruction Level Parallelism
+(ILP) from the serial instruction stream is limited because we have reached the
+maximum power consumption that can be handled without expensive cooling
+solutions \cite{olukotun2005future}. Consequently, there is a significant
+interest in single-chip parallel processor solutions (e.g. \cite{bell2008tile64,
+  kongetira2005niagara}).
+
+The processor cores in commercial multi-core chips are conventional designs and
+therefore reasonably complex. In this work, your task is to design an
+array-based parallel image processor. An array processor is organized as a
+matrix of processing elements where each element communicates with its neighbors
+in the north, south, east and west directions.
+
+Your image processor will be implemented on an FPGA, and you are free to choose
+how to realize your array-based computer architecture. The system should be
+shown to work with a suitable application. Studying the architecture of the
+Goodyear MPP \cite{batcher1980design,wiki:goodyear} might be a possible starting
+point.  Due to a large number of students this year, we will divide the work
+into two independent projects: a) Performance and b) Energy efficiency. The goal
+of group a) is to achieve maximum performance while group b) should try to
+balance performance and energy. The reports from both groups should include an
+evaluation of prototype performance and energy consumption.
+
+\subsubsection*{Additional requirements}
+The unit must utilize an Atmel AVR micro controller and a Xilinx FPGA. The
+budget is 10.000 NOK, which must cover components and PCB production. The unit
+design must adhere to the limits set by the course staff at any given
+time. Deadlines are given in a separate time schedule.
