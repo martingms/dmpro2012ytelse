@@ -30,20 +30,23 @@ VGA memory (512 x 8bit) CY7C1049DV33 TSOP44 : \url{http://www.farnell.com/datash
 As Festina Lente used some components that we also ended up using, we decided,
 after talking to Gunnar, to use their Footprints (as they were known good) for these
 components:
+\url{http://org.ntnu.no/datamaskinerprosjekt2011/altium_libraries/dmprolibrary/}
 \begin {itemize}
 \item Button
-\item USB
-\item PowerConnector
 \item Crystal
+\item USB
 \item Oscillator
 The oscillator had one issue last year, namely that the footprint was mirrored,
 noting this from Festina Lente's report, we read through the datasheet (REFERENCE),
 and remapped the pin-numbering on the foot-print before using this footprint.
+\item PowerConnector
+\item VGA-module
 \end {itemize}
 Molex? (Still in the project, but wasn't used, but double-check this)
-VGA-module? (Double check, we DID use it, and I \_think\_ we got it from Festina Lente).
 
 \subsection {Stuff about AVR-footprint}
+From AVR-freaks
 \subsection {Stuff about FPGA-footprint}
+Built-in in the Altium Designer library
 
 TODO: Mention the 1206-es that we chose to use based on the Festina Lente-report
