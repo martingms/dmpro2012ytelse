@@ -7,7 +7,7 @@
 #define B0_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_0)
 #define B1_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_1)
 #define B2_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_2)
-//TODO #define B3_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_3)
+#define B3_VALUE gpio_get_pin_value(GPIO_PUSH_BUTTON_3)
 
 #define BUTTON_PUSHED 0
 #define BUTTON_RELEASED 1
@@ -34,13 +34,13 @@ __attribute__((__interrupt__)) void button_interrupt_routine(void) {
 	if (B0_VALUE == BUTTON_PUSHED) buttons |= 1;
 	if (B1_VALUE == BUTTON_PUSHED) buttons |= 2;
 	if (B2_VALUE == BUTTON_PUSHED) buttons |= 4;
-	//TODO if (B3_VALUE == BUTTON_PUSHED) buttons |= 8;
+	if (B3_VALUE == BUTTON_PUSHED) buttons |= 8;
 	notify_listeners(buttons);
 
 	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_0);
 	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_1);
 	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_2);
-	//TODO gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_3);
+	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_3);
 }
 
 int button_init(void) {
@@ -51,19 +51,19 @@ int button_init(void) {
 	gpio_enable_gpio_pin(GPIO_PUSH_BUTTON_0);
 	gpio_enable_gpio_pin(GPIO_PUSH_BUTTON_1);
 	gpio_enable_gpio_pin(GPIO_PUSH_BUTTON_2);
-	//TODO gpio_enable_gpio_pin(GPIO_PUSH_BUTTON_3);
+	gpio_enable_gpio_pin(GPIO_PUSH_BUTTON_3);
 
 	// Enable glitch filter for all buttons
 	gpio_enable_pin_glitch_filter(GPIO_PUSH_BUTTON_0);
 	gpio_enable_pin_glitch_filter(GPIO_PUSH_BUTTON_1);
 	gpio_enable_pin_glitch_filter(GPIO_PUSH_BUTTON_2);
-	//TODO gpio_enable_pin_glitch_filter(GPIO_PUSH_BUTTON_3);
+	gpio_enable_pin_glitch_filter(GPIO_PUSH_BUTTON_3);
 
 	// Enable pull up resistors
 	gpio_enable_pin_pull_up(GPIO_PUSH_BUTTON_0);
 	gpio_enable_pin_pull_up(GPIO_PUSH_BUTTON_1);
 	gpio_enable_pin_pull_up(GPIO_PUSH_BUTTON_2);
-	//TODO gpio_enable_pin_pull_up(GPIO_PUSH_BUTTON_3);
+	gpio_enable_pin_pull_up(GPIO_PUSH_BUTTON_3);
 
 	// Register interrupt for buttons
 	int b0_line = AVR32_GPIO_IRQ_0 + GPIO_PUSH_BUTTON_0 / 8;
@@ -81,6 +81,8 @@ int button_init(void) {
 	rc = gpio_enable_pin_interrupt(GPIO_PUSH_BUTTON_1, GPIO_FALLING_EDGE);
 	if (rc != GPIO_SUCCESS) return rc;
 	rc = gpio_enable_pin_interrupt(GPIO_PUSH_BUTTON_2, GPIO_FALLING_EDGE);
+	if (rc != GPIO_SUCCESS) return rc;
+	rc = gpio_enable_pin_interrupt(GPIO_PUSH_BUTTON_3, GPIO_FALLING_EDGE);
 	if (rc != GPIO_SUCCESS) return rc;
 
 	return rc;

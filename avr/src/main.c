@@ -24,11 +24,11 @@ void init(void) {
 	int rc;
 
 	// Serial
-	//TODO, denne får LEDene til å faile:
-	//pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);
+	// funker kun når krystall er koblet til
+	pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);
 
 	rc = serial_init();
-	if (rc) seprintf("serial_init error %d\n", rc)
+	if (rc) LED_On(1);
 
 	// Interrupts
 	INTC_init_interrupts();
@@ -68,14 +68,16 @@ int init_sram(unsigned long FSC){
 	return test[0]==1;
 }
 
+void btn(U8 b) {
+	serial_write("test");
+	LED_On(b);
+}
+
 int main(void)
 {
 	init();
-	LED_On(1);
-	LED_On(2);
-	LED_On(4);
-	LED_On(8);
-
+	button_reg_listener(&btn);
+	while(TRUE);
 	return 0;
 }
 

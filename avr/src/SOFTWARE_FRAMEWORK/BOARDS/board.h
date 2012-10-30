@@ -94,9 +94,8 @@
   #include "STK600/RCUC3L0/stk600_rcuc3l0.h"
 #elif BOARD == UC3L_EK
   #include "UC3L_EK/uc3l_ek.h"
-#elif BOARD == USER_BOARD
-  // User-reserved area: #include the header file of your board here (if any).
-  #include "user_board.h"
+#elif BOARD == SHADES_OF_GRAY
+  #include "shades_of_gray.h"
 #else
   #error No known AVR32 board defined
 #endif

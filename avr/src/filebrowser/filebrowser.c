@@ -26,6 +26,7 @@ int fb_cd(const char *newdir){
 
 int fb_ls(){
 	int CurrentNavId = -1;
+	int fd;
 
 	// if no navigator available, return an error
 	if ((CurrentNavId = fsaccess_alloc_nav_id()) < 0) return ERROR_NO_NAV_ID;
