@@ -4,6 +4,7 @@
 #include "usart.h"
 #include "compiler.h"
 #include <string.h>
+#include "../freqs.h"
 
 #define seprintf(...)\
 {\

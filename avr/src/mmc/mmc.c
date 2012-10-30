@@ -1,4 +1,3 @@
-
 #include "spi.h"
 #include "sd_mmc_spi.h"
 #include "conf_sd_mmc_spi.h"
@@ -21,7 +20,8 @@ static const gpio_map_t SD_MMC_SPI_GPIO_MAP =
 static const spi_options_t spiOptions =
 {
   .reg          = SD_MMC_SPI_NPCS,
-  .baudrate     = SD_MMC_SPI_MASTER_SPEED,  // Defined in conf_sd_mmc_spi.h.
+//  .baudrate     = SD_MMC_SPI_MASTER_SPEED,  // Defined in conf_sd_mmc_spi.h.
+  .baudrate             = SPI_SPEED,
   .bits         = SD_MMC_SPI_BITS,          // Defined in conf_sd_mmc_spi.h.
   .spck_delay   = 0,
   .trans_delay  = 0,
@@ -32,23 +32,23 @@ static const spi_options_t spiOptions =
 
 void mmc_init()
 {
-	// Assign I/Os to SPI.
-	gpio_enable_module(SD_MMC_SPI_GPIO_MAP,
-	                   sizeof(SD_MMC_SPI_GPIO_MAP) / sizeof(SD_MMC_SPI_GPIO_MAP[0]));
-	// Initialize as master.
-	spi_initMaster(SD_MMC_SPI, &spiOptions);
+        // Assign I/Os to SPI.
+        gpio_enable_module(SD_MMC_SPI_GPIO_MAP,
+                           sizeof(SD_MMC_SPI_GPIO_MAP) / sizeof(SD_MMC_SPI_GPIO_MAP[0]));
+        // Initialize as master.
+        spi_initMaster(SD_MMC_SPI, &spiOptions);
 
-	// Set SPI selection mode: variable_ps, pcs_decode, delay.
-	spi_selectionMode(SD_MMC_SPI, 0, 0, 0);
+        // Set SPI selection mode: variable_ps, pcs_decode, delay.
+        spi_selectionMode(SD_MMC_SPI, 0, 0, 0);
 
-	// Enable SPI module.
-	spi_enable(SD_MMC_SPI);
+        // Enable SPI module.
+        spi_enable(SD_MMC_SPI);
 
-	// Initialize SD/MMC driver with SPI clock (PBA).
-	sd_mmc_spi_init(spiOptions, FOSC0);
+        // Initialize SD/MMC driver with SPI clock (PBA).
+        sd_mmc_spi_init(spiOptions, PBA_SPEED);
 }
 
 Ctrl_status mmc_status()
 {
-	return sd_mmc_spi_test_unit_ready();
+        return sd_mmc_spi_test_unit_ready();
 }

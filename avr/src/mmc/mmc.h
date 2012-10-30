@@ -2,6 +2,7 @@
 #define MMC_INCLUDE_GUARD_H
 
 #include "ctrl_access.h"
+#include "../freqs.h"
 
 // Initializes the SPI subsystem, selects SPI as GPIO function
 // and does some other SPI initialization needed before SD card

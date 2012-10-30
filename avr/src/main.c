@@ -11,15 +11,35 @@
 #include "serial/serial.h"
 #include "mmc/mmc.h"
 #include "sd_mmc_spi.h"
+#include "freqs.h"
 
 static char sprintf_buf[256];
 
+pcl_freq_param_t pcl_freq_param = {
+                .cpu_f = CPU_SPEED,
+                .pba_f = PBA_SPEED,
+                .osc0_f = FOSC0,
+                .osc0_startup = OSC0_STARTUP
+};
+
 int main(void)
 {
+
+    pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);
+    if (pcl_configure_clocks(&pcl_freq_param) != PASS) {
+            LED_On(LED0);
+            LED_On(LED1);
+            LED_On(LED2);
+            LED_On(LED4);
+            return 1;
+    }
+
 	serial_init();
 	mmc_init(); // init SPI peripherals
 
+	LED_On(LED0);
 	while (mmc_status() != CTRL_GOOD);
+	LED_On(LED1);
 
 	// read first 152 blocks (one lenna) five times blocks
 	int block;
@@ -41,6 +61,7 @@ int main(void)
 	serial_write("finished!\n");
 //	serial_write(sprintf_buf);
 	LED_On(LED3);
+	while(1);
 
 //	int i;
 //	for (i=0;i<512*step;i++)
