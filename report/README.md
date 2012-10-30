@@ -181,11 +181,11 @@ Alle tabeller burde ha følgende utseende:
 ```tex
 \begin{table}[h]
   \centering
-  \begin{tabular}{| x | ... | x |} \hline
-    {\sc attr} & ... & {\sc attr}\\ \hline \hline
-    val & ... & val \\ \hline
+  \begin{tabular}{ x  ...  x} \toprule
+    \thx{attr} & ... & \thx{attr}\\ \midrule
+    val & ... & val \\ \midrule
 	...
-	val & ... & val \\ \hline
+	val & ... & val \\ \bottomrule
   \end{tabular}
   \caption{tabelltekst}
   \label{tab:tabellabel}
@@ -194,29 +194,26 @@ Alle tabeller burde ha følgende utseende:
 
 Malen for `[h]`, caption og label gjelder som med figurer.
 
-Alle x'ene i `| x | ... | x |` må byttes ut med enten *c* (for *center*), *l*
+Alle x'ene i `x  ...  x` må byttes ut med enten *c* (for *center*), *l*
 (for *left*) eller *r* (for *right*). Velg det som ser best ut, men foretrekk om
 *c* det er liten eller ingen praksis forskjell. Dette gjøres for å få en viss
-konsistens i hele rapporten. Om tabellen er en 2d-tabell eller første element i
-tabellen er en identifikator (f.eks. navn, produktnavn...), må dette separeres
-med en dobbel pipe. Dette gjøres enkelt og greit ved å starte med 
-`| x || x | ... | x |` i stedet.
+konsistens i hele rapporten.
 
-Separer elementer med `&` og slutt hver linje med `\\ \hline`. Hvis tabellen har
-en header, skal denne slutte med `\\ \hline \hline`. Alle elementene i headeren
-må innkapsles i `{\sc }` - f.eks. hvis man har attributtnavnet `attr`, må
-headeren ha `{\sc attr}`.
+Separer elementer med `&` og slutt hver linje med `\\ \toprule`.Alle elementene
+i headeren må innkapsles i `\thx{}` eller `\thxc` - f.eks. hvis man har
+attributtnavnet `attr`, må headeren ha `\thx{attr}`. Forskjellen mellom `\thx`
+og `\thxc` er at `\thxc` sentrerer headeren, mens `\thx` ikke gjør det.
 
 Eksempel med tabell som benytter seg av identifikatorer:
 
 ```tex
 \begin{table}[h]
   \centering
-  \begin{tabular}{| c | | r | c |} \hline
-    {\sc Name} & {\sc Score} & {\sc Born}\\ \hline \hline
-    Rich & 100 & 1958 \\ \hline
-	Paul &  54 & 1975 \\ \hline
-	Fred &  76 & 1967 \\ \hline
+  \begin{tabular}{c r c} \toprule
+    \thx{Name} & \thx{Score} & \thx{Born}\\ \midrule
+    Rich & 100 & 1958 \\ \midrule
+	Paul &  54 & 1975 \\ \midrule
+	Fred &  76 & 1967 \\ \bottomrule
   \end{tabular}
   \caption{List of players, scores and their birthyear}
   \label{tab:pscores}
