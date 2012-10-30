@@ -8,26 +8,26 @@
 \end {flushright}
 ...Abstract...
 
-Design choices:
-Memory:
+Design choices: \\
+Memory: \\
 Since we decided to have separate instruction/data-memories, as well as VGA-ram, and
 a dedicated memory for the AVR, we ended up with a total of 5 RAM-chips. The requirements
 on the various chips did differ a bit though, we needed 8-bit words for all data, but
 24 bit for instructions. Since 24-bit memory was out of production, and 32-bit memory
 was too expensive, we opted for using two 16-bit chips, with their address-lines connected
-together, and 8 ignored I/O-pins, thus in effect creating a 24-bit memory.
+together, and 8 ignored I/O-pins, thus in effect creating a 24-bit memory. \\
 
 Since we were unsure about how constant we could get our data-streams, an additional
 AVR-memory was added. (TODO: This sentence needs to fit in with the above, AND, the
 below notion of fallbacks)
 
-VGA:
+VGA: \\
 While we had a goal of creating our own VGA-controller in the FPGA, we decided to have
 some fallback-option, thus, in addition to the neccessary pins and connectors for that
 solution, we also added the necessary connectors for the VGA-connector that Festina Lente
 used last year.
 
-Communication:
+Communication: \\
 We planned on using the SD-Card-reader as our main source of data/instructions, however
 in the same vein as the design choices for the VGA, we opted to also have a fallback-solution
 here, thus we also added USB and RS232 as fallback-solutions for getting data/communicating
