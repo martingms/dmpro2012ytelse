@@ -1,0 +1,26 @@
+\TODO{Is the font size ok? Othewise we have a case.}
+\begin{table}[h]\small
+  \centering
+  \begin{tabularx}{1.03\textwidth}{lccX}\toprule
+    \thx{name} & \thx{fn} & \thx{assembly code} & \thx{binary representation}
+    \\ \midrule
+    \thx{add} & \tt 000 & \tt add \$rs, \$rt, \$rd &
+    \tt 0 m 000 ssss tttt dddd ---- 000\\
+    \thx{sub} & \tt 001 & \tt sub \$rs, \$rt, \$rd &
+    \tt 0 m 000 ssss tttt dddd ---- 001\\
+    \thx{slt} & \tt 010 & \tt slt \$rs, \$rt, \$rd &
+    \tt 0 m 000 ssss tttt dddd ---- 010\\
+    \thx{and} & \tt 011 & \tt and \$rs, \$rt, \$rd &
+    \tt 0 m 000 ssss tttt dddd ---- 011\\
+    \thx{or}  & \tt 100 & \tt or~ \$rs, \$rt, \$rd &
+    \tt 0 m 000 ssss tttt dddd ---- 100\\
+    \thx{eq}  & \tt 101 & \tt eq~ \$rs, \$rt, \$rd &
+    \tt 0 m 000 ssss tttt dddd ---- 101\\
+    \thx{sll} & \tt 110 & \tt sll \$rs, \$rt, \$rd &
+    \tt 0 m 000 ssss tttt ---- ---- 110\\
+    \thx{srl} & \tt 111 & \tt srl \$rs, \$rt, \$rd &
+    \tt 0 m 000 ssss tttt ---- ---- 111\\ \bottomrule
+  \end{tabularx}
+  \caption{List of R-instructions}
+  \label{tab:r-instructions}
+\end{table}

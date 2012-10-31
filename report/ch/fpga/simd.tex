@@ -46,22 +46,7 @@ Each SIMD node have $2^4$ general purpose registers. 4 of these are avaiable for
 general storage when executing instructions. The remaining 2 registers are the
 special purpose registers {\tt \$zero} and {\tt \$state}.
 
-\begin{table}[h] % TODO hyPiRion: Drag out in own figure file
-  \centering
-  \begin{tabularx}{\linewidth}{XXXXXXXXX}\toprule
-    00 & 01 & 02 & 03 & 04 & 05 & 06 & 07 \\ \midrule
-    \tt \$zero & \tt \$r1 & \tt \$r2 & \tt \$r3 & \tt \$r4 & \tt \$r5 &
-    \tt \$r6 & \tt \$r7\\ \bottomrule
-  \end{tabularx}
-  \begin{tabularx}{\linewidth}{XXXXXXXX}\toprule
-    08 & 09 & 10 & 11 & 12 & 13 & 14 & 15 \\ \midrule
-    \tt \$r8 & \tt \$r9 & \tt \$r10 & \tt \$r11 & \tt \$r12 & \tt \$r13 &
-    \tt \$r14 & \tt \$state\\ \bottomrule
-  \end{tabularx}
-  % Note: Bad practice to not wrap \tt's in {}'s.
-  \caption{Registers in the SIMD nodes}
-  \label{tab:simd-registers}
-\end{table}
+\input{fig/fpga/simd-registers}
 
 \subsection{State-register}
 
@@ -80,17 +65,7 @@ formats. Arithmetic instructions (R, I and S) and message passing instructions
 \subsection{R-Format (OP = 000)}
 Arithmetic register functions instructions
 
-\begin{table}[h] % TODO hyPiRion: Drag out in own figure file
-  \centering
-  \begin{tabular}{cccccccc}\toprule
-    \thx{ctrl} & \thx{mask} & \thx{op} & \thx{rs} & \thx{rt} & \thx{rd} &
-    \thx{n/a} & \thx{fn} \\ \midrule
-    1 bit & 1 bit & 3 bit & 4 bit & 4 bit & 4 bit & 4 bit & 3 bit
-    \\ \bottomrule
-  \end{tabular}
-  \caption{Arithmetic register function instructions}
-  \label{tab:ar-re-fu-in}
-\end{table}
+\input{fig/fpga/ar-re-fu-in}
 
 \begin{itemize}
 \item {\tt ctrl} must be set to 0 in order to be executed on the SIMD node.
@@ -104,47 +79,12 @@ Arithmetic register functions instructions
 \item {\tt fn} is the artimetic operation to perform.
 \end{itemize}
 
-\TODO{this is borderline large - ``decenter'' it as done in front.tex}
-\begin{table}[h] % TODO hyPiRion: Drag out in own figure file
-  \centering
-  \begin{tabular}{lccc}\toprule
-    \thx{name} & \thx{fn} & \thx{assembly code} & \thx{binary representation}
-    \\ \midrule
-    \thx{add} & \tt 000 & \tt add \$rs, \$rt, \$rd &
-    \tt 0 m 000 ssss tttt dddd ---- 000\\
-    \thx{sub} & \tt 001 & \tt sub \$rs, \$rt, \$rd &
-    \tt 0 m 000 ssss tttt dddd ---- 001\\
-    \thx{slt} & \tt 010 & \tt slt \$rs, \$rt, \$rd &
-    \tt 0 m 000 ssss tttt dddd ---- 010\\
-    \thx{and} & \tt 011 & \tt and \$rs, \$rt, \$rd &
-    \tt 0 m 000 ssss tttt dddd ---- 011\\
-    \thx{or}  & \tt 100 & \tt or~ \$rs, \$rt, \$rd &
-    \tt 0 m 000 ssss tttt dddd ---- 100\\
-    \thx{eq}  & \tt 101 & \tt eq~ \$rs, \$rt, \$rd &
-    \tt 0 m 000 ssss tttt dddd ---- 101\\
-    \thx{sll} & \tt 110 & \tt sll \$rs, \$rt, \$rd &
-    \tt 0 m 000 ssss tttt ---- ---- 110\\
-    \thx{srl} & \tt 111 & \tt srl \$rs, \$rt, \$rd &
-    \tt 0 m 000 ssss tttt ---- ---- 111\\ \bottomrule
-  \end{tabular}
-  \caption{List of R-instructions}
-  \label{tab:r-instructions}
-\end{table}
+\input{fig/fpga/r-instructions}
 
 \subsection{I-Format (OP = 001)}
 Immediate functions using constants.
 
-\begin{table}[h] % TODO: Drag out
-  \centering
-  \begin{tabular}{ccccccc}\toprule
-    \thx{ctrl} & \thx{mask} & \thx{op} & \thx{rs} & \thx{rt} & \thx{const} &
-    \thx{fn} \\ \midrule
-    1 bit & 1 bit & 3 bit & 4 bit & 4 bit & 8 bit & 3 bit
-    \\ \bottomrule
-  \end{tabular}
-  \caption{Immediate functions using constants}
-  \label{tab:immediate-fn-const}
-\end{table}
+\input{fig/fpga/immediate-fn-const}
 
 \begin{itemize}
 \item {\tt ctrl} must be set to 0 in order to be executed on the SIMD node.
@@ -157,47 +97,13 @@ Immediate functions using constants.
 \item {\tt fn} is the artimetic operation to perform.
 \end{itemize}
 
-\TODO{this is also borderline large - ``decenter'' it as done in front.tex}
-\begin{table}[h] % TODO hyPiRion: Drag out in own figure file
-  \centering
-  \begin{tabular}{lccc}\toprule
-    \thx{name} & \thx{fn} & \thx{assembly code} & \thx{binary representation}
-    \\ \midrule
-    \thx{add} & \tt 000 & \tt addi \$rs, \$rt, \$rd &
-    \tt 0 m 001 ssss tttt cccccccc 000\\
-    \thx{sub} & \tt 001 & \tt subi \$rs, \$rt, \$rd &
-    \tt 0 m 001 ssss tttt cccccccc 001\\
-    \thx{slt} & \tt 010 & \tt slti \$rs, \$rt, \$rd &
-    \tt 0 m 001 ssss tttt cccccccc 010\\
-    \thx{and} & \tt 011 & \tt andi \$rs, \$rt, \$rd &
-    \tt 0 m 001 ssss tttt cccccccc 011\\
-    \thx{or}  & \tt 100 & \tt ori~ \$rs, \$rt, \$rd &
-    \tt 0 m 001 ssss tttt cccccccc 100\\
-    \thx{eq}  & \tt 101 & \tt eqi~ \$rs, \$rt, \$rd &
-    \tt 0 m 001 ssss tttt cccccccc 101\\
-    \thx{sll} & \tt 110 & \tt slli \$rs, \$rt, \$rd &
-    \tt 0 m 001 ssss tttt -------- 110\\
-    \thx{srl} & \tt 111 & \tt srli \$rs, \$rt, \$rd &
-    \tt 0 m 001 ssss tttt -------- 111\\ \bottomrule
-  \end{tabular}
-  \caption{List of I-instructions}
-  \label{tab:i-instructions}
-\end{table}
+\input{fig/fpga/i-instructions}
 
 \subsection{S-Format (OP = 010)}
 Swap source data register with processed data and store new source data in
 register.
 
-\begin{table}[h] % TODO: Drag out
-  \centering
-  \begin{tabular}{cccccccc}\toprule
-    \thx{ctrl} & \thx{mask} & \thx{op} & \thx{rs} & \thx{rt} & \thx{rd} &
-    \thx{n/a} & \thx{fn} \\ \midrule
-    1 bit & 1 bit & 3 bit & 4 bit & 4 bit & 4 bit & 4 bit & 3 bit \\ \bottomrule
-  \end{tabular}
-  \caption{S-format instructions}
-  \label{tab:s-fmt-instr}
-\end{table}
+\input{fig/fpga/s-fmt-instr}
 
 \begin{itemize}
 \item {\tt ctrl}  must be set to 0 in order to be executed on the SIMD node.
@@ -211,33 +117,12 @@ register.
 \item {\tt fn}   must be 000.
 \end{itemize}
 
-
-\begin{table}[h] % TODO hyPiRion: Guess once.
-  \centering
-  \begin{tabular}{lccc}\toprule
-    \thx{name} & \thx{fn} & \thx{assembly code} & \thx{binary representation}
-    \\ \midrule
-    \thx{swap} & \tt 000 & \tt swap \$rs, \$rt &
-    \tt 0 m 001 ssss tttt 0000 ---- 111\\ \bottomrule
-  \end{tabular}
-  \caption{List of S-instructions}
-  \label{tab:s-instructions}
-\end{table}
-
+\input{fig/fpga/s-instructions}
 
 \subsection{M-Format (OP = 100, 101, 110)}
 Send, recieve and forward data from and to neighbour nodes in all directions (north, south, east and west).
 
-\begin{table}[h] % TODO: Drag out
-  \centering
-  \begin{tabular}{cccccccc}\toprule
-    \thx{ctrl} & \thx{mask} & \thx{op} & \thx{n} & \thx{s} & \thx{e} &
-    \thx{w} & \thx{n/a} \\ \midrule
-    1 bit & 1 bit & 3 bit & 4 bit & 4 bit & 4 bit & 4 bit & 3 bit \\ \bottomrule
-  \end{tabular}
-  \caption{M-format instructions}
-  \label{tab:m-fmt-instr}
-\end{table}
+\input{fig/fpga/m-fmt-instr}
 
 \begin{itemize}
 \item {\tt ctrl} must be set to 0 in order to be executed on the SIMD node.
@@ -251,24 +136,7 @@ Send, recieve and forward data from and to neighbour nodes in all directions (no
 \item {\tt n/a} no ALU operations applicable.
 \end{itemize}
 
-\TODO{Okay, we have to split up these binary representations man.}
-\begin{table}[h] % TODO hyPiRion: Drag out in own figure file
-  \begin{addmargin}{-1.75\marginparwidth}
-  \begin{tabularx}{\paperwidth}{Xlccc}\toprule
-    \thx{name} & \thx{OP} & \thx{assembly code} & \thx{binary representation}
-    \\ \midrule
-    \thx{send} & \tt 100 & \tt send~ \$r1, \$r2, \$r3, \$r4 &
-    \tt 0 m 100 nnnn ssss eeee wwww ---\\
-    \thx{store} & \tt 101 & \tt subi \$r1, \$r2, \$r3, \$r4 &
-    \tt 0 m 101 nnnn ssss eeee wwww ---\\
-    \thx{store \& forward} &
-    \tt 110 & \tt frwrd \$r1, \$r2, \$r3, \$r4 &
-    \tt 0 m 110 nnnn ssss eeee wwww ---\\ \bottomrule
-  \end{tabularx}
-  \end{addmargin}
-  \caption{List of M-instructions}
-  \label{tab:m-instructions}
-\end{table}
+\input{fig/fpga/m-instructions}
 
 In figure \ref{tab:m-instructions} we see the different \ldots.  \thx{store \&
   forward} forwards according to the 4-way data exchange patterns (N
@@ -287,55 +155,13 @@ Since all nodes run the same instructions, both parts of a branch must be
 executed. Nodes are setting the {\tt state} to 1 in order to indicate that they
 are executing within that part of the branch.
 
-\begin{table}[h] % TODO: Drag out
-  \centering
-  \begin{tabularx}{\textwidth}{rlcX}\toprule
-    \thxc{step} & \thxc{instruction} & \thxc{state} & \thxc{description} \\
-    \midrule
-    0 & \tt // initial state & 0 & \\
-    1 & \tt eq \$state \$r1, \$r2 & 1
-    & Set state to 1 if branch should be take for the node.\\
-    \ldots & \tt // branch taken & 1 &
-    Instructions for when the branch is taken.\\
-    2 & \tt eq \$state, \$state, \$zero & 0 & Negate the state.\\
-    \ldots & \tt // branch not taken & 0 & Instructions for when the branch is
-    not taken.\\ \bottomrule
-  \end{tabularx}
-  \caption{Single level branching}
-  \label{tab:single-level-branching}
-\end{table}
+\input{fig/fpga/single-level-branching}
+
 \subsection{Multi-level branching}
 Since state register is 8 it is possible to have up-to 8 nested branches by
 shifting the current state to the left and adding the new state to the
 end. Below \TODO{Refer to table, not relative to where it is placed} are the
 instructions for performing a multilevel-branch.
 
-\CHECK{Better switch out zeroes and ones with x'es and y's?}
-\begin{table}[h] % TODO: Drag out
-  \centering
-  \begin{tabularx}{\textwidth}{rlcX}\toprule
-    \thxc{step} & \thxc{instruction} & \thxc{state} & \thxc{description} \\
-    \midrule
-    0 & \tt // initial state & 01 & \\
-    1 & \tt sll \$r3, \$state & 01
-    & Save the current state by shifting left.\\
-    2 & \tt eq \$r4 \$r1, \$r2 & 01
-    & Calculate if branch is taken for the node.\\
-    3 & \tt add \$state \$r4, \$r3 & 11
-    & Set the new state.\\
-    \ldots & \tt // branch taken & 11 &
-    Instructions for when the branch is taken.\\
-    4 & \tt andi \$r3, \$state, 1111 1110 & 11
-    & Save the old state for the node.\\
-    5 & \tt andi \$r4, \$state, 0000 0001 & 11 & Save the current state.\\
-    6 & \tt eq \$r4, \$r4, \$zero & 11 & Negate the current state.\\
-    7 & \tt add \$state, \$r4, \$r3 & 10 & Set new state.\\
-    \ldots & \tt // branch not taken & 10
-    & Instructions for when the branch is not taken.\\
-    8 & \tt srl \$state, \$state & 01 & Revert to state before branch by
-    shifting right.\\ \bottomrule
-  \end{tabularx}
-  \caption{Multi level branching}
-  \label{tab:multi-level-branching}
-\end{table}
+\input{fig/fpga/multi-level-branching}
 \CHECK{Could any of these tables be figures instead?}
