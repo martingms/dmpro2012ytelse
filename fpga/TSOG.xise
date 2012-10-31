@@ -75,6 +75,10 @@
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
     </file>
+    <file xil_pn:name="node/ARRAY.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+    </file>
   </files>
 
   <properties>
@@ -188,7 +192,7 @@
     <property xil_pn:name="Ignore User Timing Constraints Par" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Implementation Top" xil_pn:value="Architecture|node|Behavioral" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Implementation Top File" xil_pn:value="node/NODE.vhd" xil_pn:valueState="non-default"/>
-    <property xil_pn:name="Implementation Top Instance Path" xil_pn:value="/node" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Implementation Top Instance Path" xil_pn:value="/SIMD_ARRAY/ARR_NODE" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Include 'uselib Directive in Verilog File" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Include SIMPRIM Models in Verilog File" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Include UNISIM Models in Verilog File" xil_pn:value="false" xil_pn:valueState="default"/>
@@ -219,8 +223,8 @@
     <property xil_pn:name="Maximum Compression" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Maximum Number of Lines in Report" xil_pn:value="1000" xil_pn:valueState="default"/>
     <property xil_pn:name="Maximum Signal Name Length" xil_pn:value="20" xil_pn:valueState="default"/>
-    <property xil_pn:name="ModelSim Post-Map UUT Instance Name" xil_pn:value="UUT" xil_pn:valueState="default"/>
-    <property xil_pn:name="ModelSim Post-Par UUT Instance Name" xil_pn:value="UUT" xil_pn:valueState="default"/>
+    <property xil_pn:name="ModelSim Post-Map UUT Instance Name" xil_pn:value="NlwBlockROC" xil_pn:valueState="default"/>
+    <property xil_pn:name="ModelSim Post-Par UUT Instance Name" xil_pn:value="NlwBlockROC" xil_pn:valueState="default"/>
     <property xil_pn:name="Move First Flip-Flop Stage" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Move Last Flip-Flop Stage" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="MultiBoot: Next Configuration Mode spartan6" xil_pn:value="001" xil_pn:valueState="default"/>
@@ -307,9 +311,10 @@
     <property xil_pn:name="Run Design Rules Checker (DRC)" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Safe Implementation" xil_pn:value="No" xil_pn:valueState="default"/>
     <property xil_pn:name="Security" xil_pn:value="Enable Readback and Reconfiguration" xil_pn:valueState="default"/>
-    <property xil_pn:name="Selected Module Instance Name" xil_pn:value="/tb_node/uut" xil_pn:valueState="non-default"/>
-    <property xil_pn:name="Selected Simulation Root Source Node Behavioral" xil_pn:value="work.node" xil_pn:valueState="non-default"/>
-    <property xil_pn:name="Selected Simulation Source Node" xil_pn:value="UUT" xil_pn:valueState="default"/>
+    <property xil_pn:name="Selected Module Instance Name" xil_pn:value="/tb_node" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Selected Simulation Root Source Node Behavioral" xil_pn:value="work.tb_node" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Selected Simulation Root Source Node Post-Route" xil_pn:value="work.node" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="Selected Simulation Source Node" xil_pn:value="NlwBlockROC" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Set SPI Configuration Bus Width spartan6" xil_pn:value="1" xil_pn:valueState="default"/>
     <property xil_pn:name="Setup External Master Clock Division spartan6" xil_pn:value="1" xil_pn:valueState="default"/>
     <property xil_pn:name="Shift Register Extraction" xil_pn:value="true" xil_pn:valueState="default"/>
@@ -372,7 +377,7 @@
     <property xil_pn:name="PROP_DevFamilyPMName" xil_pn:value="spartan6" xil_pn:valueState="default"/>
     <property xil_pn:name="PROP_FPGAConfiguration" xil_pn:value="FPGAConfiguration" xil_pn:valueState="default"/>
     <property xil_pn:name="PROP_PostMapSimTop" xil_pn:value="" xil_pn:valueState="default"/>
-    <property xil_pn:name="PROP_PostParSimTop" xil_pn:value="" xil_pn:valueState="default"/>
+    <property xil_pn:name="PROP_PostParSimTop" xil_pn:value="Architecture|node|Structure" xil_pn:valueState="non-default"/>
     <property xil_pn:name="PROP_PostSynthSimTop" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="PROP_PostXlateSimTop" xil_pn:value="" xil_pn:valueState="default"/>
     <property xil_pn:name="PROP_PreSynthesis" xil_pn:value="PreSynthesis" xil_pn:valueState="default"/>
