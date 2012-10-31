@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fsaccess.h>
+#include <string.h>
 
 // PROGRAM STATES
 #define STATE_SELECT_PROGRAM 	1
@@ -20,14 +21,14 @@
 #define ENTER_BUTTON 	4
 
 // FILE SUFFIXES
-#define DATA_FILE_SUFFIX 	".byte"
+#define DATA_FILE_SUFFIX 	".lenna"
 #define SCRIPT_FILE_SUFFIX 	".script"
 
 // STRINGS AND ARRAY MAXIMUMS
 #define N_FILES_MAX_DIGITS 					20
 #define SCRIPT_TRANSFER_DELAY_MAX_LENGTH 	16
 #define DEFAULT_STRING_MAX_LENGTH 			256
-#define MAX_MENU_ITEMS 						64
+
 
 // SCRIPT LINES
 #define SCRIPT_LINE_DESCRIPTION 	0
@@ -35,10 +36,29 @@
 #define SCRIPT_LINE_DATA_TYPE_DIR 	2
 #define SCRIPT_LINE_TRANSFER_DELAY 	3
 
+// SCREEN STRINGS
+#define SCREEN_LINE_SELECT_PROGRAM 		"|-----[ SELECT PROGRAM ]-----|\n"
+#define SCREEN_LINE_SELECT_DATA			"|------[ SELECT DATA ]-------|\n"
+#define SCREEN_LINE_BOTTOM				"|----------------------------|\n"
+#define SCREEN_LINE_MORE_DATA			"                     more...  \n"
+#define SCREEN_LINE_EMPTY				"                              \n"
+#define SCREEN_PREFIX_ITEM				"  "
+#define SCREEN_PREFIX_SELECTED_ITEM 	"* "
+
+// SCREEN LIMITS
+#define SCREEN_MAX_ITEMS 15 //TODO
+#define SCREEN_MAX_WIDTH 15 //TODO
+
+
+/*#define MAX_MENU_ITEMS 						64
 struct menu_item {
 	char name[DEFAULT_STRING_MAX_LENGTH];	// Name of menu item
 	char file[DEFAULT_STRING_MAX_LENGTH];	// File path
 } menu[MAX_MENU_ITEMS];
+*/
+
+
+char screen[SCREEN_MAX_ITEMS+4][SCREEN_MAX_WIDTH+1];
 
 struct script {
 	char description[DEFAULT_STRING_MAX_LENGTH];
@@ -82,6 +102,44 @@ void program_select_start(void) {
 	}
 }
 
+void draw_screen() {
+	#define SCREEN_TOTAL_SIZE (SCREEN_MAX_ITEMS+4) * SCREEN_MAX_WIDTH+1
+	int i;
+	char buffer[SCREEN_TOTAL_SIZE];
+	for (i= 0; i < SCREEN_MAX_ITEMS+4; ++i) {
+		strncat(buffer, screen[i], SCREEN_MAX_WIDTH);
+	}
+
+	// send til bitmap-generator
+	// send til FPGA
+
+}
+
+void load_programs() {
+	int i,j;
+	bool data_above = FALSE;
+	bool data_below = FALSE;
+
+	memcpy(screen[0], SCREEN_LINE_SELECT_PROGRAM, strlen(SCREEN_LINE_SELECT_PROGRAM));
+
+	for (i=0; i < SCREEN_MAX_ITEMS; ++i) {
+		for (j = 0; j < SCREEN_MAX_WIDTH; ++j) {
+			//TODO hent filnavn
+		}
+	}
+	if (data_above)
+		memcpy(screen[1], SCREEN_LINE_MORE_DATA, strlen(SCREEN_LINE_MORE_DATA));
+	else
+		memcpy(screen[1], SCREEN_LINE_EMPTY, strlen(SCREEN_LINE_EMPTY));
+
+	if (data_below)
+		memcpy(screen[SCREEN_MAX_WIDTH], SCREEN_LINE_MORE_DATA, strlen(SCREEN_LINE_MORE_DATA));
+	else
+		memcpy(screen[SCREEN_MAX_WIDTH], SCREEN_LINE_EMPTY, strlen(SCREEN_LINE_EMPTY));
+
+	memcpy(screen[SCREEN_MAX_WIDTH+1], SCREEN_LINE_BOTTOM, strlen(SCREEN_LINE_BOTTOM));
+}
+
 void load_menu(int state) {
 	switch (state) {
 		case STATE_SELECT_PROGRAM:
@@ -118,7 +176,7 @@ void load_menu(int state) {
 void next_state(void) {
 	int rc;
 	if (current_state == STATE_SELECT_PROGRAM) {
-		rc = load_script(menu[menu_item_selected].file);
+		//rc = load_script(menu[menu_item_selected].file); //TODO hent script path
 		if (!rc) {
 			load_menu(STATE_SELECT_DATA);
 		}
@@ -126,25 +184,25 @@ void next_state(void) {
 	}
 
 	if (current_state == STATE_SELECT_DATA){
-		selected_data_unit_path = menu[menu_item_selected].file;
+		//selected_data_unit_path = menu[menu_item_selected].file; //TODO hent path
 		run_fpga_program();
 	}
 }
 
 void run_fpga_program(void) {
+	#define PATH_SIZE strlen(selected_data_unit_path)
 	busy = TRUE;
 
 	load_menu(STATE_UPLOADING_PROGRAM);
 	fpga_send_program(selected_script.fpga_bin_path);
 
 	int i;
-	int path_size = strlen(selected_data_unit_path);
 	int n_data_files = 0; 									//TODO finn antall data-filer i pathen!
 
-	if (path_size > 0) {									// If there is data
+	if (PATH_SIZE > 0) {									// If there is data
 		for (i = 0; i < n_data_files; ++i) {
 			load_menu(STATE_UPLOADING_DATA);
-			char data_path[path_size + N_FILES_MAX_DIGITS + strlen(DATA_FILE_SUFFIX)]; //TODO Finn en lur måte å finne N_FILES_MAX_DIGITS
+			char data_path[PATH_SIZE + N_FILES_MAX_DIGITS + strlen(DATA_FILE_SUFFIX)]; //TODO Finn en lur måte å finne N_FILES_MAX_DIGITS
 			sprintf(data_path, "%s%d%s", selected_data_unit_path, i, DATA_FILE_SUFFIX);
 			fpga_send_data(data_path);						// Send data to FPGA
 			fpga_run();										// Run FPGA (waits for ACK)
