@@ -47,7 +47,7 @@ int main(void)
 	LED_On(LED2);
 	serial_write("starting...\n");
 	sd_mmc_spi_read_open(0);
-	for(block=0;block<152*10;block+=step){
+	for(block=0;block<152*60;block+=step){
 		if ((block+1) % 152 == 0)
 			serial_write("doing something...\n");
 
