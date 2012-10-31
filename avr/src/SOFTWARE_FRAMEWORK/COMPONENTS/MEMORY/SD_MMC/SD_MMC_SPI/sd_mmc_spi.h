@@ -1,4 +1,4 @@
-/* This header file is part of the ATMEL AVR-UC3-SoftwareFramework-1.7.0 Release */
+/* This header file is part of the ATMEL AVR32-SoftwareFramework-AT32UC3-1.5.0 Release */
 
 /*This file is prepared for Doxygen automatic documentation generation.*/
 /*! \file *********************************************************************
@@ -75,6 +75,14 @@
 // Card identification
 #define MMC_CARD                          0
 #define SD_CARD                           1
+#define SD_CARD_2                         2
+#define SD_CARD_2_SDHC					  3
+
+/* status bits for card types */
+#define SD_SPEC_1 0
+#define SD_SPEC_2 1
+#define SD_SPEC_SDHC 2
+
 
 // Lock operations
 #define OP_UNLOCK                         0x00
@@ -87,13 +95,12 @@
 #define MMC_GO_IDLE_STATE                 0    ///< initialize card to SPI-type access
 #define MMC_SEND_OP_COND                  1    ///< set card operational mode
 #define MMC_CMD2                          2               ///< illegal in SPI mode !
+#define MMC_SEND_IF_COND				  8
 #define MMC_SEND_CSD                      9    ///< get card's CSD
 #define MMC_SEND_CID                      10    ///< get card's CID
-#define MMC_STOP_MULTIPLE_BLOCK_READ      12
 #define MMC_SEND_STATUS                   13
 #define MMC_SET_BLOCKLEN                  16    ///< Set number of bytes to transfer per block
 #define MMC_READ_SINGLE_BLOCK             17    ///< read a block
-#define MMC_READ_MULTIPLE_BLOCKS          18    ///< read multiple blocks
 #define MMC_WRITE_BLOCK                   24    ///< write a block
 #define MMC_PROGRAM_CSD                   27
 #define MMC_SET_WRITE_PROT                28
@@ -111,6 +118,7 @@
 #define SD_SEND_OP_COND_ACMD              41              ///< Same as MMC_SEND_OP_COND but specific to SD (must be preceeded by CMD55)
 #define MMC_LOCK_UNLOCK                   42              ///< To start a lock/unlock/pwd operation
 #define SD_APP_CMD55                      55              ///< Use before any specific command (type ACMD)
+#define SD_READ_OCR						  58
 #define MMC_CRC_ON_OFF                    59    ///< Turns CRC check on/off
 // R1 Response bit-defines
 #define MMC_R1_BUSY                       0x80  ///< R1 response: bit indicates card is busy
@@ -152,6 +160,8 @@ extern Bool sd_mmc_spi_mem_check(void);         // check the presence of the car
 extern Bool sd_mmc_spi_wait_not_busy (void);    // wait for the card to be not busy (exits with timeout)
 extern Bool sd_mmc_spi_get_csd(U8 *);           // stores the CSD of the card into csd[16]
 extern Bool sd_mmc_spi_get_cid(U8 *);           // stores the CID of the card into cid[16]
+extern int sd_mmc_spi_get_if(void);
+extern int sd_mmc_spi_check_hc(void);
 extern void sd_mmc_spi_get_capacity(void);      // extract parameters from CSD and compute capacity, last block adress, erase group size
 extern Bool sd_mmc_spi_get_status(void);        // read the status register of the card (R2 response)
 extern U8   sd_mmc_spi_send_and_read(U8);       // send a byte on SPI and returns the received byte
@@ -185,7 +195,6 @@ bit     sd_mmc_spi_host_read_sector (U16);
 
 //! Functions to read/write one sector (512btes) with ram buffer pointer
 extern Bool sd_mmc_spi_read_sector_to_ram(void *ram);     // reads a data block and send it to a buffer (512b)
-extern Bool sd_mmc_spi_read_sectors_to_ram(U8 count, void *ram);
 extern Bool sd_mmc_spi_write_sector_from_ram(const void *ram);  // writes a data block from a buffer (512b)
 extern Bool sd_mmc_spi_erase_sector_group(U32, U32);    // erase a group of sectors defined by start and end address (details in sd_mmc_spi.c)
 
@@ -198,6 +207,7 @@ extern void sd_mmc_spi_read_close_PDCA (void);       // unselect the memory
 
 extern U8           csd[16];                    // stores the Card Specific Data
 extern volatile U32 capacity;                   // stores the capacity in bytes
+extern volatile U16 capacity_mult;
 extern volatile U32 sd_mmc_spi_last_block_address;
 extern  U16         erase_group_size;
 extern  U8          r1;
