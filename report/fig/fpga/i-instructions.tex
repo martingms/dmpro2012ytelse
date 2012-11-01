@@ -1,0 +1,26 @@
+\TODO{Is the font size ok?}
+\begin{table}[h]\small
+  \centering
+  \begin{tabularx}{1.03\linewidth}{lccX}\toprule
+    \thx{name} & \thx{fn} & \thx{assembly code} & \thx{binary representation}
+    \\ \midrule
+    \thx{add} & \tt 000 & \tt addi \$rs, \$rt, \$rd &
+    \tt 0 m 001 ssss tttt cccccccc 000\\
+    \thx{sub} & \tt 001 & \tt subi \$rs, \$rt, \$rd &
+    \tt 0 m 001 ssss tttt cccccccc 001\\
+    \thx{slt} & \tt 010 & \tt slti \$rs, \$rt, \$rd &
+    \tt 0 m 001 ssss tttt cccccccc 010\\
+    \thx{and} & \tt 011 & \tt andi \$rs, \$rt, \$rd &
+    \tt 0 m 001 ssss tttt cccccccc 011\\
+    \thx{or}  & \tt 100 & \tt ori~ \$rs, \$rt, \$rd &
+    \tt 0 m 001 ssss tttt cccccccc 100\\
+    \thx{eq}  & \tt 101 & \tt eqi~ \$rs, \$rt, \$rd &
+    \tt 0 m 001 ssss tttt cccccccc 101\\
+    \thx{sll} & \tt 110 & \tt slli \$rs, \$rt, \$rd &
+    \tt 0 m 001 ssss tttt -------- 110\\
+    \thx{srl} & \tt 111 & \tt srli \$rs, \$rt, \$rd &
+    \tt 0 m 001 ssss tttt -------- 111\\ \bottomrule
+  \end{tabularx}
+  \caption{List of I-instructions}
+  \label{tab:i-instructions}
+\end{table}

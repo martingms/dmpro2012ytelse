@@ -1,0 +1,17 @@
+\begin{table}[h]
+  \centering
+  \begin{tabularx}{\textwidth}{rlcX}\toprule
+    \thxc{step} & \thxc{instruction} & \thxc{state} & \thxc{description} \\
+    \midrule
+    0 & \tt // initial state & 0 & \\
+    1 & \tt eq \$state \$r1, \$r2 & 1
+    & Set state to 1 if branch should be take for the node.\\
+    \ldots & \tt // branch taken & 1 &
+    Instructions for when the branch is taken.\\
+    2 & \tt eq \$state, \$state, \$zero & 0 & Negate the state.\\
+    \ldots & \tt // branch not taken & 0 & Instructions for when the branch is
+    not taken.\\ \bottomrule
+  \end{tabularx}
+  \caption{Single level branching}
+  \label{tab:single-level-branching}
+\end{table}

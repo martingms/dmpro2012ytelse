@@ -64,6 +64,7 @@
 <listOptionValue builtIn="false" value="../src/fpga"/>
 <listOptionValue builtIn="false" value="../src/mmc"/>
 <listOptionValue builtIn="false" value="../src/serial"/>
+<listOptionValue builtIn="false" value="../src/str2img"/>
 <listOptionValue builtIn="false" value="../src/bmp"/>
 <listOptionValue builtIn="false" value="../src/button"/>
 <listOptionValue builtIn="false" value="../src/bus"/>

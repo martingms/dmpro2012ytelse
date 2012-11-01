@@ -1,0 +1,22 @@
+\TODO{Is the splitup ok? Should we reorganize this somehow?}
+\begin{table}[h]
+  \begin{tabularx}{\textwidth}{lrcc}\toprule
+    \thx{name} & \thx{OP} & \thx{assembly code}
+    \\ \midrule
+    \thx{send} & \tt 100 & \tt send~ \$r1, \$r2, \$r3, \$r4\\
+    \thx{store} & \tt 101 & \tt store \$r1, \$r2, \$r3, \$r4\\
+    \thx{store \& forward} & \tt 110 & \tt frwrd \$r1, \$r2, \$r3, \$r4
+    \\ \bottomrule
+  \end{tabularx}
+  \begin{tabularx}{\textwidth}{lX}
+    \thx{name} & \thx{binary representation} \\ \midrule
+    \thx{send} & 
+    \tt 0 m 100 nnnn ssss eeee wwww ---\\
+    \thx{store} &
+    \tt 0 m 101 nnnn ssss eeee wwww ---\\
+    \thx{store \& forward} & 
+    \tt 0 m 110 nnnn ssss eeee wwww ---\\ \bottomrule
+  \end{tabularx}    
+  \caption{List of M-instructions}
+  \label{tab:m-instructions}
+\end{table}
