@@ -17,12 +17,24 @@
 #define FPGA_STATE_LOAD_INSTRUCTION		4
 
 
-/*! \brief Sends a list of words to the FPGA
- * \param *words The list of 32 bit words to be sent (only 24 bits will be sent)
+/*! \brief Sends data to the FPGA from a file
+ * \param *data_path The path to the file
+ */
+int fpga_send_data_from_file(char *data_path);
+
+/*! \brief Sends data to the FPGA from memory
+ * \param *words The list of 8 bit words to be sent
  * \param length how many words are to be sent
  */
-int fpga_send_data(char *program_path);
+int fpga_send_data_from_memory(U8 *data, size_t n_bytes);
+
+/*! \brief Sends instructions to the FPGA from file
+ * \param *program_path The path to the program
+ */
 int fpga_send_program(char *program_path);
+
+
+
 void fpga_receive_data(void);
 void fpga_run(void);
 
