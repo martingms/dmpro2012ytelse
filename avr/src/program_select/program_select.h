@@ -2,6 +2,12 @@
 #define PROGRAM_SELECT_H_
 
 #include "compiler.h"
+
+
+// FILE SUFFICES
+#define DATA_FILE_SUFFIX 	"lenna"
+#define SCRIPT_FILE_SUFFIX 	"script"
+
 void button_push(U8 button);
 
 /*! \brief Starts the program

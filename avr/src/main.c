@@ -5,7 +5,6 @@
 #include "board.h"
 #include "power_clocks_lib.h"
 #include "gpio.h"
-#include "timer/timer.h"
 #include "fsaccess.h"
 #include "ctrl_access.h"
 #include "serial/serial.h"

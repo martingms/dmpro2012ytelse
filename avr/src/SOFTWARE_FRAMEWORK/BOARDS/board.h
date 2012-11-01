@@ -95,7 +95,7 @@
 #elif BOARD == UC3L_EK
   #include "UC3L_EK/uc3l_ek.h"
 #elif BOARD == SHADES_OF_GRAY
-  #include "shades_of_gray.h"
+  #include "SHADES_OF_GRAY/shades_of_gray.h"
 #else
   #error No known AVR32 board defined
 #endif

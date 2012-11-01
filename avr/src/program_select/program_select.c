@@ -1,7 +1,9 @@
 #include "program_select.h"
+#include "screen.h"
 #include "button.h"
 #include "fpga.h"
 #include "serial.h"
+#include "filebrowser.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,15 +22,10 @@
 #define DOWN_BUTTON 	2
 #define ENTER_BUTTON 	4
 
-// FILE SUFFIXES
-#define DATA_FILE_SUFFIX 	".lenna"
-#define SCRIPT_FILE_SUFFIX 	".script"
-
 // STRINGS AND ARRAY MAXIMUMS
 #define N_FILES_MAX_DIGITS 					20
 #define SCRIPT_TRANSFER_DELAY_MAX_LENGTH 	16
 #define DEFAULT_STRING_MAX_LENGTH 			256
-
 
 // SCRIPT LINES
 #define SCRIPT_LINE_DESCRIPTION 	0
@@ -36,18 +33,6 @@
 #define SCRIPT_LINE_DATA_TYPE_DIR 	2
 #define SCRIPT_LINE_TRANSFER_DELAY 	3
 
-// SCREEN STRINGS
-#define SCREEN_LINE_SELECT_PROGRAM 		"|-----[ SELECT PROGRAM ]-----|\n"
-#define SCREEN_LINE_SELECT_DATA			"|------[ SELECT DATA ]-------|\n"
-#define SCREEN_LINE_BOTTOM				"|----------------------------|\n"
-#define SCREEN_LINE_MORE_DATA			"                     more...  \n"
-#define SCREEN_LINE_EMPTY				"                              \n"
-#define SCREEN_PREFIX_ITEM				"  "
-#define SCREEN_PREFIX_SELECTED_ITEM 	"* "
-
-// SCREEN LIMITS
-#define SCREEN_MAX_ITEMS 15 //TODO
-#define SCREEN_MAX_WIDTH 15 //TODO
 
 
 /*#define MAX_MENU_ITEMS 						64
@@ -58,7 +43,9 @@ struct menu_item {
 */
 
 
-char screen[SCREEN_MAX_ITEMS+4][SCREEN_MAX_WIDTH+1];
+
+
+
 
 struct script {
 	char description[DEFAULT_STRING_MAX_LENGTH];
@@ -102,68 +89,18 @@ void program_select_start(void) {
 	}
 }
 
-void draw_screen() {
-	#define SCREEN_TOTAL_SIZE (SCREEN_MAX_ITEMS+4) * SCREEN_MAX_WIDTH+1
-	int i;
-	char buffer[SCREEN_TOTAL_SIZE];
-	for (i= 0; i < SCREEN_MAX_ITEMS+4; ++i) {
-		strncat(buffer, screen[i], SCREEN_MAX_WIDTH);
-	}
-
-	// send til bitmap-generator
-	// send til FPGA
-
-}
-
-void load_programs() {
-	int i,j;
-	bool data_above = FALSE;
-	bool data_below = FALSE;
-
-	memcpy(screen[0], SCREEN_LINE_SELECT_PROGRAM, strlen(SCREEN_LINE_SELECT_PROGRAM));
-
-	for (i=0; i < SCREEN_MAX_ITEMS; ++i) {
-		for (j = 0; j < SCREEN_MAX_WIDTH; ++j) {
-			//TODO hent filnavn
-		}
-	}
-	if (data_above)
-		memcpy(screen[1], SCREEN_LINE_MORE_DATA, strlen(SCREEN_LINE_MORE_DATA));
-	else
-		memcpy(screen[1], SCREEN_LINE_EMPTY, strlen(SCREEN_LINE_EMPTY));
-
-	if (data_below)
-		memcpy(screen[SCREEN_MAX_WIDTH], SCREEN_LINE_MORE_DATA, strlen(SCREEN_LINE_MORE_DATA));
-	else
-		memcpy(screen[SCREEN_MAX_WIDTH], SCREEN_LINE_EMPTY, strlen(SCREEN_LINE_EMPTY));
-
-	memcpy(screen[SCREEN_MAX_WIDTH+1], SCREEN_LINE_BOTTOM, strlen(SCREEN_LINE_BOTTOM));
-}
-
 void load_menu(int state) {
 	switch (state) {
 		case STATE_SELECT_PROGRAM:
 		{
 			menu_item_selected = 0;
-			//TODO finn alle .script og list dem opp
+			load_screen_data(PROGRAM);
 			break;
 		}
 		case STATE_SELECT_DATA:
 		{
 			menu_item_selected = 0;
-			//TODO finn alle mapper i root og list dem opp
-			break;
-		}
-		case STATE_UPLOADING_PROGRAM:
-		{
-			//TODO skriv til skjermen "Loading program..."
-			seprintf("Loading program...\n");
-			break;
-		}
-		case STATE_UPLOADING_DATA:
-		{
-			//TODO skriv til skjermen "Loading data..."
-			seprintf("Loading data...\n");
+			load_screen_data(DATA);
 			break;
 		}
 		default:
@@ -175,41 +112,52 @@ void load_menu(int state) {
 
 void next_state(void) {
 	int rc;
+	char *buffer;
 	if (current_state == STATE_SELECT_PROGRAM) {
-		//rc = load_script(menu[menu_item_selected].file); //TODO hent script path
+		fb_iterator_init(FS_FILE);
+		fb_iterator_seek(menu_item_selected);
+		buffer = fb_iterator_next();
+		rc = load_script(buffer);				// Sets the program script
 		if (!rc) {
 			load_menu(STATE_SELECT_DATA);
 		}
+		fb_iterator_terminate();
 		return;
 	}
 
 	if (current_state == STATE_SELECT_DATA){
-		//selected_data_unit_path = menu[menu_item_selected].file; //TODO hent path
+		fb_iterator_init(FS_DIR);
+		fb_iterator_seek(menu_item_selected);
+		buffer = fb_iterator_next();
+		selected_data_unit_path = buffer;		// Sets the data directory
 		run_fpga_program();
+		fb_iterator_terminate();
 	}
 }
 
 void run_fpga_program(void) {
+	int i;
+	char *buffer;
 	#define PATH_SIZE strlen(selected_data_unit_path)
 	busy = TRUE;
 
-	load_menu(STATE_UPLOADING_PROGRAM);
 	fpga_send_program(selected_script.fpga_bin_path);
 
-	int i;
-	int n_data_files = 0; 									//TODO finn antall data-filer i pathen!
-
 	if (PATH_SIZE > 0) {									// If there is data
-		for (i = 0; i < n_data_files; ++i) {
-			load_menu(STATE_UPLOADING_DATA);
-			char data_path[PATH_SIZE + N_FILES_MAX_DIGITS + strlen(DATA_FILE_SUFFIX)]; //TODO Finn en lur måte å finne N_FILES_MAX_DIGITS
-			sprintf(data_path, "%s%d%s", selected_data_unit_path, i, DATA_FILE_SUFFIX);
+		fb_iterator_init(FS_FILE);
+		fb_cd(selected_data_unit_path);
+		fb_iterator_set_ext(DATA_FILE_SUFFIX);
+		while (fb_iterator_has_next()) {
+			buffer = fb_iterator_next();
+			char data_path[PATH_SIZE + N_FILES_MAX_DIGITS + 1 + strlen(buffer) + 1];
+			sprintf(data_path, "%s.%s", selected_data_unit_path, buffer);
+
 			fpga_send_data(data_path);						// Send data to FPGA
 			fpga_run();										// Run FPGA (waits for ACK)
 			usleep(selected_script.transfer_delay);			// Sleep
 		}
 	} else {
-		fpga_run();											// Fuck the system
+		fpga_run();											// No data -> just run
 	}
 
 	busy = FALSE;
@@ -243,11 +191,10 @@ int load_script(char *script_path) {
 		switch (line) {
 			case SCRIPT_LINE_DESCRIPTION:
 			{
-				if (i >= DEFAULT_STRING_MAX_LENGTH) {
-					seprintf("Error: Description in script too long (max %d characters). Loading failed.\n", DEFAULT_STRING_MAX_LENGTH);
-					return -1;
-				}
+				if (i < DEFAULT_STRING_MAX_LENGTH) {
 				selected_script.description[i] = c_buffer;
+				}
+				seprintf("Part of description in script ignored (max %d characters). \n", DEFAULT_STRING_MAX_LENGTH);
 				break;
 			}
 			case SCRIPT_LINE_FPGA_BIN_PATH:

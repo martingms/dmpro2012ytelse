@@ -28,7 +28,7 @@ void receive_ack(void) {
 	acked = TRUE;
 }
 
-int fpga_send_data(char *data_path) {
+int fpga_send_data(char *data_path) { //TODO sender kun rådata (tar ikke hensyn til bmp)
 	// S.1 - S.6 refers to the stages in 'AVR sends data to the FPGA'
 	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
 	U8 buffer;
