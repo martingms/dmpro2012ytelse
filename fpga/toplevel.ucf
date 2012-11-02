@@ -1,7 +1,7 @@
 #	-- 50 MHz oscillator
 
-#	oscillator : in std_logic;
-NET "oscillator" LOC = P80;
+#	clk : in std_logic;
+NET "clk" LOC = P80;
 
 
 #	-- Program RAM
