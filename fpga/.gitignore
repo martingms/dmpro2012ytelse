@@ -73,3 +73,7 @@ isim/
 *.exe
 *.wdb
 xilinxsim.ini
+transcript
+netgen/
+*.tdo
+wlft947jv8
