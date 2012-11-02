@@ -45,11 +45,11 @@ begin
 	process(rw_switch, mem_addr_in, pixel_in, pixel_addr)
 	begin
 		if rw_switch = 0 or rw_switch = 1 then
-			mem_we <= '1';
+			mem_we <= '0';
 			mem_addr <= mem_addr_in;
 			mem_data <= pixel_in;
 		else
-			mem_we <= '0';
+			mem_we <= '1';
 			mem_addr <= pixel_addr;
 			mem_data <= (others => 'Z');
 		end if;
