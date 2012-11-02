@@ -1,0 +1,28 @@
+\CHECK{Better switch out zeroes and ones with x'es and y's?}
+\begin{table}[h] % TODO: Drag out
+  \centering
+  \begin{tabularx}{\textwidth}{rlcX}\toprule
+    \thxc{step} & \thxc{instruction} & \thxc{state} & \thxc{description} \\
+    \midrule
+    0 & \tt // initial state & 01 & \\
+    1 & \tt sll \$r3, \$state & 01
+    & Save the current state by shifting left.\\
+    2 & \tt eq \$r4 \$r1, \$r2 & 01
+    & Calculate if branch is taken for the node.\\
+    3 & \tt add \$state \$r4, \$r3 & 11
+    & Set the new state.\\
+    \ldots & \tt // branch taken & 11 &
+    Instructions for when the branch is taken.\\
+    4 & \tt andi \$r3, \$state, 1111 1110 & 11
+    & Save the old state for the node.\\
+    5 & \tt andi \$r4, \$state, 0000 0001 & 11 & Save the current state.\\
+    6 & \tt eq \$r4, \$r4, \$zero & 11 & Negate the current state.\\
+    7 & \tt add \$state, \$r4, \$r3 & 10 & Set new state.\\
+    \ldots & \tt // branch not taken & 10
+    & Instructions for when the branch is not taken.\\
+    8 & \tt srl \$state, \$state & 01 & Revert to state before branch by
+    shifting right.\\ \bottomrule
+  \end{tabularx}
+  \caption{Multi level branching}
+  \label{tab:multi-level-branching}
+\end{table}

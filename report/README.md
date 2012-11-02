@@ -3,7 +3,7 @@
 Denne README-fila vil være en kombinasjon av tutorial samt en slags standard for
 hvordan ting skal skrives og formateres i rapporten.
 
-## Installering og kjøring
+## Installasjon og oppsett
 
 For å kunne lage PDF-en må en ha følgende pakker og programmer tilgjengelig:
 `pdflatex`, `bibtex` og `make`.
@@ -12,6 +12,38 @@ I tillegg må man ha følgende latex-pakker installert eller tilgjengelig for å
 lage selve pdf'en: classicthesis og scrextend (KOMA-script), graphicx, listings,
 inputenc, hyperref, appendix, amsmath og amssymb.
 
+For ubuntu og debian-baserte systemer, installering av følgende pakker skal
+gjøre biffen:
+
+```bash
+sudo apt-get install texlive-latex-recommended texlive-publishers
+# Om det ikke holder, prøv i tillegg dette, basert på hvilken feilmelding du får
+sudo apt-get install texlive-latex-extra
+sudo apt-get install texlive-pictures
+sudo apt-get install texlive-font-utils
+sudo apt-get install texlive-extra-utils
+sudo apt-get install texlive-fonts-extra # For eulermathfont-tingen
+# Evt. følgende, om du bestemmer deg for å gi litt blanke
+sudo apt-get install texlive-full
+```
+
+Navnene på pakkene skal være relativt like, så for Arch og andre distroer kan
+man søke på dette og få opp et nogenlunde korrekt svar. For de som benytter
+Windows og Mac, legg gjerne inn en tutorial om dere har fått til å kompilere
+PDFen.
+
+JN har følgende pakker på Debian Wheezy:
+```
+texlive-base texlive-binaries texlive-common texlive-doc-base
+texlive-extra-utils texlive-font-utils texlive-fonts-recommended
+texlive-fonts-recommended-doc texlive-generic-recommended texlive-humanities
+texlive-humanities-doc texlive-latex-base texlive-latex-base-doc
+texlive-latex-extra texlive-latex-extra-doc texlive-latex-recommended
+texlive-latex-recommended-doc texlive-pictures texlive-pictures-doc
+texlive-pstricks texlive-pstricks-doc texlive-publishers texlive-publishers-doc
+texlive-xetex
+```
+
 ## Først og fremst
 
 Det smarteste for å vite hva vi burde ha med i rapporten er å se på tidligere
@@ -19,6 +51,13 @@ rapporter. *Festina Lente* og *Igor* er to prosjekter som jeg anbefaler sterkt �
 se på, da disse to har gode rapporter og/eller har relevant informasjon man kan
 sammenligne med. I tillegg ser de bra ut, og vi kan stjele mye layoutmessig fra
 dem.
+
+## Grafer
+
+For raske mockups av grafer, benytt [yEd][] og inkluder graphml-fila du får
+ut. JN kan endre til litt penere grafer senere.
+
+[yed]: http://www.yworks.com/en/products_yed_about.html "yEd diagramming tool"
 
 ## Rapportstruktur
 

@@ -1,4 +1,5 @@
 #include "str2img.h"
+#include "compiler.h"
 
 static unsigned char buf[R_COLS * R_BPCX * 8 * R_ROWS * R_BPCY];
 static unsigned int pos = 0;
@@ -204,17 +205,11 @@ unsigned int str2img_get_cursor_row() {
 	return pos / (R_STRIDE * 8 * R_BPCY);
 }
 
-void str2img_read_block(unsigned char *data) {
-	//unsigned char *data = malloc(R_STRIDE * 8 * (R_ROWS * R_BPCY * 8) * sizeof(unsigned char));
-	//unsigned int y_last = (R_ROWS * R_BPCY * 8 - 1);
+void str2img_read_block(U8 *data) {
 	int x, y;
 	for (y = 0; y < (R_ROWS * R_BPCY * 8); y++) {
 		for (x = 0; x < (R_COLS * R_BPCX * 8); x++) {
-			//data[(y_last-y) * R_STRIDE * 8 + x] = R_READ(x,y) ? 255 : 0;
 			data[y * R_STRIDE * 8 + x] = R_READ(x,y) ? 255 : 0;
-
-			//data[i++] = R_READ(x,y) ? 255 : 0;
-			//printf("%d\n", i);
 		}
 	}
 }
