@@ -5,48 +5,43 @@ use ieee.std_logic_arith.all;
 
 entity toplevel is
 	port (
-		clk : in std_logic;
-		data : out std_logic_vector(3 downto 0));
+		-- 50 MHz oscillator
+		oscillator : in std_logic;
+		
+		-- Program RAM
+		prog_ram_addr : out std_logic_vector(15 downto 0);
+		prog_ram_data : inout std_logic_vector(23 downto 0);
+		prog_ram_write : out std_logic;
+		
+		-- Data RAM
+		data_ram_addr : out std_logic_vector(20 downto 0);
+		data_ram_data : inout std_logic_vector(7 downto 0);
+		data_ram_write : out std_logic;
+		
+		-- VGA RAM
+		vga_ram_addr : out std_logic_vector(18 downto 0);
+		vga_ram_data : inout std_logic_vector(7 downto 0);
+		vga_ram_write : out std_logic;
+		
+		-- VGA signals
+		vga_h_sync : out std_logic;
+		vga_v_sync : out std_logic;
+		vga_value : out std_logic_vector(9 downto 0);
+		
+		-- AVR data transfer
+		avr_data_in : in std_logic_vector(23 downto 0);		-- FPGA_IN_[23-0]
+		avr_data_in_ready : in std_logic;						-- FPGA_IN_24
+		avr_data_out : out std_logic_vector(7 downto 0);	-- FPGA_IO_[7-0]
+		avr_interrupt : out std_logic;							-- FPGA_IO_CTRL
+		
+		-- AVR state control
+		state : in std_logic_vector(2 downto 0);				-- FPGA_IN_[28-26]
+		state_ready : in std_logic);								-- FPGA_IN_25
+		
 end toplevel;
 
 architecture behavioral of toplevel is
-	
-	component memory_from_file is
-		generic (
-			word_width : natural;
-			address_width : natural;
-			file_name : string);
-		port (
-			clk : in std_logic;
-			write_enable : in std_logic;
-			addr : in std_logic_vector(address_width - 1 downto 0);
-			data : inout std_logic_vector(word_width - 1 downto 0));
-	end component memory_from_file;
-	
-	signal memory_data_write_enable : std_logic := '0';
-	signal memory_data_addr : std_logic_vector(1 downto 0) := (others => '0');
-	signal memory_data_data : std_logic_vector(7 downto 0);
-	
-begin
 
-	memory_data: memory_from_file
-		generic map (
-			word_width => 8,
-			address_width => 2,
-			file_name => "memory_data.dat")
-		port map (
-			clk => clk,
-			write_enable => memory_data_write_enable,
-			addr => memory_data_addr,
-			data => memory_data_data);
-	
-	data <= memory_data_data(3 downto 0);
-	
-	increment_memory_data_addr: process (clk)
-	begin
-		if rising_edge(clk) then
-			memory_data_addr <= conv_std_logic_vector(unsigned(memory_data_addr) + 1, 2);
-		end if;
-	end process increment_memory_data_addr;
+begin
 
 end behavioral;

@@ -1,0 +1,207 @@
+#	-- 50 MHz oscillator
+
+#	oscillator : in std_logic;
+NET "oscillator" LOC = P80;
+
+
+#	-- Program RAM
+
+#	prog_ram_addr : out std_logic_vector(15 downto 0);
+NET "prog_ram_addr[15]" LOC = P134;
+NET "prog_ram_addr[14]" LOC = P133;
+NET "prog_ram_addr[13]" LOC = P132;
+NET "prog_ram_addr[12]" LOC = P129;
+NET "prog_ram_addr[11]" LOC = P146;
+NET "prog_ram_addr[10]" LOC = P145;
+NET "prog_ram_addr[9]" LOC = P144;
+NET "prog_ram_addr[8]" LOC = P140;
+NET "prog_ram_addr[7]" LOC = P139;
+NET "prog_ram_addr[6]" LOC = P138;
+NET "prog_ram_addr[5]" LOC = P137;
+NET "prog_ram_addr[4]" LOC = P135;
+NET "prog_ram_addr[3]" LOC = P152;
+NET "prog_ram_addr[2]" LOC = P151;
+NET "prog_ram_addr[1]" LOC = P150;
+NET "prog_ram_addr[0]" LOC = P147;
+
+#	prog_ram_data : inout std_logic_vector(23 downto 0);
+NET "prog_ram_data[23]" LOC = P160;
+NET "prog_ram_data[22]" LOC = P161;
+NET "prog_ram_data[21]" LOC = P162;
+NET "prog_ram_data[20]" LOC = P163;
+NET "prog_ram_data[19]" LOC = P164;
+NET "prog_ram_data[18]" LOC = P165;
+NET "prog_ram_data[17]" LOC = P167;
+NET "prog_ram_data[16]" LOC = P168;
+NET "prog_ram_data[15]" LOC = P171;
+NET "prog_ram_data[14]" LOC = P172;
+NET "prog_ram_data[13]" LOC = P177;
+NET "prog_ram_data[12]" LOC = P178;
+NET "prog_ram_data[11]" LOC = P179;
+NET "prog_ram_data[10]" LOC = P180;
+NET "prog_ram_data[9]" LOC = P181;
+NET "prog_ram_data[8]" LOC = P185;
+NET "prog_ram_data[7]" LOC = P186;
+NET "prog_ram_data[6]" LOC = P187;
+NET "prog_ram_data[5]" LOC = P189;
+NET "prog_ram_data[4]" LOC = P190;
+NET "prog_ram_data[3]" LOC = P192;
+NET "prog_ram_data[2]" LOC = P193;
+NET "prog_ram_data[1]" LOC = P196;
+NET "prog_ram_data[0]" LOC = P197;
+
+#	prog_ram_write : out std_logic;
+NET "prog_ram_write" LOC = P153;
+
+
+#	-- Data RAM
+
+#	data_ram_addr : out std_logic_vector(20 downto 0);
+NET "data_ram_addr[20]" LOC = P50;
+NET "data_ram_addr[19]" LOC = P35;
+NET "data_ram_addr[18]" LOC = P36;
+NET "data_ram_addr[17]" LOC = P39;
+NET "data_ram_addr[16]" LOC = P40;
+NET "data_ram_addr[15]" LOC = P41;
+NET "data_ram_addr[14]" LOC = P49;
+NET "data_ram_addr[13]" LOC = P48;
+NET "data_ram_addr[12]" LOC = P47;
+NET "data_ram_addr[11]" LOC = P45;
+NET "data_ram_addr[10]" LOC = P42;
+NET "data_ram_addr[9]" LOC = P34;
+NET "data_ram_addr[8]" LOC = P33;
+NET "data_ram_addr[7]" LOC = P31;
+NET "data_ram_addr[6]" LOC = P30;
+NET "data_ram_addr[5]" LOC = P29;
+NET "data_ram_addr[4]" LOC = P28;
+NET "data_ram_addr[3]" LOC = P25;
+NET "data_ram_addr[2]" LOC = P24;
+NET "data_ram_addr[1]" LOC = P23;
+NET "data_ram_addr[0]" LOC = P22;
+
+#	data_ram_data : inout std_logic_vector(7 downto 0);
+NET "data_ram_data[7]" LOC = P19;
+NET "data_ram_data[6]" LOC = P18;
+NET "data_ram_data[5]" LOC = P16;
+NET "data_ram_data[4]" LOC = P15;
+NET "data_ram_data[3]" LOC = P12;
+NET "data_ram_data[2]" LOC = P11;
+NET "data_ram_data[1]" LOC = P9;
+NET "data_ram_data[0]" LOC = P8;
+
+#	data_ram_write : out std_logic;
+NET "vga_ram_write" LOC = P55;
+
+
+#	-- VGA RAM
+
+#	vga_ram_addr : out std_logic_vector(18 downto 0);
+NET "vga_ram_addr[18]" LOC = P94;
+NET "vga_ram_addr[17]" LOC = P96;
+NET "vga_ram_addr[16]" LOC = P97;
+NET "vga_ram_addr[15]" LOC = P98;
+NET "vga_ram_addr[14]" LOC = P107;
+NET "vga_ram_addr[13]" LOC = P106;
+NET "vga_ram_addr[12]" LOC = P102;
+NET "vga_ram_addr[11]" LOC = P100;
+NET "vga_ram_addr[10]" LOC = P99;
+NET "vga_ram_addr[9]" LOC = P113;
+NET "vga_ram_addr[8]" LOC = P112;
+NET "vga_ram_addr[7]" LOC = P109;
+NET "vga_ram_addr[6]" LOC = P108;
+NET "vga_ram_addr[5]" LOC = P93;
+NET "vga_ram_addr[4]" LOC = P90;
+NET "vga_ram_addr[3]" LOC = P89;
+NET "vga_ram_addr[2]" LOC = P83;
+NET "vga_ram_addr[1]" LOC = P82;
+NET "vga_ram_addr[0]" LOC = P78;
+
+#	vga_ram_data : inout std_logic_vector(7 downto 0);
+NET "vga_ram_data[7]" LOC = P128;
+NET "vga_ram_data[6]" LOC = P127;
+NET "vga_ram_data[5]" LOC = P126;
+NET "vga_ram_data[4]" LOC = P123;
+NET "vga_ram_data[3]" LOC = P122;
+NET "vga_ram_data[2]" LOC = P120;
+NET "vga_ram_data[1]" LOC = P119;
+NET "vga_ram_data[0]" LOC = P116;
+
+#	vga_ram_write : out std_logic;
+NET "vga_ram_write" LOC = P115;
+
+
+#	-- VGA signals
+
+#	vga_h_sync : out std_logic;
+NET "vga_h_sync" LOC = P76;
+
+#	vga_v_sync : out std_logic;
+NET "vga_v_sync" LOC = P77;
+
+#	vga_value : out std_logic_vector(9 downto 0);
+NET "vga_value[9]" LOC = P60;
+NET "vga_value[8]" LOC = P61;
+NET "vga_value[7]" LOC = P62;
+NET "vga_value[6]" LOC = P63;
+NET "vga_value[5]" LOC = P64;
+NET "vga_value[4]" LOC = P65;
+NET "vga_value[3]" LOC = P68;
+NET "vga_value[2]" LOC = P69;
+NET "vga_value[1]" LOC = P74;
+NET "vga_value[0]" LOC = P75;
+
+
+#	-- AVR data transfer
+
+#	avr_data_in : in std_logic_vector(23 downto 0);		-- FPGA_IN_[23-0]
+NET "avr_data_in[23]" LOC = P169;
+NET "avr_data_in[22]" LOC = P159;
+NET "avr_data_in[21]" LOC = P154;
+NET "avr_data_in[20]" LOC = P148;
+NET "avr_data_in[19]" LOC = P142;
+NET "avr_data_in[18]" LOC = P136;
+NET "avr_data_in[17]" LOC = P130;
+NET "avr_data_in[16]" LOC = P124;
+NET "avr_data_in[15]" LOC = P118;
+NET "avr_data_in[14]" LOC = P110;
+NET "avr_data_in[13]" LOC = P101;
+NET "avr_data_in[12]" LOC = P91;
+NET "avr_data_in[11]" LOC = P72;
+NET "avr_data_in[10]" LOC = P71;
+NET "avr_data_in[9]" LOC = P58;
+NET "avr_data_in[8]" LOC = P57;
+NET "avr_data_in[7]" LOC = P54;
+NET "avr_data_in[6]" LOC = P51;
+NET "avr_data_in[5]" LOC = P43;
+NET "avr_data_in[4]" LOC = P32;
+NET "avr_data_in[3]" LOC = P26;
+NET "avr_data_in[2]" LOC = P20;
+NET "avr_data_in[1]" LOC = P14;
+NET "avr_data_in[0]" LOC = P6;
+
+#	avr_data_in_ready : in std_logic;						-- FPGA_IN_24
+NET "avr_data_in_ready" LOC = P174;
+
+#	avr_data_out : out std_logic_vector(7 downto 0);	-- FPGA_IO_[7-0]
+NET "avr_data_out[7]" LOC = P4;
+NET "avr_data_out[6]" LOC = P3;
+NET "avr_data_out[5]" LOC = P2;
+NET "avr_data_out[4]" LOC = P205;
+NET "avr_data_out[3]" LOC = P203;
+NET "avr_data_out[2]" LOC = P202;
+NET "avr_data_out[1]" LOC = P200;
+NET "avr_data_out[0]" LOC = P199;
+
+#	avr_interrupt : out std_logic;							-- FPGA_IO_CTRL
+NET "avr_interrupt" LOC = P5;
+
+
+#	-- AVR state control
+
+#	state : in std_logic_vector(2 downto 0);				-- FPGA_IN_[28-26]
+NET "state[2]" LOC = P194;
+NET "state[1]" LOC = P184;
+NET "state[0]" LOC = P183;
+
+#	state_ready : in std_logic);								-- FPGA_IN_25
+NET "state_ready" LOC = P175;
