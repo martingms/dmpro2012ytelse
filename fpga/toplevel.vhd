@@ -80,9 +80,13 @@ begin
 	prog_ram_addr <= (others => '0');
 	prog_ram_data <= (others => 'Z');
 	prog_ram_write <= '0';
-	data_ram_addr <= (others => '0');
-	data_ram_data <= (others => 'Z');
-	data_ram_write <= '0';
+--	data_ram_addr <= (others => '0');
+--	data_ram_data <= (others => 'Z');
+	data_ram_addr(20 downto 19) <= (others => '0');
+--	data_ram_write <= '0';
+	vga_ram_addr <= (others => '0');
+	vga_ram_data <= (others => 'Z');
+	vga_ram_write <= '0';
 	vga_value(1 downto 0) <= (others => '0');
 	avr_data_out <= (others => '0');
 	avr_interrupt <= '0';
@@ -97,32 +101,46 @@ begin
 			pixel_in => vga_pixel_in,
 			mem_addr_in => vga_mem_addr_in,
 			
-			mem_addr => vga_ram_addr,
-			mem_we => vga_ram_write,
-			mem_data => vga_ram_data
+			mem_addr => data_ram_addr(18 downto 0),
+			mem_we => data_ram_write,
+			mem_data => data_ram_data
 		);
 
---	memory_data: memory_from_file
---		generic map (
---			word_width => 8,
---			address_width => 15,
---			file_name => "vga/lenna.dat"
---		)
---		port map (
---			clk => clk,
---			write_enable => '0',
---			addr => vga_mem_addr_in(14 downto 0),
---			data => vga_pixel_in
---		);
+	memory_data: memory_from_file
+		generic map (
+			word_width => 8,
+			address_width => 15,
+			file_name => "vga/lenna.dat"
+		)
+		port map (
+			clk => clk,
+			write_enable => '0',
+			addr => vga_mem_addr_in(14 downto 0),
+			data => vga_pixel_in
+		);
 	vga_mem_addr_in(18 downto 15) <= (others => '0');
 	
 	process(clk)
-		variable counter : natural range 0 to (2**15)*4 := 0;
+		variable counter : natural range 0 to (2**15)*4 - 1 := 0;
+		variable col : natural range 0 to 160 := 0;
+		variable row : natural range 0 to 120 := 0;
 	begin
 		if rising_edge(clk) then
-			vga_mem_addr_in(14 downto 0) <= conv_std_logic_vector(counter / 4, 15);
-			vga_pixel_in <= conv_std_logic_vector(counter / 4, 8);
-			counter := counter + 1;
+			if counter < (2**15)*4 then
+				vga_mem_addr_in(14 downto 0) <= conv_std_logic_vector(counter / 4, 15);
+--				vga_pixel_in <= conv_std_logic_vector(col + row, 8);
+				counter := counter + 1;
+				if counter mod 4 = 0 then
+					col := col + 1;
+					if col = 160 then
+						col := 0;
+						row := row + 1;
+						if row = 120 then
+							row := 0;
+						end if;
+					end if;
+				end if;
+			end if;
 		end if;
 	end process;
 
