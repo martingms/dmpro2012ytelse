@@ -78,7 +78,7 @@ begin
 --		y_next <= r.vCounter(8 downto 0);
 --	end process;
 
-	process(r,n)
+	process(r,n,pixel_next)
 	begin
 		n <= r;
 		n.hSync <= not hSyncActive;
@@ -98,7 +98,9 @@ begin
 
 		if r.hCounter < hRez and r.vCounter < vRez then
 
-			n.greytone <= pixel_curr;
+			x_next <= r.hCounter(9 downto 0);
+			y_next <= r.vCounter(8 downto 0);
+			n.greytone <= pixel_next;
 
 			--n.red   <= n.hCounter(2 downto 0) & n.hCounter(2 downto 1);
 			--n.green <= n.hCounter(4 downto 0);
@@ -129,9 +131,6 @@ begin
 		if rising_edge(pixelClock) then
 			if count = 0 then
 				r <= n;
-				pixel_curr <= pixel_next;
-				x_next <= r.hCounter(9 downto 0);
-				y_next <= r.vCounter(8 downto 0);
 			end if;
 			count <= (count + 1) mod 2;
 		end if;
