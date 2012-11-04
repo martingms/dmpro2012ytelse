@@ -97,8 +97,8 @@ begin
 	prog_ram_data <= (others => 'Z');
 	prog_ram_write <= '0';
 --	data_ram_addr <= (others => '0');
---	data_ram_data <= (others => 'Z');
 	data_ram_addr(20 downto 19) <= (others => '0');
+--	data_ram_data <= (others => 'Z');
 --	data_ram_write <= '0';
 	vga_ram_addr <= (others => '0');
 	vga_ram_data <= (others => 'Z');
