@@ -29,7 +29,7 @@ begin
 
 	process(x_coord, y_coord)
 	begin
-		pixel_addr <= conv_std_logic_vector(160 * (conv_integer(unsigned(y_coord))/2) + conv_integer(unsigned(x_coord))/2, 19);
+		pixel_addr <= conv_std_logic_vector(320 * (conv_integer(unsigned(y_coord))/2) + conv_integer(unsigned(x_coord))/2, 19);
 	end process;
 	
 	process(clk)

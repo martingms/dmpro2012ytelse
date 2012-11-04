@@ -72,8 +72,9 @@ architecture behavioral of toplevel is
 		);
 	end component;
 	
+	signal block_ram_addr_in : std_logic_vector(14 downto 0) := "000000000000000";
+	signal vga_addr_in : std_logic_vector(18 downto 0) := "0000000000000000000";
 	signal vga_pixel_in    : std_logic_vector(7 downto 0) := "00000000";
-	signal vga_mem_addr_in : std_logic_vector(18 downto 0) := "0000000000000000000";
 
 begin
 
@@ -99,7 +100,7 @@ begin
 			vSync => vga_v_sync,
 			
 			pixel_in => vga_pixel_in,
-			mem_addr_in => vga_mem_addr_in,
+			mem_addr_in => vga_addr_in,
 			
 			mem_addr => data_ram_addr(18 downto 0),
 			mem_we => data_ram_write,
@@ -115,31 +116,28 @@ begin
 		port map (
 			clk => clk,
 			write_enable => '0',
-			addr => vga_mem_addr_in(14 downto 0),
+			addr => block_ram_addr_in,
 			data => vga_pixel_in
 		);
-	vga_mem_addr_in(18 downto 15) <= (others => '0');
 	
 	process(clk)
-		variable counter : natural range 0 to (2**15)*4 - 1 := 0;
+		variable counter : natural range 0 to 1 := 0;
 		variable col : natural range 0 to 160 := 0;
 		variable row : natural range 0 to 120 := 0;
 	begin
 		if rising_edge(clk) then
-			if counter < (2**15)*4 then
-				vga_mem_addr_in(14 downto 0) <= conv_std_logic_vector(counter / 4, 15);
---				vga_pixel_in <= conv_std_logic_vector(col + row, 8);
-				counter := counter + 1;
-				if counter mod 4 = 0 then
+			if row /= 120 then
+				if counter = 0 then
+					block_ram_addr_in <= conv_std_logic_vector(160 * row + col, 15);
+					vga_addr_in <= conv_std_logic_vector(320 * row + col, 19);
+					
 					col := col + 1;
 					if col = 160 then
 						col := 0;
 						row := row + 1;
-						if row = 120 then
-							row := 0;
-						end if;
 					end if;
 				end if;
+				counter := counter + 1;
 			end if;
 		end if;
 	end process;
