@@ -42,12 +42,24 @@ end toplevel;
 
 architecture behavioral of toplevel is
 
+	component clock is
+		port (
+			CLKIN_IN : in std_logic;          
+			CLKDV_OUT : out std_logic;
+			CLKFX_OUT : out std_logic;
+			CLKIN_IBUFG_OUT : out std_logic;
+			CLK0_OUT : out std_logic
+		);
+	end component;
+
 	component vgacontroller is
 		port (
-			clk        : in  STD_LOGIC;
-			greytone   : out STD_LOGIC_VECTOR (7 downto 0);
-			hSync      : out STD_LOGIC;
-			vSync      : out STD_LOGIC;
+			clk        : in  std_logic;
+			clk_vga    : in  std_logic;
+			
+			greytone   : out std_logic_vector (7 downto 0);
+			hSync      : out std_logic;
+			vSync      : out std_logic;
 			
 			pixel_in    : in std_logic_vector(7 downto 0);
 			mem_addr_in : in std_logic_vector(18 downto 0);
@@ -72,6 +84,9 @@ architecture behavioral of toplevel is
 		);
 	end component;
 	
+	signal clk_vga : std_logic;
+	signal clk_cpu : std_logic;
+	
 	signal block_ram_addr_in : std_logic_vector(14 downto 0) := "000000000000000";
 	signal vga_addr_in : std_logic_vector(18 downto 0) := "0000000000000000000";
 	signal vga_pixel_in    : std_logic_vector(7 downto 0) := "00000000";
@@ -91,10 +106,19 @@ begin
 	vga_value(1 downto 0) <= (others => '0');
 	avr_data_out <= (others => '0');
 	avr_interrupt <= '0';
+	
+	inst_clock: clock
+		port map (
+			CLKIN_IN => clk,
+			CLKDV_OUT => clk_vga,
+			CLKFX_OUT => clk_cpu
+		);
 
 	inst_vgacontroller : vgacontroller
 		port map (
-			clk => clk,
+			clk => clk_cpu,
+			clk_vga => clk_vga,
+			
 			greytone => vga_value(9 downto 2),
 			hSync => vga_h_sync,
 			vSync => vga_v_sync,
@@ -114,18 +138,18 @@ begin
 			file_name => "vga/lenna.dat"
 		)
 		port map (
-			clk => clk,
+			clk => clk_cpu,
 			write_enable => '0',
 			addr => block_ram_addr_in,
 			data => vga_pixel_in
 		);
 	
-	process(clk)
+	process (clk_cpu)
 		variable counter : natural range 0 to 1 := 0;
 		variable col : natural range 0 to 320 := 0;
 		variable row : natural range 0 to 240 := 0;
 	begin
-		if rising_edge(clk) then
+		if rising_edge(clk_cpu) then
 			if row /= 240 then
 				if counter = 0 then
 					if row < 120 and col < 160 then

@@ -43,8 +43,6 @@ architecture Behavioral of pixelpusher is
 
 	signal r : reg := ((others=>'0'), (others=>'0'), (others=>'0'), '0', '0');
 	signal n : reg;
-	
-	signal count : natural range 0 to 1 := 0;
 
 begin
 
@@ -95,10 +93,7 @@ begin
 	process (pixelClock, n)
 	begin
 		if rising_edge(pixelClock) then
-			if count = 0 then
-				r <= n;
-			end if;
-			count <= (count + 1) mod 2;
+			r <= n;
 		end if;
 	end process;
 

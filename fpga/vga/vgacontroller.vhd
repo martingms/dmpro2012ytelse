@@ -6,6 +6,7 @@ use ieee.std_logic_arith.all;
 entity vgacontroller is
 	port (
 		clk        : in  STD_LOGIC;
+		clk_vga    : in  STD_LOGIC;
 		greytone   : out STD_LOGIC_VECTOR (7 downto 0);
 		hSync      : out STD_LOGIC;
 		vSync      : out STD_LOGIC;
@@ -72,7 +73,7 @@ begin
 
 	inst_pixelpusher : pixelpusher
 		port map (
-			pixelClock => clk,
+			pixelClock => clk_vga,
 			greytone => greytone,
 			hSync => hSync,
 			vSync => vSync,
