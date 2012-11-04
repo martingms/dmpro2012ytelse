@@ -122,17 +122,22 @@ begin
 	
 	process(clk)
 		variable counter : natural range 0 to 1 := 0;
-		variable col : natural range 0 to 160 := 0;
-		variable row : natural range 0 to 120 := 0;
+		variable col : natural range 0 to 320 := 0;
+		variable row : natural range 0 to 240 := 0;
 	begin
 		if rising_edge(clk) then
-			if row /= 120 then
+			if row /= 240 then
 				if counter = 0 then
-					block_ram_addr_in <= conv_std_logic_vector(160 * row + col, 15);
+					if row < 120 and col < 160 then
+						block_ram_addr_in <= conv_std_logic_vector(160 * row + col, 15);
+					else
+						block_ram_addr_in <= conv_std_logic_vector(0, 15);
+					end if;
+					
 					vga_addr_in <= conv_std_logic_vector(320 * row + col, 19);
 					
 					col := col + 1;
-					if col = 160 then
+					if col = 320 then
 						col := 0;
 						row := row + 1;
 					end if;
