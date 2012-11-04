@@ -35,11 +35,9 @@ begin
 	process(clk)
 	begin
 		if rising_edge(clk) then
-			if rw_switch = 0 then
-				pixel_out <= mem_data;
-			end if;
 			rw_switch <= (rw_switch + 1) mod 2;
 			if rw_switch = 0 then
+				pixel_out <= mem_data;
 				mem_we <= '0';
 				mem_addr <= mem_addr_in;
 				mem_data <= pixel_in;
@@ -50,10 +48,5 @@ begin
 			end if;
 		end if;
 	end process;
-
---	process(rw_switch, mem_addr_in, pixel_in, pixel_addr)
---	begin
---
---	end process;
 
 end Behavioral;
