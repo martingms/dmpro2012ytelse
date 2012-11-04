@@ -7,9 +7,6 @@ entity vgacontroller is
 	port (
 		clk        : in  STD_LOGIC;
 		greytone   : out STD_LOGIC_VECTOR (7 downto 0);
-		--Red        : out STD_LOGIC_VECTOR (2 downto 0);
-		--Green      : out STD_LOGIC_VECTOR (3 downto 0);
-		--Blue       : out STD_LOGIC_VECTOR (2 downto 0);
 		hSync      : out STD_LOGIC;
 		vSync      : out STD_LOGIC;
 		
@@ -42,12 +39,8 @@ architecture Behavioral of vgacontroller is
 		port (
 			pixelClock : in  STD_LOGIC;
 			greytone   : out STD_LOGIC_VECTOR (7 downto 0);
-			--Red        : out STD_LOGIC_VECTOR (2 downto 0);
-			--Green      : out STD_LOGIC_VECTOR (3 downto 0);
-			--Blue       : out STD_LOGIC_VECTOR (2 downto 0);
 			hSync      : out STD_LOGIC;
 			vSync      : out STD_LOGIC;
-			blank      : out STD_LOGIC;
 			x_next     : out std_logic_vector(9 downto 0); -- Enough to represent 640 pixels
 			y_next     : out std_logic_vector(8 downto 0); -- Enough to represent 480 pixels
 			pixel_next : in std_logic_vector(7 downto 0)

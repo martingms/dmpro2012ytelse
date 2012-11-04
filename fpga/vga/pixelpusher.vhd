@@ -21,12 +21,8 @@ entity pixelpusher is
 	port (
 		pixelClock : in  STD_LOGIC;
 		greytone   : out STD_LOGIC_VECTOR (7 downto 0);
-		--Red        : out STD_LOGIC_VECTOR (2 downto 0);
-		--Green      : out STD_LOGIC_VECTOR (3 downto 0);
-		--Blue       : out STD_LOGIC_VECTOR (2 downto 0);
 		hSync      : out STD_LOGIC;
 		vSync      : out STD_LOGIC;
-		blank      : out STD_LOGIC;
 		x_next     : out std_logic_vector(9 downto 0); -- Enough to represent 640 pixels
 		y_next     : out std_logic_vector(8 downto 0); -- Enough to represent 480 pixels
 		pixel_next : in std_logic_vector(7 downto 0)
@@ -40,21 +36,13 @@ architecture Behavioral of pixelpusher is
 		vCounter : std_logic_vector(11 downto 0);
 
 		greytone : std_logic_vector(7 downto 0);
-		--red      : std_logic_vector(2 downto 0);
-		--green    : std_logic_vector(3 downto 0);
-		--blue     : std_logic_vector(2 downto 0);
 
 		hSync    : std_logic;
 		vSync    : std_logic;
-		blank    : std_logic;
 	end record;
 
-	signal r : reg := ((others=>'0'), (others=>'0'),
-							(others=>'0'), --(others=>'0'), (others=>'0'),
-							'0', '0', '0');
+	signal r : reg := ((others=>'0'), (others=>'0'), (others=>'0'), '0', '0');
 	signal n : reg;
-
-	signal pixel_curr : std_logic_vector(7 downto 0);
 	
 	signal count : natural range 0 to 1 := 0;
 
@@ -64,19 +52,6 @@ begin
 	hSync <= r.hSync;
 	vSync <= r.vSync;
 	greytone <= r.greytone;
-	--Red   <= r.red;
-	--Green <= r.green;
-	--Blue  <= r.blue;
-	blank <= r.blank;
-
---	process(pixel_next)
---	begin
---		pixel_curr <= pixel_next;
-----		x_next <= conv_std_logic_vector(conv_integer(unsigned(r.vCounter))/8, 9);
-----		y_next <= conv_std_logic_vector(conv_integer(unsigned(r.hCounter))/8, 8);
---		x_next <= r.hCounter(9 downto 0);
---		y_next <= r.vCounter(8 downto 0);
---	end process;
 
 	process(r,n,pixel_next)
 	begin
@@ -101,17 +76,8 @@ begin
 			x_next <= r.hCounter(9 downto 0);
 			y_next <= r.vCounter(8 downto 0);
 			n.greytone <= pixel_next;
-
-			--n.red   <= n.hCounter(2 downto 0) & n.hCounter(2 downto 1);
-			--n.green <= n.hCounter(4 downto 0);
-			--n.blue  <= n.vCounter(4 downto 0);
-			n.blank <= '0';
 		else
 			n.greytone <= (others => '0');
-			--n.red   <= (others => '0');
-			--n.green <= (others => '0');
-			--n.blue  <= (others => '0');
-			n.blank <= '1';
 		end if;
 
 		-- Are we in the hSync pulse?
