@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    01:05:41 11/05/2012 
+-- Create Date:    01:52:53 11/05/2012 
 -- Design Name: 
--- Module Name:    program_loader - Behavioral 
+-- Module Name:    avr_mux - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -19,8 +19,6 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-library WORK;
-use WORK.FPGA_CONSTANT_PKG.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,30 +29,28 @@ use WORK.FPGA_CONSTANT_PKG.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity program_loader is
+entity avr_mux is
 	port (
-		clk : in std_logic;
-		enable : in std_logic;
+		selector : in std_logic;
 		
-		mem_addr : out std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
-		mem_write : out std_logic;
-		mem_data : inout std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
+		a_interrupt : in std_logic;
+		b_interrupt : in std_logic;
 		
-		avr_data_in : in std_logic_vector(23 downto 0);
-		avr_data_in_ready : in std_logic;
-		avr_interrupt : out std_logic
-	);
-end program_loader;
+		avr_interrupt : out std_logic);
+end avr_mux;
 
-architecture Behavioral of program_loader is
+architecture Behavioral of avr_mux is
 
 begin
 
-	mem_addr <= (others => '0');
-	mem_data <= (others => '0');
-	mem_write <= '0';
-	
-	avr_interrupt <= '0';
+	MUX : process(selector, a_interrupt, b_interrupt)
+	begin
+		if (selector = '0') then
+			avr_interrupt <= a_interrupt;
+		else
+			avr_interrupt <= b_interrupt;
+		end if;
+	end process;
 
 end Behavioral;
 
