@@ -1,0 +1,94 @@
+\section{Component communication}
+
+This section documents how the AVR communicates and controlls the FPGA. The communication is usually performed by the AVR assigning a state to the FPGA, followed by some data transfer. A full pin reference can be found at the end of this section.
+
+\subsection{FPGA states}
+
+The AVR can set the FPGA to 5 different states, controlling the FPGA's behaviour. The states are set with a 3-line bus (FPGA IN 26 through 28) and a line which when toggled, indicates that the FPGA should set its state to the state currently on the bus. The three state lines represent a binary number, the states and their number are as follows:
+
+\begin{description}
+\item[000] STOP (FPGA stops executing, default state) 
+\item[001] RUN (FPGA starts executing) 
+\item[010] LOAD\_DATA (FPGA receives data from AVR) 
+\item[011] STORE\_DATA (FPGA stores data to AVR) (might not be necessary) 
+\item[100] LOAD\_INSTRUCTION (FPGA receives instructions from AVR) 
+\end{description}
+
+
+\subsection{AVR transfers data to the FPGA}
+
+When the AVR transfers data, it first sets the FPGA state to LOAD\_DATA or LOAD\_INSTRUCTION to load data or instructions respectively. The procedure for the AVR is then to put one word on the bus, toggle the clock line, wait for ack and repeat. The FPGA state STOP is used to signal the end of transfer. When the data are simply data, the first 8 lines of the FPGA input bus is used to transfer data one byte at a time. When the data are instructions for the FPGA, data are transfered one instruction (24 bit) at a time, and the first 24 lines of the bus are used. The entire procedure can be summarized by the following six steps:
+
+\begin{enumerate}
+\item AVR sets FPGA state to LOAD\_DATA or LOAD\_INSTRUCTION
+\item AVR puts 8 or 24 bits of data on the bus
+\item AVR toggles the Address increment CLK line
+\item When ready for more data, FPGA interrupts/acks AVR 
+\item Repeat stage 2 through 4
+\item AVR sets FPGA state to STOP
+\end{enumerate}
+
+\subsection{FPGA transfers data to the AVR}
+The FPGA have the ability to transfer data back to the AVR. This is a fallback routine, implemented in case of a bottleneck or failure in the VGA controller on the FPGA. In this case, the FPGA can transfer the processed data back to the AVR for storage or to be sent through an alternative VGA controller. In this transfer the data bus are 8 pins connected to the FPGA's I/O pins.
+
+This transfer is rather unusual because it is, unlike all other operations, not initiated by the AVR. The FPGA will initiate the transfer by putting one byte on the bus, and then interrupt the AVR. After the AVR has acknowledged, another byte can be transfered. The first four bytes of the transfer will represent, as a 32 bit unsigned integer, the number of bytes of actual data to be transfered. The entire procedure can be summarized by the following five steps, where \emph{x} is the amount of actual data.
+
+\begin{enumerate}
+\item FPGA puts one byte of data on the bus
+\item FPGA interrupts AVR (signaling there is data on the bus)
+\item AVR reads one byte of data from the bus
+\item When ready for more data, AVR toggles the Address increment CLK line
+\item Repeat stage 1 through 4 \emph{x} times
+\end{enumerate}
+
+If it becomes a problem that the FPGA can at any time put data on the bus, the two following steps will be introduced to the start of the procedure: 
+
+\begin{enumerate}
+\item FPGA interrupts AVR. 
+\item AVR toggles address increment CLK line. 
+\end{enumerate}
+
+
+\subsection {Pin reference and the buses}
+The FPGA has two types of pins connected to the AVR. There are 9 I/O pins, and 29 input pins. The I/O pins are mostly used for the FPGA to acknowledge transfers, but the 8 remaining pins can be used for the fallback solution of having the FPGA transfer data back to the AVR. The 29 input pins are used to set the state of the FPGA, acknowledge the FPGA and as a 24 bit wide one-way data bus.
+
+\begin{itemize}
+\item FPGA\_IO\_00 - Two way data (least significant bit)
+\item FPGA\_IO\_01 - Two way data
+\item FPGA\_IO\_02 - Two way data
+\item FPGA\_IO\_03 - Two way data
+\item FPGA\_IO\_04 - Two way data
+\item FPGA\_IO\_05 - Two way data
+\item FPGA\_IO\_06 - Two way data
+\item FPGA\_IO\_07 - Two way data (most significant bit)
+\item FPGA\_IO\_CTRL - Interrupt / Ack from FPGA.
+\item FPGA\_IN\_00 - Data (least significant bit)
+\item FPGA\_IN\_01 - Data
+\item FPGA\_IN\_02 - Data
+\item FPGA\_IN\_03 - Data
+\item FPGA\_IN\_04 - Data
+\item FPGA\_IN\_05 - Data
+\item FPGA\_IN\_06 - Data
+\item FPGA\_IN\_07 - Data
+\item FPGA\_IN\_08 - Data
+\item FPGA\_IN\_09 - Data
+\item FPGA\_IN\_10 - Data
+\item FPGA\_IN\_11 - Data
+\item FPGA\_IN\_12 - Data
+\item FPGA\_IN\_13 - Data
+\item FPGA\_IN\_14 - Data
+\item FPGA\_IN\_15 - Data
+\item FPGA\_IN\_16 - Data
+\item FPGA\_IN\_17 - Data
+\item FPGA\_IN\_18 - Data
+\item FPGA\_IN\_19 - Data
+\item FPGA\_IN\_20 - Data
+\item FPGA\_IN\_21 - Data
+\item FPGA\_IN\_22 - Data
+\item FPGA\_IN\_23 - Data (most significant bit)
+\item FPGA\_IN\_24 - Address increment CLK
+\item FPGA\_IN\_25 - Set FPGA state
+\item FPGA\_IN\_26 - FPGA STATE (least significant bit)
+\item FPGA\_IN\_27 - FPGA STATE
+\item FPGA\_IN\_28 - FPGA STATE (most significant bit)
+\end{itemize}
