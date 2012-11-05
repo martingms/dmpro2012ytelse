@@ -36,5 +36,11 @@ package FPGA_CONSTANT_PKG is
 	constant NODE_IDATA_BUS			: integer	:= 24;		-- instruction address
 	constant NODE_DDATA_BUS			: integer	:= 8;			-- data bus (north, south, east, west)
 	constant NODE_SDATA_BUS			: integer	:= 8;			-- s data bus (left, right)
+	
+	-- MEMORY CONSTANTS
+	constant RAM_DATA_WORD_WIDTH			: integer	:= 8;
+	constant RAM_DATA_ADDRESS_WIDTH		: integer	:= 21;
+	constant RAM_PROGRAM_WORD_WIDTH		: integer	:= 24;
+	constant RAM_PROGRAM_ADDRESS_WIDTH	: integer	:= 16;
 
 end FPGA_CONSTANT_PKG;

@@ -2,6 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
+library WORK;
+use WORK.FPGA_CONSTANT_PKG.ALL;
 
 entity toplevel is
 	port (
@@ -51,6 +53,16 @@ architecture behavioral of toplevel is
 			CLK0_OUT : out std_logic
 		);
 	end component;
+	
+	component state_register is
+		port ( 
+           clk : in STD_LOGIC;
+           state_in : in  STD_LOGIC_VECTOR (2 downto 0);
+           state_ready : in  STD_LOGIC;
+           load_program : out  STD_LOGIC;
+           load_data : out  STD_LOGIC;
+           execute : out  STD_LOGIC);
+	end component;
 
 	component vgacontroller is
 		port (
@@ -84,18 +96,71 @@ architecture behavioral of toplevel is
 		);
 	end component;
 	
+	component ram_mux is
+		generic (
+			word_width : natural;
+			address_width : natural);
+		port (
+			selector : in std_logic;
+			
+			in0_write_enable : in std_logic;
+			in0_addr : in std_logic_vector(address_width - 1 downto 0);
+			in0_data : inout std_logic_vector(word_width - 1 downto 0);
+			
+			in1_write_enable : in std_logic;
+			in1_addr : in std_logic_vector(address_width - 1 downto 0);
+			in1_data : inout std_logic_vector(word_width - 1 downto 0);
+			
+			out_write_enable : out std_logic;
+			out_addr : out std_logic_vector(address_width - 1 downto 0);
+			out_data : inout std_logic_vector(word_width - 1 downto 0));
+	end component;
+	
+	component program_loader is
+		port (
+			clk : in std_logic;
+			enable : in std_logic;
+			
+			mem_addr : out std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
+			mem_write : out std_logic;
+			mem_data : inout std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0)
+		);
+	end component;
+	
+	component instruction_register is
+		port (
+			clk : in std_logic;
+			enable : in std_logic;
+			
+			mem_addr : out std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
+			mem_write : out std_logic;
+			mem_data : inout std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
+			
+			instruction : out std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0)
+		);
+	end component;
+	
 	signal clk_vga : std_logic;
 	signal clk_cpu : std_logic;
+	
+	signal load_program : std_logic;
+	signal load_data : std_logic;
+	signal execute : std_logic;
 	
 	signal block_ram_addr_in : std_logic_vector(14 downto 0) := "000000000000000";
 	signal vga_addr_in : std_logic_vector(18 downto 0) := "0000000000000000000";
 	signal vga_pixel_in    : std_logic_vector(7 downto 0) := "00000000";
+	
+	signal program_loader_mem_addr :  std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
+	signal program_loader_mem_write :  std_logic;
+	signal program_loader_mem_data :  std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
+	
+	signal instruction_register_mem_addr :  std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
+	signal instruction_register_mem_write :  std_logic;
+	signal instruction_register_mem_data :  std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
 
 begin
 
-	prog_ram_addr <= (others => '0');
-	prog_ram_data <= (others => 'Z');
-	prog_ram_write <= '0';
 --	data_ram_addr <= (others => '0');
 	data_ram_addr(20 downto 19) <= (others => '0');
 --	data_ram_data <= (others => 'Z');
@@ -113,6 +178,15 @@ begin
 			CLKDV_OUT => clk_vga,
 			CLKFX_OUT => clk_cpu
 		);
+		
+	inst_state_register: state_register 
+		port map ( 
+           clk => clk_cpu,
+           state_in => state,
+           state_ready => state_ready,
+           load_program => load_program,
+           load_data => load_data,
+           execute => execute);
 
 	inst_vgacontroller : vgacontroller
 		port map (
@@ -129,6 +203,46 @@ begin
 			mem_addr => data_ram_addr(18 downto 0),
 			mem_we => data_ram_write,
 			mem_data => data_ram_data
+		);
+	
+	program_ram_mux: ram_mux
+		generic map (
+			word_width => RAM_PROGRAM_WORD_WIDTH,
+			address_width => RAM_PROGRAM_ADDRESS_WIDTH)
+		port map (
+			selector => load_data,
+			
+			in0_write_enable => instruction_register_mem_write,
+			in0_addr => instruction_register_mem_addr,
+			in0_data => instruction_register_mem_data,
+			
+			in1_write_enable => program_loader_mem_write,
+			in1_addr => program_loader_mem_addr,
+			in1_data => program_loader_mem_data,
+			
+			out_write_enable => prog_ram_write,
+			out_addr => prog_ram_addr,
+			out_data => prog_ram_data
+		);
+	
+	inst_program_loader: program_loader
+		port map (
+			clk => clk_cpu,
+			enable => load_data,
+			
+			mem_addr => instruction_register_mem_addr,
+			mem_write => instruction_register_mem_write,
+			mem_data => instruction_register_mem_data
+		);
+	
+	inst_instruction_register: instruction_register
+		port map (
+			clk => clk_cpu,
+			enable => execute,
+			
+			mem_addr => program_loader_mem_addr,
+			mem_write => program_loader_mem_write,
+			mem_data => program_loader_mem_data
 		);
 
 	memory_data: memory_from_file

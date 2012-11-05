@@ -98,6 +98,10 @@
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
     </file>
+    <file xil_pn:name="control/state_register.vhd" xil_pn:type="FILE_VHDL"/>
+    <file xil_pn:name="control/ram_mux.vhd" xil_pn:type="FILE_VHDL"/>
+    <file xil_pn:name="control/program_loader.vhd" xil_pn:type="FILE_VHDL"/>
+    <file xil_pn:name="control/instruction_register.vhd" xil_pn:type="FILE_VHDL"/>
   </files>
 
   <properties>
