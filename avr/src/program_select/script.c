@@ -31,6 +31,7 @@ int load_script(char *script_path) {
 				if (i < DEFAULT_STRING_MAX_LENGTH) {
 				selected_script.description[i] = c_buffer;
 				}
+
 				seprintf("Part of description in script ignored (max %d characters). \n", DEFAULT_STRING_MAX_LENGTH);
 				break;
 			}

@@ -4,6 +4,7 @@
 #include "str2img.h"
 #include "filebrowser.h"
 #include "fpga.h"
+#include <unistd.h>
 
 // SCREEN LIMITS
 #define SCREEN_ITEMS_OFFSET 2
@@ -12,11 +13,12 @@
 #define SCREEN_MAX_WIDTH 	40
 
 // SCREEN STRINGS
-#define SCREEN_LINE_SELECT_PROGRAM 		"|-----[ SELECT PROGRAM ]-----|"
-#define SCREEN_LINE_SELECT_DATA			"|------[ SELECT DATA ]-------|"
-#define SCREEN_LINE_BOTTOM				"|----------------------------|"
-#define SCREEN_LINE_MORE_DATA			"                     more...  "
-#define SCREEN_LINE_EMPTY				"                              "
+#define SCREEN_LINE_SELECT_PROGRAM 		"|----------[ SELECT PROGRAM ]----------|"
+#define SCREEN_LINE_SELECT_DATA			"|-----------[ SELECT DATA ]------------|"
+#define SCREEN_LINE_ERROR				"|--------------[ ERROR! ]--------------|"
+#define SCREEN_LINE_BOTTOM				"|--------------------------------------|"
+#define SCREEN_LINE_MORE_DATA			"                               more...  "
+#define SCREEN_LINE_EMPTY				"                                        "
 #define SCREEN_PREFIX_ITEM				' '
 #define SCREEN_PREFIX_SELECTED_ITEM 	'*'
 
@@ -31,25 +33,41 @@ struct set {
 extern int menu_item_selected;
 enum data_type current_type;
 
-void draw_bitmap() {
+void screen_display_error_message(char *message) {
+#define ERROR_MESSAGE_TIMEOUT 10000
+	str2img_clear();
+	str2img_writeline(SCREEN_LINE_ERROR);
+	str2img_writeline(SCREEN_LINE_EMPTY);
+	str2img_write(message);
+	screen_draw_bitmap_on_screen();
+
+	usleep(ERROR_MESSAGE_TIMEOUT);
+
+	screen_make_bitmap_from_buffer();
+	screen_draw_bitmap_on_screen();
+}
+
+void screen_make_bitmap_from_buffer() {
 	int i;
-	//str2img_clear();
+	str2img_clear();
 	for (i= 0; i < SCREEN_HEIGHT; ++i) {
 		str2img_writeline(screen[i]);
 	}
 }
 
-void send_to_screen(void) {
+void screen_draw_bitmap_on_screen(void) {
 #define SIZE 320*240 //TODO usikker på størrelsen
 
 	//fpga_send_program(char *program_path); TODO program for å vise bilde
 	U8 buffer[SIZE];
 	str2img_read_block(buffer);
 	fpga_send_data_from_memory(buffer, SIZE);
-	str2img_clear();
 }
 
-void move_cursor(S8 direction) {
+/**
+ * Moves the cursor by manipulating the current bitmap
+ */
+void screen_move_cursor(S8 direction) {
 	int prev_sel = menu_item_selected;
 	menu_item_selected += direction;
 
@@ -61,13 +79,13 @@ void move_cursor(S8 direction) {
 		str2img_putc(SCREEN_PREFIX_SELECTED_ITEM);
 	}
 	else {
-		load_screen_data(current_type);
-		draw_bitmap();
+		screen_load_data_to_buffer(current_type);
+		screen_make_bitmap_from_buffer();
 	}
-
+	screen_draw_bitmap_on_screen();
 }
 
-void load_screen_data(enum data_type type) {
+void screen_load_data_to_buffer(enum data_type type) {
 	int i,j,start,rc;
 	char buffer[SCREEN_MAX_WIDTH];
 	current_type = type;
@@ -80,7 +98,7 @@ void load_screen_data(enum data_type type) {
 
 	} else if (type == PROGRAM) {
 		fb_iterator_init(FS_FILE);															// Init for files
-		fb_iterator_set_ext("");															// Set extension
+		fb_iterator_set_ext("");															// Set extension TODO?
 		memcpy(screen[0], SCREEN_LINE_SELECT_PROGRAM, strlen(SCREEN_LINE_SELECT_PROGRAM));	// Set top line of screen
 	}
 
@@ -101,7 +119,7 @@ void load_screen_data(enum data_type type) {
 	// Seek to the first file
 	rc = fb_iterator_seek(start);
 	if (rc) {
-		//TODO seek gikk galt
+		screen_display_error_message("Error, could not seek to file");
 	}
 
 	// Gets file names
@@ -116,7 +134,6 @@ void load_screen_data(enum data_type type) {
 			buffer[2] = '\0';
 
 			strcat(buffer, fb_iterator_next());			// Adds file name
-			//strcat(buffer, "\n");						// Adds line feed
 			memcpy(screen[i], buffer, SCREEN_MAX_WIDTH);
 
 		} else {		// No more files

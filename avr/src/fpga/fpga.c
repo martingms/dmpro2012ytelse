@@ -15,7 +15,6 @@
 
 #include <fsaccess.h>
 
-//#define FPGA_IO_CTRL AVR32_PIN_PB02 //TODO redundant, kan fjernes når vi får PCBen
 #define DEFAULT_FPGA_LISTENER &fpga_receive_data
 #define DATA_WORD_LENGTH 		1
 #define INSTRUCTION_WORD_LENGTH 3
@@ -101,12 +100,12 @@ int fpga_send(int(*get_word) (U32), int transfer_state) {
 	U32 buffer;
 	int i=0;
 
-	fpga_set_state(transfer_state);									// S.1
+	fpga_set_state(transfer_state);											// S.1
 	fpga_set_listener(&receive_ack);
 	while (get_word(buffer) > 0) {
 		acked = FALSE;
 		bus_send_data(buffer, FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);// S.2
-		bus_toggle_inc_clk_line();												// S.3
+		bus_toggle_inc_clk_line();											// S.3
 		while (acked == FALSE);												// S.4
 		i++;
 	}																		// S.5
@@ -117,7 +116,7 @@ int fpga_send(int(*get_word) (U32), int transfer_state) {
 // ------------------------------------//
 
 
-// ------[WORD SOURCE FUNCTIONS]------ //
+// ------[DATA SOURCE FUNCTIONS]------ //
 int fd;
 int data_from_file(U32 buffer) {
 	return read(fd, &buffer, DATA_WORD_LENGTH);
@@ -146,26 +145,29 @@ int fpga_send_data_from_memory(U8 *data, size_t size) {
 }
 
 int fpga_send_data_from_file(char *data_path) {
+	int rc;
 	fd = open(data_path, O_RDONLY);
 	if (fd < 0) {
 		seprintf("Could not open file: %s\n", data_path);
 		return fd;
 	}
-	return fpga_send(&data_from_file, FPGA_STATE_LOAD_DATA);
+	rc = fpga_send(&data_from_file, FPGA_STATE_LOAD_DATA);
+	close(fd);
+	return rc;
 }
 
 int fpga_send_program(char *program_path) {
+	int rc;
 	fd = open(program_path, O_RDONLY);
 	if (fd < 0) {
 		seprintf("Could not open file: %s\n", program_path);
 		return fd;
 	}
-	return fpga_send(&program_from_file, FPGA_STATE_LOAD_INSTRUCTION);
+	rc = fpga_send(&program_from_file, FPGA_STATE_LOAD_INSTRUCTION);
+	close(fd);
+	return rc;
 }
 // ------------------------------------//
-
-
-
 
 
 void fpga_receive_data(void) {
