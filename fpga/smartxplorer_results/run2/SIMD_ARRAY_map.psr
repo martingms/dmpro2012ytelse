@@ -1,0 +1,45 @@
+Release 12.4 Physical Synthesis Report M.81d (nt64)
+Copyright (c) 1995-2010 Xilinx, Inc. All rights reserved.
+
+TABLE OF CONTENTS
+  1) Physical Synthesis Options Summary
+  2) Optimizations statistics and details
+
+
+=========================================================================
+*                 Physical Synthesis Options Summary                    *
+=========================================================================
+---- Options
+Global Optimization                 : OFF
+    Retiming                        : OFF
+    Equivalent Register Removal     : OFF
+Timing-Driven Packing and Placement : ON
+    Logic Optimization              : ON
+    Register Duplication            : ON
+
+---- Slice clock gating 
+    Effort Level (-power)           : OFF
+
+---- Target Parameters
+Target Device                       : 3s500epq208-4
+
+=========================================================================
+
+
+=========================================================================
+*                        Optimizations                                  *
+=========================================================================
+---- Statistics
+   Number of LUTs added by Replication                       | 4               
+
+   Overall change in number of design objects                | +4               
+
+
+---- Details
+
+New or modified components                             | Optimization             | Objective           
+-------------------------------------------------------|--------------------------|----------------------
+GEN_ROW[0].GEN_COL[1].GEN_NODE/MUX_ALU/bus_out<2>1_REPLICA_2| Replication              | Fanout Optimization
+GEN_ROW[0].GEN_COL[1].GEN_NODE/MUX_N/bus_out<2>1_REPLICA_3| Replication              | Fanout Optimization
+GEN_ROW[0].GEN_COL[2].GEN_NODE/MUX_ALU/bus_out<5>1_REPLICA_0| Replication              | Fanout Optimization
+GEN_ROW[0].GEN_COL[2].GEN_NODE/MUX_N/bus_out<0>1_REPLICA_1| Replication              | Fanout Optimization

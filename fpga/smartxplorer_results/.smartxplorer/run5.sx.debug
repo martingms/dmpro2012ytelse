@@ -1,0 +1,42 @@
+strategySpecString = ':oc:sqmap:sq:cl:sp:sq:sp:dstiming:sp:dsol:sphigh:sp:sq:cm:sp:sqpower:sq:cl:sp:sqoff:sq:cm:sp:sqbitgen:sq:cl:sp:sqon:sq:cm:sp:sqsynplify:sq:cl:sp:sq:sq:cm:sp:sqngdbuild:sq:cl:sp:sq:dssd:spC:clcl:clbslUsers:clbslhanskrfl:clbslDesktop:clbsldmpro:clbslfpga:sp:dsp:spxc3s500e:dspq208:ds4:sq:cm:sp:sqtrce:sq:cl:sp:sq:dsv:sp3:sp:dss:sp4:sp:dsn:sp3:sp:dsfastpaths:sp:dsxml:spSIMD_ARRAY.twx:sp:sq:cm:sp:sqmax_score:sq:cl:spNone:cm:sp:sqindex:sq:cl:sp5:cm:sp:sqpar:sq:cl:sp:sq:sp:dsol:sphigh:sp:sq:cm:sp:sqname:sq:cl:sp:sqMapTiming1:sq:cm:sp:sqxst:sq:cl:sp:sq:sq:cm:sp:sqarea:sq:cl:sp:os:sqlut:sq:cm:sp:sqslice_reg:sq:cs:cm:sp:sqversion:sq:cl:sp:sq12.4:sq:cm:sp:sqenv:sq:cl:sp:sq:oc:cc:sq:cm:sp:sqsxLaunchDir:sq:cl:sp:sqC:cl:bsl:bslUsers:bsl:bslhanskrfl:bsl:bslDesktop:bsl:bsldmpro:bsl:bslfpga:sq:cc'
+Xilinx Environment Variables:
+
+{'XILINXD_LICENSE_FILE': '2100@xilinx.license.idi.ntnu.no'
+'XILINX_PLANAHEAD': 'C:\\Xilinx\\12.4\\ISE_DS\\PlanAhead'
+'XILINX_DSP': 'C:\\Xilinx\\12.4\\ISE_DS\\ISE'
+'XILINX_EDK': 'C:\\Xilinx\\12.4\\ISE_DS\\EDK'
+'XILINX': 'C:\\Xilinx\\12.4\\ISE_DS\\ISE\\'
+'PATH': 'C:\\Xilinx\\12.4\\ISE_DS\\ISE\\\\lib\\nt64;C:\\Xilinx\\12.4\\ISE_DS\\ISE\\\\bin\\nt64;C:\\Xilinx\\12.4\\ISE_DS\\PlanAhead\\bin;C:\\Xilinx\\12.4\\ISE_DS\\ISE\\bin\\nt64;C:\\Xilinx\\12.4\\ISE_DS\\ISE\\lib\\nt64;C:\\Xilinx\\12.4\\ISE_DS\\EDK\\bin\\nt64;C:\\Xilinx\\12.4\\ISE_DS\\EDK\\lib\\nt64;C:\\Xilinx\\12.4\\ISE_DS\\common\\bin\\nt64;C:\\Xilinx\\12.4\\ISE_DS\\common\\lib\\nt64;C:\\WinAVR-20100110\\bin;C:\\WinAVR-20100110\\utils\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\MATLAB\\R2011a\\runtime\\win64;C:\\Program Files\\MATLAB\\R2011a\\bin;C:\\Program Files (x86)\\Altium Designer Summer 09\\System;c:\\Python27;c:\\modeltech_6.6d\\win32;C:\\Program Files\\TortoiseHg\\;o:\\;o:\\tools;o:\\netprog\\perl\\bin;c:\\Python24;c:\\Program Files\\Sicstus prolog\\bin;o:\\src\\sml\\bin;C:\\Program Files\\Java\\jdk1.5.0_01\\bin;C:\\Program Files\\Java\\jre1.5.0_01\\bin;o:\\src\\jikes;c:\\program files\\rational\\common'}
+envDict = {}
+dmlab09_1.stat:C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\.sx.keepAlive.dmlab09_1
+INFO: total number of threads running this host None
+...searching for file: maptiming1.xds
+Creating XDS file ... maptiming1.xds
+###################################
+
+      <property name = "Map:Perform Timing-Driven Packing and Placement"
+               value = "true" />
+      <property name = "Map:Map Effort Level"
+               value = "High" />
+      <property name = "Place &amp; Route:Place &amp; Route Effort Level (Overall)"
+               value = "High" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Number of Paths in Error/Verbose Report"
+               value = "3" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Report Type"
+               value = "Verbose Report" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Change Device Speed To"
+               value = "-4" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Report Paths by Endpoint"
+               value = "3" />
+      <property name = "Generate Post-Place &amp; Route Static Timing:Report Fastest Path(s) in Each Constraint"
+               value = "true" />
+###################################
+launching map with options  -timing -ol high  -p xc3s500e-pq208-4 -o SIMD_ARRAY_map.ncd  C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun5:bslSIMD_ARRAY.pcf...
+runTask: map SIMD_ARRAY.ngd -timing -ol high -p xc3s500e-pq208-4 -o SIMD_ARRAY_map.ncd C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run5\SIMD_ARRAY.pcf
+args = ['map', 'SIMD_ARRAY.ngd', '-timing', '-ol', 'high', '-p', 'xc3s500e-pq208-4', '-o', 'SIMD_ARRAY_map.ncd', 'C:\\Users\\hanskrfl\\Desktop\\dmpro\\fpga\\smartxplorer_results\\run5\\SIMD_ARRAY.pcf']
+launching par with options  -ol high  -w SIMD_ARRAY.ncd  C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun5:bslSIMD_ARRAY.pcf...
+runTask: par SIMD_ARRAY_map.ncd -ol high -w SIMD_ARRAY.ncd C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run5\SIMD_ARRAY.pcf
+args = ['par', 'SIMD_ARRAY_map.ncd', '-ol', 'high', '-w', 'SIMD_ARRAY.ncd', 'C:\\Users\\hanskrfl\\Desktop\\dmpro\\fpga\\smartxplorer_results\\run5\\SIMD_ARRAY.pcf']
+launching trce...
+runTask: trce C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run5\SIMD_ARRAY.ncd C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run5\SIMD_ARRAY.pcf -xml C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run5\SIMD_ARRAY.twx -v 3 -s 4 -n 3 -fastpaths -o C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run5\SIMD_ARRAY.twr
+args = ['trce', 'C:\\Users\\hanskrfl\\Desktop\\dmpro\\fpga\\smartxplorer_results\\run5\\SIMD_ARRAY.ncd', 'C:\\Users\\hanskrfl\\Desktop\\dmpro\\fpga\\smartxplorer_results\\run5\\SIMD_ARRAY.pcf', '-xml', 'C:\\Users\\hanskrfl\\Desktop\\dmpro\\fpga\\smartxplorer_results\\run5\\SIMD_ARRAY.twx', '-v', '3', '-s', '4', '-n', '3', '-fastpaths', '-o', 'C:\\Users\\hanskrfl\\Desktop\\dmpro\\fpga\\smartxplorer_results\\run5\\SIMD_ARRAY.twr']

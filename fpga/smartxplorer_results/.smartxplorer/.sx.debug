@@ -1,0 +1,69 @@
+launching strategy on machine: dmlab09
+"C:\Xilinx\12.4\ISE_DS\ISE\bin\nt64\smartxplorer.exe"  --runStrategy  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run1"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run1\SIMD_ARRAY.ngd"  xc3s500e-pq208-4  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run1\SIMD_ARRAY_sx.log"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\dmlab09_0.stat"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\smartxplorer.env"   "None"  :oc:sqmap:sq:cl:sp:sq:sp:dstiming:sp:dsol:sphigh:sp:dsxe:spn:sp:sq:cm:sp:sqpower:sq:cl:sp:sqoff:sq:cm:sp:sqbitgen:sq:cl:sp:sqon:sq:cm:sp:sqsynplify:sq:cl:sp:sq:sq:cm:sp:sqngdbuild:sq:cl:sp:sq:dssd:spC:clcl:clbslUsers:clbslhanskrfl:clbslDesktop:clbsldmpro:clbslfpga:sp:dsp:spxc3s500e:dspq208:ds4:sq:cm:sp:sqtrce:sq:cl:sp:sq:dsv:sp3:sp:dss:sp4:sp:dsn:sp3:sp:dsfastpaths:sp:dsxml:spSIMD_ARRAY.twx:sp:sq:cm:sp:sqmax_score:sq:cl:spNone:cm:sp:sqindex:sq:cl:sp1:cm:sp:sqpar:sq:cl:sp:sq:sp:dsol:sphigh:sp:sq:cm:sp:sqname:sq:cl:sp:sqMapTimingExtraEffort:sq:cm:sp:sqxst:sq:cl:sp:sq:sq:cm:sp:sqarea:sq:cl:sp:os:sqlut:sq:cm:sp:sqslice_reg:sq:cs:cm:sp:sqversion:sq:cl:sp:sq12.4:sq:cm:sp:sqenv:sq:cl:sp:sq:oc:cc:sq:cm:sp:sqsxLaunchDir:sq:cl:sp:sqC:cl:bsl:bslUsers:bsl:bslhanskrfl:bsl:bslDesktop:bsl:bsldmpro:bsl:bslfpga:sq:cc map par
+launching strategy on machine: dmlab09
+"C:\Xilinx\12.4\ISE_DS\ISE\bin\nt64\smartxplorer.exe"  --runStrategy  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run2"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run2\SIMD_ARRAY.ngd"  xc3s500e-pq208-4  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run2\SIMD_ARRAY_sx.log"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\dmlab09_1.stat"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\smartxplorer.env"   "None"  :oc:sqmap:sq:cl:sp:sq:sp:dstiming:sp:dsol:sphigh:sp:dsxe:spn:sp:dsregister_duplication:spon:sp:dslogic_opt:spon:sp:sq:cm:sp:sqpower:sq:cl:sp:sqoff:sq:cm:sp:sqbitgen:sq:cl:sp:sqon:sq:cm:sp:sqsynplify:sq:cl:sp:sq:sq:cm:sp:sqngdbuild:sq:cl:sp:sq:dssd:spC:clcl:clbslUsers:clbslhanskrfl:clbslDesktop:clbsldmpro:clbslfpga:sp:dsp:spxc3s500e:dspq208:ds4:sq:cm:sp:sqtrce:sq:cl:sp:sq:dsv:sp3:sp:dss:sp4:sp:dsn:sp3:sp:dsfastpaths:sp:dsxml:spSIMD_ARRAY.twx:sp:sq:cm:sp:sqmax_score:sq:cl:spNone:cm:sp:sqindex:sq:cl:sp2:cm:sp:sqpar:sq:cl:sp:sq:sp:dsol:sphigh:sp:sq:cm:sp:sqname:sq:cl:sp:sqMapPhysSynthesis:sq:cm:sp:sqxst:sq:cl:sp:sq:sq:cm:sp:sqarea:sq:cl:sp:os:sqlut:sq:cm:sp:sqslice_reg:sq:cs:cm:sp:sqversion:sq:cl:sp:sq12.4:sq:cm:sp:sqenv:sq:cl:sp:sq:oc:cc:sq:cm:sp:sqsxLaunchDir:sq:cl:sp:sqC:cl:bsl:bslUsers:bsl:bslhanskrfl:bsl:bslDesktop:bsl:bsldmpro:bsl:bslfpga:sq:cc map par
+launching strategy on machine: dmlab09
+"C:\Xilinx\12.4\ISE_DS\ISE\bin\nt64\smartxplorer.exe"  --runStrategy  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run3"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run3\SIMD_ARRAY.ngd"  xc3s500e-pq208-4  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run3\SIMD_ARRAY_sx.log"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\dmlab09_2.stat"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\smartxplorer.env"   "None"  :oc:sqmap:sq:cl:sp:sq:sp:dscm:sparea:sp:sq:cm:sp:sqpower:sq:cl:sp:sqoff:sq:cm:sp:sqbitgen:sq:cl:sp:sqon:sq:cm:sp:sqsynplify:sq:cl:sp:sq:sq:cm:sp:sqngdbuild:sq:cl:sp:sq:dssd:spC:clcl:clbslUsers:clbslhanskrfl:clbslDesktop:clbsldmpro:clbslfpga:sp:dsp:spxc3s500e:dspq208:ds4:sq:cm:sp:sqtrce:sq:cl:sp:sq:dsv:sp3:sp:dss:sp4:sp:dsn:sp3:sp:dsfastpaths:sp:dsxml:spSIMD_ARRAY.twx:sp:sq:cm:sp:sqmax_score:sq:cl:spNone:cm:sp:sqindex:sq:cl:sp3:cm:sp:sqpar:sq:cl:sp:sq:sp:dsol:sphigh:sp:sq:cm:sp:sqname:sq:cl:sp:sqParHighEffort1:sq:cm:sp:sqxst:sq:cl:sp:sq:sq:cm:sp:sqarea:sq:cl:sp:os:sqlut:sq:cm:sp:sqslice_reg:sq:cs:cm:sp:sqversion:sq:cl:sp:sq12.4:sq:cm:sp:sqenv:sq:cl:sp:sq:oc:cc:sq:cm:sp:sqsxLaunchDir:sq:cl:sp:sqC:cl:bsl:bslUsers:bsl:bslhanskrfl:bsl:bslDesktop:bsl:bsldmpro:bsl:bslfpga:sq:cc map par
+launching strategy on machine: dmlab09
+"C:\Xilinx\12.4\ISE_DS\ISE\bin\nt64\smartxplorer.exe"  --runStrategy  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run4"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run4\SIMD_ARRAY.ngd"  xc3s500e-pq208-4  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run4\SIMD_ARRAY_sx.log"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\dmlab09_3.stat"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\smartxplorer.env"   "None"  :oc:sqmap:sq:cl:sp:sq:sp:dscm:sparea:sp:dst:sp2:sq:cm:sp:sqpower:sq:cl:sp:sqoff:sq:cm:sp:sqbitgen:sq:cl:sp:sqon:sq:cm:sp:sqsynplify:sq:cl:sp:sq:sq:cm:sp:sqngdbuild:sq:cl:sp:sq:dssd:spC:clcl:clbslUsers:clbslhanskrfl:clbslDesktop:clbsldmpro:clbslfpga:sp:dsp:spxc3s500e:dspq208:ds4:sq:cm:sp:sqtrce:sq:cl:sp:sq:dsv:sp3:sp:dss:sp4:sp:dsn:sp3:sp:dsfastpaths:sp:dsxml:spSIMD_ARRAY.twx:sp:sq:cm:sp:sqmax_score:sq:cl:spNone:cm:sp:sqindex:sq:cl:sp4:cm:sp:sqpar:sq:cl:sp:sq:sp:dsol:sphigh:sp:dst:sp2:sq:cm:sp:sqname:sq:cl:sp:sqParHighEffort2:sq:cm:sp:sqxst:sq:cl:sp:sq:sq:cm:sp:sqarea:sq:cl:sp:os:sqlut:sq:cm:sp:sqslice_reg:sq:cs:cm:sp:sqversion:sq:cl:sp:sq12.4:sq:cm:sp:sqenv:sq:cl:sp:sq:oc:cc:sq:cm:sp:sqsxLaunchDir:sq:cl:sp:sqC:cl:bsl:bslUsers:bsl:bslhanskrfl:bsl:bslDesktop:bsl:bsldmpro:bsl:bslfpga:sq:cc map par
+dmlab09_0 waiting on C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\.sx.keepAlive.dmlab09_0
+dmlab09_1 waiting on C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\.sx.keepAlive.dmlab09_1
+dmlab09_2 waiting on C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\.sx.keepAlive.dmlab09_2
+dmlab09_3 waiting on C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\.sx.keepAlive.dmlab09_3
+dmlab09_0 dmlab09_0.stat 1352035481.31 1352035481.22 1352035496.16
+dmlab09_1 dmlab09_1.stat 1352035481.32 1352035481.22 1352035496.16
+dmlab09_2 dmlab09_2.stat 1352035481.32 1352035481.22 1352035496.16
+dmlab09_3 dmlab09_3.stat 1352035481.31 1352035481.22 1352035496.16
+dmlab09_0 no new lines in stat file
+dmlab09_1 no new lines in stat file
+dmlab09_2 no new lines in stat file
+dmlab09_3 no new lines in stat file
+dmlab09_0 dmlab09_0.stat 1352035511.32 1352035496.16 1352035526.19
+dmlab09_1 dmlab09_1.stat 1352035511.33 1352035496.16 1352035526.2
+dmlab09_2 dmlab09_2.stat 1352035511.32 1352035496.16 1352035526.2
+dmlab09_3 dmlab09_3.stat 1352035511.32 1352035496.17 1352035526.2
+dmlab09_0 no new lines in stat file
+dmlab09_1 no new lines in stat file
+dmlab09_2 no new lines in stat file
+dmlab09_3 no new lines in stat file
+dmlab09_0 dmlab09_0.stat 1352035541.32 1352035526.19 1352035556.26
+dmlab09_1 dmlab09_1.stat 1352035541.35 1352035526.2 1352035556.28
+dmlab09_2 dmlab09_2.stat 1352035541.32 1352035526.2 1352035556.28
+dmlab09_3 dmlab09_3.stat 1352035541.31 1352035526.2 1352035556.28
+launching strategy on machine: dmlab09
+"C:\Xilinx\12.4\ISE_DS\ISE\bin\nt64\smartxplorer.exe"  --runStrategy  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run5"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run5\SIMD_ARRAY.ngd"  xc3s500e-pq208-4  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run5\SIMD_ARRAY_sx.log"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\dmlab09_1.stat"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\smartxplorer.env"   "None"  :oc:sqmap:sq:cl:sp:sq:sp:dstiming:sp:dsol:sphigh:sp:sq:cm:sp:sqpower:sq:cl:sp:sqoff:sq:cm:sp:sqbitgen:sq:cl:sp:sqon:sq:cm:sp:sqsynplify:sq:cl:sp:sq:sq:cm:sp:sqngdbuild:sq:cl:sp:sq:dssd:spC:clcl:clbslUsers:clbslhanskrfl:clbslDesktop:clbsldmpro:clbslfpga:sp:dsp:spxc3s500e:dspq208:ds4:sq:cm:sp:sqtrce:sq:cl:sp:sq:dsv:sp3:sp:dss:sp4:sp:dsn:sp3:sp:dsfastpaths:sp:dsxml:spSIMD_ARRAY.twx:sp:sq:cm:sp:sqmax_score:sq:cl:spNone:cm:sp:sqindex:sq:cl:sp5:cm:sp:sqpar:sq:cl:sp:sq:sp:dsol:sphigh:sp:sq:cm:sp:sqname:sq:cl:sp:sqMapTiming1:sq:cm:sp:sqxst:sq:cl:sp:sq:sq:cm:sp:sqarea:sq:cl:sp:os:sqlut:sq:cm:sp:sqslice_reg:sq:cs:cm:sp:sqversion:sq:cl:sp:sq12.4:sq:cm:sp:sqenv:sq:cl:sp:sq:oc:cc:sq:cm:sp:sqsxLaunchDir:sq:cl:sp:sqC:cl:bsl:bslUsers:bsl:bslhanskrfl:bsl:bslDesktop:bsl:bsldmpro:bsl:bslfpga:sq:cc map par
+launching strategy on machine: dmlab09
+"C:\Xilinx\12.4\ISE_DS\ISE\bin\nt64\smartxplorer.exe"  --runStrategy  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run6"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run6\SIMD_ARRAY.ngd"  xc3s500e-pq208-4  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run6\SIMD_ARRAY_sx.log"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\dmlab09_0.stat"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\smartxplorer.env"   "None"  :oc:sqmap:sq:cl:sp:sq:sp:dstiming:sp:dsol:sphigh:sp:dst:sp9:sq:cm:sp:sqpower:sq:cl:sp:sqoff:sq:cm:sp:sqbitgen:sq:cl:sp:sqon:sq:cm:sp:sqsynplify:sq:cl:sp:sq:sq:cm:sp:sqngdbuild:sq:cl:sp:sq:dssd:spC:clcl:clbslUsers:clbslhanskrfl:clbslDesktop:clbsldmpro:clbslfpga:sp:dsp:spxc3s500e:dspq208:ds4:sq:cm:sp:sqtrce:sq:cl:sp:sq:dsv:sp3:sp:dss:sp4:sp:dsn:sp3:sp:dsfastpaths:sp:dsxml:spSIMD_ARRAY.twx:sp:sq:cm:sp:sqmax_score:sq:cl:spNone:cm:sp:sqindex:sq:cl:sp6:cm:sp:sqpar:sq:cl:sp:sq:sp:dsol:sphigh:sp:dst:sp9:sq:cm:sp:sqname:sq:cl:sp:sqMapTiming2:sq:cm:sp:sqxst:sq:cl:sp:sq:sq:cm:sp:sqarea:sq:cl:sp:os:sqlut:sq:cm:sp:sqslice_reg:sq:cs:cm:sp:sqversion:sq:cl:sp:sq12.4:sq:cm:sp:sqenv:sq:cl:sp:sq:oc:cc:sq:cm:sp:sqsxLaunchDir:sq:cl:sp:sqC:cl:bsl:bslUsers:bsl:bslhanskrfl:bsl:bslDesktop:bsl:bsldmpro:bsl:bslfpga:sq:cc map par
+dmlab09_0 dmlab09_0.stat 1352035571.33 1352035615.28 1352035615.3
+dmlab09_0 dmlab09_0.stat 1352035601.33 1352035615.3 1352035615.3
+dmlab09_1 dmlab09_1.stat 1352035571.35 1352035604.26 1352035615.3
+dmlab09_1 dmlab09_1.stat 1352035601.35 1352035615.3 1352035615.3
+dmlab09_1 dmlab09_1.stat 1352035604.36 1352035615.3 1352035615.3
+dmlab09_2 is Idle
+dmlab09_3 is Idle
+launching strategy on machine: dmlab09
+"C:\Xilinx\12.4\ISE_DS\ISE\bin\nt64\smartxplorer.exe"  --runStrategy  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run7"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run7\SIMD_ARRAY.ngd"  xc3s500e-pq208-4  "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run7\SIMD_ARRAY_sx.log"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\dmlab09_2.stat"   "C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\.smartxplorer\smartxplorer.env"   "None"  :oc:sqmap:sq:cl:sp:sq:sp:dstiming:sp:dsol:sphigh:sp:dspr:spb:sp:sq:cm:sp:sqpower:sq:cl:sp:sqoff:sq:cm:sp:sqbitgen:sq:cl:sp:sqon:sq:cm:sp:sqsynplify:sq:cl:sp:sq:sq:cm:sp:sqngdbuild:sq:cl:sp:sq:dssd:spC:clcl:clbslUsers:clbslhanskrfl:clbslDesktop:clbsldmpro:clbslfpga:sp:dsp:spxc3s500e:dspq208:ds4:sq:cm:sp:sqtrce:sq:cl:sp:sq:dsv:sp3:sp:dss:sp4:sp:dsn:sp3:sp:dsfastpaths:sp:dsxml:spSIMD_ARRAY.twx:sp:sq:cm:sp:sqmax_score:sq:cl:spNone:cm:sp:sqindex:sq:cl:sp7:cm:sp:sqpar:sq:cl:sp:sq:sp:dsol:sphigh:sp:sq:cm:sp:sqname:sq:cl:sp:sqMapUseIOReg:sq:cm:sp:sqxst:sq:cl:sp:sq:sq:cm:sp:sqarea:sq:cl:sp:os:sqlut:sq:cm:sp:sqslice_reg:sq:cs:cm:sp:sqversion:sq:cl:sp:sq12.4:sq:cm:sp:sqenv:sq:cl:sp:sq:oc:cc:sq:cm:sp:sqsxLaunchDir:sq:cl:sp:sqC:cl:bsl:bslUsers:bsl:bslhanskrfl:bsl:bslDesktop:bsl:bsldmpro:bsl:bslfpga:sq:cc map par
+dmlab09_0 dmlab09_0.stat 1352035615.38 1352035615.3 1352035625.32
+dmlab09_1 no new lines in stat file
+dmlab09_2 dmlab09_2.stat 1352035571.32 1352035625.3 1352035625.32
+dmlab09_3 is Idle
+dmlab09_0 no new lines in stat file
+dmlab09_1 dmlab09_1.stat 1352035634.35 1352035615.3 1352035640.3
+dmlab09_2 dmlab09_2.stat 1352035625.4 1352035625.32 1352035640.31
+dmlab09_3 is Idle
+dmlab09_0 dmlab09_0.stat 1352035645.37 1352035625.32 1352035655.3
+dmlab09_1 no new lines in stat file
+dmlab09_2 no new lines in stat file
+dmlab09_3 is Idle
+dmlab09_0 no new lines in stat file
+dmlab09_1 dmlab09_1.stat 1352035664.35 1352035640.3 1352035670.3
+dmlab09_2 dmlab09_2.stat 1352035655.4 1352035640.31 1352035670.3
+dmlab09_3 is Idle
+dmlab09_0 dmlab09_0.stat 1352035675.37 1352035655.3 1352035696.3
+dmlab09_1 is Idle
+dmlab09_2 dmlab09_2.stat 1352035685.4 1352035670.3 1352035696.3
+dmlab09_3 is Idle
+dmlab09_0 is Idle
+dmlab09_1 is Idle
+dmlab09_2 is Idle
+dmlab09_3 is Idle

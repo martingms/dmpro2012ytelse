@@ -1,0 +1,24 @@
+START:Strategy:1:MapTimingExtraEffort
+REMOTE_PID:4260
+RUNNING:4260:4352:MapTimingExtraEffort:map:SIMD_ARRAY.ngd: -timing -ol high -xe n  -p xc3s500e-pq208-4 -o SIMD_ARRAY_map.ncd  C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun1:bslSIMD_ARRAY.pcf
+STATUS:MapTimingExtraEffort:map:Score:None:lut:None:slice_reg:444 (4%):slice:None:bram:None:dsp48:None:mult18x18:None:Power:None:Time:40.21 secs 
+STATUS:MapTimingExtraEffort:map:Score:None:lut:1,384 (14%):slice_reg:444 (4%):slice:None:bram:None:dsp48:None:mult18x18:None:Power:None:Time:40.21 secs 
+STATUS:MapTimingExtraEffort:map:Score:None:lut:1,384 (14%):slice_reg:444 (4%):slice:881 (18%):bram:None:dsp48:None:mult18x18:None:Power:None:Time:40.21 secs 
+STATUS:MapTimingExtraEffort:map:Score:None:lut:1,390 (14%):slice_reg:444 (4%):slice:881 (18%):bram:None:dsp48:None:mult18x18:None:Power:None:Time:40.21 secs 
+DONE:map:0
+RUNNING:4260:4872:MapTimingExtraEffort:par:SIMD_ARRAY_map.ncd: -ol high  -w SIMD_ARRAY.ncd  C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun1:bslSIMD_ARRAY.pcf
+DONE:par:0
+RUNNING:4260:4392:MapTimingExtraEffort:trce:C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run1\SIMD_ARRAY.ncd:C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun1:bslSIMD_ARRAY.pcf -xml C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun1:bslSIMD_ARRAY.twx -v 3 -s 4 -n 3 -fastpaths    -o C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun1:bslSIMD_ARRAY.twr
+DONE:trce:0
+START:Strategy:6:MapTiming2
+REMOTE_PID:4772
+RUNNING:4772:4736:MapTiming2:map:SIMD_ARRAY.ngd: -timing -ol high -t 9 -p xc3s500e-pq208-4 -o SIMD_ARRAY_map.ncd  C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun6:bslSIMD_ARRAY.pcf
+STATUS:MapTiming2:map:Score:None:lut:None:slice_reg:444 (4%):slice:None:bram:None:dsp48:None:mult18x18:None:Power:None:Time:25.05 secs 
+STATUS:MapTiming2:map:Score:None:lut:1,384 (14%):slice_reg:444 (4%):slice:None:bram:None:dsp48:None:mult18x18:None:Power:None:Time:25.05 secs 
+STATUS:MapTiming2:map:Score:None:lut:1,384 (14%):slice_reg:444 (4%):slice:938 (20%):bram:None:dsp48:None:mult18x18:None:Power:None:Time:25.05 secs 
+STATUS:MapTiming2:map:Score:None:lut:1,390 (14%):slice_reg:444 (4%):slice:938 (20%):bram:None:dsp48:None:mult18x18:None:Power:None:Time:25.05 secs 
+DONE:map:0
+RUNNING:4772:4836:MapTiming2:par:SIMD_ARRAY_map.ncd: -ol high -t 9 -w SIMD_ARRAY.ncd  C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun6:bslSIMD_ARRAY.pcf
+DONE:par:0
+RUNNING:4772:5080:MapTiming2:trce:C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run6\SIMD_ARRAY.ncd:C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun6:bslSIMD_ARRAY.pcf -xml C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun6:bslSIMD_ARRAY.twx -v 3 -s 4 -n 3 -fastpaths    -o C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun6:bslSIMD_ARRAY.twr
+DONE:trce:0

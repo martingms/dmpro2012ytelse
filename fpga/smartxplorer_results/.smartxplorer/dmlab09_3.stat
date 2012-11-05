@@ -1,0 +1,12 @@
+START:Strategy:4:ParHighEffort2
+REMOTE_PID:4284
+RUNNING:4284:4320:ParHighEffort2:map:SIMD_ARRAY.ngd: -cm area -t 2 -p xc3s500e-pq208-4 -o SIMD_ARRAY_map.ncd  C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun4:bslSIMD_ARRAY.pcf
+STATUS:ParHighEffort2:map:Score:None:lut:None:slice_reg:444 (4%):slice:None:bram:None:dsp48:None:mult18x18:None:Power:None:Time:15.07 secs 
+STATUS:ParHighEffort2:map:Score:None:lut:1,384 (14%):slice_reg:444 (4%):slice:None:bram:None:dsp48:None:mult18x18:None:Power:None:Time:15.07 secs 
+STATUS:ParHighEffort2:map:Score:None:lut:1,384 (14%):slice_reg:444 (4%):slice:718 (15%):bram:None:dsp48:None:mult18x18:None:Power:None:Time:15.07 secs 
+STATUS:ParHighEffort2:map:Score:None:lut:1,390 (14%):slice_reg:444 (4%):slice:718 (15%):bram:None:dsp48:None:mult18x18:None:Power:None:Time:15.07 secs 
+DONE:map:0
+RUNNING:4284:4532:ParHighEffort2:par:SIMD_ARRAY_map.ncd: -ol high -t 2 -w SIMD_ARRAY.ncd  C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun4:bslSIMD_ARRAY.pcf
+DONE:par:0
+RUNNING:4284:5088:ParHighEffort2:trce:C:\Users\hanskrfl\Desktop\dmpro\fpga\smartxplorer_results\run4\SIMD_ARRAY.ncd:C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun4:bslSIMD_ARRAY.pcf -xml C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun4:bslSIMD_ARRAY.twx -v 3 -s 4 -n 3 -fastpaths    -o C:cl:bslUsers:bslhanskrfl:bslDesktop:bsldmpro:bslfpga:bslsmartxplorer_results:bslrun4:bslSIMD_ARRAY.twr
+DONE:trce:0
