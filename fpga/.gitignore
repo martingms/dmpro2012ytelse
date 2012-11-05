@@ -77,3 +77,8 @@ transcript
 netgen/
 *.tdo
 wlft947jv8
+output.txt
+toplevel.cfi
+toplevel.mcs
+toplevel.prm
+toplevel.sig

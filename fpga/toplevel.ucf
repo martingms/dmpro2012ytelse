@@ -57,7 +57,7 @@ NET "prog_ram_write" LOC = P153;
 #	-- Data RAM
 
 #	data_ram_addr : out std_logic_vector(20 downto 0);
-NET "data_ram_addr[20]" LOC = P50;
+NET "data_ram_addr[2]" LOC = P50; # Temporary switch of A2 and A20 to debug memory
 NET "data_ram_addr[19]" LOC = P35;
 NET "data_ram_addr[18]" LOC = P36;
 NET "data_ram_addr[17]" LOC = P39;
@@ -75,7 +75,7 @@ NET "data_ram_addr[6]" LOC = P30;
 NET "data_ram_addr[5]" LOC = P29;
 NET "data_ram_addr[4]" LOC = P28;
 NET "data_ram_addr[3]" LOC = P25;
-NET "data_ram_addr[2]" LOC = P24;
+NET "data_ram_addr[20]" LOC = P24; # Temporary switch of A2 and A20 to debug memory
 NET "data_ram_addr[1]" LOC = P23;
 NET "data_ram_addr[0]" LOC = P22;
 

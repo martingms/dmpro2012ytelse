@@ -22,36 +22,30 @@ end memctrl;
 
 architecture Behavioral of memctrl is
 
-	signal rw_switch : natural range 0 to 3 := 0;
+	signal rw_switch : natural range 0 to 1 := 0;
 	signal pixel_addr : std_logic_vector(18 downto 0);
 
 begin
 
 	process(x_coord, y_coord)
 	begin
-		pixel_addr <= conv_std_logic_vector(160 * (conv_integer(unsigned(y_coord))/4) + conv_integer(unsigned(x_coord))/4, 19);
+		pixel_addr <= conv_std_logic_vector(320 * (conv_integer(unsigned(y_coord))/2) + conv_integer(unsigned(x_coord))/2, 19);
 	end process;
 	
 	process(clk)
 	begin
 		if rising_edge(clk) then
-			if rw_switch = 3 then
+			rw_switch <= (rw_switch + 1) mod 2;
+			if rw_switch = 0 then
 				pixel_out <= mem_data;
+				mem_we <= '0';
+				mem_addr <= mem_addr_in;
+				mem_data <= pixel_in;
+			else
+				mem_we <= '1';
+				mem_addr <= pixel_addr;
+				mem_data <= (others => 'Z');
 			end if;
-			rw_switch <= (rw_switch + 1) mod 4;
-		end if;
-	end process;
-
-	process(rw_switch, mem_addr_in, pixel_in, pixel_addr)
-	begin
-		if rw_switch = 0 or rw_switch = 1 then
-			mem_we <= '0';
-			mem_addr <= mem_addr_in;
-			mem_data <= pixel_in;
-		else
-			mem_we <= '1';
-			mem_addr <= pixel_addr;
-			mem_data <= (others => 'Z');
 		end if;
 	end process;
 

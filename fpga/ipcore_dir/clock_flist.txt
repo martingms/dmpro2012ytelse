@@ -1,0 +1,4 @@
+# Output products list for <clock>
+clock_flist.txt
+clock_readme.txt
+clock_xmdf.tcl
