@@ -102,6 +102,10 @@
     <file xil_pn:name="control/ram_mux.vhd" xil_pn:type="FILE_VHDL"/>
     <file xil_pn:name="control/program_loader.vhd" xil_pn:type="FILE_VHDL"/>
     <file xil_pn:name="control/instruction_register.vhd" xil_pn:type="FILE_VHDL"/>
+    <file xil_pn:name="test_image_loader.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation"/>
+      <association xil_pn:name="Implementation"/>
+    </file>
   </files>
 
   <properties>

@@ -81,20 +81,6 @@ architecture behavioral of toplevel is
 			mem_data    : inout std_logic_vector(7 downto 0)
 		);
 	end component;
-
-	component memory_from_file is
-		generic (
-			word_width : natural;
-			address_width : natural;
-			file_name : string
-		);
-		port (
-			clk : in std_logic;
-			write_enable : in std_logic;
-			addr : in std_logic_vector(address_width - 1 downto 0);
-			data : inout std_logic_vector(word_width - 1 downto 0)
-		);
-	end component;
 	
 	component ram_mux is
 		generic (
@@ -140,6 +126,14 @@ architecture behavioral of toplevel is
 		);
 	end component;
 	
+	component test_image_loader is
+		port (
+			clk : in  std_logic;
+			pixel_out : out std_logic_vector(7 downto 0);
+			mem_addr_out : out std_logic_vector(18 downto 0)
+		);
+	end component;
+	
 	signal clk_vga : std_logic;
 	signal clk_cpu : std_logic;
 	
@@ -147,9 +141,8 @@ architecture behavioral of toplevel is
 	signal load_data : std_logic;
 	signal execute : std_logic;
 	
-	signal block_ram_addr_in : std_logic_vector(14 downto 0) := "000000000000000";
-	signal vga_addr_in : std_logic_vector(18 downto 0) := "0000000000000000000";
-	signal vga_pixel_in    : std_logic_vector(7 downto 0) := "00000000";
+	signal vga_mem_addr_in : std_logic_vector(18 downto 0);
+	signal vga_pixel_in : std_logic_vector(7 downto 0);
 	
 	signal program_loader_mem_addr :  std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
 	signal program_loader_mem_write :  std_logic;
@@ -198,7 +191,7 @@ begin
 			vSync => vga_v_sync,
 			
 			pixel_in => vga_pixel_in,
-			mem_addr_in => vga_addr_in,
+			mem_addr_in => vga_mem_addr_in,
 			
 			mem_addr => data_ram_addr(18 downto 0),
 			mem_we => data_ram_write,
@@ -244,45 +237,12 @@ begin
 			mem_write => program_loader_mem_write,
 			mem_data => program_loader_mem_data
 		);
-
-	memory_data: memory_from_file
-		generic map (
-			word_width => 8,
-			address_width => 15,
-			file_name => "vga/lenna.dat"
-		)
+		
+	inst_test_image_loader: test_image_loader
 		port map (
 			clk => clk_cpu,
-			write_enable => '0',
-			addr => block_ram_addr_in,
-			data => vga_pixel_in
+			pixel_out => vga_pixel_in,
+			mem_addr_out => vga_mem_addr_in
 		);
-	
-	process (clk_cpu)
-		variable counter : natural range 0 to 1 := 0;
-		variable col : natural range 0 to 320 := 0;
-		variable row : natural range 0 to 240 := 0;
-	begin
-		if rising_edge(clk_cpu) then
-			if row /= 240 then
-				if counter = 0 then
-					if row < 120 and col < 160 then
-						block_ram_addr_in <= conv_std_logic_vector(160 * row + col, 15);
-					else
-						block_ram_addr_in <= conv_std_logic_vector(0, 15);
-					end if;
-					
-					vga_addr_in <= conv_std_logic_vector(320 * row + col, 19);
-					
-					col := col + 1;
-					if col = 320 then
-						col := 0;
-						row := row + 1;
-					end if;
-				end if;
-				counter := counter + 1;
-			end if;
-		end if;
-	end process;
 
 end behavioral;
