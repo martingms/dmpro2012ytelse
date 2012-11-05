@@ -104,9 +104,9 @@ begin
 	S_DATA(2)(7 downto 0) <= data_in;
 	S_DATA(3)(7 downto 0) <= data_in;
 	
-	data_out0 <= S_DATA(1)(((ARRAY_COLS)*8)+7 downto (ARRAY_COLS)*8);
-	data_out1 <= S_DATA(2)(((ARRAY_COLS)*8)+7 downto (ARRAY_COLS)*8);
-	data_out2 <= S_DATA(3)(((ARRAY_COLS)*8)+7 downto (ARRAY_COLS)*8);
+	data_out0 <= S_DATA(1)(((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8);
+	data_out1 <= S_DATA(2)(((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8);
+	data_out2 <= S_DATA(3)(((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8);
 	
 	E_OUT(0)(7 downto 0) <= "00000001";
 	E_OUT(1)(7 downto 0) <= "00000010";
@@ -124,7 +124,7 @@ begin
 --		n_out							=> (others => '0'),
 --		s_out							=> (others => '0'),
 --		e_out							=> (others => '0'),
---		w_out							=> (others => '0'),			
+--		w_out							=> (others => '0'),
 --		step 							=> node_step,
 --		sr_in							: in  STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
 --		sr_out						: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0)
