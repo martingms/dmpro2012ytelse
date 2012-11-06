@@ -29,7 +29,13 @@ TODO: Fill in about the types of errors/warnings we got.
 \item more...
 \end{itemize}
 TODO: Silk-over-silk in USB/Lenna, errors we could ignore.
-TODO: Scaling of board.
+TODO: Scaling of board. (Should go elsewhere or not at all?)
+Initially we started with a boardsize chosen more or less at random, just picking something
+that seemed to fit the components comfortably with room to spare, after laying out the components
+on the board, we noticed that the board had quite a bit of room left over, as this would be a waste
+of resources, we scaled the board down in size, by moving the keep-out-borders inwards until the wasted
+space was removed, and then using the "scale-to-fit-components"-tool in Altium, with the Keepout-border
+selected.
 
 In the end we remapped some pins to increase physical proximity, and to untangle the
 amount of crossing wires. Although care was taken during this process, we accidentally
