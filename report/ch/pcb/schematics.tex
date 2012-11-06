@@ -22,6 +22,17 @@ The overall layout of the schematic is logically grouped "geographically", to
 allow for easy reading of the schematic.
 
 \subsection {Buses/Wirelabels}
-(TODO: Noe om issues vi fikk med å navngi busser)
+We initially worked on the assumption that all pins should be connected to a bus, and then
+that bus should be connected to the pins in the other end, this gave us noe end of issues with
+duplicate naming, and after digging through quite a bit of Altium-documentation, we became
+assured that simply wire-labeling the pins would create the necessary connections (as any
+pin/wire with the same name as any other pin/wire will be connected by definition in Altium).
+
+This arguably made for a less readable Schematic (as the bus-connected solution was quite a lot
+easier to follow when tracing, however as our schematic still is logically grouped, it isn't very hard
+to find the correct connections even without the busses drawn in. (Albeit with a bit of a learning curve
+at the beginning, to learn where the various components are placed). We are quite sure that given
+a logical overview of which components are directly connected to eachother, finding the various pins
+that perform this connection should be trivial even without the busses/wires drawn in.
 
 TODO: Overordnet forklaring av hvordan
