@@ -5,11 +5,12 @@ the reason for the time span needed for this was a result of a couple of
 things.
 
 (TODO: Expand the following into text)
-Why we used so much time: (Or, what the other group did right, and we did wrong)
+There are quite a few possible reasons for why we ended up using more time than the
+energy group to get our board fully routed:
 \begin {itemize}
 \item We were the first group to start routing, and thus got to fall into all the gotcha-traps that
 exist for routing, with no-one to walk into them ahead of us.
-\item We didn't think about physical proximity when laying out the pins
+\item We didn't think about physical proximity when laying out the pins.
 \item We had 5 memory chips, with all the extra connections that implies.
 \item We didn't set limitations until a few days into the week.
 \end {itemize}
@@ -29,7 +30,13 @@ TODO: Fill in about the types of errors/warnings we got.
 \item more...
 \end{itemize}
 TODO: Silk-over-silk in USB/Lenna, errors we could ignore.
-TODO: Scaling of board.
+TODO: Scaling of board. (Should go elsewhere or not at all?)
+Initially we started with a boardsize chosen more or less at random, just picking something
+that seemed to fit the components comfortably with room to spare, after laying out the components
+on the board, we noticed that the board had quite a bit of room left over, as this would be a waste
+of resources, we scaled the board down in size, by moving the keep-out-borders inwards until the wasted
+space was removed, and then using the "scale-to-fit-components"-tool in Altium, with the Keepout-border
+selected.
 
 In the end we remapped some pins to increase physical proximity, and to untangle the
 amount of crossing wires. Although care was taken during this process, we accidentally
