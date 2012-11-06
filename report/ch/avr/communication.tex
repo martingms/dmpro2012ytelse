@@ -29,7 +29,7 @@ When the AVR transfers data, it first sets the FPGA state to LOAD\_DATA or LOAD\
 \end{enumerate}
 
 \subsection{FPGA transfers data to the AVR}
-The FPGA have the ability to transfer data back to the AVR. This is a fallback routine, implemented in case of a bottleneck or failure in the VGA controller on the FPGA. In this case, the FPGA can transfer the processed data back to the AVR for storage or to be sent through an alternative VGA controller. In this transfer the data bus are 8 pins connected to the FPGA's I/O pins.
+The FPGA has the ability to transfer data back to the AVR. This is a fallback routine, implemented in case of a bottleneck or failure in the VGA controller on the FPGA. In this case, the FPGA can transfer the processed data back to the AVR for storage or to be sent through an alternative VGA controller. In this transfer the data bus are 8 pins connected to the FPGA's I/O pins.
 
 This transfer is rather unusual because it is, unlike all other operations, not initiated by the AVR. The FPGA will initiate the transfer by putting one byte on the bus, and then interrupt the AVR. After the AVR has acknowledged, another byte can be transfered. The first four bytes of the transfer will represent, as a 32 bit unsigned integer, the number of bytes of actual data to be transfered. The entire procedure can be summarized by the following five steps, where \emph{x} is the amount of actual data.
 
