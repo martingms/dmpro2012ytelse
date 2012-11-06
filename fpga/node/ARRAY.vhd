@@ -33,7 +33,8 @@ entity SIMD_ARRAY is
 		data_in 						: in  STD_LOGIC_VECTOR (7 downto 0);
 		data_out0 					: out STD_LOGIC_VECTOR (7 downto 0);
 		data_out1 					: out STD_LOGIC_VECTOR (7 downto 0);
-		--data_out2 					: out STD_LOGIC_VECTOR (7 downto 0);
+		data_out2 					: out STD_LOGIC_VECTOR (7 downto 0);
+		data_out3 					: out STD_LOGIC_VECTOR (7 downto 0);
 		state_out					: out STD_LOGIC
 	);
 end SIMD_ARRAY;
@@ -83,28 +84,32 @@ architecture Behavioral of SIMD_ARRAY is
 	constant ARRAY_COLS 			: integer := 2;
 	constant ARRAY_ROWS 			: integer := 2;
 	type DATA_T  is array (ARRAY_ROWS+1 downto 0) of STD_LOGIC_VECTOR (((ARRAY_COLS+1)*8)+7 downto 0);
+	type DATA_S  is array (ARRAY_ROWS+1 downto 0) of STD_LOGIC_VECTOR (((ARRAY_COLS+2)*8)+7 downto 0);
 	type STATE_T is array (ARRAY_ROWS   downto 1) of STD_LOGIC_VECTOR   (ARRAY_COLS-1 downto 0);
 		signal N_OUT  					: DATA_T; --  := (others => (others=> '0'));
 	signal S_OUT  					: DATA_T; --  := (others => (others=> '0'));
 	signal E_OUT  					: DATA_T; --  := (others => (others=> '0'));
 	signal W_OUT  					: DATA_T; --  := (others => (others=> '0'));
 
-	signal S_DATA  				: DATA_T; --  := (others => (others=> '0'));
+	signal S_DATA  				: DATA_S; --  := (others => (others=> '0'));
 	signal STATE 					: STATE_T;--  := (others => (others=> '0'));
 
 begin	
+	S_DATA(0)(7 downto 0) <= data_in;
 	S_DATA(1)(7 downto 0) <= data_in;
 	S_DATA(2)(7 downto 0) <= data_in;
+	S_DATA(3)(7 downto 0) <= data_in;
 	--S_DATA(3)(7 downto 0) <= data_in;
 	
-	data_out0 <= S_DATA(1)(((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8);
-	data_out1 <= S_DATA(2)(((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8);
-	--data_out2 <= S_DATA(3)(((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8);
+	data_out0 <= S_DATA(0)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
+	data_out1 <= S_DATA(1)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
+	data_out2 <= S_DATA(2)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
+	data_out3 <= S_DATA(3)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
 	
 ----------------------------------------------------------------------------------
 --	LEFT-TOP EDGE NODE
 ----------------------------------------------------------------------------------
-	GEN_LEFT_TOP_NODE : NODE_EDGE port map (
+	LEFT_TOP_NODE : NODE_EDGE port map (
 		clk 							=> clk,
 		reset 						=> reset,
 		instr 						=> instr,
@@ -124,7 +129,7 @@ begin
 ----------------------------------------------------------------------------------
 -- LEFT-LOWER EDGE NODE
 ----------------------------------------------------------------------------------
-	GEN_LEFT_LOWER_NODE : NODE_EDGE port map (
+	LEFT_LOWER_NODE : NODE_EDGE port map (
 		clk 							=> clk,
 		reset	 						=> reset,
 		instr 						=> instr,
@@ -144,7 +149,7 @@ begin
 ----------------------------------------------------------------------------------
 -- RIGHT TOP EDGE NODE
 ----------------------------------------------------------------------------------
-	GEN_RIGHT_TOP_NODE : NODE_EDGE port map (
+	RIGHT_TOP_NODE : NODE_EDGE port map (
 		clk 							=> clk,
 		reset 						=> reset,
 		instr 						=> instr,
@@ -154,31 +159,31 @@ begin
 		s_in							=> N_OUT(1) (((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
 		--e_out						=> (others => '0'),
 		e_in							=> (others => '0'),
-		w_out							=> E_OUT(0) (((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
-		w_in							=> W_OUT(0) (((ARRAY_COLS  )*8)+7 downto (ARRAY_COLS  )*8),
+		w_out							=> W_OUT(0) (((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
+		w_in							=> E_OUT(0) (((ARRAY_COLS  )*8)+7 downto (ARRAY_COLS  )*8),
 		step 							=> node_step,
 		sr_in							=> S_DATA(0)(((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
-		sr_out						=> S_DATA(0)(((ARRAY_COLS  )*8)+7 downto (ARRAY_COLS  )*8)
+		sr_out						=> S_DATA(0)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8)
 	);
 
 ----------------------------------------------------------------------------------
 -- RIGHT LOWER EDGE NODE
 ----------------------------------------------------------------------------------
-	GEN_RIGHT_LOWER_NODE : NODE_EDGE port map (
+	   RIGHT_LOWER_NODE : NODE_EDGE port map (
 		clk 							=> clk,
 		reset 						=> reset,
 		instr 						=> instr,
-		n_out							=> S_OUT(ARRAY_ROWS+1) (((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
-		n_in							=> N_OUT(ARRAY_ROWS  ) (((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
+		n_out							=> N_OUT(ARRAY_ROWS+1) (((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
+		n_in							=> S_OUT(ARRAY_ROWS  ) (((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
 		--s_out						=> (others => '0'),
 		s_in							=> (others => '0'),
 		--e_out						=> (others => '0'),
 		e_in							=> (others => '0'),
-		w_out							=> E_OUT(ARRAY_ROWS+1) (((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
-		w_in							=> W_OUT(ARRAY_ROWS+1) (((ARRAY_COLS  )*8)+7 downto (ARRAY_COLS  )*8),
+		w_out							=> W_OUT(ARRAY_ROWS+1) (((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
+		w_in							=> E_OUT(ARRAY_ROWS+1) (((ARRAY_COLS  )*8)+7 downto (ARRAY_COLS  )*8),
 		step 							=> node_step,
 		sr_in							=> S_DATA(ARRAY_ROWS+1)(((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
-		sr_out						=> S_DATA(ARRAY_ROWS+1)(((ARRAY_COLS  )*8)+7 downto (ARRAY_COLS  )*8)
+		sr_out						=> S_DATA(ARRAY_ROWS+1)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8)
 	);
 	
 ----------------------------------------------------------------------------------
@@ -218,8 +223,8 @@ begin
 			w_out						=> W_OUT(row  )(((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8),
 			w_in						=> E_OUT(row  )( (ARRAY_COLS*8)+7    downto  ARRAY_COLS*8),
 			step 						=> node_step,
-			sr_in						=> S_DATA(row )( (ARRAY_COLS*8)+7    downto  ARRAY_COLS*8),
-			sr_out					=> S_DATA(row )(((ARRAY_COLS+1)*8)+7 downto (ARRAY_COLS+1)*8)
+			sr_in						=> S_DATA(row )( (ARRAY_COLS+1*8)+7  downto  ARRAY_COLS+1*8),
+			sr_out					=> S_DATA(row )(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8)
 		);	
 		
 	end generate GEN_LETF_AND_RIGHT;
