@@ -4,52 +4,56 @@ We spent the entire final week before production working on the routing,
 the reason for the time span needed for this was a result of a couple of
 things.
 
-(TODO: Expand the following into text)
-There are quite a few possible reasons for why we ended up using more time than the
-energy group to get our board fully routed:
+\TODO{Expand the following into text}
+There are quite a few possible reasons for why we ended up using more time than
+the energy group to get our board fully routed:
 \begin {itemize}
-\item We were the first group to start routing, and thus got to fall into all the gotcha-traps that
-exist for routing, with no-one to walk into them ahead of us.
-\item We didn't think about physical proximity when laying out the pins.
+\item We were the first group to start routing, and thus got to fall into all
+  the gotcha-traps that exist for routing, with no-one to walk into them ahead
+  of us.
+\item We did not think about physical proximity when laying out the pins.
 \item We had 5 memory chips, with all the extra connections that implies.
-\item We didn't set limitations until a few days into the week.
+\item We did not set limitations until a few days into the week.
 \end {itemize}
 
-Initially we attempted auto-routing, which took the better part of half an hour,
-even before the constraints were set, this showed us quite a few issues that needed
-to be handled (and even more so when we finally got the constraints in).
+Initially we attempted autorouting. This took the better part of half an hour,
+even before the constraints were set. This showed us quite a few issues that
+needed to be handled, and even more so when we finally got the constraints in.
 
-TODO: Fill in about the types of errors/warnings we got.
+\TODO{Fill in about the types of errors/warnings we got.}
 \begin{itemize}
-\item Constraints violations set wrong
+\item Constraints violations set wrong.
 \item Power-plane net-labeled wrong.
-\item Clearance constraints violated by Altium
+\item Clearance constraints violated by Altium.
 \item Short-circuiting vias.
 \item Overlapping vias.
-\item In general, the auto-routing started to produce violations 
-\item more...
+\item In general, the auto-routing started to produce violations.
+\item more\ldots
 \end{itemize}
-TODO: Silk-over-silk in USB/Lenna, errors we could ignore.
-TODO: Scaling of board. (Should go elsewhere or not at all?)
-Initially we started with a boardsize chosen more or less at random, just picking something
-that seemed to fit the components comfortably with room to spare, after laying out the components
-on the board, we noticed that the board had quite a bit of room left over, as this would be a waste
-of resources, we scaled the board down in size, by moving the keep-out-borders inwards until the wasted
-space was removed, and then using the "scale-to-fit-components"-tool in Altium, with the Keepout-border
-selected.
+\TODO{Silk-over-silk in USB/Lenna, errors we could ignore.}
+\TODO{Scaling of board. (Should go elsewhere or not at all?)}
 
-In the end we remapped some pins to increase physical proximity, and to untangle the
-amount of crossing wires. Although care was taken during this process, we accidentally
-happened to disconnect one pin in the schematic while reordering, we did notice this before
-production though, and were able to correct the mistake by manually routing the connection.
-Finally we did some manual routing to reduce the amount of unneccessary vias. \\
+Initially we started with a board size chosen more or less at random, and picked
+something that seemed to fit the components comfortably with room to spare.
+After laying out the components on the board, we noticed that the board had
+quite a bit of room left over. As this would be a waste of resources, we scaled
+the board down in size. We did this by moving the keep-out-borders inwards until
+the wasted space was removed, and then used the ``scale-to-fit-components''-tool
+in Altium, with the Keepout-border selected.
+
+In the end we remapped some pins to increase physical proximity, and to untangle
+the amount of crossing wires. Although care was taken during this process, we
+accidentally happened to disconnect one pin in the schematic while reordering.
+We did notice this before production, and were able to correct the mistake by
+manually routing the connection. Finally, we did some manual routing to reduce
+the amount of unneccessary vias.
 
 \subsection {Lenna and Text}
-In the top right corner of our board, we put the "Lenna"-picture, this image
-was produced by doing an edge-detection-pass on the image, then putting it through
-the image-converter-plugin in Altium: \url{http://wiki.altium.com/display/ADOH/How+to+import+a+graphic+onto+the+PCB+overlay}
+In the top right corner of our board, we put the ``Lenna''-picture. This image
+was produced by doing an edge detection pass on the image, then putting it
+through the image converter plugin in Altium:
+\url{http://wiki.altium.com/display/ADOH/How+to+import+a+graphic+onto+the+PCB+overlay}
 
-We also put our names, and the name of the project on the board, this was simply done
-with the Text-label tool in Altium's PCB-Designer. This didn't allow for norwegian letters,
-but this was fixed easily by adding lines and circles manually (as well as moving a's and e's together
-to form æ).
+We also put our names and the name of the project on the board. This was simply
+done with the Text-label tool in Altium's PCB-Designer. As this did not allow
+for Norwegian letters, we added lines and circles manually.

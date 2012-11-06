@@ -1,38 +1,41 @@
 \section {Schematics}
 
-We decided to design the entire PCB in one schematic, because having read
-the Festina Lente report, we noticed that they mention that using multiple schematics
-might give some interesting issues (which we never got any further into,
-as we never tried to use more than one schematic).
+We decided to design the entire PCB in one schematic, as the Festina Lente
+report\TODO{Reference here} mentioned that using multiple schematics might give
+some interesting issues.
 
-A major downside of this approach was the fact that this completely serialized our
-work on the Schematic, since we couldn't make concurrent changes to our single document.
-This limited the paralellism of our work-flow to one person working on the schematic,
-and the other people in the PCB-group doing whatever could be done without touching the schematic.
-(Looking up components, making footprints etc). Since the schematic was the biggest amount
-of work, this produced a major bottle-neck for the schematic work. HOWEVER, having the overall
-control of the entire thing in one document did help to smooth out quite a few issues we met
-along the road, for instance we were having quite a few issues with netlabels, which were quite
-easy to untangle when everything was in one document with 0 ports, as getting the complete overview
-of where everything was, was quite easily readable with this approach. We also avoided needing
-to use any buses this way (even if we did end up with one or two, for the sake of readability)
-(TODO: Fill in a bit of details about pros for one-document vs multi). \\
+A major downside of this approach was the fact that this completely serialized
+our work on the Schematic, since we could not make concurrent changes to our
+single document. This limited the parallelism of our workflow to one person
+working on the schematic. In the meantime, the other people in the PCB group did
+whatever could be done without touching the schematic. Since the schematic was
+the biggest amount of work, this produced a major bottleneck for the schematic
+work. However, having the overall control of the entire thing in one document
+did help to smooth out quite a few issues we met along the road. For instance,
+we were having quite a few issues with netlabels. This was quite easy to
+untangle when everything was in one document with 0 ports, as getting the
+complete overview was very readable with this approach. We also avoided the need
+to use any buses this way, although we did end up with one or two for the sake
+of readability. \TODO{Fill in a bit of details about pros for one-document vs
+multi.}
 
-The overall layout of the schematic is logically grouped "geographically", to
+The overall layout of the schematic is logically grouped ``geographically'', to
 allow for easy reading of the schematic.
 
 \subsection {Buses/Wirelabels}
-We initially worked on the assumption that all pins should be connected to a bus, and then
-that bus should be connected to the pins in the other end, this gave us noe end of issues with
-duplicate naming, and after digging through quite a bit of Altium-documentation, we became
-assured that simply wire-labeling the pins would create the necessary connections (as any
-pin/wire with the same name as any other pin/wire will be connected by definition in Altium).
+We initially worked on the assumption that all pins should be connected to a
+bus, and then that bus should be connected to the pins in the other end. This
+gave us some issues with duplicate naming. After digging through quite a bit of
+Altium documentation, we became assured that simply wire-labelling the pins
+would create the necessary connections. This is because any pin/wire with the
+same name as any other pin/wire will be connected by definition in Altium.
 
-This arguably made for a less readable Schematic (as the bus-connected solution was quite a lot
-easier to follow when tracing, however as our schematic still is logically grouped, it isn't very hard
-to find the correct connections even without the busses drawn in. (Albeit with a bit of a learning curve
-at the beginning, to learn where the various components are placed). We are quite sure that given
-a logical overview of which components are directly connected to eachother, finding the various pins
-that perform this connection should be trivial even without the busses/wires drawn in.
+This arguably made for a less readable schematic, as the bus-connected solution
+was quite a lot easier to follow when tracing. However, as our schematic still
+is logically grouped, it is not very hard to find the correct connections even
+without the busses drawn in. We are quite sure that given a logical overview of
+which components are directly connected to each other, finding the various pins
+that perform this connection should be trivial even without the busses/wires
+drawn in.
 
-TODO: Overordnet forklaring av hvordan
+\TODO{Overordnet forklaring av hvordan (JN: ???)}
