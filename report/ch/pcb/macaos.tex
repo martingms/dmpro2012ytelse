@@ -1,15 +1,42 @@
 \section {Macaos}
 
-(TODO: This section is intended to provide a few insights about the
-ins and outs of using Macaos for creating production-files, some of
-what ends up here MAY fit better in an Appendix, but we feel it might
-be usefull to note down what we learned for those that come after us)
+This section is intended to provide a few insights about the
+ins and outs of using Macaos for creating production-files, as we feel 
+it might be usefull to note down what we learned for those that come after us)
 
 \begin {enumerate}
-\item Visit the Macaos homepage and apply for a license-key (TODO: Insert url)
-\item In Altium Designer, use File-Fabrication Outputs-Gerber Files
-\item In Altium Designer, use File-Fabrication Outputs-NC Drill Files
+\item Visit the Macaos homepage and apply for a license-key (see below for link), remember to leave some
+time for a reply on this, as these requests seem to be handled manually.
+\item In Altium Designer, use File-Fabrication Outputs-Gerber Files (See Macaos-documentation for decent settings, take specific care regarding the Digit-format, and zero-suppression settings)
+\item In Altium Designer, use File-Fabrication Outputs-NC Drill Files (As above, see the Macaos-documentation for proper settings, they are likely the same as in the Gerber Files.)
 \item The necessary files should now exist in your Project-folder under "Project Outputs for Projectname"
-\item Install and open Macaos
-\item (TODO: Complete this when I have access to a computer with Macaos on.)
+\item Install and open Macaos (You will be asked for a license-key, which you should have gotten along with
+the download-link)
+\item Click "Import"
+\item At this point it might be usefull to have file-endings enabled in Explorer, so open an Explorer-window,
+and go to Tools, Folder-Options, and remove the checkmark for "Hide extensions for known file types"
+\item Click "Open Files"
+\item Select the relevant files for import, crossreferencing against the Altium-documentation might give a decent idea about which
+files go where, simply importing all the files might be a good idea though, as you might have an easier time selecting the correct
+files when watching the preview of each file.
+\item Bind the files to their respective layers. Most of the layers should be easily spottable, like GTO for Notation Top, GTS for Top Solder Mask, GP1 and GP2 for internal layers 1 and 2, (take care to make sure
+these are not negative, if so then select Negative Layer 1/2 instead of Inner Layer 1/2), the Copper-layers will likely be GTL and GBL, make sure these are correct too. Additional files include the Keepout (GKO), which
+can be used as "Board".
+\item Verify that the drill files are properly selected (You'll probably have to link a text-file ending in -RoundHoles.txt to "Drill"), by clicking on "Drill Tools" in Macaos, at this point it might also
+be a good idea to verify that the amount of holes match.
+\item Verify that the list of layers in Macaos is complete.
+\item Click "Contour" in Macaos, a Board-contour will be auto-generated for you.
+\item Click "Board specs", select a stackup (typically 4001 which is listed as standard)
+\item If wanted, you can select a different colour for your board/silk-layer here too
+\item Click "Board stats", check the hole-amount, and set the "Minimum feature sizes", these values depend a bit on what settings you ended up with in Altium, but usually 0.125 and 0.15 mm seem to be decent values.
+\item Click "Place Product/Batch number", and place that on your board (alternatively skip this, and let Macaos pick a place for it.
+\item Click "Publish to product browser", which allows you to get a price-estimate on your board.
+\item IF you did all this with your own license, you might also want to click File, Save to local disk, to generate a .mei-file that you can deliver to whoever will be doing the actual ordering.
 \end {enumerate}
+
+Usefull links:
+\begin {itemize}
+\item \url{http://www.macaos.com/products/me/get} - Applying for a Macaos-license
+\item \url{http://www.macaos.com/support/gerber/other} - Generating Gerber-files
+\item \url{http://wiki.altium.com/display/ADOH/Gerber+Output+Options} - Altium-information about generated Gerber-files.
+\end {itemize}

@@ -5,6 +5,7 @@
 
 // FILE SUFFICES
 #define DATA_FILE_SUFFIX 	"lenna"
+#define BMP_FILE_SUFFIX		"bmp"
 #define SCRIPT_FILE_SUFFIX 	"script"
 
 // STRINGS AND ARRAY MAXIMUMS

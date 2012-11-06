@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "../assert.h"
+#include "compiler.h"
 #define BMPFILESIG 0x4d42
 typedef uint16_t BmpImageFileType;
 
@@ -33,4 +34,4 @@ uint8_t * read_BMP_from_buffer(uint8_t *buffer, bmiHeader_t *bmp_hdr);
 uint8_t * read_BMP_from_file(const char fn[], bmiHeader_t *bmp_hdr);
 
 //Move this to some general utilities
-void read_file(const char fn[], char *buffer);
+void read_file(const char fn[], U8 *buffer);

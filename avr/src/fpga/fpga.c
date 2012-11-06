@@ -12,6 +12,8 @@
 #include "compiler.h"
 #include "intc.h"
 #include "gpio.h"
+#include "bmp.h"
+#include "screen.h"
 
 #include <fsaccess.h>
 
@@ -27,74 +29,8 @@ void receive_ack(void) {
 	acked = TRUE;
 }
 
-/*
-int fpga_send_data_from_file(char *data_path) { //TODO sender kun rådata (tar ikke hensyn til bmp)
-	// S.1 - S.6 refers to the stages in 'AVR sends data to the FPGA'
-	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
-	U8 buffer;
-	int fd = open(data_path, O_RDONLY);
-	if (fd < 0) {
-		seprintf("Could not open file: %s\n", data_path);
-		return fd;
-	}
-	fpga_set_state(FPGA_STATE_LOAD_DATA);									// S.1
-	fpga_set_listener(&receive_ack);
-	while (read(fd, &buffer, DATA_WORD_LENGTH) > 0) {
-		acked = FALSE;
-		bus_send_data(buffer, FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);// S.2
-		bus_toggle_inc_clk_line();												// S.3
-		while (acked == FALSE);												// S.4
-	}																		// S.5
-	fpga_set_listener(DEFAULT_FPGA_LISTENER);
-	fpga_set_state(FPGA_STATE_STOP);										// S.6
-	return 0;
-}
-
-int fpga_send_data_from_memory(U8 *data, size_t n_bytes) {
-	// S.1 - S.6 refers to the stages in 'AVR sends data to the FPGA'
-	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
-	int i;
-	fpga_set_state(FPGA_STATE_LOAD_DATA);									// S.1
-	fpga_set_listener(&receive_ack);
-	for (i=0; i < n_bytes; ++i) {
-		acked = FALSE;
-		bus_send_data(data[i], FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);// S.2
-		bus_toggle_inc_clk_line();												// S.3
-		while (acked == FALSE);												// S.4
-		i++;
-	}																		// S.5
-	fpga_set_listener(DEFAULT_FPGA_LISTENER);
-	fpga_set_state(FPGA_STATE_STOP);										// S.6
-	return 0;
-}
-
-int fpga_send_program(char *program_path) {
-	// S.1 - S.6 refers to the stages in 'AVR sends program to the FPGA'
-	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
-	U32 buffer;
-	int i=0;
-	int fd = open(program_path, O_RDONLY);
-	if (fd < 0) {
-		seprintf("Could not open file: %s\n", program_path);
-		return fd;
-	}
-	fpga_set_state(FPGA_STATE_LOAD_DATA);									// S.1
-	fpga_set_listener(&receive_ack);
-	while (read(fd, &buffer, INSTRUCTION_WORD_LENGTH) > 0) {
-		acked = FALSE;
-		bus_send_data(buffer, FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);// S.2
-		bus_toggle_inc_clk_line();												// S.3
-		while (acked == FALSE);												// S.4
-		i++;
-	}																		// S.5
-	fpga_set_listener(DEFAULT_FPGA_LISTENER);
-	fpga_set_state(FPGA_STATE_STOP);										// S.6
-	return 0;
-}
-*/
-
 // ------[GENERIC SEND FUNCTION]-------//
-int fpga_send(int(*get_word) (U32), int transfer_state) {
+int fpga_send(int(*get_word) (U32), int transfer_state, int word_width) {
 	// S.1 - S.6 refers to the stages in 'AVR sends program to the FPGA'
 	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
 	U32 buffer;
@@ -104,7 +40,7 @@ int fpga_send(int(*get_word) (U32), int transfer_state) {
 	fpga_set_listener(&receive_ack);
 	while (get_word(buffer) > 0) {
 		acked = FALSE;
-		bus_send_data(buffer, FPGA_DATA_IN_BUS_OFFSET, FPGA_DATA_IN_BUS_SIZE);// S.2
+		bus_send_data(buffer, FPGA_DATA_IN_BUS_OFFSET, word_width*8);// S.2
 		bus_toggle_inc_clk_line();											// S.3
 		while (acked == FALSE);												// S.4
 		i++;
@@ -117,54 +53,79 @@ int fpga_send(int(*get_word) (U32), int transfer_state) {
 
 
 // ------[DATA SOURCE FUNCTIONS]------ //
-int fd;
-int data_from_file(U32 buffer) {
-	return read(fd, &buffer, DATA_WORD_LENGTH);
-}
-int program_from_file(U32 buffer) {
-	return read(fd, &buffer, INSTRUCTION_WORD_LENGTH);
-}
-
 U8 *data_buffer;
 size_t n_bytes;
+/**
+ * Takes one byte from 'data_buffer'.
+ * Will not exceed 'n_bytes'.
+ * Returns number of bytes read.
+ */
 int data_from_memory(U32 buffer) {
 	static int i=0;
+	buffer = 0;
 	if (i < n_bytes) {
 		buffer = data_buffer[i++];
 		return DATA_WORD_LENGTH;
 	}
 	return 0;
 }
+
+/**
+ * Takes 3 bytes from 'data_buffer' and puts it in one U32,
+ * bytewise: 0-B1-B2-B3, where B1 is the first byte read from the file.
+ * Will not exceed 'n_bytes'.
+ * Returns number of bytes read.
+ */
+int program_from_memory(U32 buffer) {
+	static int i=0;
+	int j;
+	U32 tmp;
+	buffer = 0;
+	for (j=INSTRUCTION_WORD_LENGTH-1; j>=0 && i<n_bytes; --j, ++i) {
+		tmp = data_buffer[i];
+		tmp = tmp << 8*j;
+		buffer |= tmp;
+	}
+	if (j>= 0) {
+		seprintf("Warning: detected instruction of less than 24 bit width! (fpga.c)\n");
+	}
+	return INSTRUCTION_WORD_LENGTH-1 - j;
+}
+
+
 // ----------------------------------- //
 
 // ----[SPECIALIZED SEND FUNCTIONS]----//
 int fpga_send_data_from_memory(U8 *data, size_t size) {
 	data_buffer = data;
 	n_bytes = size;
-	return fpga_send(&data_from_memory, FPGA_STATE_LOAD_DATA);
+	return fpga_send(&data_from_memory, FPGA_STATE_LOAD_DATA, DATA_WORD_LENGTH);
 }
 
-int fpga_send_data_from_file(char *data_path) {
-	int rc;
-	fd = open(data_path, O_RDONLY);
-	if (fd < 0) {
-		seprintf("Could not open file: %s\n", data_path);
-		return fd;
-	}
-	rc = fpga_send(&data_from_file, FPGA_STATE_LOAD_DATA);
+int fpga_send_data_from_file(char *data_path, bool bmp) {
+	int fd = open(data_path, O_RDONLY);			// Opens to check size
+	size_t file_size = fsaccess_file_get_size(fd);
+	U8 file_buffer[file_size];					// Creates buffer
 	close(fd);
-	return rc;
+	read_file(data_path, file_buffer);			// Reads into buffer
+
+	if (bmp) {
+		bmiHeader_t bmp_head;
+		return fpga_send_data_from_memory(read_BMP_from_buffer(file_buffer, &bmp_head), PICTURE_SIZE);
+	}
+	return fpga_send_data_from_memory(file_buffer, file_size);
+
 }
 
 int fpga_send_program(char *program_path) {
 	int rc;
-	fd = open(program_path, O_RDONLY);
-	if (fd < 0) {
-		seprintf("Could not open file: %s\n", program_path);
-		return fd;
-	}
-	rc = fpga_send(&program_from_file, FPGA_STATE_LOAD_INSTRUCTION);
+	int fd = open(program_path, O_RDONLY);			// Opens to check size
+	size_t file_size = fsaccess_file_get_size(fd);
 	close(fd);
+	U8 file_buffer[file_size];						// Creates buffer
+	read_file(program_path, file_buffer);			// Reads into buffer
+
+	rc = fpga_send(&program_from_memory, FPGA_STATE_LOAD_INSTRUCTION, INSTRUCTION_WORD_LENGTH);
 	return rc;
 }
 // ------------------------------------//
@@ -186,7 +147,7 @@ void fpga_receive_data(void) {
 		bus_toggle_inc_clk_line();	// Increment CLK
 		tmp = tmp << 8*i;
 		transfer_size |= tmp;
-		while (acked == FALSE);		// Wait for ACK
+		while (acked == FALSE);		// Wait for ACK (next byte)
 	}
 
 	// Read data
@@ -195,7 +156,7 @@ void fpga_receive_data(void) {
 		word = bus_receive_data();	// Read bus
 		bus_toggle_inc_clk_line();	// Increment CLK
 		//TODO lagre word et sted
-		while (acked == FALSE);		// Wait for ACK
+		while (acked == FALSE);		// Wait for ACK (next byte)
 	}
 
 	fpga_set_listener(DEFAULT_FPGA_LISTENER); // Stop listening for ACKs

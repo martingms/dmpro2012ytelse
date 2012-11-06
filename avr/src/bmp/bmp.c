@@ -38,7 +38,7 @@ uint8_t * read_BMP_from_buffer(uint8_t *buffer, bmiHeader_t *bmp_hdr){
 	return buffer_base + bmp_dibhdr.ImageDataOffset;
 }
 
-void read_file(const char fn[], char *buffer)
+void read_file(const char fn[], U8 *buffer)
 {
 	assert(buffer);
 	assert(fn);

@@ -84,10 +84,10 @@ void next_state(void) {
 		fb_iterator_seek(menu_item_selected);
 		buffer = fb_iterator_next();
 		rc = load_script(buffer); // Sets the program script
+		fb_iterator_terminate();
 		if (!rc) {
 			load_menu(STATE_SELECT_DATA);
 		}
-		fb_iterator_terminate();
 		return;
 	}
 
@@ -101,10 +101,10 @@ void next_state(void) {
 	}
 }
 
-// TODO hva hvis data er bmp?
 void run_fpga_program(void) {
 #define PATH_SIZE strlen(selected_data_unit_path)
 	char *buffer;
+	bool bmp;
 	busy = TRUE; // Stop listening on buttons
 
 	fpga_send_program(selected_script.fpga_bin_path); // Send program to FPGA
@@ -112,13 +112,19 @@ void run_fpga_program(void) {
 	if (PATH_SIZE > 0) { // If there is data
 		fb_iterator_init(FS_FILE);
 		fb_cd(selected_data_unit_path);
-		fb_iterator_set_ext(DATA_FILE_SUFFIX);
+		fb_iterator_set_ext("*");
 		while (fb_iterator_has_next()) {
 			buffer = fb_iterator_next();
 			char data_path[PATH_SIZE + N_FILES_MAX_DIGITS + 1 + strlen(buffer) + 1];
-			sprintf(data_path, "%s.%s", selected_data_unit_path, buffer);
+			sprintf(data_path, "%s%s", selected_data_unit_path, buffer);
 
-			fpga_send_data_from_file(data_path); // Send data to FPGA
+			// Determines if BMP file
+			char *suffix = strchr(buffer, '.');
+			suffix++; //skips '.'
+			if (!strcmp(suffix, BMP_FILE_SUFFIX)) 	bmp = true;
+			else 									bmp = false;
+
+			fpga_send_data_from_file(data_path, bmp); // Send data to FPGA
 			fpga_run(); // Run FPGA (waits for ACK)
 			usleep(selected_script.transfer_delay); // Sleep
 		}

@@ -3,6 +3,8 @@
 
 #include "compiler.h"
 
+#define PICTURE_SIZE 320*240
+
 #define screen_display_error_messagef(...)\
 {\
 	static char sprintf_buf[256];\

@@ -20,7 +20,7 @@
 /*! \brief Sends data to the FPGA from a file
  * \param *data_path The path to the file
  */
-int fpga_send_data_from_file(char *data_path);
+int fpga_send_data_from_file(char *data_path, bool bmp);
 
 /*! \brief Sends data to the FPGA from memory
  * \param *words The list of 8 bit words to be sent
