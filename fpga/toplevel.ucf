@@ -202,6 +202,10 @@ NET "avr_interrupt" LOC = P5;
 NET "state[2]" LOC = P194;
 NET "state[1]" LOC = P184;
 NET "state[0]" LOC = P183;
+#NET "state[2]" LOC = P81;
+#NET "state[1]" LOC = P84;
+#NET "state[0]" LOC = P86;
 
 #	state_ready : in std_logic);								-- FPGA_IN_25
 NET "state_ready" LOC = P175;
+#NET "state_ready" CLOCK_DEDICATED_ROUTE = FALSE;

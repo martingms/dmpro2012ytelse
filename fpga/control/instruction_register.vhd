@@ -49,8 +49,8 @@ architecture Behavioral of instruction_register is
 begin
 
 	mem_addr <= (others => '0');
-	mem_data <= (others => '0');
-	mem_write <= '0';
+	mem_data <= (others => 'Z');
+	mem_write <= '1';
 	
 	instruction <= (others => '0');
 

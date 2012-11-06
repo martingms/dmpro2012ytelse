@@ -97,6 +97,9 @@ begin
 					if col = 320 then
 						col := 0;
 						row := row + 1;
+						if row = 240 then
+							row := 0;
+						end if;
 					end if;
 				end if;
 				counter := counter + 1;

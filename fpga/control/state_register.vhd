@@ -46,9 +46,9 @@ architecture Behavioral of state_register is
 
 begin
 
-	update_incoming_state: process(state_ready)
+	update_incoming_state: process(clk)
 	begin
-		if rising_edge(state_ready) then
+		if rising_edge(clk) then
 			incoming_state <= state_in;
 		end if;
 	end process update_incoming_state;

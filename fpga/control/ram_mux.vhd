@@ -55,14 +55,36 @@ begin
 
 	MUX : process(selector, in0_write_enable, in0_addr, in0_data, in1_write_enable, in1_addr, in1_data, out_data)
 	begin
+		if in0_write_enable = '1' then
+			in0_data <= out_data;
+		else
+			in0_data <= (others => 'Z');
+		end if;
+		
+		if in1_write_enable = '1' then
+			in1_data <= out_data;
+		else
+			in1_data <= (others => 'Z');
+		end if;
+		
 		if (selector = '0') then
 			out_write_enable <= in0_write_enable;
 			out_addr <= in0_addr;
-			out_data <= in0_data; -- Does this work?
+			if in0_write_enable = '1' then
+				out_data <= (others => 'Z');
+			else
+				out_data <= in0_data;
+			end if;
 		else
 			out_write_enable <= in1_write_enable;
 			out_addr <= in1_addr;
-			out_data <= in1_data;
+			if in1_write_enable = '1' then
+				out_data <= (others => 'Z');
+				in1_data <= out_data;
+			else
+				in1_data <= (others => 'Z');
+				out_data <= in1_data;
+			end if;
 		end if;
 	end process;
 

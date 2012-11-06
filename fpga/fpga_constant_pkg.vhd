@@ -42,5 +42,7 @@ package FPGA_CONSTANT_PKG is
 	constant RAM_DATA_ADDRESS_WIDTH		: integer	:= 21;
 	constant RAM_PROGRAM_WORD_WIDTH		: integer	:= 24;
 	constant RAM_PROGRAM_ADDRESS_WIDTH	: integer	:= 16;
+	constant RAM_VGA_WORD_WIDTH			: integer	:= 8;
+	constant RAM_VGA_ADDRESS_WIDTH		: integer	:= 19;
 
 end FPGA_CONSTANT_PKG;

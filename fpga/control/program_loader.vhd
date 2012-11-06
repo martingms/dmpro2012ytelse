@@ -51,8 +51,8 @@ architecture Behavioral of program_loader is
 begin
 
 	mem_addr <= (others => '0');
-	mem_data <= (others => '0');
-	mem_write <= '0';
+	mem_data <= (others => 'Z');
+	mem_write <= '1';
 	
 	avr_interrupt <= '0';
 
