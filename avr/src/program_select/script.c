@@ -17,7 +17,6 @@ int load_script(char *script_path) {
 	// Read script file
 	for (i=0, line=0; read(fd, &c_buffer, 1) > 0; ++i) {
 
-
 		if (c_buffer == '\n') {
 			line++;			// Go to next line in script file
 			i=0; 			// Reset character counter

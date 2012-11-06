@@ -12,56 +12,8 @@
 #include "compiler.h"
 
 
-// TODO dette ligger også i 'shades_of_gray.h' under BOARDS
-// når vi bytter til PCBen kan det under fjernes
-// ------------------------------------ //
-/*
-#define FPGA_IO_00 AVR32_PIN_PA25
-#define FPGA_IO_01 AVR32_PIN_PA26
-#define FPGA_IO_02 AVR32_PIN_PA27
-#define FPGA_IO_03 AVR32_PIN_PA28
-#define FPGA_IO_04 AVR32_PIN_PC00
-#define FPGA_IO_05 AVR32_PIN_PC01
-#define FPGA_IO_06 AVR32_PIN_PB00
-#define FPGA_IO_07 AVR32_PIN_PB01
-#define FPGA_IO_CTRL AVR32_PIN_PB02
-
-#define FPGA_IN_00 AVR32_PIN_PB03
-#define FPGA_IN_01 AVR32_PIN_PB04
-#define FPGA_IN_02 AVR32_PIN_PB05
-#define FPGA_IN_03 AVR32_PIN_PB06
-#define FPGA_IN_04 AVR32_PIN_PB07
-#define FPGA_IN_05 AVR32_PIN_PB08
-#define FPGA_IN_06 AVR32_PIN_PB09
-#define FPGA_IN_07 AVR32_PIN_PB10
-#define FPGA_IN_08 AVR32_PIN_PB11
-#define FPGA_IN_09 AVR32_PIN_PB12
-#define FPGA_IN_10 AVR32_PIN_PA29
-#define FPGA_IN_11 AVR32_PIN_PA30
-#define FPGA_IN_12 AVR32_PIN_PB13
-#define FPGA_IN_13 AVR32_PIN_PB14
-#define FPGA_IN_14 AVR32_PIN_PC04
-#define FPGA_IN_15 AVR32_PIN_PC05
-#define FPGA_IN_16 AVR32_PIN_PB15
-#define FPGA_IN_17 AVR32_PIN_PX35
-#define FPGA_IN_18 AVR32_PIN_PB16
-#define FPGA_IN_19 AVR32_PIN_PX36
-#define FPGA_IN_20 AVR32_PIN_PB17
-#define FPGA_IN_21 AVR32_PIN_PX37
-#define FPGA_IN_22 AVR32_PIN_PB18
-#define FPGA_IN_23 AVR32_PIN_PX38
-#define FPGA_IN_24 AVR32_PIN_PB19
-#define FPGA_IN_25 AVR32_PIN_PX39
-#define FPGA_IN_26 AVR32_PIN_PX00
-#define FPGA_IN_27 AVR32_PIN_PX01
-#define FPGA_IN_28 AVR32_PIN_PX02
-
-#define FPGA_BUS_SIZE 38
-// ------------------------------------ //
-*/
-
 int fpga_bus[] = {
-		FPGA_IO_00,
+		FPGA_IO_00,	// 0 (FPGA_IO_BUS_OFFSET)
 		FPGA_IO_01,
 		FPGA_IO_02,
 		FPGA_IO_03,
@@ -70,7 +22,7 @@ int fpga_bus[] = {
 		FPGA_IO_06,
 		FPGA_IO_07,
 		FPGA_IO_CTRL,
-		FPGA_IN_00, //9
+		FPGA_IN_00, //9 (FPGA_DATA_IN_BUS_OFFSET)
 		FPGA_IN_01,
 		FPGA_IN_02,
 		FPGA_IN_03,
@@ -94,9 +46,9 @@ int fpga_bus[] = {
 		FPGA_IN_21, //30
 		FPGA_IN_22,
 		FPGA_IN_23,
-		FPGA_IN_24,	//33
-		FPGA_IN_25, //34
-		FPGA_IN_26, //35
+		FPGA_IN_24,	//33 (FPGA_INC_CLK_LINE)
+		FPGA_IN_25, //34 (FPGA_SET_STATE_LINE)
+		FPGA_IN_26, //35 (FPGA_STATE_OFFSET)
 		FPGA_IN_27, //36
 		FPGA_IN_28  //37
 };

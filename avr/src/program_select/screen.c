@@ -22,6 +22,8 @@
 #define SCREEN_PREFIX_ITEM				' '
 #define SCREEN_PREFIX_SELECTED_ITEM 	'*'
 
+#define FPGA_PROGRAM_SHOW_PICTURE		"/show_picture.fpga" //TODO ugyldig definisjon
+
 
 char screen[SCREEN_MAX_ITEMS+4][SCREEN_MAX_WIDTH];
 
@@ -56,12 +58,10 @@ void screen_make_bitmap_from_buffer() {
 }
 
 void screen_draw_bitmap_on_screen(void) {
-#define SIZE 320*240 //TODO usikker på størrelsen
-
-	//fpga_send_program(char *program_path); TODO program for å vise bilde
-	U8 buffer[SIZE];
+	fpga_send_program(FPGA_PROGRAM_SHOW_PICTURE);
+	U8 buffer[PICTURE_SIZE];
 	str2img_read_block(buffer);
-	fpga_send_data_from_memory(buffer, SIZE);
+	fpga_send_data_from_memory(buffer, PICTURE_SIZE);
 }
 
 /**
@@ -98,7 +98,6 @@ void screen_load_data_to_buffer(enum data_type type) {
 
 	} else if (type == PROGRAM) {
 		fb_iterator_init(FS_FILE);															// Init for files
-		fb_iterator_set_ext("");															// Set extension TODO?
 		memcpy(screen[0], SCREEN_LINE_SELECT_PROGRAM, strlen(SCREEN_LINE_SELECT_PROGRAM));	// Set top line of screen
 	}
 
