@@ -43,8 +43,7 @@ void program_select_start(void) {
 }
 
 void button_push(U8 button) {
-	if (busy)
-		return;
+	if (busy) return;
 
 	if ((button & UP_BUTTON) && (menu_item_selected > 0)) {
 		screen_move_cursor(-1);

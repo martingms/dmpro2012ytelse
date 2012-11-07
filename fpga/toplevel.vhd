@@ -195,9 +195,9 @@ begin
 
 	vga_mem_addr(20 downto 19) <= (others => '0');
 	
-	vga_ram_addr <= (others => '0');
-	vga_ram_data <= (others => 'Z');
-	vga_ram_write <= '0';
+--	vga_ram_addr <= (others => '0');
+--	vga_ram_data <= (others => 'Z');
+--	vga_ram_write <= '0';
 	vga_value(1 downto 0) <= (others => '0');
 	avr_data_out <= (others => '0');
 	
@@ -229,9 +229,9 @@ begin
 			pixel_in => vga_pixel_in,
 			mem_addr_in => vga_mem_addr_in,
 			
-			mem_addr => vga_mem_addr(18 downto 0),
-			mem_we => vga_mem_write,
-			mem_data => vga_mem_data
+			mem_addr => vga_ram_addr(18 downto 0),
+			mem_we => vga_ram_write,
+			mem_data => vga_ram_data
 		);
 	
 	program_ram_mux: ram_mux

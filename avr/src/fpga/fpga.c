@@ -16,6 +16,10 @@
 #include "screen.h"
 
 #include <fsaccess.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 
 #define DEFAULT_FPGA_LISTENER &fpga_receive_data
 #define DATA_WORD_LENGTH 		1
@@ -34,7 +38,6 @@ int fpga_send(int(*get_word) (U32), int transfer_state, int word_width) {
 	// S.1 - S.6 refers to the stages in 'AVR sends program to the FPGA'
 	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
 	U32 buffer;
-	int i=0;
 
 	fpga_set_state(transfer_state);											// S.1
 	fpga_set_listener(&receive_ack);
@@ -43,7 +46,6 @@ int fpga_send(int(*get_word) (U32), int transfer_state, int word_width) {
 		bus_send_data(buffer, FPGA_DATA_IN_BUS_OFFSET, word_width*8);// S.2
 		bus_toggle_inc_clk_line();											// S.3
 		while (acked == FALSE);												// S.4
-		i++;
 	}																		// S.5
 	fpga_set_listener(DEFAULT_FPGA_LISTENER);
 	fpga_set_state(FPGA_STATE_STOP);										// S.6
@@ -71,7 +73,7 @@ int data_from_memory(U32 buffer) {
 }
 
 /**
- * Takes 3 bytes from 'data_buffer' and puts it in one U32,
+ * Takes 3 bytes from 'data_buffer' and puts it in the U32 buffer,
  * bytewise: 0-B1-B2-B3, where B1 is the first byte read from the file.
  * Will not exceed 'n_bytes'.
  * Returns number of bytes read.
@@ -133,11 +135,17 @@ int fpga_send_program(char *program_path) {
 
 void fpga_receive_data(void) {
 #define TRANSFER_SIZE_N_BYTES 4
+#define DATA_DUMP_PATH "A:/lena_dump.data"
 	int i;
 	U8 word = 0;
 	U32 tmp;
 	U32 transfer_size = 0;
 	fpga_set_listener(&receive_ack);
+
+	// Prepare file for data dump
+	int fd = open(DATA_DUMP_PATH, O_WRONLY | O_APPEND | O_CREAT, S_IRWXU);
+	char text[] = "\n\n\nSTARTING NEW DATA DUMP FROM LENA:\n";
+	write(fd, text, strlen(text));
 
 	// Read size of data
 	for (i = 0; i < TRANSFER_SIZE_N_BYTES; ++i) {
@@ -155,10 +163,10 @@ void fpga_receive_data(void) {
 		acked = FALSE;
 		word = bus_receive_data();	// Read bus
 		bus_toggle_inc_clk_line();	// Increment CLK
-		//TODO lagre word et sted
+		write(fd, &word, sizeof(word)); // Dumps word to SD-card
 		while (acked == FALSE);		// Wait for ACK (next byte)
 	}
-
+	close(fd);
 	fpga_set_listener(DEFAULT_FPGA_LISTENER); // Stop listening for ACKs
 }
 

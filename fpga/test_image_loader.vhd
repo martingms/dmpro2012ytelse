@@ -79,6 +79,8 @@ begin
 	
 	process (clk)
 		variable counter : natural range 0 to 1 := 0;
+		variable flipcounter : natural range 0 to 60 := 0;
+		variable flip : natural range 0 to 1 := 0;
 		variable col : natural range 0 to 320 := 0;
 		variable row : natural range 0 to 240 := 0;
 	begin
@@ -86,7 +88,11 @@ begin
 			if row /= 240 then
 				if counter = 0 then
 					if row < 120 and col < 160 then
-						block_ram_addr_in <= conv_std_logic_vector(160 * row + col, 15);
+						if flip = 0 then
+							block_ram_addr_in <= conv_std_logic_vector(160 * row + col, 15);
+						else
+							block_ram_addr_in <= conv_std_logic_vector(160 * row + 159 - col, 15);
+						end if;
 					else
 						block_ram_addr_in <= conv_std_logic_vector(0, 15);
 					end if;
@@ -99,6 +105,10 @@ begin
 						row := row + 1;
 						if row = 240 then
 							row := 0;
+							flipcounter := flipcounter + 1;
+							if flipcounter = 0 then
+								flip := flip + 1;
+							end if;
 						end if;
 					end if;
 				end if;
