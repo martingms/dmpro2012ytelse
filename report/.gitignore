@@ -6,3 +6,7 @@
 *.lot
 *.lol
 *.out
+*.texpadtmp
+*.tpbuild
+*.dvi
+*.ps
