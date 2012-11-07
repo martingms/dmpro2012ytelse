@@ -58,7 +58,7 @@ void bus_init(void) {
 	for (i = 0; i < FPGA_BUS_SIZE; ++i) {
 		// Enable pins
 		gpio_enable_gpio_pin(fpga_bus[i]);
-		// Pull output bus down TODO nødvendig?
+		// Pull output bus down
 		if (i >= FPGA_DATA_IN_BUS_OFFSET) {
 			gpio_clr_gpio_pin(fpga_bus[i]);
 		}
