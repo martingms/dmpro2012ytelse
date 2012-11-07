@@ -50,50 +50,44 @@ end data_loader;
 
 architecture Behavioral of data_loader is
 
-	signal big_word : std_logic_vector(23 downto 0);
-	
-	signal cur_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0) := (others => '0');
-	signal cur_word : natural range 0 to 2 := 0;
+	signal running : std_logic := '0';
+	signal next_address : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0) := (others => '0');
+	signal current_address : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0) := (others => '0');
 
 begin
 	
-	update_big_word: process(clk)
+	clock_running: process(clk)
 	begin
 		if rising_edge(clk) then
-			if avr_data_in_ready = '1' then
-				big_word <= avr_data_in;
+			if avr_data_in_ready = '1' and running = '0' then
+				running <= '1';
+			else
+				running <= '0';
 			end if;
 		end if;
 	end process;
 	
-	run_loader: process(clk)
+	clock_current_address: process(clk)
 	begin
 		if rising_edge(clk) then
-			if cur_word /= 0 or avr_data_in_ready = '1' then
-				mem_addr <= cur_addr;
-				case cur_word is
-					when 0 =>	mem_data <= big_word(7 downto 0);
-									cur_word <= 1;
-					when 1 =>	mem_data <= big_word(15 downto 8);
-									cur_word <= 2;
-					when 2 =>	mem_data <= big_word(23 downto 16);
-									cur_word <= 0;
-				end case;
-				mem_write <= '0';
-				
-				cur_addr <= conv_std_logic_vector(unsigned(cur_addr) + 1, RAM_DATA_ADDRESS_WIDTH);
-				
-				if cur_word = 2 then
-					avr_interrupt <= '1';
-				else
-					avr_interrupt <= '0';
-	 			end if;
-			else
-				mem_addr <= (others => '0');
-				mem_data <= (others => 'Z');
-				mem_write <= '1';
-				avr_interrupt <= '0';
-			end if;
+			current_address <= next_address;
+		end if;
+	end process;
+	
+	update_signals: process(running, current_address, avr_data_in)
+	begin
+		if running = '1' then
+			mem_addr <= current_address;
+			mem_data <= avr_data_in(7 downto 0);
+			mem_write <= '0';
+			avr_interrupt <= '1';
+			
+			next_address <= conv_std_logic_vector(unsigned(current_address) + 1, RAM_DATA_ADDRESS_WIDTH);
+		else
+			mem_addr <= (others => '0');
+			mem_data <= (others => 'Z');
+			mem_write <= '1';
+			avr_interrupt <= '0';
 		end if;
 	end process;
 
