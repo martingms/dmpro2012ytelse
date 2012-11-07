@@ -51,38 +51,39 @@ end data_loader;
 architecture Behavioral of data_loader is
 
 	signal running : std_logic := '0';
+	signal next_running : std_logic := '0';
+	
+	signal address : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0) := (others => '0');
 	signal next_address : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0) := (others => '0');
-	signal current_address : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0) := (others => '0');
 
 begin
 	
-	clock_running: process(clk)
+	update_next_running: process(running, avr_data_in_ready)
 	begin
-		if rising_edge(clk) then
-			if avr_data_in_ready = '1' and running = '0' then
-				running <= '1';
-			else
-				running <= '0';
-			end if;
+		if avr_data_in_ready = '1' and running = '0' then
+			next_running <= '1';
+		else
+			next_running <= '0';
 		end if;
 	end process;
 	
-	clock_current_address: process(clk)
+	clock_signals: process(clk)
 	begin
 		if rising_edge(clk) then
-			current_address <= next_address;
+			running <= next_running;
+			address <= next_address;
 		end if;
 	end process;
 	
-	update_signals: process(running, current_address, avr_data_in)
+	update_signals: process(running, address, avr_data_in)
 	begin
 		if running = '1' then
-			mem_addr <= current_address;
+			mem_addr <= address;
 			mem_data <= avr_data_in(7 downto 0);
 			mem_write <= '0';
 			avr_interrupt <= '1';
 			
-			next_address <= conv_std_logic_vector(unsigned(current_address) + 1, RAM_DATA_ADDRESS_WIDTH);
+			next_address <= conv_std_logic_vector(unsigned(address) + 1, RAM_DATA_ADDRESS_WIDTH);
 		else
 			mem_addr <= (others => '0');
 			mem_data <= (others => 'Z');
