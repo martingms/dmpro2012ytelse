@@ -1,20 +1,23 @@
 \section{Assignment}
 The task given was to create an {\em array-based} parallel image processor with
-focus on performance. After some ideas and calculations, we decided to escalate
-the goal to an image processor performant enough to run video. Fast image
-processing is essential in robots and in artificial intelligence in order to
-work in the real world. Autonomous cars and robots need to process images from
-image sensors fast enough to react and e.g. prevent accidents. Image processing
-in general is also highly applicable in the medical field and in the petroleum
-industry.
-% Last sentence = pasta. Should tweak it a bit.
+focus on performance. After some calculations\TODO{Should we show the actual
+  calculations?}, we decided to escalate our goal to a parallel image processor
+with enough throughput to show a low quality unprocessed video, as a proof of
+concept.
+
+Fast image processing is essential in robots\cite{miller1989r-vision,
+  thrun2007stanley} and in artificial intelligence\cite{hwang1989parallel} in
+order to work in the real world. Autonomous cars and robots need to process
+images from image sensors fast enough to react and e.g. prevent
+accidents\cite{aufrere2003coll-avoid}. Image processing in general is also
+highly applicable in the medical field\cite{luong2009medical-image,
+  sternberg1983biomedical} and in the petroleum
+industry\cite{ferrari2007steam-images}.
 
 An array processor is a grid of processing elements, where each of the
 processing elements are only able to communicate with its north, south, east and
 west neighbours. All the processing elements must perform the same instruction
 at all times.
-
-\TODO{Fill in some more here?}
 
 \subsection{Original Assignment Text}
 
@@ -43,10 +46,10 @@ into two independent projects: a) Performance and b) Energy efficiency. The goal
 of group a) is to achieve maximum performance while group b) should try to
 balance performance and energy. The reports from both groups should include an
 evaluation of prototype performance and energy consumption.
-\end{quotation}
 
 \subsubsection*{Additional requirements}
 The unit must utilize an Atmel AVR micro controller and a Xilinx FPGA. The
 budget is 10.000 NOK, which must cover components and PCB production. The unit
 design must adhere to the limits set by the course staff at any given
 time. Deadlines are given in a separate time schedule.
+\end{quotation}
