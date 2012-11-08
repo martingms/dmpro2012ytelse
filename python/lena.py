@@ -80,6 +80,20 @@ def __assembleNodeInstrI__(fn, parmas):
 	bin += node['instr']['i'][fn]
 	return bin
 
+# Assemble swap instruction
+def __assembleNodeInstrSwap__(params):
+	bin  = "0" + sep + "0" + sep + "010" + sep 
+	regs = params.rsplit(" "); 
+	
+	if (len(regs) == 2):
+		for i in regs:
+			if i in node['regs']:
+				bin += node['regs'][i] + sep
+	else: exit("ERROR: Swap instructions expects exactly 2 input parameters.")
+
+	bin += "00000000" + sep + "000"
+	return bin
+
 # Assemble a NODE instruction into binary code 
 def __assembleNodeInstr__(instr):
 	debug("Assembling SIMD Node instruction '" + instr + "'")
@@ -88,8 +102,9 @@ def __assembleNodeInstr__(instr):
 	fn 			= instr[0]
 	params 	= instr[2]
 	
-	if fn in node['instr']['r']	: output = __assembleNodeInstrR__(fn, params) # R-Functions
-	elif fn in node['instr']['i']	: output = __assembleNodeInstrI__(fn, params) # I-Functions
+	if fn in node['instr']['r']	: output = __assembleNodeInstrR__(fn, params) # R-instructions
+	elif fn in node['instr']['i']	: output = __assembleNodeInstrI__(fn, params) # I-instructions
+	elif fn == "swap"				: output = __assembleNodeInstrSwap__(params) # Swap instruction
 	else								: exit("ERROR: Unrecognized instruction '" + fn + " " + params + "'")
 	
 	#debug(output)
@@ -116,7 +131,7 @@ def main():
 	
 	p = optparse.OptionParser()
 	p.add_option('--node', '-n', default="add R3 R1 R2", help="assemble a single SIMD Node instruction", metavar="INSTR")
-	p.add_option('--debug', '-d', action="store_true", default=False, help="")
+	p.add_option('--debug', '-d', action="store_true", default=False, help="divide instructions into groups for debug")
 	p.add_option('--verbose', '-v', action="store_true", default=False, help="print status messages to stdout")
 	options, arguments = p.parse_args()
 	
