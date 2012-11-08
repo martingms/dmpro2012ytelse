@@ -51,26 +51,32 @@ end data_loader;
 architecture Behavioral of data_loader is
 
 	signal running : std_logic := '0';
-	signal next_running : std_logic := '0';
-	
+	signal toggle_in_value : std_logic := '0';
+	signal data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0) := (others => '0');
 	signal address : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0) := (others => '0');
+	
+	signal next_running : std_logic := '0';
+	signal next_toggle_in_value : std_logic := '0';
 	signal next_address : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0) := (others => '0');
 
 begin
 	
-	update_next_running: process(running, avr_data_in_ready)
+	update_internal_signals: process(running, avr_data_in_ready)
 	begin
-		if avr_data_in_ready = '1' and running = '0' then
+		if running = '0' and avr_data_in_ready /= toggle_in_value then
 			next_running <= '1';
+			next_toggle_in_value <= avr_data_in_ready;
 		else
 			next_running <= '0';
 		end if;
 	end process;
 	
-	clock_signals: process(clk)
+	clock_internal_signals: process(clk)
 	begin
 		if rising_edge(clk) then
 			running <= next_running;
+			toggle_in_value <= next_toggle_in_value;
+			data <= avr_data_in(7 downto 0);
 			address <= next_address;
 		end if;
 	end process;
@@ -79,7 +85,7 @@ begin
 	begin
 		if running = '1' then
 			mem_addr <= address;
-			mem_data <= avr_data_in(7 downto 0);
+			mem_data <= data;
 			mem_write <= '0';
 			avr_interrupt <= '1';
 			

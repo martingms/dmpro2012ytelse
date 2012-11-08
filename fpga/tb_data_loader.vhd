@@ -138,11 +138,16 @@ BEGIN
 		state_ready <= '0';
 		wait for 100 ns;
 		
-		avr_data_in <= "010101011111111110101010";
+		avr_data_in <= "010101010101010111111111";
 		avr_data_in_ready <= '1';
-		wait for 40 ns;
+		wait until avr_interrupt = '1';
 		
+		avr_data_in <= "010101010101010100001111";
 		avr_data_in_ready <= '0';
+		wait until avr_interrupt = '1';
+		
+		avr_data_in <= "010101010101010111110000";
+		avr_data_in_ready <= '1';
 		wait until avr_interrupt = '1';
 
       wait;
