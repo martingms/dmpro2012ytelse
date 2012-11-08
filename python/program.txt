@@ -1,0 +1,19 @@
+# Store some initial value data
+addi R1 ZERO 1 # R1 <= 1
+addi R2 ZERO 2 # R2 <= 2
+addi R3 ZERO 3 # R3 <= 3
+addi R4 ZERO 4 # R4 <= 4
+
+# Do some arithmetic operations
+add R5 R1 R2 # R5  <= R1 + R2
+sub R6 R4 R1 # R6  <= R4 - R1
+slt R7 R1 R2 # R7  <= R1 < R2
+and R8 R1 R2 # R8  <= R1 & R2
+or R9 R1 R2  # R9  <= R1 | R2
+eq R10 R1 R2 # R10 <= R1 = R2
+
+# Do some special instructions
+move R11 R4  # R11 <= R4
+move R12 R4  # R12 <= R4
+sll R11 R11  # R11 <= R11 << 1
+srl R12 R12  # R12 <= R12 >> 1
