@@ -1,35 +1,9 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    01:05:41 11/05/2012 
--- Design Name: 
--- Module Name:    program_loader - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
---
-----------------------------------------------------------------------------------
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+use ieee.std_logic_arith.all;
 library WORK;
 use WORK.FPGA_CONSTANT_PKG.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity program_loader is
 	port (
@@ -48,13 +22,53 @@ end program_loader;
 
 architecture Behavioral of program_loader is
 
-begin
-
-	mem_addr <= (others => '0');
-	mem_data <= (others => 'Z');
-	mem_write <= '1';
+	signal running : std_logic := '0';
+	signal toggle_in_value : std_logic := '0';
+	signal data : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0) := (others => '0');
+	signal address : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0) := (others => '0');
 	
-	avr_interrupt <= '0';
+	signal next_running : std_logic := '0';
+	signal next_toggle_in_value : std_logic := '0';
+	signal next_address : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0) := (others => '0');
+
+begin
+	
+	update_internal_signals: process(running, avr_data_in_ready)
+	begin
+		if running = '0' and avr_data_in_ready /= toggle_in_value then
+			next_running <= '1';
+			next_toggle_in_value <= avr_data_in_ready;
+		else
+			next_running <= '0';
+		end if;
+	end process;
+	
+	clock_internal_signals: process(clk)
+	begin
+		if rising_edge(clk) then
+			running <= next_running;
+			toggle_in_value <= next_toggle_in_value;
+			data <= avr_data_in(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
+			address <= next_address;
+		end if;
+	end process;
+	
+	update_signals: process(running, address, avr_data_in)
+	begin
+		if running = '1' then
+			mem_addr <= address;
+			mem_data <= data;
+			mem_write <= '0';
+			avr_interrupt <= '1';
+			
+			next_address <= conv_std_logic_vector(unsigned(address) + 1, RAM_PROGRAM_ADDRESS_WIDTH);
+		else
+			mem_addr <= (others => '0');
+			mem_data <= (others => 'Z');
+			mem_write <= '1';
+			avr_interrupt <= '0';
+		end if;
+	end process;
 
 end Behavioral;
 

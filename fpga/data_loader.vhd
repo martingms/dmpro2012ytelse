@@ -1,37 +1,9 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    01:05:41 11/05/2012 
--- Design Name: 
--- Module Name:    program_loader - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
---
-----------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 library WORK;
 use WORK.FPGA_CONSTANT_PKG.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity data_loader is
 	port (
@@ -76,7 +48,7 @@ begin
 		if rising_edge(clk) then
 			running <= next_running;
 			toggle_in_value <= next_toggle_in_value;
-			data <= avr_data_in(7 downto 0);
+			data <= avr_data_in(RAM_DATA_WORD_WIDTH - 1 downto 0);
 			address <= next_address;
 		end if;
 	end process;
