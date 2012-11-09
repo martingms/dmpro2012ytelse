@@ -13,6 +13,7 @@ entity vgacontroller is
 		
 		pixel_in    : in std_logic_vector(7 downto 0);
 		mem_addr_in : in std_logic_vector(18 downto 0);
+		frame_flag  : in std_logic;
 		
 		mem_addr    : out std_logic_vector(18 downto 0);
 		mem_we      : out std_logic;
@@ -44,7 +45,8 @@ architecture Behavioral of vgacontroller is
 			vSync      : out STD_LOGIC;
 			x_next     : out std_logic_vector(9 downto 0); -- Enough to represent 640 pixels
 			y_next     : out std_logic_vector(8 downto 0); -- Enough to represent 480 pixels
-			pixel_next : in std_logic_vector(7 downto 0)
+			pixel_next : in std_logic_vector(7 downto 0);
+			frame_flag : in std_logic
 		);
 	end component;
 
@@ -52,31 +54,39 @@ architecture Behavioral of vgacontroller is
 		port (
 			clk         : in std_logic;
 			
+			-- From control core.
 			pixel_in    : in std_logic_vector(7 downto 0);
 			mem_addr_in : in std_logic_vector(18 downto 0);
+			frame_flag  : in std_logic;
 			
-			mem_addr    : out std_logic_vector(18 downto 0);
+			-- To and from physical vga-memory.
+			mem_addr    : out std_logic_vector(19 downto 0);
 			mem_we      : out std_logic;
 			mem_data    : inout std_logic_vector(7 downto 0);
 			
+			-- To and from pixel-pusher.
 			x_coord     : in std_logic_vector(9 downto 0); -- Enough to represent 640 pixels
 			y_coord     : in std_logic_vector(8 downto 0); -- Enough to represent 480 pixels
-			pixel_out   : out std_logic_vector(7 downto 0)
+			pixel_out   : out std_logic_vector(7 downto 0);
+			vSync       : in std_logic
 		);
 	end component;
 
 	signal x_next : std_logic_vector(9 downto 0); -- Enough to represent 640 pixels
 	signal y_next : std_logic_vector(8 downto 0); -- Enough to represent 480 pixels
 	signal pixel_next : std_logic_vector(7 downto 0);
+	signal vSync_internal : std_logic;
 
 begin
+	-- Split vSync to physical vga-port and to memctrl.
+	vSync <= vSync_internal;
 
 	inst_pixelpusher : pixelpusher
 		port map (
 			pixelClock => clk_vga,
 			greytone => greytone,
 			hSync => hSync,
-			vSync => vSync,
+			vSync => vSync_internal,
 			x_next => x_next,
 			y_next => y_next,
 			pixel_next => pixel_next
@@ -88,6 +98,7 @@ begin
 			
 			pixel_in => pixel_in,
 			mem_addr_in => mem_addr_in,
+			frame_flag => frame_flag,
 			
 			mem_addr => mem_addr,
 			mem_we => mem_we,
@@ -95,7 +106,8 @@ begin
 			
 			x_coord => x_next,
 			y_coord => y_next,
-			pixel_out => pixel_next
+			pixel_out => pixel_next,
+			vSync => vSync_intenal
 		);
 
 end Behavioral;
