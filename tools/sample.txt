@@ -17,3 +17,13 @@ move R11 R4  # R11 <= R4
 move R12 R4  # R12 <= R4
 sll R11 R11  # R11 <= R11 << 1
 srl R12 R12  # R12 <= R12 >> 1
+
+# Swap data
+nop
+swap R12 R1  # R1  <= SOURCE DATA
+nop
+
+# Node communication (N, S, E, W)
+send R1 R2 R3 R4
+fwrd R5 R6 R7 R8
+store R9 R10 R11 R12

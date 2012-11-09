@@ -1,9 +1,11 @@
 #!/usr/bin/env python
+
 import optparse
 import re
 
+# @todo: add support for control core instructions
 # @todo: add support for mask bit keyword
-# @todo: special instructions like move, mul and branch
+# @todo: CISC instructions; mul, branch (lables)
 
 verbose = False
 sep  = ""
@@ -36,71 +38,61 @@ node = {
 			'or'	: '100', #  or R1 R2 R3
 			'eq'	: '101'  #  eq R1 R2 R3
 		},
-		# I-Format instructions
+		# I-Format instruction
+		# Quick translation into R-Format 
 		'i' : {
-			'addi' : '000', # andi R1 R2 C
-			'subi' : '001', # subi R1 R2 C
-			'slti' : '010', # slti R1 R2 C
-			'andi' : '011', # andi R1 R2 C
-			'ori' 	: '100', # ori  R1 R2 C
-			'eqi' 	: '101'  # eqi  R1 R2 C
+			'addi'	: '000',
+			'subi'	: '001',
+			'slti'	: '010',
+			'andi'	: '011',
+			'ori'	: '100',
+			'eqi'	: '101'
 		},
 		# Two operands instructions
 		's' : {
 			'move' : '000', # move R1 R2
 			'sll'	: '110', #  sll R1 R2
 			'srl'	: '111'  #  srl R1 R2
-		} 
+		},
+		# M-Format instructions
+		# Message passing between nodes
+		'm' : {
+			'send' : '100',
+			'store': '101',
+			'fwrd' : '110'
+		}
 	}
 }
 
-# Assemble Node R-Instructions
-def __assembleNodeInstrR__(fn, parmas):
-	bin  = "0" + sep + "0" + sep + "000" + sep 
-	regs = parmas.rsplit(" "); 
-	
-	if (len(regs) == 3):
-		for i in regs:
-			if i in node['regs']:
-				bin += node['regs'][i] + sep
-	else: exit("Assembler error: R-Format Instructions expects exactly 3 input parameters.")
-
-	bin += "0000" + sep + node['instr']['r'][fn]
-	return bin
-
-# Assemble Node I-Instruction
-def __assembleNodeInstrI__(fn, parmas):
-	bin  = "0" + sep + "0" + sep + "001" + sep 
-	regs = parmas.rsplit(" "); 
-	
-	# @todo check for constant
-	if (len(regs) == 3):
-		for i in regs:
-			if i in node['regs']:
-				bin += node['regs'][i] + sep
-			elif i.isdigit():
-				bin += dec2bin(i, 8) + sep
-	else: exit("Assembler error: I-Format Instructions expects exactly 3 input parameters.")
-
-	bin += node['instr']['i'][fn]
-	return bin
-
-# Special case instructions
-def __assembleNodeInstrS__(op, fn, params):
+# Assemble node instruction
+def __assembleNodeInstrN__(op, fn, regs, n):
+	debug("OP: " + op + ", FN: " + fn + ", REGS: " + regs + ", N: " + str(n))
 	bin  = "0" + sep + "0" + sep + op + sep 
-	regs = params.rsplit(" "); 
+	regs = regs.rsplit(" "); 
 	
-	# Get ALU function code
-	if not fn.isdigit(): fn = node['instr']['s'][fn]
+	if regs == ['']: regs = '' # hack for 0 regs
+	if len(regs) != n: exit("error: Instruction expects " + str(n) + " input params.")
 	
-	if (len(regs) == 2):
-		for i in regs:
-			if i in node['regs']:
-				bin += node['regs'][i] + sep
-	else: exit("Assembler error: Swap and move instructions expects exactly 2 input parameters.")
-
-	bin += "0000" + sep + "0000" + sep + fn
-	return bin
+	if op == "001": n = n-1
+	
+	# Assemble registers
+	for i in range(n):
+		reg = regs[i]
+		if reg in node['regs']:
+			bin += node['regs'][reg] + sep
+		else: exit("error: Register '" + reg + "' does not exist.")
+	
+	# Remaining 4-n words
+	if op == "001":
+		const = regs[2]
+		if const.isdigit():
+			bin += dec2bin(const, 8) + sep
+		else: exit("error: Constant '" + const + "' is not a valid integer.")
+	else:
+		for i in range(n, 4):
+			bin += "0000" + sep
+	
+	return (bin + fn)
 
 # Assemble a NODE instruction into binary code 
 def __assembleNodeInstr__(instr):
@@ -109,12 +101,14 @@ def __assembleNodeInstr__(instr):
 	instr 		= instr.partition(" ");
 	fn 			= instr[0]
 	params 	= instr[2]
-	
-	if fn in node['instr']['r']	: output = __assembleNodeInstrR__(fn, params) # R-instructions
-	elif fn in node['instr']['i']	: output = __assembleNodeInstrI__(fn, params) # I-instructions
-	elif fn in node['instr']['s']	: output = __assembleNodeInstrS__("000", fn, params) # Two operands instructions
-	elif fn == "swap"				: output = __assembleNodeInstrS__("010", "000", params) # Swap instruction
-	else								: exit("Assembler error: Unrecognized instruction '" + fn + " " + params + "'")
+		
+	if fn in node['instr']['r']	: output = __assembleNodeInstrN__("000", node['instr']['r'][fn], params, 3)
+	elif fn in node['instr']['i']	: output = __assembleNodeInstrN__("001", node['instr']['i'][fn], params, 3)
+	elif fn in node['instr']['s']	: output = __assembleNodeInstrN__("000", node['instr']['s'][fn], params, 2)
+	elif fn in node['instr']['m']	: output = __assembleNodeInstrN__(node['instr']['m'][fn], "000", params, 4)
+	elif fn == "swap"				: output = __assembleNodeInstrN__("010", "000", params, 2)
+	elif fn == "nop"					: output = __assembleNodeInstrN__("000", "000", "", 0)
+	else								: exit("error: Unrecognized instruction: '" + fn + " " + params + "'")
 	
 	debug(output)
 	return output
@@ -125,7 +119,8 @@ def __assembleInstrFile__(input, output):
 	r = open(input, 'r')
 	w = open(output, 'w')
 	for instr in r:
-		instr = re.sub("#[^^]+", "", instr) # remove comments
+		debug("Reading line '" + instr + "'")
+		instr = re.sub("#[^$]+", "", instr) # remove comments
 		instr = instr.strip()
 		if instr:
 			# @todo: one too many new line (\n) at end of file
@@ -135,7 +130,7 @@ def __assembleInstrFile__(input, output):
 	r.close()
 	w.close()
 	
-	return "Assembly completed and stored in '" + output + "'!"
+	return "Assembly completed sucessfully. Output is stored in '" + output + "'!"
 
 # Print (if verbose)
 def debug(str) :
@@ -159,16 +154,14 @@ def main():
 	p = optparse.OptionParser()
 	p.add_option('--node', '-n', help="assemble a single SIMD Node instruction", metavar="INSTR")
 	p.add_option('--input', '-i', help="assemble an entire FPGA program file", metavar="INPUT_FILE")
-	p.add_option('--output', '-o', default="program.bin", help="assembled FPGA program binary file", metavar="OUTPUT_FILE")
-	p.add_option('--debug', '-d', action="store_true", default=False, help="divide instructions into groups for debug")
+	p.add_option('--output', '-o', default="", help="assembled FPGA program binary file", metavar="OUTPUT_FILE")
+	p.add_option('--group', '-d', action="store_true", default=False, help="Group instructions into logical groups for debuging")
 	p.add_option('--verbose', '-v', action="store_true", default=False, help="print status messages to stdout")
 	options, arguments = p.parse_args()
 	
-	#print options, arguments
-	
-	# Debug seperator
-	if options.debug: sep = " "
-	if options.verbose: verbose = " "
+	if options.group: sep = " "
+	if options.verbose: verbose = True
+	if options.input and not options.output: options.output = re.sub("(\\.\\w+)$", ".bin", options.input)
 	
 	if options.input				: print __assembleInstrFile__(options.input, options.output)
 	elif options.node			: print __assembleNodeInstr__(options.node)
