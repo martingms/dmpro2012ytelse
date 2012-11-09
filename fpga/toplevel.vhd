@@ -31,7 +31,7 @@ entity toplevel is
 		vga_value : out std_logic_vector(9 downto 0);
 		
 		-- AVR data transfer
-		avr_data_in : in std_logic_vector(23 downto 0);		-- FPGA_IN_[23-0]
+		avr_data_in : in std_logic_vector(7 downto 0);		-- FPGA_IN_[23-0]
 		avr_data_in_ready : in std_logic;						-- FPGA_IN_24
 		avr_data_out : out std_logic_vector(7 downto 0);	-- FPGA_IO_[7-0]
 		avr_interrupt : out std_logic;							-- FPGA_IO_CTRL
@@ -194,6 +194,16 @@ architecture behavioral of toplevel is
 			step_s : out std_logic);
 	end component;
 	
+	component test_screen_copy is
+		port (
+			clk : in  std_logic;
+			disable : in  std_logic;
+			pixel_in : in std_logic_vector(7 downto 0);
+			pixel_out : out std_logic_vector(7 downto 0);
+			mem_addr : out std_logic_vector(18 downto 0)
+		);
+	end component;
+	
 	signal clk_vga : std_logic;
 	signal clk_cpu : std_logic;
 	
@@ -219,10 +229,6 @@ architecture behavioral of toplevel is
 	signal instruction_register_mem_write : std_logic;
 	signal instruction_register_mem_data : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
 	
-	signal vga_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
-	signal vga_mem_write : std_logic;
-	signal vga_mem_data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
-	
 	signal control_core_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
 	signal control_core_mem_write : std_logic;
 	signal control_core_mem_data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
@@ -234,14 +240,19 @@ architecture behavioral of toplevel is
 	signal dma_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
 	signal dma_mem_write : std_logic;
 	signal dma_mem_data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
+	
+	signal avr_data_in_modified : std_logic_vector(23 downto 0);
+	
+	signal il_pixel_in : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
+	signal il_pixel_out : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
+	signal il_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
 
 begin
 
-	vga_mem_addr(20 downto 19) <= (others => '0');
+	avr_data_in_modified(23 downto 8) <= (others => '0');
+	avr_data_in_modified(7 downto 0) <= avr_data_in;
 	
---	vga_ram_addr <= (others => '0');
---	vga_ram_data <= (others => 'Z');
---	vga_ram_write <= '0';
+	il_mem_addr(20 downto 19) <= (others => '0');
 	vga_value(1 downto 0) <= (others => '0');
 	avr_data_out <= (others => '0');
 	
@@ -271,8 +282,8 @@ begin
 			hSync => vga_h_sync,
 			vSync => vga_v_sync,
 			
-			pixel_in => vga_pixel_in,
-			mem_addr_in => vga_mem_addr_in,
+			pixel_in => il_pixel_out,
+			mem_addr_in => il_mem_addr(18 downto 0),
 			
 			mem_addr => vga_ram_addr(18 downto 0),
 			mem_we => vga_ram_write,
@@ -326,9 +337,9 @@ begin
 		port map (
 			selector => dma_active,
 			
-			in0_write_enable => vga_mem_write,
-			in0_addr => vga_mem_addr,
-			in0_data => vga_mem_data,
+			in0_write_enable => '0',
+			in0_addr => il_mem_addr,
+			in0_data => il_pixel_in,
 			
 			in1_write_enable => dma_mem_write,
 			in1_addr => dma_mem_addr,
@@ -349,7 +360,7 @@ begin
 			mem_write => program_loader_mem_write,
 			mem_data => program_loader_mem_data,
 			
-			avr_data_in => avr_data_in,
+			avr_data_in => avr_data_in_modified,
 			avr_data_in_ready => avr_data_in_ready,
 			avr_interrupt => program_loader_done
 		);
@@ -364,7 +375,7 @@ begin
 			mem_write => data_loader_mem_write,
 			mem_data => data_loader_mem_data,
 			
-			avr_data_in => avr_data_in,
+			avr_data_in => avr_data_in_modified,
 			avr_data_in_ready => avr_data_in_ready,
 			avr_interrupt => data_loader_done
 		);
@@ -380,11 +391,20 @@ begin
 			mem_data => instruction_register_mem_data
 		);
 		
-	inst_test_image_loader: test_image_loader
-		port map (
+--	inst_test_image_loader: test_image_loader
+--		port map (
+--			clk => clk_cpu,
+--			pixel_out => vga_pixel_in,
+--			mem_addr_out => vga_mem_addr_in
+--		);
+
+	inst_test_screen_copy: test_screen_copy
+		port map(
 			clk => clk_cpu,
-			pixel_out => vga_pixel_in,
-			mem_addr_out => vga_mem_addr_in
+			disable => load_program,
+			pixel_in => il_pixel_in,
+			pixel_out => il_pixel_out,
+			mem_addr => il_mem_addr(18 downto 0)
 		);
 		
 	inst_avr_mux: avr_mux
