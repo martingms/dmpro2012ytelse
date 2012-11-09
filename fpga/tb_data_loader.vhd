@@ -1,36 +1,5 @@
---------------------------------------------------------------------------------
--- Company: 
--- Engineer:
---
--- Create Date:   00:57:49 11/07/2012
--- Design Name:   
--- Module Name:   /home/evegard/dmpro2012ytelse/fpga/tb_data_loader.vhd
--- Project Name:  TSOG
--- Target Device:  
--- Tool versions:  
--- Description:   
--- 
--- VHDL Test Bench Created by ISE for module: toplevel
--- 
--- Dependencies:
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
---
--- Notes: 
--- This testbench has been automatically generated using types std_logic and
--- std_logic_vector for the ports of the unit under test.  Xilinx recommends
--- that these types always be used for the top-level I/O of a design in order
--- to guarantee that the testbench will bind correctly to the post-implementation 
--- simulation model.
---------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
- 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---USE ieee.numeric_std.ALL;
  
 ENTITY tb_data_loader IS
 END tb_data_loader;
@@ -130,21 +99,24 @@ BEGIN
    -- Stimulus process
    stim_proc: process
    begin		
-      -- hold reset state for 100 ns.
-      wait for 100 ns;	
+		wait for 300 ns;
 		
 		state <= "010";
 		state_ready <= '1';
-		wait for 20 ns;
-		
+      wait for 20 ns;
 		state_ready <= '0';
 		wait for 100 ns;
 		
-		avr_data_in <= "010101011111111110101010";
+		avr_data_in <= "010101010101010111111111";
 		avr_data_in_ready <= '1';
-		wait for 40 ns;
+		wait until avr_interrupt = '1';
 		
+		avr_data_in <= "010101010101010100001111";
 		avr_data_in_ready <= '0';
+		wait until avr_interrupt = '1';
+		
+		avr_data_in <= "010101010101010111110000";
+		avr_data_in_ready <= '1';
 		wait until avr_interrupt = '1';
 
       wait;

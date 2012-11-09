@@ -41,29 +41,12 @@ end state_register;
 
 architecture Behavioral of state_register is
 
-	signal incoming_state : std_logic_vector(2 downto 0);
-	signal state : std_logic_vector(2 downto 0);
-
 begin
-
-	update_incoming_state: process(clk)
-	begin
-		if rising_edge(clk) then
-			incoming_state <= state_in;
-		end if;
-	end process update_incoming_state;
-
-	update_state: process(clk)
-	begin
-		if rising_edge(clk) then
-			state <= incoming_state;
-		end if;
-	end process update_state;
 	
 	update_flags: process(clk)
 	begin
 		if rising_edge(clk) then
-			case state is
+			case state_in is
 				when "001" => -- FPGA_STATE_RUN  
 					load_program <= '0';
 					load_data <= '0';
