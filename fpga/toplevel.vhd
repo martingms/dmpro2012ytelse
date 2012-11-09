@@ -215,6 +215,10 @@ architecture behavioral of toplevel is
 	signal vga_mem_addr_in : std_logic_vector(18 downto 0);
 	signal vga_pixel_in : std_logic_vector(7 downto 0);
 	
+	signal vga_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
+	signal vga_mem_write : std_logic;
+	signal vga_mem_data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
+	
 	signal program_loader_mem_addr : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
 	signal program_loader_mem_write : std_logic;
 	signal program_loader_mem_data : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
@@ -252,7 +256,12 @@ begin
 	avr_data_in_modified(23 downto 8) <= (others => '0');
 	avr_data_in_modified(7 downto 0) <= avr_data_in;
 	
+--	vga_ram_write <= '0';
+--	vga_ram_addr <= (others => '0');
+--	vga_ram_data <= (others => '0');
+	
 	il_mem_addr(20 downto 19) <= (others => '0');
+	vga_mem_addr(20 downto 19) <= (others => '0');
 	vga_value(1 downto 0) <= (others => '0');
 	avr_data_out <= (others => '0');
 	
@@ -285,6 +294,9 @@ begin
 			pixel_in => il_pixel_out,
 			mem_addr_in => il_mem_addr(18 downto 0),
 			
+--			mem_addr => vga_mem_addr(18 downto 0),
+--			mem_we => vga_mem_write,
+--			mem_data => vga_mem_data
 			mem_addr => vga_ram_addr(18 downto 0),
 			mem_we => vga_ram_write,
 			mem_data => vga_ram_data
@@ -320,6 +332,9 @@ begin
 			in0_write_enable => control_core_mem_write,
 			in0_addr => control_core_mem_addr,
 			in0_data => control_core_mem_data,
+--			in0_write_enable => vga_mem_write,
+--			in0_addr => vga_mem_addr,
+--			in0_data => vga_mem_data,
 			
 			in1_write_enable => data_loader_mem_write,
 			in1_addr => data_loader_mem_addr,
@@ -335,13 +350,16 @@ begin
 			word_width => RAM_DATA_WORD_WIDTH,
 			address_width => RAM_DATA_ADDRESS_WIDTH)
 		port map (
-			selector => dma_active,
+			selector => '0',
 			
-			in0_write_enable => '0',
+			in0_write_enable => '1',
 			in0_addr => il_mem_addr,
 			in0_data => il_pixel_in,
+--			in0_write_enable => vga_mem_write,
+--			in0_addr => vga_mem_addr,
+--			in0_data => vga_mem_data,
 			
-			in1_write_enable => dma_mem_write,
+			in1_write_enable => '1',
 			in1_addr => dma_mem_addr,
 			in1_data => dma_mem_data,
 			
@@ -401,7 +419,7 @@ begin
 	inst_test_screen_copy: test_screen_copy
 		port map(
 			clk => clk_cpu,
-			disable => load_program,
+			disable => load_data,
 			pixel_in => il_pixel_in,
 			pixel_out => il_pixel_out,
 			mem_addr => il_mem_addr(18 downto 0)

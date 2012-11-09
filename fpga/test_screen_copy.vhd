@@ -48,15 +48,17 @@ architecture Behavioral of test_screen_copy is
 begin
 
 	process (clk)
-		variable counter : natural range 0 to 3 := 0;
+		variable counter : natural range 0 to 1 := 0;
 		variable address : natural range 0 to 2**18-1 := 0;
+		variable last_pixel : std_logic_vector(7 downto 0);
 	begin
 		if rising_edge(clk) and disable = '0' then
-			mem_addr <= conv_std_logic_vector(counter, 19);
-			pixel_out <= pixel_in;
 			counter := counter + 1;
 			if counter = 0 then
 				address := address + 1;
+				mem_addr <= conv_std_logic_vector(address, 19);
+				last_pixel := pixel_in;
+				pixel_out <= last_pixel;
 			end if;
 		end if;
 	end process;
