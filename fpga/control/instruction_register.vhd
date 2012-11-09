@@ -35,6 +35,7 @@ entity instruction_register is
 	port (
 		clk : in std_logic;
 		enable : in std_logic;
+		reset : in std_logic;
 		
 		mem_addr : out std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
 		mem_write : out std_logic;

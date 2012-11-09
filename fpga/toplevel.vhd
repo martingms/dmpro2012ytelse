@@ -61,7 +61,8 @@ architecture behavioral of toplevel is
            state_ready : in  STD_LOGIC;
            load_program : out  STD_LOGIC;
            load_data : out  STD_LOGIC;
-           execute : out  STD_LOGIC);
+           execute : out  STD_LOGIC;
+           reset : out  STD_LOGIC);
 	end component;
 
 	component vgacontroller is
@@ -106,6 +107,7 @@ architecture behavioral of toplevel is
 		port (
 			clk : in std_logic;
 			enable : in std_logic;
+			reset : in std_logic;
 			
 			mem_addr : out std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
 			mem_write : out std_logic;
@@ -121,6 +123,7 @@ architecture behavioral of toplevel is
 		port (
 			clk : in std_logic;
 			enable : in std_logic;
+			reset : in std_logic;
 			
 			mem_addr : out std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
 			mem_write : out std_logic;
@@ -136,6 +139,7 @@ architecture behavioral of toplevel is
 		port (
 			clk : in std_logic;
 			enable : in std_logic;
+			reset : in std_logic;
 			
 			mem_addr : out std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
 			mem_write : out std_logic;
@@ -169,6 +173,7 @@ architecture behavioral of toplevel is
 	signal load_program : std_logic;
 	signal load_data : std_logic;
 	signal execute : std_logic;
+	signal reset : std_logic;
 	
 	signal vga_mem_addr_in : std_logic_vector(18 downto 0);
 	signal vga_pixel_in : std_logic_vector(7 downto 0);
@@ -215,7 +220,8 @@ begin
            state_ready => state_ready,
            load_program => load_program,
            load_data => load_data,
-           execute => execute);
+           execute => execute,
+			  reset => reset);
 
 	inst_vgacontroller : vgacontroller
 		port map (
@@ -278,6 +284,7 @@ begin
 		port map (
 			clk => clk_cpu,
 			enable => load_program,
+			reset => reset,
 			
 			mem_addr => program_loader_mem_addr,
 			mem_write => program_loader_mem_write,
@@ -292,6 +299,7 @@ begin
 		port map (
 			clk => clk_cpu,
 			enable => load_data,
+			reset => reset,
 			
 			mem_addr => data_loader_mem_addr,
 			mem_write => data_loader_mem_write,
@@ -306,6 +314,7 @@ begin
 		port map (
 			clk => clk_cpu,
 			enable => execute,
+			reset => reset,
 			
 			mem_addr => instruction_register_mem_addr,
 			mem_write => instruction_register_mem_write,
