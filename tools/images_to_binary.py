@@ -9,7 +9,10 @@ if len(sys.argv) < 3:
 
 file = open(sys.argv[1], "wb")
 
-for arg in sys.argv[2:]:
+images = sys.argv[2:]
+print "Processing " + str(len(images)) + " frames..."
+
+for i, arg in enumerate(images):
     im = Image.open(arg)
     pix = im.load()
 
@@ -19,5 +22,8 @@ for arg in sys.argv[2:]:
     for y in range(0, h):
         for x in range(0, w):
             file.write(chr(pix[x, y]))
+    print "Frame " + str(i) + " done"
+
+print "Finished"
 
 file.close()
