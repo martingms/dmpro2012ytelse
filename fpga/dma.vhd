@@ -64,28 +64,32 @@ begin
 
 	update_signals: process (clk, enable)
 	begin
-		if rising_edge(clk) and enable = '1' then
-			case command is
-				when "0100" => read_active <= parameter(0);
-				when "0101" => read_base_addr <= parameter(mem_addr_width - 1 downto 0);
-				when "0110" => read_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "0111" => read_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "1000" => write_active <= parameter(0);
-				when "1001" => write_base_addr <= parameter(mem_addr_width - 1 downto 0);
-				when "1010" => write_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "1011" => write_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "0001" =>
-					state.secondary_action_phase <= '0';
-					state.memory_assert_phase <= '0';
-					state.step_s <= '0';
-					state.read_addr <= read_base_addr;
-					state.write_addr <= write_base_addr;
-					state.row <= 0;
-					state.col <= simd_cols - 1;
-					state.active <= '1';
-				when others =>
-					state <= next_state;
-			end case;
+		if rising_edge(clk) then
+--			if reset = '1' then
+--			elsif enable = '1' then
+			if enable = '1' then
+				case command is
+					when "0100" => read_active <= parameter(0);
+					when "0101" => read_base_addr <= parameter(mem_addr_width - 1 downto 0);
+					when "0110" => read_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
+					when "0111" => read_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
+					when "1000" => write_active <= parameter(0);
+					when "1001" => write_base_addr <= parameter(mem_addr_width - 1 downto 0);
+					when "1010" => write_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
+					when "1011" => write_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
+					when "0001" =>
+						state.secondary_action_phase <= '0';
+						state.memory_assert_phase <= '0';
+						state.step_s <= '0';
+						state.read_addr <= read_base_addr;
+						state.write_addr <= write_base_addr;
+						state.row <= 0;
+						state.col <= simd_cols - 1;
+						state.active <= '1';
+					when others =>
+						state <= next_state;
+				end case;
+			end if;
 		end if;
 	end process update_signals;
 	
