@@ -17,5 +17,5 @@ else
     imageext="${4##*.}"
 fi
 
-ffmpeg -i "$1" -strict -2 -pix_fmt gray -vf crop=960:720,scale=320:240 -r "$fps" "$imageprefix-%3d.$imageext"
+ffmpeg -i "$1" -strict -2 -pix_fmt gray -vf "scale=320:-1,pad=320:240:0:(oh-ih)/2" -r "$fps" "$imageprefix-%5d.$imageext"
 $(dirname $0)/images_to_binary.py "$2" "$imageprefix"-*."$imageext"
