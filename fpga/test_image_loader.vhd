@@ -112,7 +112,7 @@ begin
 						end if;
 					end if;
 				end if;
-				counter := counter + 1;
+				counter := (counter + 1) mod 2;
 			end if;
 		end if;
 	end process;

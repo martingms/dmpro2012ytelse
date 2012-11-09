@@ -99,24 +99,67 @@ BEGIN
    -- Stimulus process
    stim_proc: process
    begin		
-		wait for 300 ns;
+		wait for 200 ns;
 		
+		wait for 100 ns;
 		state <= "010";
 		state_ready <= '1';
-      wait for 20 ns;
+      wait for 25 ns;
 		state_ready <= '0';
 		wait for 100 ns;
 		
-		avr_data_in <= "010101010101010111111111";
+		wait for 25 ns;
+		avr_data_in <= "000000000000000011111111";
 		avr_data_in_ready <= '1';
 		wait until avr_interrupt = '1';
 		
-		avr_data_in <= "010101010101010100001111";
+		wait for 25 ns;
+		avr_data_in <= "000000000000000000001111";
 		avr_data_in_ready <= '0';
 		wait until avr_interrupt = '1';
 		
-		avr_data_in <= "010101010101010111110000";
+		wait for 25 ns;
+		avr_data_in <= "000000000000000011110000";
 		avr_data_in_ready <= '1';
+		wait until avr_interrupt = '1';
+		
+		wait for 25 ns;
+		avr_data_in <= "000000000000000001010101";
+		avr_data_in_ready <= '0';
+		wait until avr_interrupt = '1';
+		
+		wait for 100 ns;
+		state <= "000";
+		state_ready <= '1';
+      wait for 25 ns;
+		state_ready <= '0';
+		wait for 100 ns;
+		
+		wait for 100 ns;
+		state <= "010";
+		state_ready <= '1';
+      wait for 25 ns;
+		state_ready <= '0';
+		wait for 100 ns;
+		
+		wait for 25 ns;
+		avr_data_in <= "000000000000000011111111";
+		avr_data_in_ready <= '1';
+		wait until avr_interrupt = '1';
+		
+		wait for 25 ns;
+		avr_data_in <= "000000000000000000001111";
+		avr_data_in_ready <= '0';
+		wait until avr_interrupt = '1';
+		
+		wait for 25 ns;
+		avr_data_in <= "000000000000000011110000";
+		avr_data_in_ready <= '1';
+		wait until avr_interrupt = '1';
+		
+		wait for 25 ns;
+		avr_data_in <= "000000000000000001010101";
+		avr_data_in_ready <= '0';
 		wait until avr_interrupt = '1';
 
       wait;

@@ -34,6 +34,7 @@ entity state_register is
            clk : in STD_LOGIC;
            state_in : in  STD_LOGIC_VECTOR (2 downto 0);
            state_ready : in  STD_LOGIC;
+			  reset : out STD_LOGIC;
            load_program : out  STD_LOGIC;
            load_data : out  STD_LOGIC;
            execute : out  STD_LOGIC);
@@ -41,32 +42,45 @@ end state_register;
 
 architecture Behavioral of state_register is
 
-begin
+	signal last_state : std_logic_vector(2 downto 0);
 	
+begin
+
 	update_flags: process(clk)
 	begin
 		if rising_edge(clk) then
-			case state_in is
-				when "001" => -- FPGA_STATE_RUN  
-					load_program <= '0';
-					load_data <= '0';
-					execute <= '1';
-					
-				when "010" => -- FPGA_STATE_LOAD_DATA   
-					load_program <= '0';
-					load_data <= '1';
-					execute <= '0';
-					
-				when "100" => -- FPGA_STATE_LOAD_INSTRUCTION   
-					load_program <= '1';
-					load_data <= '0';
-					execute <= '0';
-					
-				when others => -- "000" is FPGA_STATE_STOP 
-					load_program <= '0';
-					load_data <= '0';
-					execute <= '0';
-			end case;
+			if state_in /= last_state then
+				reset <= '1';
+				
+				load_program <= '0';
+				load_data <= '0';
+				execute <= '0';
+			else
+				reset <= '0';
+				
+				case last_state is
+					when "001" => -- FPGA_STATE_RUN  
+						load_program <= '0';
+						load_data <= '0';
+						execute <= '1';
+						
+					when "010" => -- FPGA_STATE_LOAD_DATA   
+						load_program <= '0';
+						load_data <= '1';
+						execute <= '0';
+						
+					when "100" => -- FPGA_STATE_LOAD_INSTRUCTION   
+						load_program <= '1';
+						load_data <= '0';
+						execute <= '0';
+						
+					when others => -- "000" is FPGA_STATE_STOP 
+						load_program <= '0';
+						load_data <= '0';
+						execute <= '0';
+				end case;
+			end if;
+			last_state <= state_in;
 		end if;
 	end process;
 

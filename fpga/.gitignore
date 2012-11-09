@@ -82,3 +82,4 @@ toplevel.cfi
 toplevel.mcs
 toplevel.prm
 toplevel.sig
+*.ipf
