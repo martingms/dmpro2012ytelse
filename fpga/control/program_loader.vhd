@@ -72,6 +72,8 @@ begin
 			mem_data <= (others => 'Z');
 			mem_write <= '1';
 			avr_interrupt <= '0';
+			
+			next_address <= address;
 		end if;
 	end process;
 
