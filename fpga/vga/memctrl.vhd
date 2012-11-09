@@ -9,11 +9,11 @@ entity memctrl is
 		
 		-- From control core.
 		pixel_in    : in std_logic_vector(7 downto 0);
-		mem_addr_in : in std_logic_vector(18 downto 0);
+		mem_addr_in : in std_logic_vector(17 downto 0);
 		frame_flag  : in std_logic;
 		
 		-- To and from physical vga-memory.
-		mem_addr    : out std_logic_vector(19 downto 0);
+		mem_addr    : out std_logic_vector(18 downto 0);
 		mem_we      : out std_logic;
 		mem_data    : inout std_logic_vector(7 downto 0);
 		
@@ -28,21 +28,21 @@ end memctrl;
 architecture Behavioral of memctrl is
 
 	signal rw_switch       : natural range 0 to 1 := 0;
-	signal pixel_addr      : std_logic_vector(18 downto 0);
+	signal pixel_addr      : std_logic_vector(17 downto 0);
 	signal mem_addr_prefix : std_logic;
 
 begin
 
 	process(vSync)
 	begin
-		if vSync then -- Only change frame-buffer between frames.
+		if vSync = '1' then -- Only change frame-buffer between frames.
 			mem_addr_prefix <= frame_flag;
 		end if;
 	end process;
 
 	process(x_coord, y_coord)
 	begin
-		pixel_addr <= conv_std_logic_vector(320 * (conv_integer(unsigned(y_coord))/2) + conv_integer(unsigned(x_coord))/2, 19);
+		pixel_addr <= conv_std_logic_vector(320 * (conv_integer(unsigned(y_coord))/2) + conv_integer(unsigned(x_coord))/2, 18);
 	end process;
 	
 	process(clk)
