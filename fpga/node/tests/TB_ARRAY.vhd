@@ -28,9 +28,9 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
  
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---USE ieee.numeric_std.ALL;
+-- "WORK" is the current library
+library WORK;
+use WORK.FPGA_CONSTANT_PKG.ALL;
  
 ENTITY TB_ARRAY IS
 END TB_ARRAY;
@@ -41,51 +41,48 @@ ARCHITECTURE behavior OF TB_ARRAY IS
  
     COMPONENT SIMD_ARRAY
     PORT(
-         clk : IN  std_logic;
-         reset : IN  std_logic;
-         instr : IN  std_logic_vector(23 downto 0);
-         node_step : IN  std_logic;
-         data_in : IN  std_logic_vector(7 downto 0);
-         data_out1 : OUT  std_logic_vector(7 downto 0);
-         data_out2 : OUT  std_logic_vector(7 downto 0);
-         data_out3 : OUT  std_logic_vector(7 downto 0);
-         data_out4 : OUT  std_logic_vector(7 downto 0);
-         state_out : OUT  std_logic
+         clk 						: in  STD_LOGIC;
+         reset 					: in  STD_LOGIC;
+         instr 					: in  STD_LOGIC_VECTOR(23 downto 0);
+         node_step				: in  STD_LOGIC;
+			data_write				: in  STD_LOGIC;
+			row_sel 					: in  STD_LOGIC_VECTOR (1 downto 0);
+			data_in 					: in  STD_LOGIC_VECTOR (7 downto 0);
+			data_out 				: out STD_LOGIC_VECTOR (7 downto 0);
+			state_out				: out STD_LOGIC
 		);
     END COMPONENT;
     
 
    --Inputs
-   signal clk : std_logic := '0';
-   signal reset : std_logic := '0';
-   signal instr : std_logic_vector(23 downto 0) := (others => '0');
-   signal node_step : std_logic := '0';
-   signal data_in : std_logic_vector(7 downto 0) := (others => '0');
+   signal clk 						: STD_LOGIC 							:= '0';
+   signal reset 					: STD_LOGIC 							:= '0';
+   signal instr 					: STD_LOGIC_VECTOR(23 downto 0) 	:= (others => '0');
+   signal node_step 				: STD_LOGIC 							:= '0';
+   signal data_write 			: STD_LOGIC 							:= '0';
+   signal row_sel 				: STD_LOGIC_VECTOR(1 downto 0) 	:= (others => '0');
+   signal data_in 				: STD_LOGIC_VECTOR(7 downto 0) 	:= (others => '0');
 
  	--Outputs
-   signal data_out1 : std_logic_vector(7 downto 0);
-   signal data_out2 : std_logic_vector(7 downto 0);
-   signal data_out3 : std_logic_vector(7 downto 0);
-   signal data_out4 : std_logic_vector(7 downto 0);
-   signal state_out : std_logic;
+   signal data_out				: STD_LOGIC_VECTOR(7 downto 0);
+   signal state_out 				: STD_LOGIC;
 
    -- Clock period definitions
-   constant clk_period : time := 10 ns;
+   constant clk_period 			: time := 10 ns;
  
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
    uut: SIMD_ARRAY PORT MAP (
-          clk => clk,
-          reset => reset,
-          instr => instr,
-          node_step => node_step,
-          data_in => data_in,
-          data_out1 => data_out1,
-          data_out2 => data_out2,
-          data_out3 => data_out3,
-          data_out4 => data_out4,
-          state_out => state_out
+          clk 						=> clk,
+          reset 					=> reset,
+          instr 					=> instr,
+          node_step 				=> node_step,
+          data_write				=> data_write,
+			 row_sel					=> row_sel,
+			 data_in 				=> data_in,
+          data_out				=> data_out,
+          state_out 				=> state_out
         );
 
    -- Clock process definitions
@@ -102,17 +99,163 @@ BEGIN
    begin		
 
 		reset 			<= '1';
-      wait for clk_period*10;
+      wait for clk_period*5;
 		
+		data_write		<= '0';
 		reset 			<= '0';
-		data_in 			<= (others => '1');
-		node_step 		<= '1';
+      wait for clk_period;
+
+--------------------------------------------------------
+-- write col 4
+--------------------------------------------------------
+		data_write		<= '1';
+		node_step		<= '0';
+		
+		row_sel			<= "00";
+		data_in 			<= "00000001";		
 		wait for clk_period;
 		
-		data_in 			<= (others => '0');
-		wait for clk_period*7;
-			
-		node_step <= '0';		
+		row_sel			<= "01";
+		data_in 			<= "00000010";
+		wait for clk_period;
+
+		row_sel			<= "10";
+		data_in 			<= "00000011";
+		wait for clk_period;
+
+		row_sel			<= "11";
+		data_in 			<= "00000100";
+		wait for clk_period;
+		
+--------------------------------------------------------
+-- step
+--------------------------------------------------------
+		data_write		<= '0';
+		node_step 		<= '1';	
+		wait for clk_period;
+
+--------------------------------------------------------
+-- write col 3
+--------------------------------------------------------
+		data_write		<= '1';
+		node_step		<= '0';
+		
+		row_sel			<= "00";
+		data_in 			<= (others => '1');		
+		wait for clk_period;
+		
+		row_sel			<= "01";
+		data_in 			<= (others => '0');		
+		wait for clk_period;
+
+		row_sel			<= "10";
+		data_in 			<= (others => '1');		
+		wait for clk_period;
+
+		row_sel			<= "11";
+		data_in 			<= (others => '0');		
+		wait for clk_period;
+		
+--------------------------------------------------------
+-- step
+--------------------------------------------------------
+		data_write		<= '0';
+		node_step 		<= '1';		
+		wait for clk_period;
+
+--------------------------------------------------------
+-- write col 2
+--------------------------------------------------------
+		data_write		<= '1';
+		node_step		<= '0';
+		
+		row_sel			<= "00";
+		data_in 			<= "00000101";
+		wait for clk_period;
+		
+		row_sel			<= "01";
+		data_in 			<= "00000110";
+		wait for clk_period;
+
+		row_sel			<= "10";
+		data_in 			<= "00000111";
+		wait for clk_period;
+
+		row_sel			<= "11";
+		data_in 			<= "00001000";
+		wait for clk_period;
+
+--------------------------------------------------------
+-- step
+--------------------------------------------------------
+		data_write		<= '0';
+		node_step 		<= '1';		
+		wait for clk_period;
+
+--------------------------------------------------------
+-- write col 1
+--------------------------------------------------------
+		data_write		<= '1';
+		node_step		<= '0';
+		
+		row_sel			<= "00";
+		data_in 			<= (others => '1');		
+		wait for clk_period;
+		
+		row_sel			<= "01";
+		data_in 			<= (others => '0');		
+		wait for clk_period;
+
+		row_sel			<= "10";
+		data_in 			<= (others => '1');		
+		wait for clk_period;
+
+		row_sel			<= "11";
+		data_in 			<= (others => '0');		
+		wait for clk_period;
+
+--------------------------------------------------------
+-- step
+--------------------------------------------------------
+		data_write		<= '0';
+		node_step 		<= '1';		
+		wait for clk_period;
+
+--------------------------------------------------------
+-- do nothing
+--------------------------------------------------------
+		node_step 		<= '0';		
+		wait for clk_period; -- WARNING!!!
+
+--------------------------------------------------------
+-- step (now we will get output read)
+--------------------------------------------------------
+		data_write		<= '0';
+		node_step 		<= '1';		
+		wait for clk_period;
+
+--------------------------------------------------------
+-- print col 1
+--------------------------------------------------------
+		node_step 		<= '0';
+		row_sel			<= "00";
+		wait for clk_period;
+
+--------------------------------------------------------
+-- print col 2
+--------------------------------------------------------
+		row_sel			<= "01";
+		wait for clk_period;
+		
+--------------------------------------------------------
+-- print col 3
+--------------------------------------------------------
+		row_sel			<= "10";
+		wait for clk_period;
+		--------------------------------------------------------
+-- print col 4
+--------------------------------------------------------
+		row_sel			<= "11";
       wait;
    end process;
 
