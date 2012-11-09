@@ -1,7 +1,7 @@
 #include "str2img.h"
 #include "compiler.h"
 
-static unsigned char buf[R_COLS * R_BPCX * 8 * R_ROWS * R_BPCY];
+static unsigned char *buf;
 static unsigned int pos = 0;
 
 static unsigned char A[] = { 255, 255, 247, 227, 235, 233, 221, 221, 128, 190, 62, 127, 255, 255, 255, 255 };
@@ -148,6 +148,10 @@ static unsigned char *lut(char chr) {
 		default:
 			return '\0';
 	}
+}
+
+void str2img_init(unsigned char *addr) {
+	buf = addr;
 }
 
 void str2img_clear() {
