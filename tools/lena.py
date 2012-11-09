@@ -117,14 +117,21 @@ def __assembleInstrFile__(input, output):
 	debug("Reading instructions from '" + input + "'...")
 	
 	r = open(input, 'r')
-	w = open(output, 'w')
+	w = open(output, 'wb')
 	for instr in r:
 		debug("Reading line '" + instr + "'")
 		instr = re.sub("#[^$]+", "", instr) # remove comments
 		instr = instr.strip()
 		if instr:
-			# @todo: one too many new line (\n) at end of file
-			w.write(__assembleNodeInstr__(instr) + '\n')
+			# ascii bin
+			if sep:
+				w.write(__assembleNodeInstr__(instr) + '\n')
+			# true bin
+			else:
+				ascii_instr = __assembleNodeInstr__(instr)
+				w.write(chr(int(ascii_instr[0:8], 2)))
+				w.write(chr(int(ascii_instr[8:16], 2)))
+				w.write(chr(int(ascii_instr[16:24], 2)))
 		else:
 			debug('Skipping empty instruction line')
 	r.close()
