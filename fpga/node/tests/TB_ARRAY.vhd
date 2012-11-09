@@ -51,7 +51,7 @@ ARCHITECTURE behavior OF TB_ARRAY IS
          data_out3 : OUT  std_logic_vector(7 downto 0);
          data_out4 : OUT  std_logic_vector(7 downto 0);
          state_out : OUT  std_logic
-        );
+		);
     END COMPONENT;
     
 
@@ -101,67 +101,17 @@ BEGIN
    stim_proc: process
    begin		
 
-		reset <= '1';
+		reset 			<= '1';
       wait for clk_period*10;
 		
-		reset <= '0';
-		wait for clk_period*10;
-
-		data_in <= (others => '1');
+		reset 			<= '0';
+		data_in 			<= (others => '1');
+		node_step 		<= '1';
 		wait for clk_period;
 		
-		node_step <= '1';
-		wait for clk_period;
-		
-		data_in <= (others => '0');
-		node_step <= '0';
-		wait for clk_period;
-		
-		node_step <= '1';
-		wait for clk_period;
-	
-		node_step <= '0';
-		wait for clk_period;
-
-		node_step <= '1';
-		wait for clk_period;
-	
-		node_step <= '0';
-		wait for clk_period;
-
-		node_step <= '1';
-		wait for clk_period;
-	
-		node_step <= '0';
-		wait for clk_period;
-
-		node_step <= '1';
-		wait for clk_period;
-	
-		node_step <= '0';
-		wait for clk_period;
-		
-		node_step <= '1';
-		wait for clk_period;
-	
-		node_step <= '0';
-		wait for clk_period;
-
-		node_step <= '1';
-		wait for clk_period;
-	
-		node_step <= '0';
-		wait for clk_period;
-
-		node_step <= '1';
-		wait for clk_period;
-	
-		node_step <= '0';
-		wait for clk_period;
-
-		node_step <= '1';
-		wait for clk_period;
-	
+		data_in 			<= (others => '0');
+		wait for clk_period*7;
+			
 		node_step <= '0';		
       wait;
    end process;

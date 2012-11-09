@@ -85,19 +85,19 @@ architecture Behavioral of SIMD_ARRAY is
 	constant ARRAY_ROWS 			: integer := 2;
 	type DATA_T  is array (ARRAY_ROWS+2 downto 0) of STD_LOGIC_VECTOR (((ARRAY_COLS+2)*8)+7 downto 0);
 	type STATE_T is array (ARRAY_ROWS-1 downto 0) of STD_LOGIC_VECTOR   (ARRAY_COLS-1 downto 0);
-		signal N_OUT  					: DATA_T; --  := (others => (others=> '0'));
-	signal S_OUT  					: DATA_T; --  := (others => (others=> '0'));
-	signal E_OUT  					: DATA_T; --  := (others => (others=> '0'));
-	signal W_OUT  					: DATA_T; --  := (others => (others=> '0'));
+		signal N_OUT  					: DATA_T  := (others => (others=> '0'));
+	signal S_OUT  					: DATA_T  := (others => (others=> '0'));
+	signal E_OUT  					: DATA_T  := (others => (others=> '0'));
+	signal W_OUT  					: DATA_T  := (others => (others=> '0'));
 
-	signal S_DATA  				: DATA_T; --  := (others => (others=> '0'));
-	signal STATE 					: STATE_T;--  := (others => (others=> '0'));
+	signal S_DATA  				: DATA_T  := (others => (others=> '0'));
+	signal STATE 					: STATE_T := (others => (others=> '0'));
 
 begin	
-	S_DATA(0)(7 downto 0) <= data_in;
 	S_DATA(1)(7 downto 0) <= data_in;
 	S_DATA(2)(7 downto 0) <= data_in;
 	S_DATA(3)(7 downto 0) <= data_in;
+	S_DATA(4)(7 downto 0) <= data_in;
 	
 	data_out1 <= S_DATA(1)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
 	data_out2 <= S_DATA(2)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
