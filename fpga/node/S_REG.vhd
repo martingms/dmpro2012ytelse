@@ -30,40 +30,43 @@ entity S_REG is
 		s_step 						: in  STD_LOGIC;
 		s_res 						: in  STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
 		s_in 							: in  STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
-		s_new 						: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
-		s_out 						: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0)
+		s_new 						: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
+		s_out 						: out STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0')
 	);
 end S_REG;
 
 architecture Behavioral of S_REG is
 
 	signal tmp_s					: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
-	signal tmp_s_new				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
-	signal tmp_s_out				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
+--	signal tmp_s_new				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
+--	signal tmp_s_out				: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
 
 begin
 
-	S: process(clk, reset, s_in, s_res) begin	
+	S: process(clk, reset) begin	
 		if reset = '1' then
 			tmp_s						<= (others => '0');		-- input buffer
-			tmp_s_new				<= (others => '0');		-- input buffer
-			tmp_s_out				<= (others => '0');		-- output buffer
+			s_new						<= (others => '0');		-- input buffer
+			s_out						<= (others => '0');		-- output buffer
 		elsif rising_edge(clk) then
-
 			if s_step = '1' then
-				tmp_s_out			<= tmp_s;
+				s_out					<= tmp_s;
 				tmp_s					<= s_in;
 			elsif s_swap = '1' then
-				tmp_s_new			<= tmp_s;
+				s_new					<= tmp_s;
 				tmp_s					<= s_res;
+			end if;			
+		else
+			if s_step = '1' then
+				s_out					<= tmp_s;
+			elsif s_swap = '1' then
+				s_new					<= tmp_s;
 			end if;
-			
 		end if;
 		
-		s_new							<= tmp_s_new;
-		s_out							<= tmp_s_out;
-	
 	end process S;
 
-end Behavioral;
+--	s_new								<= tmp_s_new;
+--	s_out								<= tmp_s_out;
 
+end Behavioral;

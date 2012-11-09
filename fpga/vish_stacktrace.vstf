@@ -1,0 +1,42 @@
+# Current time Fri Nov 09 17:03:08 2012
+# ModelSim Stack Trace
+# Program = vish
+# Id = "6.6d"
+# Version = "2010.11"
+# Date = "Nov  1 2010"
+# Platform = win32
+
+Exception c0000005 has occurred at address 1004b620. Traceback:
+# 0    0x1004b620: 'Tcl_GetStringFromObj + 0x10'
+# 1    0x10041e04: 'Tcl_FSNewNativePath + 0x114'
+# 2    0x1004b4ac: 'Tcl_ConvertToType + 0x1c'
+# 3    0x1004289f: 'Tcl_FSConvertToPathType + 0x6f'
+# 4    0x10042a9b: 'Tcl_FSPathSeparator + 0x3b'
+# 5    0x10013ebe: 'Tcl_FileObjCmd + 0xbae'
+# 6    0x1000c770: 'TclEvalObjvInternal + 0x230'
+# 7    0x1002d7bb: 'TclExprFloatError + 0x10eb'
+# 8    0x1002bc79: 'TclCompEvalObj + 0xd9'
+# 9    0x1005391f: 'TclObjInterpProc + 0x23f'
+# 10   0x1000c770: 'TclEvalObjvInternal + 0x230'
+# 11   0x1002d7bb: 'TclExprFloatError + 0x10eb'
+# 12   0x1002bc79: 'TclCompEvalObj + 0xd9'
+# 13   0x1000efc6: 'Tcl_EvalObjEx + 0x56'
+# 14   0x1027f656: 'TkInvokeMenu + 0x1f6'
+# 15   0x1023153b: 'TkWinHandleMenuEvent + 0x27b'
+# 16   0x10238e1b: 'TkWmDeadWindow + 0x175b'
+# 17   0x773c62fa: '<unknown (@0x773c62fa)>'
+# 18   0x773c6d3a: '<unknown (@0x773c6d3a)>'
+# 19   0x773c77c4: '<unknown (@0x773c77c4)>'
+# 20   0x773c7bca: '<unknown (@0x773c7bca)>'
+# 21   0x10068a1d: 'Tcl_WaitForEvent + 0xed'
+# 22   0x1004b0e9: 'Tcl_DoOneEvent + 0xd9'
+# 23   0x1026368f: 'Tk_MainLoop + 0x1f'
+# 24   0x0049fc11: 'Mtirpc_Init + 0x15221'
+# 25   0x004a14d4: 'Mtirpc_Init + 0x16ae4'
+# 26   0x0073dc3a: '<unknown (@0x73dc3a)>'
+# 27   0x769b339a: '<unknown (@0x769b339a)>'
+# 28   0x77c49ef2: '<unknown (@0x77c49ef2)>'
+# 29   0x77c49ec5: '<unknown (@0x77c49ec5)>'
+StackWalk failed 487
+# End of Stack Trace
+

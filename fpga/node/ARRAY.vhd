@@ -19,10 +19,11 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
--- "WORK" is the current library
-library WORK;
-use WORK.FPGA_CONSTANT_PKG.ALL;
+				-- "WORK" is the current library
+				library WORK;
+				use WORK.FPGA_CONSTANT_PKG.ALL;
 
 entity SIMD_ARRAY is
     Port (
@@ -30,11 +31,11 @@ entity SIMD_ARRAY is
 		reset 						: in  STD_LOGIC;
 		instr 						: in  STD_LOGIC_VECTOR (NODE_IDATA_BUS-1 downto 0);
 		node_step 					: in  STD_LOGIC;
-		data_in 						: in  STD_LOGIC_VECTOR (7 downto 0);
-		data_out1 					: out STD_LOGIC_VECTOR (7 downto 0);
-		data_out2 					: out STD_LOGIC_VECTOR (7 downto 0);
-		data_out3 					: out STD_LOGIC_VECTOR (7 downto 0);
-		data_out4 					: out STD_LOGIC_VECTOR (7 downto 0);
+		
+		data_write					: in  STD_LOGIC;
+		row_sel 						: in  STD_LOGIC_VECTOR (1 downto 0);
+		data_in 						: in  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+		data_out 					: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0) := (others => '0');
 		state_out					: out STD_LOGIC
 	);
 end SIMD_ARRAY;
@@ -85,24 +86,18 @@ architecture Behavioral of SIMD_ARRAY is
 	constant ARRAY_ROWS 			: integer := 2;
 	type DATA_T  is array (ARRAY_ROWS+2 downto 0) of STD_LOGIC_VECTOR (((ARRAY_COLS+2)*8)+7 downto 0);
 	type STATE_T is array (ARRAY_ROWS-1 downto 0) of STD_LOGIC_VECTOR   (ARRAY_COLS-1 downto 0);
-		signal N_OUT  					: DATA_T; --  := (others => (others=> '0'));
-	signal S_OUT  					: DATA_T; --  := (others => (others=> '0'));
-	signal E_OUT  					: DATA_T; --  := (others => (others=> '0'));
-	signal W_OUT  					: DATA_T; --  := (others => (others=> '0'));
+		signal N_OUT  					: DATA_T  := (others => (others=> '0'));
+	signal S_OUT  					: DATA_T  := (others => (others=> '0'));
+	signal E_OUT  					: DATA_T  := (others => (others=> '0'));
+	signal W_OUT  					: DATA_T  := (others => (others=> '0'));
 
-	signal S_DATA  				: DATA_T; --  := (others => (others=> '0'));
-	signal STATE 					: STATE_T;--  := (others => (others=> '0'));
-
-begin	
-	S_DATA(0)(7 downto 0) <= data_in;
-	S_DATA(1)(7 downto 0) <= data_in;
-	S_DATA(2)(7 downto 0) <= data_in;
-	S_DATA(3)(7 downto 0) <= data_in;
+	signal S_DATA  				: DATA_T  := (others => (others=> '0'));
+	signal STATE 					: STATE_T := (others => (others=> '0'));
 	
-	data_out1 <= S_DATA(1)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
-	data_out2 <= S_DATA(2)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
-	data_out3 <= S_DATA(3)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
-	data_out4 <= S_DATA(4)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
+	signal tmp_data_in 			: STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0) := (others => '0');
+	signal tmp_data_out 			: STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0) := (others => '0');
+
+begin
 	
 ----------------------------------------------------------------------------------
 -- GENERATE ALL NODES
@@ -161,13 +156,32 @@ begin
 	process (clk, reset) begin
 		if (reset = '1') then
 			state_out				<= '0';
-		elsif rising_edge(clk) then
+			--data_out					<= (others => '0');
+		else
+			-- Send node state
 			if (STATE(0) = "00" and STATE(1) = "00") then 
 				state_out			<= '0';
 			else
 				state_out			<= '1';
 			end if;
+			
+			-- Node data in/out
+			if (data_write = '1') then
+				CASE row_sel IS
+					WHEN  "01"  =>  S_DATA(2)(7 downto 0) <= data_in;
+					WHEN  "10"  =>  S_DATA(3)(7 downto 0) <= data_in;
+					WHEN  "11"  =>  S_DATA(4)(7 downto 0) <= data_in;
+					WHEN OTHERS =>  S_DATA(1)(7 downto 0) <= data_in;
+				END CASE;
+			end if;
 		end if;
+		
+		CASE row_sel IS
+			WHEN  "01"  =>  data_out <= S_DATA(2)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
+			WHEN  "10"  =>  data_out <= S_DATA(3)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
+			WHEN  "11"  =>  data_out <= S_DATA(4)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
+			WHEN OTHERS =>  data_out <= S_DATA(1)(((ARRAY_COLS+2)*8)+7 downto (ARRAY_COLS+2)*8);
+		END CASE;
 	end process;
 	
 end Behavioral;
