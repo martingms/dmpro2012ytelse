@@ -26,6 +26,7 @@ entity dma is
 		simd_data : inout std_logic_vector(word_width - 1 downto 0);
 		simd_write : out std_logic;
 		
+		active : out std_logic;
 		step_s : out std_logic);
 end dma;
 
@@ -99,6 +100,7 @@ begin
 		if enable = '1' and state.active = '1' then
 			-- Set external signals
 			step_s <= state.step_s;
+			active <= state.active;
 			
 			-- Update internal state
 			next_state <= state;
@@ -142,7 +144,7 @@ begin
 				if state.memory_assert_phase = '0' then
 					mem_addr <= state.read_addr;
 					mem_data <= (others => 'Z');
-					mem_write <= '0';
+					mem_write <= '1'; -- Read
 					
 					next_state.memory_assert_phase <= '1';
 				else
@@ -165,12 +167,13 @@ begin
 					
 					mem_addr <= state.write_addr;
 					mem_data <= simd_data;
-					mem_write <= '1';
+					mem_write <= '0'; -- Write
 					
 					next_state.memory_assert_phase <= '1';
 				else
-					mem_addr <= (others => 'Z');
-					mem_write <= '0';
+					mem_addr <= (others => '0');
+					mem_data <= (others => 'Z');
+					mem_write <= '1'; -- Read
 					
 					next_state.memory_assert_phase <= '0';
 					assert_done := '1';
@@ -198,6 +201,16 @@ begin
 				
 				next_state.secondary_action_phase <= '0';
 			end if;
+		else
+			active <= '0';
+			
+			mem_addr <= (others => '0');
+			mem_data <= (others => 'Z');
+			mem_write <= '1'; -- Read
+			
+			simd_addr <= (others => '0');
+			simd_data <= (others => 'Z');
+			simd_write <= '0';
 		end if;
 	end process run_dma;
 
