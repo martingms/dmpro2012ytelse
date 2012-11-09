@@ -16,8 +16,8 @@ for arg in sys.argv[2:]:
     w = im.size[0]
     h = im.size[1]
 
-    for x in range(0, w):
-        for y in range(0, h):
+    for y in range(0, h):
+        for x in range(0, w):
             file.write(chr(pix[x, y]))
 
 file.close()
