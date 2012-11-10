@@ -1,4 +1,4 @@
-/* This header file is part of the ATMEL AVR-UC3-SoftwareFramework-1.7.0 Release */
+/* This header file is part of the ATMEL AVR32-SoftwareFramework-AT32UC3-1.5.0 Release */
 
 /*This file is prepared for Doxygen automatic documentation generation.*/
 /*! \file *********************************************************************
@@ -57,6 +57,7 @@
   #error sd_mmc_spi.h is #included although SD_MMC_SPI_MEM is disabled
 #endif
 
+
 #include "compiler.h"
 #include "spi.h"
 
@@ -64,8 +65,7 @@
 /*_____ M A C R O S ________________________________________________________*/
 
 #ifndef MMC_SECTOR_SIZE
-#define MMC_SECTOR_SIZE                   2048   //default sector size is 512 bytes
-#define RAM_BUFFER_SIZE                   8192 // max 2 block reads
+#define MMC_SECTOR_SIZE                   512   //default sector size is 512 bytes
 #endif
 
 
@@ -93,7 +93,6 @@
 #define OP_RESET_PWD                      0x02
 #define OP_SET_PWD                        0x01
 #define OP_FORCED_ERASE                   0x08
-
 
 // MMC commands (taken from MMC reference)
 #define MMC_GO_IDLE_STATE                 0     ///< initialize card to SPI-type access
@@ -190,6 +189,8 @@ extern Bool sd_mmc_spi_write_open (U32);        // to call before first access t
 extern void sd_mmc_spi_write_close (void);
 
 //! Funtions to link USB DEVICE flow with MMC
+extern Bool sd_mmc_spi_write_sector (U16);      // write a 512b sector from USB buffer
+extern Bool sd_mmc_spi_read_sector (U16);       // reads a 512b sector to an USB buffer
 extern Bool sd_mmc_spi_read_multiple_sector(U16 nb_sector);
 extern Bool sd_mmc_spi_write_multiple_sector(U16 nb_sector);
 extern void sd_mmc_spi_read_multiple_sector_callback(const void *psector, unsigned char ucNbrSectors);
@@ -207,6 +208,12 @@ extern Bool sd_mmc_spi_write_sector_from_ram(const void *ram);  // writes a data
 extern Bool sd_mmc_spi_erase_sector_group(U32, U32);    // erase a group of sectors defined by start and end address (details in sd_mmc_spi.c)
 
 
+//!functions used to make a transfer from SD_MMC to RAM using the PDCA
+//Max reading size is block
+extern Bool sd_mmc_spi_read_open_PDCA (U32);         // to call before first access to a random page
+extern void sd_mmc_spi_read_close_PDCA (void);       // unselect the memory
+
+
 extern U8           csd[16];                    // stores the Card Specific Data
 extern volatile U32 capacity;                   // stores the capacity in bytes
 extern volatile U16 capacity_mult;
@@ -219,3 +226,4 @@ extern  Bool        sd_mmc_spi_init_done;
 
 
 #endif  // _SD_MMC_SPI_H_
+

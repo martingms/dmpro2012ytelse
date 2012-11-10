@@ -1814,7 +1814,7 @@ Bool  fat_cache_read_sector( Bool b_load )
    if( b_load )
    {
       // Load the sector from memory
-      if( CTRL_GOOD != memory_2_ram( fs_g_nav.u8_lun  , fs_g_sectorcache.u32_addr, fs_g_sector))
+      if( CTRL_GOOD != memory_2_ram( fs_g_nav.u8_lun  , fs_g_sectorcache.u32_addr, fs_g_sector, 1))
       {
          fs_g_status = FS_ERR_HW;
          return FALSE;
