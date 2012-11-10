@@ -154,30 +154,38 @@ NET "vga_value[0]" LOC = P75;
 #	-- AVR data transfer
 
 #	avr_data_in : in std_logic_vector(23 downto 0);		-- FPGA_IN_[23-0]
-NET "avr_data_in[23]" LOC = P169;
-NET "avr_data_in[22]" LOC = P159;
-NET "avr_data_in[21]" LOC = P154;
-NET "avr_data_in[20]" LOC = P148;
-NET "avr_data_in[19]" LOC = P142;
-NET "avr_data_in[18]" LOC = P136;
-NET "avr_data_in[17]" LOC = P130;
-NET "avr_data_in[16]" LOC = P124;
-NET "avr_data_in[15]" LOC = P118;
-NET "avr_data_in[14]" LOC = P110;
-NET "avr_data_in[13]" LOC = P101;
-NET "avr_data_in[12]" LOC = P91;
-NET "avr_data_in[11]" LOC = P72;
-NET "avr_data_in[10]" LOC = P71;
-NET "avr_data_in[9]" LOC = P58;
-NET "avr_data_in[8]" LOC = P57;
-NET "avr_data_in[7]" LOC = P54;
-NET "avr_data_in[6]" LOC = P51;
-NET "avr_data_in[5]" LOC = P43;
-NET "avr_data_in[4]" LOC = P32;
-NET "avr_data_in[3]" LOC = P26;
-NET "avr_data_in[2]" LOC = P20;
-NET "avr_data_in[1]" LOC = P14;
-NET "avr_data_in[0]" LOC = P6;
+#NET "avr_data_in[23]" LOC = P169;
+#NET "avr_data_in[22]" LOC = P159;
+#NET "avr_data_in[21]" LOC = P154;
+#NET "avr_data_in[20]" LOC = P148;
+#NET "avr_data_in[19]" LOC = P142;
+#NET "avr_data_in[18]" LOC = P136;
+#NET "avr_data_in[17]" LOC = P130;
+#NET "avr_data_in[16]" LOC = P124;
+#NET "avr_data_in[15]" LOC = P118;
+#NET "avr_data_in[14]" LOC = P110;
+#NET "avr_data_in[13]" LOC = P101;
+#NET "avr_data_in[12]" LOC = P91;
+#NET "avr_data_in[11]" LOC = P72;
+#NET "avr_data_in[10]" LOC = P71;
+#NET "avr_data_in[9]" LOC = P58;
+#NET "avr_data_in[8]" LOC = P57;
+#NET "avr_data_in[7]" LOC = P54;
+#NET "avr_data_in[6]" LOC = P51;
+#NET "avr_data_in[5]" LOC = P43;
+#NET "avr_data_in[4]" LOC = P32;
+#NET "avr_data_in[3]" LOC = P26; # Broken?!?!?!?!
+#NET "avr_data_in[2]" LOC = P20;
+#NET "avr_data_in[1]" LOC = P14;
+#NET "avr_data_in[0]" LOC = P6;
+NET "avr_data_in[7]" LOC = P101;
+NET "avr_data_in[6]" LOC = P91;
+NET "avr_data_in[5]" LOC = P58;
+NET "avr_data_in[4]" LOC = P57;
+NET "avr_data_in[3]" LOC = P54;
+NET "avr_data_in[2]" LOC = P51;
+NET "avr_data_in[1]" LOC = P43;
+NET "avr_data_in[0]" LOC = P32;
 
 #	avr_data_in_ready : in std_logic;						-- FPGA_IN_24
 NET "avr_data_in_ready" LOC = P174;
@@ -199,12 +207,12 @@ NET "avr_interrupt" LOC = P5;
 #	-- AVR state control
 
 #	state : in std_logic_vector(2 downto 0);				-- FPGA_IN_[28-26]
-#NET "state[2]" LOC = P194;
-#NET "state[1]" LOC = P184;
-#NET "state[0]" LOC = P183;
-NET "state[2]" LOC = P81;
-NET "state[1]" LOC = P84;
-NET "state[0]" LOC = P86;
+NET "state[2]" LOC = P194;
+NET "state[1]" LOC = P184;
+NET "state[0]" LOC = P183;
+#NET "state[2]" LOC = P81;
+#NET "state[1]" LOC = P84;
+#NET "state[0]" LOC = P86;
 
 #	state_ready : in std_logic);								-- FPGA_IN_25
 NET "state_ready" LOC = P175;

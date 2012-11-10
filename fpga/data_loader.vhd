@@ -9,6 +9,7 @@ entity data_loader is
 	port (
 		clk : in std_logic;
 		enable : in std_logic;
+		reset : in std_logic;
 		
 		mem_addr : out std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
 		mem_write : out std_logic;
@@ -49,7 +50,11 @@ begin
 			running <= next_running;
 			toggle_in_value <= next_toggle_in_value;
 			data <= avr_data_in(RAM_DATA_WORD_WIDTH - 1 downto 0);
-			address <= next_address;
+			if reset = '1' then
+				address <= (others => '0');
+			else
+				address <= next_address;
+			end if;
 		end if;
 	end process;
 	
@@ -67,6 +72,8 @@ begin
 			mem_data <= (others => 'Z');
 			mem_write <= '1';
 			avr_interrupt <= '0';
+			
+			next_address <= address;
 		end if;
 	end process;
 

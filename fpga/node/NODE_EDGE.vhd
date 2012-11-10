@@ -77,8 +77,8 @@ architecture Behavioral of NODE_EDGE is
 		);
 	end component;
 		
-	signal sr_new					: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
-	signal sr_data					: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0);
+	signal sr_new					: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
+	signal sr_data					: STD_LOGIC_VECTOR (NODE_SDATA_BUS-1 downto 0) := (others => '0');
 
 begin
 

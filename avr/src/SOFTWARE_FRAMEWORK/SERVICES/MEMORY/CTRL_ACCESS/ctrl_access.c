@@ -85,6 +85,7 @@
  */
 #define Ctrl_access_unlock()  xSemaphoreGive(ctrl_access_semphr)
 
+
 //! @}
 
 //! Handle to the semaphore protecting accesses to LUNs.
@@ -177,7 +178,8 @@ static const struct
   Ctrl_status (*usb_write_10)(U32, U16);
 #endif
 #if ACCESS_MEM_TO_RAM == ENABLED
-  Ctrl_status (*mem_2_ram)(U32, void *);
+  Ctrl_status (*mem_2_ram)(U32, void *, U8);
+  //Ctrl_status (*mem_2_ram)(U32, void *);
   Ctrl_status (*ram_2_mem)(U32, const void *);
 #endif
   const char *name;
@@ -468,7 +470,8 @@ Ctrl_status usb_2_memory(U8 lun, U32 addr, U16 nb_sector)
 //! @{
 
 
-Ctrl_status memory_2_ram(U8 lun, U32 addr, void *ram)
+Ctrl_status memory_2_ram(U8 lun, U32 addr, void *ram, U8 NbrSectors)
+//Ctrl_status memory_2_ram(U8 lun, U32 addr, void *ram)
 {
   Ctrl_status status;
 
@@ -477,7 +480,8 @@ Ctrl_status memory_2_ram(U8 lun, U32 addr, void *ram)
   memory_start_read_action(1);
   status =
 #if MAX_LUN
-           (lun < MAX_LUN) ? lun_desc[lun].mem_2_ram(addr, ram) :
+          (lun < MAX_LUN) ? lun_desc[lun].mem_2_ram(addr, ram, NbrSectors) :
+		  //(lun < MAX_LUN) ? lun_desc[lun].mem_2_ram(addr, ram) :
 #endif
 #if LUN_USB == ENABLE
                              Lun_usb_mem_2_ram(addr, ram);
@@ -544,7 +548,8 @@ Ctrl_status stream_mem_to_mem(U8 src_lun, U32 src_addr, U8 dest_lun, U32 dest_ad
 
   while (nb_sector--)
   {
-    if ((status = memory_2_ram(src_lun, src_addr++, sector_buf)) != CTRL_GOOD) break;
+	if ((status = memory_2_ram(src_lun, src_addr++, sector_buf, 1)) != CTRL_GOOD) break;
+	//if ((status = memory_2_ram(src_lun, src_addr++, sector_buf)) != CTRL_GOOD) break;
     if ((status = ram_2_memory(dest_lun, dest_addr++, sector_buf)) != CTRL_GOOD) break;
   }
 

@@ -26,6 +26,7 @@ entity dma is
 		simd_data : inout std_logic_vector(word_width - 1 downto 0);
 		simd_write : out std_logic;
 		
+		active : out std_logic;
 		step_s : out std_logic);
 end dma;
 
@@ -63,28 +64,32 @@ begin
 
 	update_signals: process (clk, enable)
 	begin
-		if rising_edge(clk) and enable = '1' then
-			case command is
-				when "0100" => read_active <= parameter(0);
-				when "0101" => read_base_addr <= parameter(mem_addr_width - 1 downto 0);
-				when "0110" => read_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "0111" => read_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "1000" => write_active <= parameter(0);
-				when "1001" => write_base_addr <= parameter(mem_addr_width - 1 downto 0);
-				when "1010" => write_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "1011" => write_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
-				when "0001" =>
-					state.secondary_action_phase <= '0';
-					state.memory_assert_phase <= '0';
-					state.step_s <= '0';
-					state.read_addr <= read_base_addr;
-					state.write_addr <= write_base_addr;
-					state.row <= 0;
-					state.col <= simd_cols - 1;
-					state.active <= '1';
-				when others =>
-					state <= next_state;
-			end case;
+		if rising_edge(clk) then
+--			if reset = '1' then
+--			elsif enable = '1' then
+			if enable = '1' then
+				case command is
+					when "0100" => read_active <= parameter(0);
+					when "0101" => read_base_addr <= parameter(mem_addr_width - 1 downto 0);
+					when "0110" => read_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
+					when "0111" => read_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
+					when "1000" => write_active <= parameter(0);
+					when "1001" => write_base_addr <= parameter(mem_addr_width - 1 downto 0);
+					when "1010" => write_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
+					when "1011" => write_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
+					when "0001" =>
+						state.secondary_action_phase <= '0';
+						state.memory_assert_phase <= '0';
+						state.step_s <= '0';
+						state.read_addr <= read_base_addr;
+						state.write_addr <= write_base_addr;
+						state.row <= 0;
+						state.col <= simd_cols - 1;
+						state.active <= '1';
+					when others =>
+						state <= next_state;
+				end case;
+			end if;
 		end if;
 	end process update_signals;
 	
@@ -99,6 +104,7 @@ begin
 		if enable = '1' and state.active = '1' then
 			-- Set external signals
 			step_s <= state.step_s;
+			active <= state.active;
 			
 			-- Update internal state
 			next_state <= state;
@@ -142,7 +148,7 @@ begin
 				if state.memory_assert_phase = '0' then
 					mem_addr <= state.read_addr;
 					mem_data <= (others => 'Z');
-					mem_write <= '0';
+					mem_write <= '1'; -- Read
 					
 					next_state.memory_assert_phase <= '1';
 				else
@@ -165,12 +171,13 @@ begin
 					
 					mem_addr <= state.write_addr;
 					mem_data <= simd_data;
-					mem_write <= '1';
+					mem_write <= '0'; -- Write
 					
 					next_state.memory_assert_phase <= '1';
 				else
-					mem_addr <= (others => 'Z');
-					mem_write <= '0';
+					mem_addr <= (others => '0');
+					mem_data <= (others => 'Z');
+					mem_write <= '1'; -- Read
 					
 					next_state.memory_assert_phase <= '0';
 					assert_done := '1';
@@ -198,6 +205,16 @@ begin
 				
 				next_state.secondary_action_phase <= '0';
 			end if;
+		else
+			active <= '0';
+			
+			mem_addr <= (others => '0');
+			mem_data <= (others => 'Z');
+			mem_write <= '1'; -- Read
+			
+			simd_addr <= (others => '0');
+			simd_data <= (others => 'Z');
+			simd_write <= '0';
 		end if;
 	end process run_dma;
 

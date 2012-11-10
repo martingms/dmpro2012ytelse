@@ -10,6 +10,9 @@
 // retrieve the pixel value at (x,y). either 1 or 0.
 #define R_READ(x,y) (((unsigned char)( buf[y * R_STRIDE + (x/8)] & (1<<(7-x%8)) ))>0)
 
+// tells str2img where to put its working data buffer
+void str2img_init(unsigned char *addr);
+
 // clears the image and resets the pointer to position (0,0) (upper left hand corner)
 void str2img_clear();
 

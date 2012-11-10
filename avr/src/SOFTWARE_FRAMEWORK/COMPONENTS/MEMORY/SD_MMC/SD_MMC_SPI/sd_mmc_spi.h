@@ -68,7 +68,10 @@
 #define MMC_SECTOR_SIZE                   512   //default sector size is 512 bytes
 #endif
 
-#define byte_adr_of_block(ad)             (ad<<9)   // returns the first byte address of a specified sector/block number (512bytes/block)
+
+#define byte_adr_of_block(ad)             (ad << 9)   // returns the first byte address of a specified sector/block number (512bytes/block)
+#define MAX_SECTORS_AT_ONCE				  (RAM_BUFFER_SIZE / MMC_SECTOR_SIZE / 2)
+
 
 /*_____ D E F I N I T I O N ________________________________________________*/
 
@@ -92,16 +95,20 @@
 #define OP_FORCED_ERASE                   0x08
 
 // MMC commands (taken from MMC reference)
-#define MMC_GO_IDLE_STATE                 0    ///< initialize card to SPI-type access
-#define MMC_SEND_OP_COND                  1    ///< set card operational mode
-#define MMC_CMD2                          2               ///< illegal in SPI mode !
-#define MMC_SEND_IF_COND				  8
-#define MMC_SEND_CSD                      9    ///< get card's CSD
+#define MMC_GO_IDLE_STATE                 0     ///< initialize card to SPI-type access
+#define MMC_SEND_OP_COND                  1     ///< set card operational mode
+#define MMC_CMD2                          2     ///< illegal in SPI mode !
+#define MMC_SEND_IF_COND		  		  8
+#define MMC_SEND_CSD                      9     ///< get card's CSD
 #define MMC_SEND_CID                      10    ///< get card's CID
+#define MMC_STOP_TRANSMISSION             12    ///< stop multiblock transmission
 #define MMC_SEND_STATUS                   13
 #define MMC_SET_BLOCKLEN                  16    ///< Set number of bytes to transfer per block
 #define MMC_READ_SINGLE_BLOCK             17    ///< read a block
+#define MMC_READ_MULTIPLE_BLOCKS		  18
+#define MMC_SET_BLOCK_COUNT				  23	
 #define MMC_WRITE_BLOCK                   24    ///< write a block
+#define MMC_WRITE_MULTIPLE_BLOCKS		  25
 #define MMC_PROGRAM_CSD                   27
 #define MMC_SET_WRITE_PROT                28
 #define MMC_CLR_WRITE_PROT                29
@@ -148,8 +155,11 @@
 #define MMC_DR_REJECT_CRC                 0x0B
 #define MMC_DR_REJECT_WRITE_ERROR         0x0D
 
-
-
+#define SDHC_CARD                         1
+#define SD_CARD_T                         0 
+                              
+#define SD_FAILURE                       -1
+#define SD_MMC                            0
 /*_____ D E C L A R A T I O N ______________________________________________*/
 
 //! Low-level functions (basic management)
@@ -183,15 +193,14 @@ extern Bool sd_mmc_spi_write_sector (U16);      // write a 512b sector from USB 
 extern Bool sd_mmc_spi_read_sector (U16);       // reads a 512b sector to an USB buffer
 extern Bool sd_mmc_spi_read_multiple_sector(U16 nb_sector);
 extern Bool sd_mmc_spi_write_multiple_sector(U16 nb_sector);
-extern void sd_mmc_spi_read_multiple_sector_callback(const void *psector);
-extern void sd_mmc_spi_write_multiple_sector_callback(void *psector);
+extern void sd_mmc_spi_read_multiple_sector_callback(const void *psector, unsigned char ucNbrSectors);
+extern void sd_mmc_spi_write_multiple_sector_callback(void *psector, unsigned char ucNbrSectors);
 
 
-/*
-//! Funtions to link USB HOST flow with MMC
-bit     sd_mmc_spi_host_write_sector (U16);
-bit     sd_mmc_spi_host_read_sector (U16);
-*/
+// Function to read / write multiple sectors
+extern Bool sd_mmc_spi_write_multiple_sector_from_ram(const void *ram, unsigned char ucNrbSectors);
+extern Bool sd_mmc_spi_read_multiple_sectors_to_ram(void *ram, unsigned char ucNbrSectors);
+
 
 //! Functions to read/write one sector (512btes) with ram buffer pointer
 extern Bool sd_mmc_spi_read_sector_to_ram(void *ram);     // reads a data block and send it to a buffer (512b)
@@ -217,3 +226,4 @@ extern  Bool        sd_mmc_spi_init_done;
 
 
 #endif  // _SD_MMC_SPI_H_
+

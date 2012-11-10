@@ -897,7 +897,7 @@ Bool sd_mmc_spi_read_multiple_sector(U16 nb_sector)
   {
     // Read the next sector
     sd_mmc_spi_read_sector_to_ram(sector_buf);
-    sd_mmc_spi_read_multiple_sector_callback(sector_buf);
+    sd_mmc_spi_read_multiple_sector_callback(sector_buf, nb_sector);
   }
 
   return OK;
@@ -914,7 +914,7 @@ Bool sd_mmc_spi_write_multiple_sector(U16 nb_sector)
   while (nb_sector--)
   {
     // Write the next sector
-    sd_mmc_spi_write_multiple_sector_callback(sector_buf);
+    sd_mmc_spi_write_multiple_sector_callback(sector_buf, nb_sector);
     sd_mmc_spi_write_sector_from_ram(sector_buf);
   }
 
@@ -1138,16 +1138,16 @@ Bool sd_mmc_spi_read_sector_to_ram(void *ram)
   }
 
   // wait for token (may be a datablock start token OR a data error token !)
-  read_time_out = 30000;
-  while((r1 = sd_mmc_spi_send_and_read(0xFF)) == 0xFF)
-  {
-     read_time_out--;
-     if (read_time_out == 0)   // TIME-OUT
-     {
-       spi_unselectChip(SD_MMC_SPI, SD_MMC_SPI_NPCS); // unselect SD_MMC_SPI
-       return KO;
-     }
-  }
+//  read_time_out = 30000;
+  while((r1 = sd_mmc_spi_send_and_read(0xFF)) == 0xFF);
+//  {
+//     read_time_out--;
+//     if (read_time_out == 0)   // TIME-OUT
+//     {
+//       spi_unselectChip(SD_MMC_SPI, SD_MMC_SPI_NPCS); // unselect SD_MMC_SPI
+//       return KO;
+//     }
+//  }
 
   // check token
   if (r1 != MMC_STARTBLOCK_READ)
@@ -1157,22 +1157,49 @@ Bool sd_mmc_spi_read_sector_to_ram(void *ram)
     return KO;
   }
 
+
+//  spi_status_t spi_read(volatile avr32_spi_t *spi, unsigned short *data)
+//  {
+//    while ((spi->sr & (AVR32_SPI_SR_RDRF_MASK | AVR32_SPI_SR_TXEMPTY_MASK)) !=
+//           (AVR32_SPI_SR_RDRF_MASK | AVR32_SPI_SR_TXEMPTY_MASK));
+//    *data = spi->rdr >> AVR32_SPI_RDR_RD_OFFSET;
+//  }
+
+//  spi_status_t spi_write(volatile avr32_spi_t *spi, unsigned short data)
+//  {
+//    while (!(spi->sr & AVR32_SPI_SR_TDRE_MASK));
+//    spi->tdr = data << AVR32_SPI_TDR_TD_OFFSET;
+//  }
+
   // store datablock
-  for(i=0;i<MMC_SECTOR_SIZE;i++)
-  {
-    spi_write(SD_MMC_SPI,0xFF);
-    spi_read(SD_MMC_SPI,&data_read);
-    *_ram++=data_read;
-  }
+    for(i=0;i<MMC_SECTOR_SIZE;i++)
+    {
+    	((avr32_spi_t*)SD_MMC_SPI)->tdr = 0xFF;
+    	while (!(((avr32_spi_t*)SD_MMC_SPI)->sr & AVR32_SPI_SR_RDRF_MASK));
+		*_ram++ = ((avr32_spi_t*)SD_MMC_SPI)->rdr;
+    }
+//  for(i=0;i<MMC_SECTOR_SIZE;i++)
+//  {
+//  while (!(((avr32_spi_t*)SD_MMC_SPI)->sr & AVR32_SPI_SR_TDRE_MASK));
+//	((avr32_spi_t*)SD_MMC_SPI)->tdr = 0xFF << AVR32_SPI_TDR_TD_OFFSET;
+//  while ((((avr32_spi_t*)SD_MMC_SPI)->sr & (AVR32_SPI_SR_RDRF_MASK | AVR32_SPI_SR_TXEMPTY_MASK)) !=
+//			(AVR32_SPI_SR_RDRF_MASK | AVR32_SPI_SR_TXEMPTY_MASK));
+//	*_ram++ = ((avr32_spi_t*)SD_MMC_SPI)->rdr >> AVR32_SPI_RDR_RD_OFFSET;
+//
+////    spi_write(SD_MMC_SPI,0xFF);
+////    spi_read(SD_MMC_SPI,&data_read);
+////    *_ram++=data_read;
+//  }
+
   gl_ptr_mem += MMC_SECTOR_SIZE;     // Update the memory pointer.
 
   // load 16-bit CRC (ignored)
-  spi_write(SD_MMC_SPI,0xFF);
-  spi_write(SD_MMC_SPI,0xFF);
+//  spi_write(SD_MMC_SPI,0xFF);
+//  spi_write(SD_MMC_SPI,0xFF);
 
   // continue delivering some clock cycles
-  spi_write(SD_MMC_SPI,0xFF);
-  spi_write(SD_MMC_SPI,0xFF);
+//  spi_write(SD_MMC_SPI,0xFF);
+//  spi_write(SD_MMC_SPI,0xFF);
 
   // release chip select
   spi_unselectChip(SD_MMC_SPI, SD_MMC_SPI_NPCS);  // unselect SD_MMC_SPI
@@ -1180,6 +1207,91 @@ Bool sd_mmc_spi_read_sector_to_ram(void *ram)
   return OK;   // Read done.
 }
 
+
+
+//! @brief This function reads ucNbrSectors from MMC and load it into a ram buffer
+//!
+//!         DATA FLOW is: SD/MMC => RAM
+//!
+//!
+//! NOTE:
+//!   - First call (if sequential read) must be preceded by a call to the sd_mmc_spi_read_open() function
+//!
+//! @param ram         pointer to ram buffer
+//!
+//! @return bit
+//!   The read succeeded   -> OK
+//!   The read failed (bad address, etc.)  -> KO
+//!/
+Bool sd_mmc_spi_read_multiple_sectors_to_ram(void *ram, unsigned char ucNbrSectors)
+{
+	U8 *_ram = ram;
+
+	// wait for MMC not busy
+	if (KO == sd_mmc_spi_wait_not_busy())
+		return KO;
+
+	spi_selectChip(SD_MMC_SPI, SD_MMC_SPI_NPCS);    // select SD_MMC_SPI
+
+	// issue command
+	if(card_type == SD_CARD_2_SDHC) {
+		r1 = sd_mmc_spi_command(MMC_READ_MULTIPLE_BLOCKS, gl_ptr_mem >> 9);
+	} else {
+		r1 = sd_mmc_spi_command(MMC_READ_MULTIPLE_BLOCKS, gl_ptr_mem);
+	}
+
+	// check for valid response
+	if (r1 != 0x00)
+	{
+		spi_unselectChip(SD_MMC_SPI, SD_MMC_SPI_NPCS);  // unselect SD_MMC_SPI
+		return KO;
+	}
+
+	int i;
+	while (ucNbrSectors)
+	{
+		// wait for token (may be a datablock start token OR a data error token !)
+		while((r1 = sd_mmc_spi_send_and_read(0xFF)) == 0xFF);
+
+		// check token
+		if (r1 != MMC_STARTBLOCK_READ)
+		{
+			spi_write(SD_MMC_SPI,0xFF);
+			spi_unselectChip(SD_MMC_SPI, SD_MMC_SPI_NPCS);  // unselect SD_MMC_SPI
+			return KO;
+		}
+
+		for(i=0;i<MMC_SECTOR_SIZE;i++)
+		{
+			((avr32_spi_t*)SD_MMC_SPI)->tdr = 0xFF;
+			while (!(((avr32_spi_t*)SD_MMC_SPI)->sr & AVR32_SPI_SR_RDRF_MASK));
+			*_ram++ = ((avr32_spi_t*)SD_MMC_SPI)->rdr;
+		}
+
+		gl_ptr_mem += MMC_SECTOR_SIZE;        	// Update the memory pointer.
+		ucNbrSectors--;
+
+		// load 16-bit CRC (ignored)
+		spi_write(SD_MMC_SPI,0xFF);
+		spi_write(SD_MMC_SPI,0xFF);
+	}
+
+	/* Stop transmission */
+//	sd_mmc_spi_command(MMC_STOP_TRANSMISSION, 0);
+	spi_write(SD_MMC_SPI,0xFF);
+	spi_write(SD_MMC_SPI,MMC_STOP_TRANSMISSION | 0x40);
+	spi_write(SD_MMC_SPI,0);
+	spi_write(SD_MMC_SPI,0);
+	spi_write(SD_MMC_SPI,0);
+	spi_write(SD_MMC_SPI,0);
+	spi_write(SD_MMC_SPI,0xFF);
+	while((r1 = sd_mmc_spi_send_and_read(0xFF)) == 0xFF);
+
+	// release chip select
+	spi_unselectChip(SD_MMC_SPI, SD_MMC_SPI_NPCS);  // unselect SD_MMC_SPI
+
+	return OK;   // Read done.
+}
 
 //! @brief This function writes one MMC sector from a ram buffer
 //!

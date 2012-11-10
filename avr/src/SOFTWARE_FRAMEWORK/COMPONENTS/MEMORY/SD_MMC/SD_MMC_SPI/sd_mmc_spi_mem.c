@@ -214,33 +214,20 @@ Bool  sd_mmc_spi_removal(void)
 
 Ctrl_status sd_mmc_spi_usb_read_10(U32 addr, U16 nb_sector)
 {
-Bool status;
+	Sd_mmc_spi_access_signal_on();
 
-   if (sd_mmc_spi_init_done == FALSE)
-   {
-      sd_mmc_spi_mem_init();
-   }
+	sd_mmc_spi_read_open(addr);
+	sd_mmc_spi_read_multiple_sector(nb_sector);
+	sd_mmc_spi_read_close();
+	Sd_mmc_spi_access_signal_off();
 
-   if (sd_mmc_spi_init_done == TRUE)
-   {
-     Sd_mmc_spi_access_signal_on();
-     sd_mmc_spi_read_open(addr);
-     status = sd_mmc_spi_read_multiple_sector(nb_sector);
-     sd_mmc_spi_read_close();
-     Sd_mmc_spi_access_signal_off();
-     if (status == OK)
-        return CTRL_GOOD;
-     else
-        return CTRL_NO_PRESENT;
-   }
-   else
-     return CTRL_NO_PRESENT;
+	return CTRL_GOOD;
 }
 
 
-void sd_mmc_spi_read_multiple_sector_callback(const void *psector)
+void sd_mmc_spi_read_multiple_sector_callback(const void *psector, unsigned char ucNbrSectors)
 {
-  U16 data_to_transfer = MMC_SECTOR_SIZE;
+  U16 data_to_transfer = MMC_SECTOR_SIZE * ucNbrSectors;
 
   while (data_to_transfer)
   {
@@ -257,33 +244,20 @@ void sd_mmc_spi_read_multiple_sector_callback(const void *psector)
 
 Ctrl_status sd_mmc_spi_usb_write_10(U32 addr, U16 nb_sector)
 {
-  Bool status;
+	Sd_mmc_spi_access_signal_on();
 
-   if (sd_mmc_spi_init_done == FALSE)
-   {
-      sd_mmc_spi_mem_init();
-   }
+	sd_mmc_spi_write_open(addr);
+	sd_mmc_spi_write_multiple_sector(nb_sector);
+	sd_mmc_spi_write_close();
+	Sd_mmc_spi_access_signal_off();
 
-   if (sd_mmc_spi_init_done == TRUE)
-   {
-     Sd_mmc_spi_access_signal_on();
-     sd_mmc_spi_write_open(addr);
-     status = sd_mmc_spi_write_multiple_sector(nb_sector);
-     sd_mmc_spi_write_close();
-     Sd_mmc_spi_access_signal_off();
-     if (status == OK)
-       return CTRL_GOOD;
-     else
-       return CTRL_NO_PRESENT;
-   }
-   else
-     return CTRL_NO_PRESENT;
+	return CTRL_GOOD;
 }
 
 
-void sd_mmc_spi_write_multiple_sector_callback(void *psector)
+void sd_mmc_spi_write_multiple_sector_callback(void *psector, unsigned char ucNbrSectors)
 {
-  U16 data_to_transfer = MMC_SECTOR_SIZE;
+  U16 data_to_transfer = MMC_SECTOR_SIZE * ucNbrSectors;
 
   while (data_to_transfer)
   {
@@ -303,36 +277,31 @@ void sd_mmc_spi_write_multiple_sector_callback(void *psector)
 
 #if ACCESS_MEM_TO_RAM == ENABLED
 
-Ctrl_status sd_mmc_spi_mem_2_ram(U32 addr, void *ram)
+Ctrl_status sd_mmc_spi_mem_2_ram(U32 addr, void *ram, U8 nb_sectors)
+//Ctrl_status sd_mmc_spi_mem_2_ram(U32 addr, void *ram)
 {
-   Sd_mmc_spi_access_signal_on();
-   sd_mmc_spi_check_presence();
+	if (nb_sectors > 1)
+	{
+		Sd_mmc_spi_access_signal_on();
+		sd_mmc_spi_read_open(addr);
+		sd_mmc_spi_read_multiple_sectors_to_ram(ram, nb_sectors);
+		sd_mmc_spi_read_close();
+		Sd_mmc_spi_access_signal_off();
+	}
+	else
+	{
+		Sd_mmc_spi_access_signal_on();
+		sd_mmc_spi_read_open(addr);
+		sd_mmc_spi_read_sector_to_ram(ram);
+		sd_mmc_spi_read_close();
+		Sd_mmc_spi_access_signal_off();
+	}
 
-   if (sd_mmc_spi_init_done == FALSE)
-   {
-      sd_mmc_spi_mem_init();
-   }
-
-   if (sd_mmc_spi_init_done == TRUE)
-   {
-     sd_mmc_spi_read_open(addr);
-     if (KO == sd_mmc_spi_read_sector_to_ram(ram))
-     {
-       sd_mmc_spi_write_close();
-       Sd_mmc_spi_access_signal_off();
-       return CTRL_NO_PRESENT;
-     }
-     sd_mmc_spi_read_close();
-     Sd_mmc_spi_access_signal_off();
-     return CTRL_GOOD;
-   }
-   Sd_mmc_spi_access_signal_off();
-
-   return CTRL_NO_PRESENT;
+	return CTRL_GOOD;
 }
 
 
-//! This fonction initialises the memory for a write operation
+//! This function initializes the memory for a write operation
 //! from ram buffer to SD/MMC (1 sector)
 //!
 //!         DATA FLOW is: RAM => SD/MMC
@@ -347,30 +316,14 @@ Ctrl_status sd_mmc_spi_mem_2_ram(U32 addr, void *ram)
 //!
 Ctrl_status    sd_mmc_spi_ram_2_mem(U32 addr, const void *ram)
 {
-   Sd_mmc_spi_access_signal_on();
-   sd_mmc_spi_check_presence();
+	Sd_mmc_spi_access_signal_on();
 
-   if (sd_mmc_spi_init_done == FALSE)
-   {
-      sd_mmc_spi_mem_init();
-   }
+	sd_mmc_spi_write_open(addr);
+	sd_mmc_spi_write_sector_from_ram(ram);
+	sd_mmc_spi_write_close();
+	Sd_mmc_spi_access_signal_off();
 
-   if (sd_mmc_spi_init_done == TRUE)
-   {
-     sd_mmc_spi_write_open(addr);
-     if (KO == sd_mmc_spi_write_sector_from_ram(ram))
-     {
-       sd_mmc_spi_write_close();
-       Sd_mmc_spi_access_signal_off();
-       return CTRL_NO_PRESENT;
-     }
-     sd_mmc_spi_write_close();
-     Sd_mmc_spi_access_signal_off();
-     return CTRL_GOOD;
-   }
-   Sd_mmc_spi_access_signal_off();
-
-   return CTRL_NO_PRESENT;
+	return CTRL_GOOD;
 }
 
 
