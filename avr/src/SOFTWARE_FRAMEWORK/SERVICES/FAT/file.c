@@ -254,6 +254,7 @@ U16   file_read_buf( U8 _MEM_TYPE_SLOW_ *buffer , U16 u16_buf_size )
    _MEM_TYPE_FAST_ U16 u16_nb_read;
    _MEM_TYPE_FAST_ U16 u16_pos_in_sector;
    _MEM_TYPE_FAST_ U32 u32_byte_remaining;
+				   U8  u8_sectors_to_read;
 
    if( !fat_check_mount_select_open())
       return FALSE;
@@ -308,17 +309,19 @@ U16   file_read_buf( U8 _MEM_TYPE_SLOW_ *buffer , U16 u16_buf_size )
             fs_g_seg.u32_size_or_pos = u16_nb_read_tmp;
          }
 
-         // Directly data tranfert from memory to buffer
-         while( 0 != fs_g_seg.u32_size_or_pos )
+         // Directly data transfer from memory to buffer
+         while(0 != fs_g_seg.u32_size_or_pos )
          {
-            if( CTRL_GOOD != memory_2_ram( fs_g_nav.u8_lun  , fs_g_seg.u32_addr, buffer))
-            {
-               fs_g_status = FS_ERR_HW;
-               return u16_nb_read;
-            }
-            fs_g_seg.u32_size_or_pos--;
-            fs_g_seg.u32_addr++;
-            buffer += FS_512B;
+        	 u8_sectors_to_read = fs_g_seg.u32_size_or_pos;
+
+        	 if( CTRL_GOOD != memory_2_ram( fs_g_nav.u8_lun, fs_g_seg.u32_addr, buffer, u8_sectors_to_read))
+        	 {
+        		 fs_g_status = FS_ERR_HW;
+        		 return u16_nb_read;
+        	 }
+        	 fs_g_seg.u32_size_or_pos-= u8_sectors_to_read;
+        	 fs_g_seg.u32_addr+= u8_sectors_to_read;
+        	 buffer += FS_512B * u8_sectors_to_read;
          }
          // Translate from sector unit to byte unit
          u16_nb_read_tmp *= FS_512B;
@@ -414,7 +417,7 @@ U16   file_getc( void )
 //! Note: the file can be fragmented and you must call file_write() for each fragments.
 //! @endverbatim
 //!
-Bool  file_write( Fs_file_segment _MEM_TYPE_SLOW_ *segment )
+Bool  file_write(Fs_file_segment _MEM_TYPE_SLOW_ *segment)
 {
    if( !fat_check_mount_select_open())
       return FALSE;
@@ -425,14 +428,14 @@ Bool  file_write( Fs_file_segment _MEM_TYPE_SLOW_ *segment )
       return FALSE;
    }
 
-   if( !fat_write_file( FS_CLUST_ACT_SEG , segment->u16_size ))
+   if(!fat_write_file( FS_CLUST_ACT_SEG , segment->u16_size))
       return FALSE;
 
    // If the segment is too large then truncate it
    if( (segment->u16_size != 0)  // if not undefine limit
    &&  (segment->u16_size < fs_g_seg.u32_size_or_pos) )
    {
-      fs_g_seg.u32_size_or_pos = segment->u16_size ;
+      fs_g_seg.u32_size_or_pos = segment->u16_size;
    }
 
    // Update file position
@@ -443,7 +446,8 @@ Bool  file_write( Fs_file_segment _MEM_TYPE_SLOW_ *segment )
    {
       fs_g_nav_entry.u32_size = fs_g_nav_entry.u32_pos_in_file;
    }
-   file_load_segment_value( segment );
+   file_load_segment_value(segment);
+
    return TRUE;
 }
 
@@ -644,19 +648,16 @@ U32   file_getpos( void )
 //!
 //! @param     u32_pos     number of byte to seek
 //! @param     u8_whence   direction of seek <br>
-//!                        FS_SEEK_SET   , start at the beginning and foward <br>
+//!                        FS_SEEK_SET   , start at the beginning and forward <br>
 //!                        FS_SEEK_END   , start at the end of file and rewind <br>
 //!                        FS_SEEK_CUR_RE, start at the current position and rewind <br>
-//!                        FS_SEEK_CUR_FW, start at the current position and foward <br>
+//!                        FS_SEEK_CUR_FW, start at the current position and forward <br>
 //!
 //! @return    FALSE in case of error, see global value "fs_g_status" for more detail
 //! @return    TRUE otherwise
 //!
 Bool  file_seek( U32 u32_pos , U8 u8_whence )
 {
-   if( !fat_check_mount_select_open())
-      return FALSE;
-
    switch(u8_whence)
    {
       case FS_SEEK_CUR_RE:
@@ -727,9 +728,7 @@ U8    file_bof( void )
 //!
 U8    file_eof( void )
 {
-   if( !fat_check_mount_select_open() )
-      return 0xFF;
-   return (fs_g_nav_entry.u32_size <= fs_g_nav_entry.u32_pos_in_file );
+	return (fs_g_nav_entry.u32_size <= fs_g_nav_entry.u32_pos_in_file );
 }
 
 

@@ -167,7 +167,7 @@ extern Ctrl_status    sd_mmc_spi_usb_write_10(U32 addr, U16 nb_sector);
 //!   It is ready      ->    CTRL_GOOD
 //!   An error occurs  ->    CTRL_FAIL
 //!
-extern Ctrl_status    sd_mmc_spi_mem_2_ram(U32 addr, void *ram);
+extern Ctrl_status sd_mmc_spi_mem_2_ram(U32 addr, void *ram, U8 nb_sectors);
 
 //! This fonction initialises the memory for a write operation
 //! from ram buffer to SD/MMC (1 sector)
