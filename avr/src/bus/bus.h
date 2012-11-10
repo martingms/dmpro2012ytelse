@@ -19,6 +19,8 @@
 #define FPGA_STATE_OFFSET 35
 #define FPGA_STATE_SIZE 3
 
+int bus_send_data_8(U8);
+
 
 /*! \brief Initializes the bus
  */

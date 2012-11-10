@@ -21,6 +21,8 @@
 #include <fcntl.h>
 
 
+#include "led.h"
+
 #define DEFAULT_FPGA_LISTENER &fpga_receive_data
 #define DATA_WORD_LENGTH 		1
 #define INSTRUCTION_WORD_LENGTH 3
@@ -34,19 +36,26 @@ void receive_ack(void) {
 }
 
 // ------[GENERIC SEND FUNCTION]-------//
-int fpga_send(int(*get_word) (U32), int transfer_state, int word_width) {
+int fpga_send(int(*get_word) (U32*), int transfer_state, int word_width) {
 	// S.1 - S.6 refers to the stages in 'AVR sends program to the FPGA'
 	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
 	U32 buffer;
 
 	fpga_set_state(transfer_state);											// S.1
 	fpga_set_listener(&receive_ack);
-	while (get_word(buffer) > 0) {
-		acked = FALSE;
+	while (get_word(&buffer) > 0) {
+		//acked = FALSE;
 		bus_send_data(buffer, FPGA_DATA_IN_BUS_OFFSET, word_width*8);// S.2
+		//bus_send_data_8(buffer);
 		bus_toggle_inc_clk_line();											// S.3
-		while (acked == FALSE);												// S.4
+		//while (acked == FALSE);												// S.4
+		//int count = 10;
+		//while(count--);
+
+		//LED_On(LED6);
+
 	}																		// S.5
+	//LED_On(LED7);
 	fpga_set_listener(DEFAULT_FPGA_LISTENER);
 	fpga_set_state(FPGA_STATE_STOP);										// S.6
 	return 0;
@@ -62,11 +71,11 @@ size_t n_bytes;
  * Will not exceed 'n_bytes'.
  * Returns number of bytes read.
  */
-int data_from_memory(U32 buffer) {
-	static int i=0;
-	buffer = 0;
-	if (i < n_bytes) {
-		buffer = data_buffer[i++];
+int byte_count;
+int data_from_memory(U32 *buffer) {
+	*buffer = 0;
+	if (byte_count < n_bytes) {
+		*buffer = data_buffer[byte_count++];
 		return DATA_WORD_LENGTH;
 	}
 	return 0;
@@ -74,33 +83,33 @@ int data_from_memory(U32 buffer) {
 
 /**
  * Takes 3 bytes from 'data_buffer' and puts it in the U32 buffer,
- * bytewise: 0-B1-B2-B3, where B1 is the first byte read from the file.
+ * bytewise: 0-B3-B2-B1, where B1 is the first byte read from the file.
  * Will not exceed 'n_bytes'.
  * Returns number of bytes read.
  */
-int program_from_memory(U32 buffer) {
+int program_from_memory(U32 *buffer) {
 	static int i=0;
 	int j;
 	U32 tmp;
-	buffer = 0;
-	for (j=INSTRUCTION_WORD_LENGTH-1; j>=0 && i<n_bytes; --j, ++i) {
+	*buffer = 0;
+	for (j=0; j<INSTRUCTION_WORD_LENGTH && i<n_bytes; --j, ++i) {
 		tmp = data_buffer[i];
 		tmp = tmp << 8*j;
-		buffer |= tmp;
-	}
-	if (j>= 0) {
+		*buffer |= tmp;
+	} //TODO tenk over dette (riktig rekkefølge på bytes)
+
+	if (j < INSTRUCTION_WORD_LENGTH) {
 		seprintf("Warning: detected instruction of less than 24 bit width! (fpga.c)\n");
 	}
-	return INSTRUCTION_WORD_LENGTH-1 - j;
+	return j - INSTRUCTION_WORD_LENGTH;
 }
-
-
 // ----------------------------------- //
 
 // ----[SPECIALIZED SEND FUNCTIONS]----//
 int fpga_send_data_from_memory(U8 *data, size_t size) {
 	data_buffer = data;
 	n_bytes = size;
+	byte_count = 0;
 	return fpga_send(&data_from_memory, FPGA_STATE_LOAD_DATA, DATA_WORD_LENGTH);
 }
 
@@ -200,7 +209,7 @@ __attribute__((__interrupt__)) void fpga_interrupt_routine(void) {
 int fpga_init_interrupt(void) {
 	// Register interrupt
 	INTC_register_interrupt(&fpga_interrupt_routine, AVR32_GPIO_IRQ_0 + FPGA_IO_CTRL / 8, AVR32_INTC_INT0);
-	int rc = gpio_enable_pin_interrupt(FPGA_IO_CTRL, GPIO_PIN_CHANGE);
+	int rc = gpio_enable_pin_interrupt(FPGA_IO_CTRL, GPIO_RISING_EDGE); //TODO hør med FPGA om dette
 	fpga_set_listener(DEFAULT_FPGA_LISTENER);
 	return rc;
 }

@@ -12,6 +12,14 @@
 #include "sd_mmc_spi.h"
 #include "freqs.h"
 
+
+#include "led.h"
+#include "fpga.h"
+#include "button.h"
+#include "bus.h"
+#include "intc.h"
+
+
 static char sprintf_buf[256];
 
 pcl_freq_param_t pcl_freq_param = {
@@ -21,7 +29,106 @@ pcl_freq_param_t pcl_freq_param = {
                 .osc0_startup = OSC0_STARTUP
 };
 
-int main(void)
+void init(void) {
+	int rc;
+
+	// Serial
+	pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);
+	/*if (pcl_configure_clocks(&pcl_freq_param) != PASS) {
+	            LED_On(LED0); LED_On(LED1);
+	            LED_On(LED2); LED_On(LED3);
+	            while(1);
+	   }
+	*/
+
+	rc = serial_init();
+	//if (rc) LED_On(1);
+
+	// Interrupts
+	INTC_init_interrupts();
+	rc = fpga_init_interrupt();
+	if (rc) seprintf("fpga_init_interrupt error %d\n", rc);
+	rc = button_init();
+	if (rc) seprintf("button_init error %d\n", rc);
+	Enable_global_interrupt();
+
+	// Bus
+	bus_init();
+}
+
+void set_state(void);
+void send_some_data(void);
+
+U8 selector = 1;
+void b_handler(U8 button) {
+#define RIGHT 1
+#define LEFT 2
+#define ENTER 4
+#define SEND 8
+	U8 tmp;
+
+	LED_Off(0xff);
+
+	if (button == LEFT && (tmp=selector<<1) > 0) {
+		selector = tmp;
+	} else if (button == RIGHT && (tmp=selector>>1) > 0) {
+		selector = tmp;
+	} else if (button == ENTER) {
+		set_state();
+	} else if (button == SEND) {
+		send_some_data();
+	}
+	LED_On(selector);
+}
+
+void set_state(void) {
+	switch (selector) {
+		case 1:
+			fpga_set_state(FPGA_STATE_STOP);
+			break;
+		case 2:
+			fpga_set_state(FPGA_STATE_RUN);
+			break;
+		case 3:
+			fpga_set_state(FPGA_STATE_LOAD_DATA);
+			break;
+		case 4:
+			fpga_set_state(FPGA_STATE_STORE_DATA);
+			break;
+		case 5:
+			fpga_set_state(FPGA_STATE_LOAD_INSTRUCTION);
+			break;
+		default:
+			return;
+	}
+}
+
+#define SIZE 1000
+void send_some_data(void) {
+
+	//fpga_send_data_from_file("A:/data", false);
+	//return;
+	U8 random[] = {1,23,64,10,53,156,65,14,253,200,211,69,2,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+
+	U8 data[SIZE];
+	int i;
+	for (i = 0, j=0; i < SIZE, j<20; ++i) {
+		data[i] = random[i];//i%256;
+	}
+	fpga_send_data_from_memory(data, SIZE);
+}
+
+int main(void) {
+	init();
+	//button_reg_listener(&b_handler);
+	//LED_On(selector);
+	LED_On(LED0);
+	send_some_data();
+	LED_On(LED1);
+	while(TRUE);
+}
+
+int test_mmc(void)
 {
 
     pcl_switch_to_osc(PCL_OSC0, FOSC0, OSC0_STARTUP);

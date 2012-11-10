@@ -68,38 +68,52 @@ void bus_init(void) {
 int bus_send_data(U32 word, int bus_offset, int bus_size) {
 	if ((bus_offset+bus_size) > FPGA_BUS_SIZE) return -1; // bus index will get out of bounds
 	int i,j;
-	U32 power_of_two = 1;
+	U32 bit_mask = 1;
 	U32 pin;
 	for (i=bus_offset, j=0; i < bus_offset+bus_size; ++i, ++j) {
-		pin = word & power_of_two;
+		pin = word & bit_mask;
 		if (pin == 0) {
 			gpio_clr_gpio_pin(fpga_bus[i]);
-		} else if (pin == power_of_two){
+		} else if (pin == bit_mask){
 			gpio_set_gpio_pin(fpga_bus[i]);
 		}
-		power_of_two = power_of_two << 1;
+		bit_mask = bit_mask << 1;
 	}
+	return 0;
+}
+
+int bus_send_data_8(U8 word) {
+	static volatile avr32_gpio_port_t *portB = &AVR32_GPIO.port[1];
+
+
+	static U8 last = '\0';
+	U32 val = (word ^ last) << 3;
+	portB->ovrt = val;
+	portB->oders = (0xFF << 3);
+	portB->gpers = (0xFF << 3);
+	last = word;
+
 	return 0;
 }
 
 U8 bus_receive_data(void) {
 	U8 data = 0;
+	U8 bit_mask = 1;
 	int i,j;
-	U32 power_of_two = 1;
 	for (i=FPGA_IO_BUS_OFFSET, j=0; i < FPGA_IO_BUS_OFFSET+FPGA_IO_BUS_SIZE; ++i, ++j) {
 		if (gpio_get_pin_value(fpga_bus[i]) == 1) {
-			data |= power_of_two;
+			data |= bit_mask;
 		}
-		power_of_two = power_of_two << 1;
+		bit_mask = bit_mask << 1;
 	}
 	return data;
 }
 
 void bus_toggle_inc_clk_line() {
-	gpio_tgl_gpio_pin(fpga_bus[FPGA_INC_CLK_LINE]);
+	gpio_tgl_gpio_pin(fpga_bus[FPGA_INC_CLK_LINE]); //TODO hør med FPGA om dette
 }
 
 void bus_toggle_set_state_line() {
-	gpio_tgl_gpio_pin(fpga_bus[FPGA_SET_STATE_LINE]);
+	gpio_tgl_gpio_pin(fpga_bus[FPGA_SET_STATE_LINE]); //TODO hør med FPGA om dette
 }
 
