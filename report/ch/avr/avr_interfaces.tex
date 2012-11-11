@@ -15,14 +15,14 @@ We also wanted to have some visual input and debugging tools for the project (bu
 
 Same goes for the VGA controller we had mapped up to the AVR. Seeing as this neither did require specific ports on the AVR we fit this in where there were leftover pins when the rest was mapped out.
 
-As for the actual pinout of the AVR refer to apendix.
+As for the actual pinout of the AVR refer to the appendix.
 \TODO Add appendix on this
 
 \subsection{AVR crystal}
 
 Previous years have chosen to have multiple crystals for the AVR. Our AVR has support for up to 3 crystals where 2 is high frequency crystals that can be used as external clocks for the AVR. The last crystal is a low frequency crystal that is needed if one intends to make use of power saving functions in the AVR or are in need of real time measurement on the AVR.
 
-Our project we tried to use the most of the given resources. This including saving pins wherever we could, and as such we have gone with only one crystal. This crystal is connected to port 0 on the AVR and has a socket. We ordered a number of crystals in order to make sure that we could adapt to most any requirements that may or may not have been clear to us at the time of the design.
+As we were to optimize for performance we tried to use the most of the given resources. This including saving pins wherever we could, and as such we have gone with only one crystal. This crystal is connected to port 0 on the AVR and has a socket. We ordered a number of crystals in order to make sure that we could adapt to most any requirements that may or may not have been clear to us at the time of the design.
 
 \subsection{SD card}
 
@@ -36,12 +36,9 @@ The serial feature was implemented as a way of debugging. This is connected to U
 
 Our AVR also supported USB. We decided to map up the USB even though we were doubtful if it would have much use for it due to both having SD card and serial for debugging purposes. This feature therefore got low priority and was not implemented in the final design due to time constraints.
  
-
-
 \subsection{EBI (avrMemory)}
 
 Early in the design process we came to doubt wheter the SD card would perform as well as we needed it to. In order to try to safeguard us from total failure in a case where this would come true (which it did) we gave the AVR a seperate memory in order to be able to have a buffer for data comming from the SD card or from the FPGA. The AVR itself don't have enough memory for even a single fram of video and as such this was after some discussion deemed a worthwhile use of ports at the expense of some I/O lines to the FPGA.
-
 
 \subsection{VGA controller}
 
