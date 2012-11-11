@@ -256,10 +256,6 @@ begin
 	avr_data_in_modified(23 downto 8) <= (others => '0');
 	avr_data_in_modified(7 downto 0) <= avr_data_in;
 	
---	vga_ram_write <= '0';
---	vga_ram_addr <= (others => '0');
---	vga_ram_data <= (others => '0');
-	
 	il_mem_addr(20 downto 19) <= (others => '0');
 	vga_mem_addr(20 downto 19) <= (others => '0');
 	vga_value(1 downto 0) <= (others => '0');
@@ -294,9 +290,6 @@ begin
 			pixel_in => il_pixel_out,
 			mem_addr_in => il_mem_addr(18 downto 0),
 			
---			mem_addr => vga_mem_addr(18 downto 0),
---			mem_we => vga_mem_write,
---			mem_data => vga_mem_data
 			mem_addr => vga_ram_addr(18 downto 0),
 			mem_we => vga_ram_write,
 			mem_data => vga_ram_data
@@ -332,9 +325,6 @@ begin
 			in0_write_enable => control_core_mem_write,
 			in0_addr => control_core_mem_addr,
 			in0_data => control_core_mem_data,
---			in0_write_enable => vga_mem_write,
---			in0_addr => vga_mem_addr,
---			in0_data => vga_mem_data,
 			
 			in1_write_enable => data_loader_mem_write,
 			in1_addr => data_loader_mem_addr,
@@ -350,16 +340,13 @@ begin
 			word_width => RAM_DATA_WORD_WIDTH,
 			address_width => RAM_DATA_ADDRESS_WIDTH)
 		port map (
-			selector => '0',
+			selector => dma_active,
 			
 			in0_write_enable => '1',
 			in0_addr => il_mem_addr,
 			in0_data => il_pixel_in,
---			in0_write_enable => vga_mem_write,
---			in0_addr => vga_mem_addr,
---			in0_data => vga_mem_data,
 			
-			in1_write_enable => '1',
+			in1_write_enable => dma_mem_write,
 			in1_addr => dma_mem_addr,
 			in1_data => dma_mem_data,
 			
