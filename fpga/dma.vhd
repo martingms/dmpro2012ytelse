@@ -14,6 +14,7 @@ entity dma is
 	port (
 		clk : in std_logic;
 		enable : in std_logic;
+		reset : in std_logic;
 		
 		command : in std_logic_vector(3 downto 0);
 		parameter : in std_logic_vector(mem_addr_width - 1 downto 0);
@@ -62,12 +63,12 @@ architecture behavioral of dma is
 	
 begin
 
-	update_signals: process (clk, enable)
+	update_signals: process (clk)
 	begin
 		if rising_edge(clk) then
---			if reset = '1' then
---			elsif enable = '1' then
-			if enable = '1' then
+			if reset = '1' then
+				state <= ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0', '0');
+			elsif enable = '1' then
 				case command is
 					when "0100" => read_active <= parameter(0);
 					when "0101" => read_base_addr <= parameter(mem_addr_width - 1 downto 0);
@@ -206,6 +207,8 @@ begin
 				next_state.secondary_action_phase <= '0';
 			end if;
 		else
+			next_state <= state;
+			
 			active <= '0';
 			
 			mem_addr <= (others => '0');

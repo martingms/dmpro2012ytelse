@@ -178,6 +178,7 @@ architecture behavioral of toplevel is
 		port (
 			clk : in std_logic;
 			enable : in std_logic;
+			reset : in std_logic;
 			
 			command : in std_logic_vector(3 downto 0);
 			parameter : in std_logic_vector(mem_addr_width - 1 downto 0);
@@ -431,6 +432,7 @@ begin
 		port map (
 			clk => clk_cpu,
 			enable => execute,
+			reset => reset,
 			
 			command => dma_command,
 			parameter => dma_parameter,
