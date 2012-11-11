@@ -7,11 +7,11 @@
 -- \   \   \/     Version : 12.4
 --  \   \         Application : xaw2vhdl
 --  /   /         Filename : clock.vhd
--- /___/   /\     Timestamp : 11/07/2012 18:48:14
+-- /___/   /\     Timestamp : 11/09/2012 16:05:18
 -- \   \  /  \ 
 --  \___\/\___\ 
 --
---Command: xaw2vhdl-intstyle C:/Users/martigam/dmpro/dmpro2012ytelse/fpga/ipcore_dir/clock.xaw -st clock.vhd
+--Command: xaw2vhdl-intstyle C:/Users/vegarded/dmpro2012ytelse/fpga/ipcore_dir/clock.xaw -st clock.vhd
 --Design Name: clock
 --Device: xc3s500e-4pq208
 --

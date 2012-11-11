@@ -1,8 +1,8 @@
 INTSTYLE=impact
-INFILE=C:\Users\martigam\dmpro\dmpro2012ytelse\fpga\impact.xsl
-OUTFILE=C:\Users\martigam\dmpro\dmpro2012ytelse\fpga\impact.xsl
+INFILE=C:\Users\vegarded\dmpro2012ytelse\fpga\impact.xsl
+OUTFILE=C:\Users\vegarded\dmpro2012ytelse\fpga\impact.xsl
 FAMILY=Multiple
 PART=Multiple
-WORKINGDIR=C:\Users\martigam\dmpro\dmpro2012ytelse\fpga
+WORKINGDIR=C:\Users\vegarded\dmpro2012ytelse\fpga
 LICENSE=iMPACT
 USER_INFO=iMPACT
