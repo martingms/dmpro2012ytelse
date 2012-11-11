@@ -130,9 +130,6 @@
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
     </file>
-    <file xil_pn:name="node/tests/TB_ARRAY.bmm" xil_pn:type="FILE_BMM">
-      <association xil_pn:name="Implementation"/>
-    </file>
     <file xil_pn:name="node/tests/TB_ARRAY.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="PostMapSimulation"/>
@@ -153,6 +150,7 @@
       <association xil_pn:name="BehavioralSimulation"/>
       <association xil_pn:name="Implementation"/>
     </file>
+    <file xil_pn:name="controll/CONTROLL.vhd" xil_pn:type="FILE_VHDL"/>
   </files>
 
   <properties>
@@ -445,7 +443,6 @@
 
   <bindings>
     <binding xil_pn:location="/toplevel" xil_pn:name="toplevel.ucf"/>
-    <binding xil_pn:location="/SIMD_ARRAY" xil_pn:name="node/tests/TB_ARRAY.bmm"/>
   </bindings>
 
   <libraries/>
