@@ -14,6 +14,8 @@
 #include "gpio.h"
 #include "bmp.h"
 #include "screen.h"
+#include "mmc.h"
+#include "sram.h"
 
 #include <fsaccess.h>
 #include <sys/types.h>
@@ -27,6 +29,8 @@
 #define DATA_WORD_LENGTH 		1
 #define INSTRUCTION_WORD_LENGTH 3
 
+#define BUFFER_SIZE 1024
+
 void(*listener) (void);
 U8 fpga_current_state;
 bool acked;
@@ -35,32 +39,86 @@ void receive_ack(void) {
 	acked = TRUE;
 }
 
-// ------[GENERIC SEND FUNCTION]-------//
-int fpga_send(int(*get_word) (U32*), int transfer_state, int word_width) {
+
+void fpga_send_data_from_file(const char *file) {
+
+	// Wait for SD card
+	while (mmc_status() != CTRL_GOOD);
+	LED_On(LED1);
+
+	// Opens file
+	int fd = open(file, O_RDONLY);
+	if (fd < 0) {
+		LED_On(LED4); LED_On(LED5);
+		LED_On(LED6); LED_On(LED7);
+		while(1);
+	}
+
+	// Gets file size
+	int fs = fsaccess_file_get_size(fd);
+	int read_so_far = 0;
+
+	//fpga_set_state(FPGA_STATE_LOAD_DATA); //TODO redundant, fjern
+	LED_On(LED2);
+
+	U8* sram_offset = FRAME_BUFFER;
+	U8 *sram_curr_addr = (U8*)sram_offset;
+	U8* ptr = sram_curr_addr;
+
+
+#define FRAME_SIZE 76800
+
+	while (read_so_far < fs) {
+		int rd = read(fd, (void*)sram_curr_addr, BUFFER_SIZE);
+		read_so_far += rd;
+		sram_curr_addr += BUFFER_SIZE;
+		if (read_so_far % FRAME_SIZE == 0) {
+			fpga_set_state(FPGA_STATE_LOAD_DATA);
+			ptr = sram_offset;
+			while (ptr != sram_curr_addr) {
+				bus_send_byte(*ptr++);
+			}
+			bus_send_byte(*ptr++);
+			sram_curr_addr = sram_offset;
+
+			LED_Toggle(LED7);
+			fpga_set_state(FPGA_STATE_STOP);
+		}
+	}
+
+	close(fd);
+	LED_On(LED3);
+
+	//fpga_set_state(FPGA_STATE_STOP);	//TODO redundant
+}
+
+/**
+ * Sends 8 bit data to the FPGA from given memory address
+ */
+void fpga_send_data_from_memory(U8 *data, size_t size) {
 	// S.1 - S.6 refers to the stages in 'AVR sends program to the FPGA'
 	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
-	U32 buffer;
 
-	fpga_set_state(transfer_state);											// S.1
-	fpga_set_listener(&receive_ack);
-	while (get_word(&buffer) > 0) {
+	fpga_set_state(FPGA_STATE_LOAD_DATA);											// S.1
+	//fpga_set_listener(&receive_ack);
+
+	int i;
+	for (i = 0; i < size; ++i) {
 		//acked = FALSE;
-		bus_send_data(buffer, FPGA_DATA_IN_BUS_OFFSET, word_width*8);// S.2
-		//bus_send_data_8(buffer);
-		bus_toggle_inc_clk_line();											// S.3
+		bus_send_byte(data[i]);
 		//while (acked == FALSE);												// S.4
-		//int count = 10;
-		//while(count--);
-
-		//LED_On(LED6);
-
 	}																		// S.5
-	//LED_On(LED7);
 	fpga_set_listener(DEFAULT_FPGA_LISTENER);
 	fpga_set_state(FPGA_STATE_STOP);										// S.6
-	return 0;
 }
-// ------------------------------------//
+
+
+
+
+
+
+
+
 
 
 // ------[DATA SOURCE FUNCTIONS]------ //
@@ -70,7 +128,7 @@ size_t n_bytes;
  * Takes one byte from 'data_buffer'.
  * Will not exceed 'n_bytes'.
  * Returns number of bytes read.
- */
+ *//*
 int byte_count;
 int data_from_memory(U32 *buffer) {
 	*buffer = 0;
@@ -79,7 +137,7 @@ int data_from_memory(U32 *buffer) {
 		return DATA_WORD_LENGTH;
 	}
 	return 0;
-}
+}*/
 
 /**
  * Takes 3 bytes from 'data_buffer' and puts it in the U32 buffer,
@@ -106,40 +164,58 @@ int program_from_memory(U32 *buffer) {
 // ----------------------------------- //
 
 // ----[SPECIALIZED SEND FUNCTIONS]----//
-int fpga_send_data_from_memory(U8 *data, size_t size) {
+/*int fpga_send_data_from_memory_old(U8 *data, size_t size) { //TODO gammel, fjern
 	data_buffer = data;
 	n_bytes = size;
 	byte_count = 0;
 	return fpga_send(&data_from_memory, FPGA_STATE_LOAD_DATA, DATA_WORD_LENGTH);
-}
+}*/
 
-int fpga_send_data_from_file(char *data_path, bool bmp) {
-	int fd = open(data_path, O_RDONLY);			// Opens to check size
-	size_t file_size = fsaccess_file_get_size(fd);
-	U8 file_buffer[file_size];					// Creates buffer
-	close(fd);
-	read_file(data_path, file_buffer);			// Reads into buffer
 
-	if (bmp) {
-		bmiHeader_t bmp_head;
-		return fpga_send_data_from_memory(read_BMP_from_buffer(file_buffer, &bmp_head), PICTURE_SIZE);
-	}
-	return fpga_send_data_from_memory(file_buffer, file_size);
 
-}
-
+// ------[GENERIC SEND FUNCTION]-------//
 int fpga_send_program(char *program_path) {
-	int rc;
-	int fd = open(program_path, O_RDONLY);			// Opens to check size
-	size_t file_size = fsaccess_file_get_size(fd);
-	close(fd);
-	U8 file_buffer[file_size];						// Creates buffer
-	read_file(program_path, file_buffer);			// Reads into buffer
 
-	rc = fpga_send(&program_from_memory, FPGA_STATE_LOAD_INSTRUCTION, INSTRUCTION_WORD_LENGTH);
-	return rc;
+	// Wait for SD card
+	while (mmc_status() != CTRL_GOOD);
+	LED_On(LED1);
+
+	// Opens file
+	int fd = open(program_path, O_RDONLY);
+	if (fd < 0) {
+		LED_On(LED4); LED_On(LED5);
+		LED_On(LED6); LED_On(LED7);
+		while(1);
+	}
+
+	// Gets file size
+	int fs = fsaccess_file_get_size(fd);
+	int read_so_far = 0;
+
+	U8* sram_offset = FRAME_BUFFER;
+	U8 *sram_curr_addr = (U8*)sram_offset;
+	U8* ptr = sram_curr_addr;
+
+	// Read from SD into buffer
+	while (read_so_far < fs) {
+		int rd = read(fd, (void*)sram_curr_addr, BUFFER_SIZE);
+		read_so_far += rd;
+		sram_curr_addr += rd;
+	}
+
+	int i,j;
+	U32 instruction;
+	U32 tmp;
+	for (i=0; i<fs; i+=3) {
+		instruction = (sram_offset[i] << 16) | (sram_offset[i+1] << 8) | sram_offset[i+2];
+		bus_send_data(instruction, FPGA_DATA_IN_BUS_OFFSET, INSTRUCTION_WORD_LENGTH*8);
+	}
+
+	close(fd);
+	LED_On(LED3);
+
+	//fpga_set_state(FPGA_STATE_STOP);	//TODO redundant
 }
-// ------------------------------------//
 
 
 void fpga_receive_data(void) {

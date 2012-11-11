@@ -135,6 +135,7 @@
 
 
 												//[SHADES_OF_GRAY]
+
 // FPGA bus
 #define FPGA_BUS_SIZE 38
 

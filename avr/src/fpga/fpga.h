@@ -20,13 +20,13 @@
 /*! \brief Sends data to the FPGA from a file
  * \param *data_path The path to the file
  */
-int fpga_send_data_from_file(char *data_path, bool bmp);
+void fpga_send_data_from_file(const char *file);
 
 /*! \brief Sends data to the FPGA from memory
  * \param *words The list of 8 bit words to be sent
  * \param length how many words are to be sent
  */
-int fpga_send_data_from_memory(U8 *data, size_t n_bytes);
+void fpga_send_data_from_memory(U8 *data, size_t n_bytes);
 
 /*! \brief Sends instructions to the FPGA from file
  * \param *program_path The path to the program

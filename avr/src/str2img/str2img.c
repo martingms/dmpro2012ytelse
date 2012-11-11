@@ -73,6 +73,10 @@ static unsigned char dot[] = { 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 static unsigned char exclamation[] = { 255, 255, 247, 247, 247, 247, 247, 247, 247, 255, 255, 247, 255, 255, 255, 255 };
 static unsigned char question[] = { 255, 255, 193, 136, 158, 252, 248, 243, 247, 255, 255, 247, 255, 255, 255, 255 };
 static unsigned char comma[] = { 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 243, 243, 231, 231, 255, 255 };
+static unsigned char opening_bracket[] = { 255, 241, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 241, 255 };
+static unsigned char closing_bracket[] = { 255, 199, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 199, 255 };
+static unsigned char pipe[] = { 255, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 255 };
+static unsigned char asterisk[] = { 255, 255, 255, 255, 255, 247, 213, 227, 227, 201, 255, 255, 255, 255, 255, 255 };
 
 static unsigned char *lut(char chr) {
 	switch (chr) {
@@ -145,8 +149,12 @@ static unsigned char *lut(char chr) {
 		case ' ': return space;
 		case '?': return question;
 		case ',': return comma;
+		case '[': return opening_bracket;
+		case ']': return closing_bracket;
+		case '|': return pipe;
+		case '*': return asterisk;
 		default:
-			return '\0';
+			return question;
 	}
 }
 
@@ -164,6 +172,7 @@ void str2img_clear() {
 
 }
 
+#include "led.h"
 void str2img_putc(const char c) {
 	switch (c) {
 		case '\n':

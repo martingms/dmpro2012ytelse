@@ -13,39 +13,55 @@
 #define BUTTON_RELEASED 1
 
 
-#define MAX_LISTENERS 20
-void(*listeners[MAX_LISTENERS]) (U8);
-int n_listeners;
+//#define MAX_LISTENERS 20
+//void(*listeners[MAX_LISTENERS]) (U8);
+volatile void(*listener)(U8);
+volatile void(*old_listener)(U8);
+//int n_listeners;
 
 /*
  * Notifies all listeners of a button push
  */
 void notify_listeners(U8 buttons) {
-	int i;
-	for (i = 0; i < n_listeners; ++i) {
-		listeners[i](buttons);
-	}
+	if (listener) listener(buttons);
+	//int i;
+	//for (i = 0; i < n_listeners; ++i) {
+		//listeners[i](buttons);
+	//}
 }
 #include "serial.h"
 
 __attribute__((__interrupt__)) void button_interrupt_routine(void) {
-	U8 buttons = 0;
-
-	if (B0_VALUE == BUTTON_PUSHED) buttons |= 1;
-	if (B1_VALUE == BUTTON_PUSHED) buttons |= 2;
-	if (B2_VALUE == BUTTON_PUSHED) buttons |= 4;
-	if (B3_VALUE == BUTTON_PUSHED) buttons |= 8;
-	notify_listeners(buttons);
-
-	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_0);
-	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_1);
-	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_2);
-	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_3);
+//	U8 buttons = 0;
+	if (gpio_get_pin_interrupt_flag(GPIO_PUSH_BUTTON_0)) {
+		gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_0);
+		notify_listeners(1);
+	} else if (gpio_get_pin_interrupt_flag(GPIO_PUSH_BUTTON_1)) {
+		gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_1);
+		notify_listeners(2);
+	} else if (gpio_get_pin_interrupt_flag(GPIO_PUSH_BUTTON_2)) {
+		gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_2);
+		notify_listeners(4);
+	} else if (gpio_get_pin_interrupt_flag(GPIO_PUSH_BUTTON_3)) {
+		gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_3);
+		notify_listeners(8);
+	}
+//	if (B0_VALUE == BUTTON_PUSHED) buttons |= 1;
+//	if (B1_VALUE == BUTTON_PUSHED) buttons |= 2;
+//	if (B2_VALUE == BUTTON_PUSHED) buttons |= 4;
+//	if (B3_VALUE == BUTTON_PUSHED) buttons |= 8;
+//
+//	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_0);
+//	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_1);
+//	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_2);
+//	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_3);
+//
+//	if (buttons) notify_listeners(buttons);
 }
 
 int button_init(void) {
 	int rc;
-	n_listeners = 0;
+	//n_listeners = 0;
 
 	// Enable GPIO button pins
 	gpio_enable_gpio_pin(GPIO_PUSH_BUTTON_0);
@@ -88,12 +104,16 @@ int button_init(void) {
 	return rc;
 }
 
-int button_reg_listener(void(*listener) (U8)) {
-	if (n_listeners+1 >= MAX_LISTENERS){
-		return -1;
-	}
+void button_reg_listener(void(*l) (U8)) {
+	listener = l;
+}
 
-	listeners[n_listeners++] = listener;
-	return 0;
+void button_set_tmp_listener(void(*l) (U8)) {
+	old_listener = listener;
+	if (l) listener = l;
+}
+
+void button_remove_tmp_listener(void) {
+	listener = old_listener;
 }
 

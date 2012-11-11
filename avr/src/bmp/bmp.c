@@ -5,6 +5,8 @@
 #include <fsaccess.h>
 #include "../serial/serial.h"
 
+#include "led.h" //TODO debug only
+
 /*
  * Parses the given buffer as if it were a rawly read file into bmp headers
  * and returns a pointer to the start of the raw image data.

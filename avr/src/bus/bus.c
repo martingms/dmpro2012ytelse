@@ -10,7 +10,9 @@
 #include "board.h"
 #include "gpio.h"
 #include "compiler.h"
+#include "fpga.h"
 
+static volatile avr32_gpio_port_t *portB = &AVR32_GPIO.port[1];
 
 int fpga_bus[] = {
 		FPGA_IO_00,	// 0 (FPGA_IO_BUS_OFFSET)
@@ -59,10 +61,13 @@ void bus_init(void) {
 		// Enable pins
 		gpio_enable_gpio_pin(fpga_bus[i]);
 		// Pull output bus down
-		if (i >= FPGA_DATA_IN_BUS_OFFSET) {
+		/*if (i >= FPGA_DATA_IN_BUS_OFFSET) {
 			gpio_clr_gpio_pin(fpga_bus[i]);
-		}
+		}*/
+		fpga_set_state(FPGA_STATE_STOP);
 	}
+    portB->oders = (0xFF << 7) | (1 << 19);
+	portB->gpers = (0xFF << 7) | (1 << 19);
 }
 
 int bus_send_data(U32 word, int bus_offset, int bus_size) {
@@ -82,18 +87,13 @@ int bus_send_data(U32 word, int bus_offset, int bus_size) {
 	return 0;
 }
 
-int bus_send_data_8(U8 word) {
-	static volatile avr32_gpio_port_t *portB = &AVR32_GPIO.port[1];
 
 
+__inline__ void bus_send_byte(U8 word) {
 	static U8 last = '\0';
-	U32 val = (word ^ last) << 3;
-	portB->ovrt = val;
-	portB->oders = (0xFF << 3);
-	portB->gpers = (0xFF << 3);
+	portB->ovrt = (word ^ last) << 7;
+	portB->ovrt  = (1 << 19);				// Toggle clk line
 	last = word;
-
-	return 0;
 }
 
 U8 bus_receive_data(void) {

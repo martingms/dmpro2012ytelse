@@ -5,6 +5,7 @@
 #include "fpga.h"
 #include "serial.h"
 #include "filebrowser.h"
+#include "str2img.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,13 +30,14 @@ int current_state;
 int menu_item_selected;
 int menu_size;
 
-bool busy;
-bool reset;
+volatile bool busy;
+volatile bool reset;
 
 void program_select_start(void) {
+	button_reg_listener(&button_push); 	// Set button listener
 	while (TRUE) {
 		load_menu(STATE_SELECT_PROGRAM); 	// Load menu
-		button_reg_listener(&button_push); 	// Set button listener
+		screen_printf("ferdig med load_menu()\n");
 		busy = FALSE; 						// Start listening on buttons
 		reset = FALSE;
 		while (reset == FALSE); 			// Wait for reset
@@ -44,6 +46,7 @@ void program_select_start(void) {
 
 void button_push(U8 button) {
 	if (busy) return;
+	LED_Toggle(button);
 
 	if ((button & UP_BUTTON) && (menu_item_selected > 0)) {
 		screen_move_cursor(-1);
@@ -56,16 +59,39 @@ void button_push(U8 button) {
 	}
 }
 
+void set_file_type(enum data_type type) {
+	fb_cd("A:/");	// Set directory
+
+	// Initialize and set extension
+	if (type == DATA) {
+		fb_iterator_init(FS_DIR);					// Init for directories
+		fb_iterator_set_ext(DATA_FILE_SUFFIX);		// Set extension
+
+	} else if (type == PROGRAM) {
+		fb_iterator_init(FS_FILE);					// Init for files
+		fb_iterator_set_ext("*"); 					// Set extension
+	}
+
+	// Count files
+	menu_size = 0;
+	while (fb_iterator_has_next()) {
+		fb_iterator_next();
+		menu_size++;
+	}
+}
+
 void load_menu(int state) {
 	switch (state) {
 	case STATE_SELECT_PROGRAM: {
 		menu_item_selected = 0;
-		screen_load_data_to_buffer(PROGRAM);
+		set_file_type(PROGRAM);
+		screen_load_data_to_bitmap(PROGRAM);
 		break;
 	}
 	case STATE_SELECT_DATA: {
 		menu_item_selected = 0;
-		screen_load_data_to_buffer(DATA);
+		set_file_type(DATA);
+		screen_load_data_to_bitmap(DATA);
 		break;
 	}
 	default:
@@ -73,6 +99,9 @@ void load_menu(int state) {
 	}
 	current_state = state;
 
+
+	//screen_make_bitmap_from_buffer();
+	screen_draw_bitmap_on_screen();
 }
 
 void next_state(void) {
@@ -120,12 +149,12 @@ void run_fpga_program(void) {
 			// Determines if BMP file
 			char *suffix = strchr(buffer, '.');
 			suffix++; //skips '.'
-			if (!strcmp(suffix, BMP_FILE_SUFFIX)) 	bmp = true;
+			if (!strcmp(suffix, BMP_FILE_SUFFIX)) 	bmp = true;		//TODO bmp brukes ikke
 			else 									bmp = false;
 
-			fpga_send_data_from_file(data_path, bmp); // Send data to FPGA
+			fpga_send_data_from_file(data_path); // Send data to FPGA
 			fpga_run(); // Run FPGA (waits for ACK)
-			usleep(selected_script.transfer_delay); // Sleep
+			//usleep(selected_script.transfer_delay); // Sleep TODO
 		}
 	} else {
 		fpga_run(); // No data -> just run

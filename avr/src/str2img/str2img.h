@@ -6,6 +6,7 @@
 #define R_BPCX 1 // Byte Per Char X
 #define R_BPCY 2 // Byte Per Char Y
 #define R_STRIDE (R_COLS * R_BPCX) // width of a single "scanline", in bytes.
+#define STR2IMG_BUFFER_SIZE (R_COLS*R_BPCX*R_ROWS*R_BPCY*8)
 
 // retrieve the pixel value at (x,y). either 1 or 0.
 #define R_READ(x,y) (((unsigned char)( buf[y * R_STRIDE + (x/8)] & (1<<(7-x%8)) ))>0)

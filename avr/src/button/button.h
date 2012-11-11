@@ -19,7 +19,9 @@ int button_init(void);
  *
  * \param listener The listener function. It must take one parameter U8.
  */
-int button_reg_listener(void(*listener) (U8));
+void button_reg_listener(void(*l) (U8));
 
+void button_set_tmp_listener(void(*l) (U8));
+void button_remove_tmp_listener(void);
 
 #endif
