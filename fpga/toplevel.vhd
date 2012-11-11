@@ -1,4 +1,4 @@
-library ieee;
+		library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
@@ -188,11 +188,27 @@ architecture behavioral of toplevel is
 			mem_write : out std_logic;
 			
 			simd_addr : out std_logic_vector(simd_addr_width - 1 downto 0);
-			simd_data : inout std_logic_vector(word_width - 1 downto 0);
+			simd_data_in : in std_logic_vector(word_width - 1 downto 0);
+			simd_data_out : out std_logic_vector(word_width - 1 downto 0);
 			simd_write : out std_logic;
 			
 			active : out std_logic;
 			step_s : out std_logic);
+	end component;
+	
+	component SIMD_ARRAY is
+		 Port (
+			clk 							: in  STD_LOGIC;
+			reset 						: in  STD_LOGIC;
+			instr 						: in  STD_LOGIC_VECTOR (NODE_IDATA_BUS-1 downto 0);
+			node_step 					: in  STD_LOGIC;
+			
+			data_write					: in  STD_LOGIC;
+			row_sel 						: in  STD_LOGIC_VECTOR (1 downto 0);
+			data_in 						: in  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
+			data_out 					: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0) := (others => '0');
+			state_out					: out STD_LOGIC
+		);
 	end component;
 	
 	component test_screen_copy is
@@ -234,6 +250,8 @@ architecture behavioral of toplevel is
 	signal instruction_register_mem_write : std_logic;
 	signal instruction_register_mem_data : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
 	
+	signal instruction_register_instruction : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
+	
 	signal control_core_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
 	signal control_core_mem_write : std_logic;
 	signal control_core_mem_data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
@@ -245,6 +263,12 @@ architecture behavioral of toplevel is
 	signal dma_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
 	signal dma_mem_write : std_logic;
 	signal dma_mem_data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
+	
+	signal dma_step_s : std_logic;
+	signal dma_simd_addr : std_logic_vector(1 downto 0);
+	signal dma_simd_write : std_logic;
+	signal dma_simd_data_in : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
+	signal dma_simd_data_out : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
 	
 	signal avr_data_in_modified : std_logic_vector(23 downto 0);
 	
@@ -441,11 +465,25 @@ begin
 			mem_data => dma_mem_data,
 			mem_write => dma_mem_write,
 			
-			simd_addr => open,
-			simd_data => open,
-			simd_write => open,
+			simd_addr => dma_simd_addr,
+			simd_data_in => dma_simd_data_in,
+			simd_data_out => dma_simd_data_out,
+			simd_write => dma_simd_write,
 			
 			active => dma_active,
-			step_s => open);
+			step_s => dma_step_s);
+	
+	inst_simd_array: SIMD_ARRAY
+		port map (
+			clk => clk_cpu,
+			reset => reset,
+			instr => instruction_register_instruction,
+			node_step => dma_step_s,
+
+			data_write => dma_simd_write,
+			row_sel => dma_simd_addr,
+			data_in => dma_simd_data_out,
+			data_out => dma_simd_data_in,
+			state_out => open);
 
 end behavioral;

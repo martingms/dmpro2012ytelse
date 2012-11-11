@@ -24,7 +24,8 @@ entity dma is
 		mem_write : out std_logic;
 		
 		simd_addr : out std_logic_vector(simd_addr_width - 1 downto 0);
-		simd_data : inout std_logic_vector(word_width - 1 downto 0);
+		simd_data_in : in std_logic_vector(word_width - 1 downto 0);
+		simd_data_out : out std_logic_vector(word_width - 1 downto 0);
 		simd_write : out std_logic;
 		
 		active : out std_logic;
@@ -154,7 +155,7 @@ begin
 					next_state.memory_assert_phase <= '1';
 				else
 					simd_addr <= conv_std_logic_vector(state.row, simd_addr_width);
-					simd_data <= mem_data;
+					simd_data_out <= mem_data;
 					simd_write <= '1';
 					
 					next_state.memory_assert_phase <= '0';
@@ -167,11 +168,11 @@ begin
 			if action(1) = '1' then
 				if state.memory_assert_phase = '0' then
 					simd_addr <= conv_std_logic_vector(state.row, simd_addr_width);
-					simd_data <= (others => 'Z');
+					simd_data_out <= (others => '0');
 					simd_write <= '0';
 					
 					mem_addr <= state.write_addr;
-					mem_data <= simd_data;
+					mem_data <= simd_data_in;
 					mem_write <= '0'; -- Write
 					
 					next_state.memory_assert_phase <= '1';
@@ -216,7 +217,7 @@ begin
 			mem_write <= '1'; -- Read
 			
 			simd_addr <= (others => '0');
-			simd_data <= (others => 'Z');
+			simd_data_out <= (others => '0');
 			simd_write <= '0';
 		end if;
 	end process run_dma;
