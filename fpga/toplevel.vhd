@@ -418,7 +418,9 @@ begin
 			
 			mem_addr => instruction_register_mem_addr,
 			mem_write => instruction_register_mem_write,
-			mem_data => instruction_register_mem_data
+			mem_data => instruction_register_mem_data,
+			
+			instruction => instruction_register_instruction
 		);
 		
 --	inst_test_image_loader: test_image_loader

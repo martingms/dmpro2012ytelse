@@ -53,7 +53,12 @@ begin
 	mem_data <= (others => 'Z');
 	mem_write <= '1';
 	
-	instruction <= (others => '0');
+	process (clk)
+	begin
+		if enable = '1' then
+			instruction <= mem_data;
+		end if;
+	end process;
 
 end Behavioral;
 
