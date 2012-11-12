@@ -503,13 +503,13 @@ begin
 	test_prog_ram: memory_from_file
 		generic map (
 			word_width => RAM_PROGRAM_WORD_WIDTH,
-			address_width => 9,
-			file_name => "control/plot_black.dat"
+			address_width => 8,
+			file_name => "control/test_program.dat"
 		)
 		port map (
 			clk => clk_cpu,
 			write_enable => test_prog_ram_write,
-			addr => test_prog_ram_addr(8 downto 0),
+			addr => test_prog_ram_addr(7 downto 0),
 			data => test_prog_ram_data
 		);
 

@@ -39,7 +39,7 @@ begin
 	process (clk)
 	begin
 		if rising_edge(clk) then
-			if write_enable = '1' then
+			if write_enable = '0' then
 				data <= (others => 'Z');
 				ram(conv_integer(addr)) <= to_bitvector(data);
 			else
