@@ -45,7 +45,6 @@ void fpga_send_data_from_file(const char *file) {
 	// Wait for SD card
 	while (mmc_status() != CTRL_GOOD);
 	LED_On(LED1);
-
 	// Opens file
 	int fd = open(file, O_RDONLY);
 	if (fd < 0) {
@@ -101,14 +100,13 @@ void fpga_send_data_from_memory(U8 *data, size_t size) {
 
 	fpga_set_state(FPGA_STATE_LOAD_DATA);											// S.1
 	//fpga_set_listener(&receive_ack);
-
 	int i;
 	for (i = 0; i < size; ++i) {
 		//acked = FALSE;
 		bus_send_byte(data[i]);
 		//while (acked == FALSE);												// S.4
 	}																		// S.5
-	fpga_set_listener(DEFAULT_FPGA_LISTENER);
+	//fpga_set_listener(DEFAULT_FPGA_LISTENER); //Denne linjen ødelegger for knappene
 	fpga_set_state(FPGA_STATE_STOP);										// S.6
 }
 

@@ -211,6 +211,29 @@ architecture behavioral of toplevel is
 		);
 	end component;
 	
+	component CONTROLL is
+		Port (
+			clk 							: in  STD_LOGIC;
+			reset 						: in  STD_LOGIC;
+			
+			state							: in STD_LOGIC; -- simd array state
+			
+			idata							: in  STD_LOGIC_VECTOR(CTRL_IDATA_BUS-1 downto 0);
+			iaddr							: out STD_LOGIC_VECTOR(CTRL_IADDR_BUS-1 downto 0);
+
+			ddata							: in  STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+			daddr							: out STD_LOGIC_VECTOR(CTRL_DADDR_BUS-1 downto 0);
+			--daddr_write				: out STD_LOGIC;
+			
+			vdata							: out STD_LOGIC_VECTOR(CTRL_VDATA_BUS-1 downto 0);
+			vaddr							: out STD_LOGIC_VECTOR(CTRL_VADDR_BUS-1 downto 0);
+			--vaddr_write				: out STD_LOGIC;
+			
+			dma_cmd						: out STD_LOGIC_VECTOR(CTRL_DMA_CMD_BUS-1 downto 0);
+			dma_params					: out STD_LOGIC_VECTOR(CTRL_DMA_DAT_BUS-1 downto 0)
+		);
+	end component;
+	
 	component test_screen_copy is
 		port (
 			clk : in  std_logic;
@@ -228,13 +251,6 @@ architecture behavioral of toplevel is
 	signal load_data : std_logic;
 	signal execute : std_logic;
 	signal reset : std_logic;
-	
-	signal vga_mem_addr_in : std_logic_vector(18 downto 0);
-	signal vga_pixel_in : std_logic_vector(7 downto 0);
-	
-	signal vga_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
-	signal vga_mem_write : std_logic;
-	signal vga_mem_data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
 	
 	signal program_loader_mem_addr : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
 	signal program_loader_mem_write : std_logic;
@@ -256,6 +272,9 @@ architecture behavioral of toplevel is
 	signal control_core_mem_write : std_logic;
 	signal control_core_mem_data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
 	
+	signal control_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
+	signal control_mem_data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
+	
 	signal dma_active : std_logic;
 	signal dma_command : std_logic_vector(3 downto 0);
 	signal dma_parameter : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
@@ -272,17 +291,16 @@ architecture behavioral of toplevel is
 	
 	signal avr_data_in_modified : std_logic_vector(23 downto 0);
 	
-	signal il_pixel_in : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
-	signal il_pixel_out : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
-	signal il_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
+	signal vga_addr_in : std_logic_vector(RAM_VGA_ADDRESS_WIDTH - 1 downto 0);
+	signal vga_pixel_in : std_logic_vector(RAM_VGA_WORD_WIDTH - 1 downto 0);
+	
+	signal simd_array_state : std_logic;
 
 begin
 
 	avr_data_in_modified(23 downto 8) <= (others => '0');
 	avr_data_in_modified(7 downto 0) <= avr_data_in;
 	
-	il_mem_addr(20 downto 19) <= (others => '0');
-	vga_mem_addr(20 downto 19) <= (others => '0');
 	vga_value(1 downto 0) <= (others => '0');
 	avr_data_out <= (others => '0');
 	
@@ -312,8 +330,8 @@ begin
 			hSync => vga_h_sync,
 			vSync => vga_v_sync,
 			
-			pixel_in => il_pixel_out,
-			mem_addr_in => il_mem_addr(18 downto 0),
+			pixel_in => vga_pixel_in,
+			mem_addr_in => vga_addr_in,
 			
 			mem_addr => vga_ram_addr(18 downto 0),
 			mem_we => vga_ram_write,
@@ -327,7 +345,7 @@ begin
 		port map (
 			selector => load_program,
 			
-			in0_write_enable => instruction_register_mem_write,
+			in0_write_enable => '1',
 			in0_addr => instruction_register_mem_addr,
 			in0_data => instruction_register_mem_data,
 			
@@ -368,8 +386,8 @@ begin
 			selector => dma_active,
 			
 			in0_write_enable => '1',
-			in0_addr => il_mem_addr,
-			in0_data => il_pixel_in,
+			in0_addr => control_mem_addr,
+			in0_data => control_mem_data,
 			
 			in1_write_enable => dma_mem_write,
 			in1_addr => dma_mem_addr,
@@ -408,35 +426,6 @@ begin
 			avr_data_in => avr_data_in_modified,
 			avr_data_in_ready => avr_data_in_ready,
 			avr_interrupt => data_loader_done
-		);
-	
-	inst_instruction_register: instruction_register
-		port map (
-			clk => clk_cpu,
-			enable => execute,
-			reset => reset,
-			
-			mem_addr => instruction_register_mem_addr,
-			mem_write => instruction_register_mem_write,
-			mem_data => instruction_register_mem_data,
-			
-			instruction => instruction_register_instruction
-		);
-		
---	inst_test_image_loader: test_image_loader
---		port map (
---			clk => clk_cpu,
---			pixel_out => vga_pixel_in,
---			mem_addr_out => vga_mem_addr_in
---		);
-
-	inst_test_screen_copy: test_screen_copy
-		port map(
-			clk => clk_cpu,
-			disable => load_data,
-			pixel_in => il_pixel_in,
-			pixel_out => il_pixel_out,
-			mem_addr => il_mem_addr(18 downto 0)
 		);
 		
 	inst_avr_mux: avr_mux
@@ -486,6 +475,25 @@ begin
 			row_sel => dma_simd_addr,
 			data_in => dma_simd_data_out,
 			data_out => dma_simd_data_in,
-			state_out => open);
+			state_out => simd_array_state);
+	
+	inst_control: CONTROLL
+		port map (
+			clk => clk_cpu,
+			reset => reset,
+
+			state => simd_array_state,
+
+			idata => instruction_register_mem_data,
+			iaddr => instruction_register_mem_addr,
+
+			ddata => control_mem_data,
+			daddr => control_mem_addr,
+
+			vdata => vga_pixel_in,
+			vaddr => vga_addr_in,
+
+			dma_cmd => dma_command,
+			dma_params => dma_parameter);
 
 end behavioral;
