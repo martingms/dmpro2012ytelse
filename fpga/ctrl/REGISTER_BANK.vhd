@@ -29,9 +29,9 @@ entity CTRL_REGISTER is
 		
 		write						:	in	 STD_LOGIC;
 		
-		adr0 						:	in	 STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
-		adr1 						:	in	 STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
-		adr2 						:	in	 STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+		adr0 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+		adr1 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+		adr2 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
 		
 		data0_in					:	in	 STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
 		
@@ -49,7 +49,7 @@ architecture Behavioral of CTRL_REGISTER is
 	constant ZERO_ADDR: STD_LOGIC_VECTOR(NODE_RADDR_BUS-1 downto 0) := (others => '0');
 	constant NUM_REG : integer := 2 ** NODE_RADDR_BUS;
 	
-	type REGS_T is array (NUM_REG-1 downto 0) of STD_LOGIC_VECTOR(NODE_RDATA_BUS-1 downto 0);
+	type REGS_T is array (NUM_REG-1 downto 0) of STD_LOGIC_VECTOR(CTRL_WORD_WIDTH-1 downto 0);
 	signal REGS : REGS_T := (others => (others =>'0'));
 
 begin

@@ -50,13 +50,13 @@ package FPGA_CONSTANT_PKG is
 	
 	-- CONTROL 
 	constant CTRL_INSTR_OP			: integer	:= 4;
-	constant CTRL_OP_R				: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "0000"; -- R-instr
-	constant CTRL_OP_I				: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "0001"; -- I-instr
-	constant CTRL_OP_LW				: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "0010"; -- Load from DRAM
-	constant CTRL_OP_JUMP			: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "0100"; -- UNCONDITIONAL JUMP
-	constant CTRL_OP_BEQ				: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "0101"; -- BRANCH
-	constant CTRL_OP_DMA				: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "1000"; -- DMA COMMAND
-	-- constant CTRL_OP_VGA			: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "1001"; -- FEED VGA DATA
+	constant CTRL_OP_R				: STD_LOGIC_VECTOR(CTRL_INSTR_OP-1 downto 0) := "0000"; -- R-instr
+	constant CTRL_OP_I				: STD_LOGIC_VECTOR(CTRL_INSTR_OP-1 downto 0) := "0001"; -- I-instr
+	constant CTRL_OP_LW				: STD_LOGIC_VECTOR(CTRL_INSTR_OP-1 downto 0) := "0010"; -- Load from DRAM
+	constant CTRL_OP_JUMP			: STD_LOGIC_VECTOR(CTRL_INSTR_OP-1 downto 0) := "0100"; -- UNCONDITIONAL JUMP
+	constant CTRL_OP_BEQ				: STD_LOGIC_VECTOR(CTRL_INSTR_OP-1 downto 0) := "0101"; -- BRANCH
+	constant CTRL_OP_DMA				: STD_LOGIC_VECTOR(CTRL_INSTR_OP-1 downto 0) := "1000"; -- DMA COMMAND
+	-- constant CTRL_OP_VGA			: STD_LOGIC_VECTOR(CTRL_INSTR_OP-1 downto 0) := "1001"; -- FEED VGA DATA
 	
 	-- MEMORY CONSTANTS
 	constant RAM_DATA_WORD_WIDTH			: integer	:= 8;
