@@ -113,6 +113,11 @@ def __assembleNodeInstr__(instr):
 	debug(output)
 	return output
 
+# Assemble a Control Core instruction into binary code 
+def __assembleCtrlInstr__(instr):
+	return "false"
+
+# Assemble program file
 def __assembleInstrFile__(input, output):
 	debug("Reading instructions from '" + input + "'...")
 	
@@ -123,15 +128,23 @@ def __assembleInstrFile__(input, output):
 		instr = re.sub("#[^$]+", "", instr) # remove comments
 		instr = instr.strip()
 		if instr:
-			# ascii bin
+			instr = instr.partition(" ");
+			if not instr[2]: exit("error: Invalid instruction {instr[2]}")
+			
+			# Assemble
+			if instr[0] == "node":
+				instr = __assembleNodeInstr__(instr[2])
+			elif instr[0] == "ctrl":  
+				instr = __assembleCtrlInstr__(instr[2])
+			else: exit("error: Invalid instruction {instr[1] = " + instr[0] + "}")
+			
+			# Write
 			if sep:
-				w.write(__assembleNodeInstr__(instr) + '\n')
-			# true bin
+				w.write(instr + '\n')
 			else:
-				ascii_instr = __assembleNodeInstr__(instr)
-				w.write(chr(int(ascii_instr[0:8], 2)))
-				w.write(chr(int(ascii_instr[8:16], 2)))
-				w.write(chr(int(ascii_instr[16:24], 2)))
+				w.write(chr(int(instr[0:8], 2)))
+				w.write(chr(int(instr[8:16], 2)))
+				w.write(chr(int(instr[16:24], 2)))
 		else:
 			debug('Skipping empty instruction line')
 	r.close()
@@ -160,6 +173,7 @@ def main():
 	
 	p = optparse.OptionParser()
 	p.add_option('--node', '-n', help="assemble a single SIMD Node instruction", metavar="INSTR")
+	p.add_option('--ctrl', '-c', help="assemble a single SIMD Control instruction", metavar="INSTR")
 	p.add_option('--input', '-i', help="assemble an entire FPGA program file", metavar="INPUT_FILE")
 	p.add_option('--output', '-o', default="", help="assembled FPGA program binary file", metavar="OUTPUT_FILE")
 	p.add_option('--group', '-d', action="store_true", default=False, help="Group instructions into logical groups for debuging")
@@ -172,6 +186,7 @@ def main():
 	
 	if options.input				: print __assembleInstrFile__(options.input, options.output)
 	elif options.node			: print __assembleNodeInstr__(options.node)
+	elif options.ctrl			: print __assembleCtrlInstr__(options.node)
 	else							: exit("Unknown command line tool command")
 
 if __name__ == '__main__':
