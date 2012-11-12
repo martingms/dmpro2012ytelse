@@ -38,7 +38,6 @@ package FPGA_CONSTANT_PKG is
 	constant NODE_SDATA_BUS			: integer	:= 8;			-- s data bus (left, right)
 	
 	-- CONTROLL BUS CONSTANTS
-	constant NODE_IDATA_BUS			: integer	:= 24;		-- instruction data
 	constant NODE_IADDR_BUS			: integer	:= 21;		-- instruction address
 	
 	
