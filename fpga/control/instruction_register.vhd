@@ -57,6 +57,8 @@ begin
 	begin
 		if enable = '1' then
 			instruction <= mem_data;
+		else
+			instruction <= (others => '0');
 		end if;
 	end process;
 

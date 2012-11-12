@@ -38,8 +38,7 @@ package FPGA_CONSTANT_PKG is
 	constant NODE_SDATA_BUS			: integer	:= 8;			-- s data bus (left, right)
 	
 	-- CONTROL BUS CONSTANTS
-	constant CTRL_WORD_WIDTH		: integer	:= 21;		-- control core word width
-	
+	constant CTRL_WORD_WIDTH		: integer	:= 21;		-- control core word width	
 	constant CTRL_IDATA_BUS			: integer	:= 24;		-- instruction data
 	constant CTRL_IADDR_BUS			: integer	:= 16;		-- instruction address
 	constant CTRL_DDATA_BUS			: integer	:= 8;			-- image data
