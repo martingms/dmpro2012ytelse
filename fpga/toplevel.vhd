@@ -149,14 +149,6 @@ architecture behavioral of toplevel is
 		);
 	end component;
 	
-	component test_image_loader is
-		port (
-			clk : in  std_logic;
-			pixel_out : out std_logic_vector(7 downto 0);
-			mem_addr_out : out std_logic_vector(18 downto 0)
-		);
-	end component;
-	
 	component avr_mux is
 		port (
 			selector : in std_logic;
@@ -234,13 +226,17 @@ architecture behavioral of toplevel is
 		);
 	end component;
 	
-	component test_screen_copy is
+	component memory_from_file is
+		generic (
+			word_width : natural;
+			address_width : natural;
+			file_name : string
+		);
 		port (
-			clk : in  std_logic;
-			disable : in  std_logic;
-			pixel_in : in std_logic_vector(7 downto 0);
-			pixel_out : out std_logic_vector(7 downto 0);
-			mem_addr : out std_logic_vector(18 downto 0)
+			clk : in std_logic;
+			write_enable : in std_logic;
+			addr : in std_logic_vector(address_width - 1 downto 0);
+			data : inout std_logic_vector(word_width - 1 downto 0)
 		);
 	end component;
 	
@@ -251,6 +247,10 @@ architecture behavioral of toplevel is
 	signal load_data : std_logic;
 	signal execute : std_logic;
 	signal reset : std_logic;
+	
+	signal test_prog_ram_write : std_logic;
+	signal test_prog_ram_addr : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
+	signal test_prog_ram_data : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
 	
 	signal program_loader_mem_addr : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
 	signal program_loader_mem_write : std_logic;
@@ -263,10 +263,7 @@ architecture behavioral of toplevel is
 	signal data_loader_done : std_logic;
 	
 	signal instruction_register_mem_addr : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
-	signal instruction_register_mem_write : std_logic;
 	signal instruction_register_mem_data : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
-	
-	signal instruction_register_instruction : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
 	
 	signal control_core_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
 	signal control_core_mem_write : std_logic;
@@ -353,10 +350,17 @@ begin
 			in1_addr => program_loader_mem_addr,
 			in1_data => program_loader_mem_data,
 			
-			out_write_enable => prog_ram_write,
-			out_addr => prog_ram_addr,
-			out_data => prog_ram_data
+--			out_write_enable => prog_ram_write,
+--			out_addr => prog_ram_addr,
+--			out_data => prog_ram_data
+			out_write_enable => test_prog_ram_write,
+			out_addr => test_prog_ram_addr,
+			out_data => test_prog_ram_data
 		);
+
+	prog_ram_addr <= (others => '0');
+	prog_ram_data <= (others => 'Z');
+	prog_ram_write <= '1';
 	
 	data_ram_mux: ram_mux
 		generic map (
@@ -468,7 +472,7 @@ begin
 		port map (
 			clk => clk_cpu,
 			reset => reset,
-			instr => instruction_register_instruction,
+			instr => instruction_register_mem_data,
 			node_step => dma_step_s,
 
 			data_write => dma_simd_write,
@@ -495,5 +499,18 @@ begin
 
 			dma_cmd => dma_command,
 			dma_params => dma_parameter);
+	
+	test_prog_ram: memory_from_file
+		generic map (
+			word_width => RAM_PROGRAM_WORD_WIDTH,
+			address_width => 9,
+			file_name => "control/plot_black.dat"
+		)
+		port map (
+			clk => clk_cpu,
+			write_enable => test_prog_ram_write,
+			addr => test_prog_ram_addr(8 downto 0),
+			data => test_prog_ram_data
+		);
 
 end behavioral;
