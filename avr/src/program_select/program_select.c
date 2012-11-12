@@ -26,60 +26,53 @@
 
 char *selected_data_unit_path;
 
+enum data_type current_type;
 int current_state;
 int menu_item_selected;
 int menu_size;
 
-volatile bool busy;
+volatile bool busy = TRUE;
 volatile bool reset;
 
+/*
+ * Program select starts here
+ */
 void program_select_start(void) {
 	button_reg_listener(&button_push); 	// Set button listener
 	while (TRUE) {
 		load_menu(STATE_SELECT_PROGRAM); 	// Load menu
-		screen_printf("ferdig med load_menu()\n");
 		busy = FALSE; 						// Start listening on buttons
 		reset = FALSE;
-		while (reset == FALSE); 			// Wait for reset
+		while (reset == FALSE);				// Wait for reset
 	}
 }
 
+/*
+ * Button interrupt routine
+ */
 void button_push(U8 button) {
 	if (busy) return;
-	LED_Toggle(button);
+	LED_On(button);
 
-	if ((button & UP_BUTTON) && (menu_item_selected > 0)) {
+	if ((button == UP_BUTTON) && (menu_item_selected > 0)) {
 		screen_move_cursor(-1);
 	}
-	if ((button & DOWN_BUTTON) && (menu_item_selected + 1 < menu_size)) {
+	if ((button == DOWN_BUTTON) && (menu_item_selected + 1 < menu_size)) {
 		screen_move_cursor(1);
 	}
-	if (button & ENTER_BUTTON) {
+	if (button == ENTER_BUTTON) {
 		next_state();
+		//TODO next_state() kjører til siste linjen, men returnerer aldri hit
+		screen_display_error_message("hei");
 	}
+	LED_Off(button);
 }
 
-void set_file_type(enum data_type type) {
-	fb_cd("A:/");	// Set directory
+void set_file_type(enum data_type type);
 
-	// Initialize and set extension
-	if (type == DATA) {
-		fb_iterator_init(FS_DIR);					// Init for directories
-		fb_iterator_set_ext(DATA_FILE_SUFFIX);		// Set extension
-
-	} else if (type == PROGRAM) {
-		fb_iterator_init(FS_FILE);					// Init for files
-		fb_iterator_set_ext("*"); 					// Set extension
-	}
-
-	// Count files
-	menu_size = 0;
-	while (fb_iterator_has_next()) {
-		fb_iterator_next();
-		menu_size++;
-	}
-}
-
+/*
+ * Load menu onto screen
+ */
 void load_menu(int state) {
 	switch (state) {
 	case STATE_SELECT_PROGRAM: {
@@ -99,36 +92,89 @@ void load_menu(int state) {
 	}
 	current_state = state;
 
-
-	//screen_make_bitmap_from_buffer();
 	screen_draw_bitmap_on_screen();
 }
 
+/*
+ * Go to next state of program
+ */
 void next_state(void) {
 	int rc;
-	char *buffer;
+	char *file;
 	if (current_state == STATE_SELECT_PROGRAM) {
-		fb_iterator_init(FS_FILE);
-		fb_iterator_seek(menu_item_selected);
-		buffer = fb_iterator_next();
-		rc = load_script(buffer); // Sets the program script
+		//send_selected_file();
+		//return;
+
+		fb_iterator_init(FS_FILE);				// Inits file iterator for files
+		fb_iterator_seek(menu_item_selected);	// Seeks to selected item
+		file = fb_iterator_next();
+		char file_full[sizeof(file)+3];
+		file_full[0] = 'A';
+		file_full[1] = ':';
+		file_full[2] = '/';
+		file_full[3] = '\0';
+		rc = load_script(strcat(file_full, file)); 				// Tries to load the program script
 		fb_iterator_terminate();
 		if (!rc) {
 			load_menu(STATE_SELECT_DATA);
+		} else {
+			screen_display_error_messagef("Could not load script\n%s\n", file_full);
 		}
-		return;
 	}
 
-	if (current_state == STATE_SELECT_DATA) {
+	else if (current_state == STATE_SELECT_DATA) {
 		fb_iterator_init(FS_DIR);
 		fb_iterator_seek(menu_item_selected);
-		buffer = fb_iterator_next();
-		selected_data_unit_path = buffer; // Sets the data directory
+		file = fb_iterator_next();
+		selected_data_unit_path = file; // Sets the data directory
 		run_fpga_program();
 		fb_iterator_terminate();
 	}
 }
 
+/*
+ * Set file type to be displayed:
+ * Program or data
+ */
+void set_file_type(enum data_type type) {
+	fb_cd("A:/");	// Set directory
+
+	// Initialize and set extension
+	if (type == DATA) {
+		fb_iterator_init(FS_DIR);					// Init for directories
+		fb_iterator_set_ext(DATA_FILE_SUFFIX);		// Set extension
+
+	} else if (type == PROGRAM) {
+		fb_iterator_init(FS_FILE);					// Init for files
+		fb_iterator_set_ext(SCRIPT_FILE_SUFFIX); 	// Set extension
+	}
+
+	// Count files
+	menu_size = 0;
+	while (fb_iterator_has_next()) {
+		fb_iterator_next();
+		menu_size++;
+	}
+	current_type = type;
+}
+
+//TODO midlertidig funksjon, brukes kun til testing
+void send_selected_file(void) {
+	fb_iterator_init(FS_FILE);				// Inits file iterator for files
+	fb_iterator_seek(menu_item_selected);	// Seeks to selected item
+	char *file = fb_iterator_next();
+	char file_full[sizeof(file)+3];
+	file_full[0] = 'A';
+	file_full[1] = ':';
+	file_full[2] = '/';
+	file_full[3] = '\0';
+
+	fpga_send_data_from_file(strcat(file_full, file));
+}
+
+/*
+ * Final stage: run program on FPGA
+ */
 void run_fpga_program(void) {
 #define PATH_SIZE strlen(selected_data_unit_path)
 	char *buffer;
@@ -147,14 +193,15 @@ void run_fpga_program(void) {
 			sprintf(data_path, "%s%s", selected_data_unit_path, buffer);
 
 			// Determines if BMP file
-			char *suffix = strchr(buffer, '.');
+			/*char *suffix = strchr(buffer, '.');
 			suffix++; //skips '.'
 			if (!strcmp(suffix, BMP_FILE_SUFFIX)) 	bmp = true;		//TODO bmp brukes ikke
-			else 									bmp = false;
+			else 									bmp = false;*/
 
 			fpga_send_data_from_file(data_path); // Send data to FPGA
 			fpga_run(); // Run FPGA (waits for ACK)
-			//usleep(selected_script.transfer_delay); // Sleep TODO
+			volatile int i = selected_script.transfer_delay;
+			while (i--);		// Sleeps
 		}
 	} else {
 		fpga_run(); // No data -> just run
