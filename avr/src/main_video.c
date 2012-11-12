@@ -1,4 +1,4 @@
-
+/*
 #include <string.h>
 #include <stdio.h>
 #include "compiler.h"
@@ -112,7 +112,7 @@ int read_sd_directly() {
 		LED_Toggle(LED1);
 		LED_Toggle(LED2);
 
-//		fpga_send_data(sram, 320*240);
+		fpga_send_data(sram, 320*240);
 		LED_Toggle(LED2);
 	}
 	LED_On(LED3);
@@ -151,16 +151,16 @@ void read_fs_file() {
 		sram_curr_addr += bufsize;
 
 		if (read_so_far % 76800 == 0) {
-//			fpga_set_state(FPGA_STATE_LOAD_DATA);
-//			ptr = sram;
-//			while (ptr != sram_curr_addr) {
-//				fpga_send_byte(*ptr++);
-//			}
-//			fpga_send_byte(*ptr++);
+			fpga_set_state(FPGA_STATE_LOAD_DATA);
+			ptr = sram;
+			while (ptr != sram_curr_addr) {
+				fpga_send_byte(*ptr++);
+			}
+			fpga_send_byte(*ptr++);
 			sram_curr_addr = sram;
 
 			LED_Toggle(LED7);
-//			fpga_set_state(FPGA_STATE_STOP);
+			fpga_set_state(FPGA_STATE_STOP);
 		}
 	}
 
@@ -213,8 +213,10 @@ int main(void)
 //    gpio_enable_pin_glitch_filter(FPGA_IO_CTRL);
 
 //	send_fancy_pattern();
-	read_sd_directly();
-//	read_fs_file();
+//	read_sd_directly();
+	read_fs_file();
 
 	while(1);
 }
+
+*/

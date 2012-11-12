@@ -108,9 +108,11 @@ void button_reg_listener(void(*l) (U8)) {
 	listener = l;
 }
 
+#include "led.h"
 void button_set_tmp_listener(void(*l) (U8)) {
 	old_listener = listener;
 	if (l) listener = l;
+	else LED_On(0xff);
 }
 
 void button_remove_tmp_listener(void) {

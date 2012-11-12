@@ -43,7 +43,7 @@ architecture Behavioral of CTRL_INST_DECODER is
 
 begin
 
-	process(op_code, enable, reset) begin	
+	process(instr_op, instr_dma, enable, reset) begin	
 		
 		if (enable='0' or reset='1') then
 			reg_write 				<= '0';

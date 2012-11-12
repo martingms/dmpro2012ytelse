@@ -40,8 +40,8 @@ entity CONTROLL is
 		vaddr							: out STD_LOGIC_VECTOR(CTRL_VADDR_BUS-1 downto 0);
 		--vaddr_write				: out STD_LOGIC;
 		
-		dma_cmd						: out STD_LOGIC_VECTOR(CTRL_DMA_BUS-1 downto 0)
-		dma_params					: out STD_LOGIC_VECTOR(CTRL_DMA_BUS-1 downto 0)
+		dma_cmd						: out STD_LOGIC_VECTOR(CTRL_DMA_CMD_BUS-1 downto 0);
+		dma_params					: out STD_LOGIC_VECTOR(CTRL_DMA_DAT_BUS-1 downto 0)
 	);
 end CONTROLL;
 
@@ -66,16 +66,16 @@ architecture Behavioral of CONTROLL is
 		);
 	end component;
 	
-	signal reg_write				: in  STD_LOGIC;
-	signal mem_to_reg				: in  STD_LOGIC;
-	signal alu_const				: in  STD_LOGIC;
-	signal jump						: in  STD_LOGIC;
-	signal branch					: in  STD_LOGIC;
+	signal reg_write				: STD_LOGIC;
+	signal mem_to_reg				: STD_LOGIC;
+	signal alu_const				: STD_LOGIC;
+	signal jump						: STD_LOGIC;
+	signal branch					: STD_LOGIC;
 
 ----------------------------------------------------------------------------------
 --	PROGRAM COUNTER
 ----------------------------------------------------------------------------------
-	component PC is
+	component PROGRAM_COUNTER is
 		Port (
 			clk 						: in  STD_LOGIC;
 			reset 					: in  STD_LOGIC;
@@ -88,16 +88,16 @@ architecture Behavioral of CONTROLL is
 	end component;
 
 ----------------------------------------------------------------------------------
---	PROGRAM COUNTER
+--	REGISTER BANK
 ----------------------------------------------------------------------------------
 	component CTRL_REGISTER is
 		Port(
 			clk 						:	in	 STD_LOGIC;
 			reset						:	in	 STD_LOGIC;
 			write						:	in	 STD_LOGIC;			
-			adr0 						:	in	 STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
-			adr1 						:	in	 STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
-			adr2 						:	in	 STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+			adr0 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+			adr1 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
+			adr2 						:	in	 STD_LOGIC_VECTOR (NODE_RADDR_BUS-1 downto 0);
 			data0_in					:	in	 STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
 			data1_out				:	out STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
 			data2_out				:	out STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
@@ -106,7 +106,12 @@ architecture Behavioral of CONTROLL is
 			vga_data					:	out STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0)
 		);
 	end component;
-
+	
+	signal data1_out				: STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+	signal data2_out				: STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+	signal tmp_dma_params		: STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+	signal tmp_vga_addr			: STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+	signal tmp_vga_data			: STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
 ----------------------------------------------------------------------------------
 --	MAIN ALU
 ----------------------------------------------------------------------------------
@@ -121,6 +126,7 @@ architecture Behavioral of CONTROLL is
 	end component;
 	
 	signal alu_op2					: STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+	signal alu_res					: STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
 	
 ----------------------------------------------------------------------------------
 --	MUX
@@ -135,7 +141,93 @@ architecture Behavioral of CONTROLL is
 		);
 	end component;
 	
+	signal reg_data				: STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+	signal tmp_alu_mux_in1 		: STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+	signal tmp_reg_mux_in1		: STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+	
 begin
 
+----------------------------------------------------------------------------------
+--	INSTRUCTION DECODER
+----------------------------------------------------------------------------------
+	DECODER : CTRL_INST_DECODER port map (
+		reset 						=> reset,
+		enable						=> idata(23),
+		array_state					=> state,
+		instr_op						=> idata(22 downto 19),
+		instr_dma					=> idata(6 downto 3),		
+		reg_write					=> reg_write,
+		mem_to_reg					=> mem_to_reg,
+		alu_const					=> alu_const,
+		jump							=> jump,
+		branch						=> branch,
+		dma_cmd						=> dma_cmd
+	);
 
+----------------------------------------------------------------------------------
+--	PROGRAM COUNTER
+----------------------------------------------------------------------------------
+	PC : PROGRAM_COUNTER port map (
+		clk 							=> clk,
+		reset 						=> reset,
+		jump_addr					=> idata(18 downto 3),
+		jump							=> jump,
+		branch						=> branch,
+		alu_res						=> reg_data(0),
+		instr_addr					=> iaddr
+	);
+
+----------------------------------------------------------------------------------
+--	REGISTER BANK
+----------------------------------------------------------------------------------
+	dma_params						<= tmp_dma_params(CTRL_DMA_DAT_BUS-1 downto 0);
+	vaddr								<= tmp_vga_addr(CTRL_VADDR_BUS-1 downto 0);
+	vdata								<= tmp_vga_data(CTRL_VDATA_BUS-1 downto 0);
+	
+	REG : CTRL_REGISTER port map (
+		clk 							=> clk,
+		reset							=> reset,
+		write							=> reg_write,
+		adr0 							=> idata(18 downto 15),
+		adr1 							=> idata(14 downto 11),
+		adr2 							=> idata(10 downto  7),
+		data0_in						=> reg_data,
+		data1_out					=> data1_out,
+		data2_out					=> data2_out,
+		dma_params				 	=> tmp_dma_params,
+		vga_addr						=> tmp_vga_addr,
+		vga_data						=> tmp_vga_data
+	);
+	
+----------------------------------------------------------------------------------
+--	MAIN ALU
+----------------------------------------------------------------------------------
+	daddr								<= alu_res(CTRL_DADDR_BUS-1 downto 0);
+	
+	MAIN_ALU : ALU port map( 
+		alu_op						=> idata(2 downto 0),
+		op1 							=> data1_out,
+		op2 							=> alu_op2,
+		res 							=> alu_res
+	);
+
+----------------------------------------------------------------------------------
+--	MUX
+----------------------------------------------------------------------------------
+	tmp_alu_mux_in1 				<= ("0000000000000" & idata(10 downto 3));
+	tmp_reg_mux_in1				<= ("0000000000000" & ddata);
+	
+	ALU_MUX : MUX port map ( 
+		selector						=> alu_const,
+		bus_in0 						=> data2_out,
+		bus_in1 						=> tmp_alu_mux_in1,
+		bus_out 						=> alu_op2
+	);
+	
+	REG_MUX : MUX port map ( 
+		selector						=> mem_to_reg,
+		bus_in0 						=> alu_res,
+		bus_in1 						=> tmp_reg_mux_in1,
+		bus_out 						=> reg_data
+	);
 end Behavioral;
