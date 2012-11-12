@@ -83,4 +83,3 @@ begin
 	data3_out <= (others=>'0') when adr3=ZERO_ADDR else REGS(to_integer(unsigned(adr3)));
 
 end Behavioral;
-
