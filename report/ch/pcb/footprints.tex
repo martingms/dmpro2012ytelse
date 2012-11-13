@@ -6,45 +6,46 @@ This usually meant either staring at datasheets and carefully placing pins
 relative to each other, or running the IPC-wizard.
 
 \subsection {We made the following footprints ourselves}
-\TODO{Make the links to references}
 \begin {itemize}
-\item SD-card \url{http://katalog.we-online.de/em/datasheet/693063010911.pdf}
+\item SD-card 
   With the pin-designations selected by googling the pinouts for SD-cards in
   general, and comparing a few of those hits to make sure that the results
-  agreed \url{http://pinouts.ru/Memory/sdcard_pinout.shtml} ended up being what
-  we based the schematic-component based on. This schematic was particularly hard
-  to read, to the point that we had to ask Tufte for help to understand it, and even
-  after that, there was no way to be sure precisely where the grounding pads were relative
-  to the rest of the SD-card-reader. We thus ended up with a bit of guesswork, and added
-  quite a bit of slack to the ground-pads by simply adding extra tin to these pads.
-\item VGA-plug \url{http://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=82068_AMPLIMITE_Right-Angle_Posted_Conn&DocType=CS}
+  agreed this\footnote{\url{http://pinouts.ru/Memory/sdcard_pinout.shtml}} 
+  ended up being what we based the schematic-component based on. This 
+  schematic\footnote{\url{http://katalog.we-online.de/em/datasheet/693063010911.pdf}}
+  schematic was particularly hard to read, to the point that we had to ask 
+  Tufte for help to understand it, and even after that, there was no way to
+  be sure precisely where the grounding pads were relative to the rest of the 
+  SD-card-reader. We thus ended up with a bit of guesswork, and added quite a 
+  bit of slack to the ground-pads by simply adding extra tin to these pads.
+\item VGA-plug
 \item Memory (TSOP54/TSOP44)
 The TSOP54/TSOP44 footprints were created using the IPC Footprint Wizard, as
 their datasheets fitted nicely with the Small Outline Package-setting in that
 Wizard.
 
 \begin {itemize}
-\item Data-memory (2M x 8bit) CY7C1069DV33 54TSOP:
-\url{http://www.cypress.com/?docID=31945} 
-\item Program-memory (64K x 16bit)
-CY7C1021DV33 44TSOP: \url{http://www.cypress.com/?docID=31965} 
-\item VGA memory (512 x 8bit) CY7C1049DV33 TSOP44 : \url{http://www.farnell.com/datasheets/1468461.pdf}
+\item Data-memory (2M x 8bit) CY7C1069DV33 54TSOP
+\item Program-memory (64K x 16bit) CY7C1021DV33 44TSOP 
+\item VGA memory (512 x 8bit) CY7C1049DV33 TSOP44 
 \end {itemize}
+
 \end {itemize}
 
 \subsection{Footprints from Festina Lente:}
 As Festina Lente used some components that we also ended up using, we decided,
-after talking to Tufte, to use their Footprints (as they were known to work) 
-for these components:
-\url{http://org.ntnu.no/datamaskinerprosjekt2011/altium_libraries/dmprolibrary/}
+after talking to Tufte, to use their Footprints\footnote{\url{http://org.ntnu.no/datamaskinerprosjekt2011/altium_libraries/dmprolibrary/}}
+(as they were known to work) for these components:
+
 \begin{itemize}
-\item Button
+\item Button (TE CONNECTIVITY / ALCOSWITCH - FSM2JSMA)
 \item Crystal
-\item USB
-\item Oscillator - The oscillator had one issue last year, namely that the
+\item Mini-USB (LUMBERG - 2486 01 - MINI USB TYPE B)
+\item Oscillator (CITIZEN AMERICA - CSX750FJC50.000M-UT) - 
+  The oscillator had one issue last year, namely that the
   footprint was mirrored, noting this from Festina Lente's report, we read
-  through the datasheet \TODO{Reference}, and remapped the
-  pin-numbering on the foot-print before using this footprint.
+  through the datasheet, and remapped the pin-numbering on the foot-print 
+  before using this footprint.
 \item Power Connector
 \item VGA-module
 \end{itemize}
