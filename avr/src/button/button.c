@@ -35,16 +35,16 @@ __attribute__((__interrupt__)) void button_interrupt_routine(void) {
 //	U8 buttons = 0;
 	if (gpio_get_pin_interrupt_flag(GPIO_PUSH_BUTTON_0)) {
 		gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_0);
-		notify_listeners(1);
+		if (listener) listener(1);
 	} else if (gpio_get_pin_interrupt_flag(GPIO_PUSH_BUTTON_1)) {
 		gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_1);
-		notify_listeners(2);
+		if (listener) listener(2);
 	} else if (gpio_get_pin_interrupt_flag(GPIO_PUSH_BUTTON_2)) {
 		gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_2);
-		notify_listeners(4);
+		if (listener) listener(4);
 	} else if (gpio_get_pin_interrupt_flag(GPIO_PUSH_BUTTON_3)) {
 		gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_3);
-		notify_listeners(8);
+		if (listener) listener(8);
 	}
 //	if (B0_VALUE == BUTTON_PUSHED) buttons |= 1;
 //	if (B1_VALUE == BUTTON_PUSHED) buttons |= 2;
@@ -57,6 +57,7 @@ __attribute__((__interrupt__)) void button_interrupt_routine(void) {
 //	gpio_clear_pin_interrupt_flag(GPIO_PUSH_BUTTON_3);
 //
 //	if (buttons) notify_listeners(buttons);
+	return;
 }
 
 int button_init(void) {
