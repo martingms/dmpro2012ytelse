@@ -202,7 +202,9 @@ begin
 ----------------------------------------------------------------------------------
 --	MAIN ALU
 ----------------------------------------------------------------------------------
-	daddr								<= alu_res(CTRL_DADDR_BUS-1 downto 0);
+--	daddr(18 downto 0)			<= alu_res(18 downto 0);
+--	daddr(20 downto 19)			<= (others => '0');
+	daddr(20 downto 0)			<= alu_res(20 downto 0);
 	
 	MAIN_ALU : ALU port map( 
 		alu_op						=> idata(2 downto 0),

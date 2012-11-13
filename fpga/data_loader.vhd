@@ -15,7 +15,7 @@ entity data_loader is
 		mem_write : out std_logic;
 		mem_data : inout std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
 		
-		avr_data_in : in std_logic_vector(23 downto 0);
+		avr_data_in : in std_logic_vector(7 downto 0);
 		avr_data_in_ready : in std_logic;
 		avr_interrupt : out std_logic
 	);
@@ -49,7 +49,7 @@ begin
 		if rising_edge(clk) then
 			running <= next_running;
 			toggle_in_value <= next_toggle_in_value;
-			data <= avr_data_in(RAM_DATA_WORD_WIDTH - 1 downto 0);
+			data <= avr_data_in;
 			if reset = '1' then
 				address <= (others => '0');
 			else
