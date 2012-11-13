@@ -17,13 +17,12 @@ on the various chips did differ a bit though, we needed 8-bit words for all data
 was too expensive, we opted for using two 16-bit chips, with their address-lines connected
 together, and 8 ignored I/O-pins, thus in effect creating a 24-bit memory. Additionally,
 as we were unsure about how constant we could get our data-streams, an additional
-AVR-memory was added. This was chosen to be the same chip as the VGA-memory. (TODO: Double-check,
-as this was written offline).
+AVR-memory was added. This was chosen to be the same chip as the VGA-memory.
 
 VGA: \\
 While we had a goal of creating our own VGA-controller in the FPGA, we decided to have
 some fallback-option, thus, in addition to the neccessary pins and connectors for that
-solution, we also added the necessary connectors for the VGA-connector that Festina Lente
+solution, we also added the necessary connectors for the VGA-module that Festina Lente
 used last year.
 
 Communication: \\
