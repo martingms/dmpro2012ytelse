@@ -31,9 +31,8 @@ entity toplevel is
 		vga_value : out std_logic_vector(9 downto 0);
 		
 		-- AVR data transfer
-		avr_data_in : in std_logic_vector(7 downto 0);		-- FPGA_IN_[23-0]
+		avr_data_in : in std_logic_vector(23 downto 0);		-- FPGA_IN_[23-0]
 		avr_data_in_ready : in std_logic;						-- FPGA_IN_24
-		avr_data_out : out std_logic_vector(7 downto 0);	-- FPGA_IO_[7-0]
 		avr_interrupt : out std_logic;							-- FPGA_IO_CTRL
 		
 		-- AVR state control
@@ -129,7 +128,7 @@ architecture behavioral of toplevel is
 			mem_write : out std_logic;
 			mem_data : inout std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
 		
-			avr_data_in : in std_logic_vector(23 downto 0);
+			avr_data_in : in std_logic_vector(7 downto 0);
 			avr_data_in_ready : in std_logic;
 			avr_interrupt : out std_logic
 		);
@@ -264,6 +263,7 @@ architecture behavioral of toplevel is
 	
 	signal instruction_register_mem_addr : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
 	signal instruction_register_mem_data : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
+	signal instruction_register_mem_data_filtered : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
 	
 	signal control_core_mem_addr : std_logic_vector(RAM_DATA_ADDRESS_WIDTH - 1 downto 0);
 	signal control_core_mem_write : std_logic;
@@ -286,20 +286,23 @@ architecture behavioral of toplevel is
 	signal dma_simd_data_in : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
 	signal dma_simd_data_out : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
 	
-	signal avr_data_in_modified : std_logic_vector(23 downto 0);
-	
 	signal vga_addr_in : std_logic_vector(RAM_VGA_ADDRESS_WIDTH - 1 downto 0);
 	signal vga_pixel_in : std_logic_vector(RAM_VGA_WORD_WIDTH - 1 downto 0);
 	
 	signal simd_array_state : std_logic;
 
+	signal prog_ram_addr_tmp : std_logic_vector(15 downto 0);
+	signal prog_ram_write_tmp : std_logic;
 begin
-
-	avr_data_in_modified(23 downto 8) <= (others => '0');
-	avr_data_in_modified(7 downto 0) <= avr_data_in;
+	
+	prog_ram_addr <= prog_ram_addr_tmp;
+	prog_ram_write <= prog_ram_write_tmp;
 	
 	vga_value(1 downto 0) <= (others => '0');
-	avr_data_out <= (others => '0');
+	
+--	vga_value(9 downto 4) <= prog_ram_addr_tmp(5 downto 0);
+--	vga_value(3) <= prog_ram_write_tmp;
+--	vga_value(2) <= avr_data_in_ready;
 	
 	inst_clock: clock
 		port map (
@@ -330,7 +333,7 @@ begin
 			pixel_in => vga_pixel_in,
 			mem_addr_in => vga_addr_in,
 			
-			mem_addr => vga_ram_addr(18 downto 0),
+			mem_addr => vga_ram_addr,
 			mem_we => vga_ram_write,
 			mem_data => vga_ram_data
 		);
@@ -350,17 +353,17 @@ begin
 			in1_addr => program_loader_mem_addr,
 			in1_data => program_loader_mem_data,
 			
---			out_write_enable => prog_ram_write,
---			out_addr => prog_ram_addr,
---			out_data => prog_ram_data
-			out_write_enable => test_prog_ram_write,
-			out_addr => test_prog_ram_addr,
-			out_data => test_prog_ram_data
+			out_write_enable => prog_ram_write_tmp,
+			out_addr => prog_ram_addr_tmp,
+			out_data => prog_ram_data
+--			out_write_enable => test_prog_ram_write,
+--			out_addr => test_prog_ram_addr,
+--			out_data => test_prog_ram_data
 		);
 
-	prog_ram_addr <= (others => '0');
-	prog_ram_data <= (others => 'Z');
-	prog_ram_write <= '1';
+--	prog_ram_addr <= (others => '0');
+--	prog_ram_data <= (others => 'Z');
+--	prog_ram_write <= '1';
 	
 	data_ram_mux: ram_mux
 		generic map (
@@ -412,7 +415,7 @@ begin
 			mem_write => program_loader_mem_write,
 			mem_data => program_loader_mem_data,
 			
-			avr_data_in => avr_data_in_modified,
+			avr_data_in => avr_data_in,
 			avr_data_in_ready => avr_data_in_ready,
 			avr_interrupt => program_loader_done
 		);
@@ -427,7 +430,7 @@ begin
 			mem_write => data_loader_mem_write,
 			mem_data => data_loader_mem_data,
 			
-			avr_data_in => avr_data_in_modified,
+			avr_data_in => avr_data_in(11 downto 4),
 			avr_data_in_ready => avr_data_in_ready,
 			avr_interrupt => data_loader_done
 		);
@@ -453,7 +456,8 @@ begin
 			enable => execute,
 			reset => reset,
 			
-			command => dma_command,
+--			command => dma_command,
+			command => (others => '0'),
 			parameter => dma_parameter,
 			
 			mem_addr => dma_mem_addr,
@@ -472,7 +476,8 @@ begin
 		port map (
 			clk => clk_cpu,
 			reset => reset,
-			instr => instruction_register_mem_data,
+--			instr => instruction_register_mem_data,
+			instr => (others => '0'),
 			node_step => dma_step_s,
 
 			data_write => dma_simd_write,
@@ -481,6 +486,15 @@ begin
 			data_out => dma_simd_data_in,
 			state_out => simd_array_state);
 	
+	filter_instructions: process (execute, instruction_register_mem_data)
+	begin
+		if execute = '1' then
+			instruction_register_mem_data_filtered <= instruction_register_mem_data;
+		else
+			instruction_register_mem_data_filtered <= (others => '0');
+		end if;
+	end process filter_instructions;
+	
 	inst_control: CONTROLL
 		port map (
 			clk => clk_cpu,
@@ -488,7 +502,7 @@ begin
 
 			state => simd_array_state,
 
-			idata => instruction_register_mem_data,
+			idata => instruction_register_mem_data_filtered,
 			iaddr => instruction_register_mem_addr,
 
 			ddata => control_mem_data,
@@ -500,17 +514,17 @@ begin
 			dma_cmd => dma_command,
 			dma_params => dma_parameter);
 	
-	test_prog_ram: memory_from_file
-		generic map (
-			word_width => RAM_PROGRAM_WORD_WIDTH,
-			address_width => 8,
-			file_name => "control/test_program.dat"
-		)
-		port map (
-			clk => clk_cpu,
-			write_enable => test_prog_ram_write,
-			addr => test_prog_ram_addr(7 downto 0),
-			data => test_prog_ram_data
-		);
+--	test_prog_ram: memory_from_file
+--		generic map (
+--			word_width => RAM_PROGRAM_WORD_WIDTH,
+--			address_width => 8,
+--			file_name => "control/test_program.dat"
+--		)
+--		port map (
+--			clk => clk_cpu,
+--			write_enable => test_prog_ram_write,
+--			addr => test_prog_ram_addr(7 downto 0),
+--			data => test_prog_ram_data
+--		);
 
 end behavioral;

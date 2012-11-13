@@ -49,7 +49,7 @@ begin
 		if rising_edge(clk) then
 			running <= next_running;
 			toggle_in_value <= next_toggle_in_value;
-			data <= avr_data_in(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
+			data <= avr_data_in;
 			if reset = '1' then
 				address <= (others => '0');
 			else
