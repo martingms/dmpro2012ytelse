@@ -18,14 +18,13 @@ The AVR can set the FPGA to 5 different states, controlling the FPGA's behaviour
 
 \subsection{AVR transfers data to the FPGA}
 
-When the AVR transfers data, it first sets the FPGA state to LOAD\_DATA or LOAD\_INSTRUCTION to load data or instructions respectively. The procedure for the AVR is then to put one word on the bus, toggle the clock line, wait for ack and repeat. The FPGA state STOP is used to signal the end of transfer. When the data are simply data, the first 8 lines of the FPGA input bus is used to transfer data one byte at a time. When the data are instructions for the FPGA, data are transfered one instruction (24 bit) at a time, and the first 24 lines of the bus are used. The entire procedure can be summarized by the following six steps:
+When the AVR transfers data, it first sets the FPGA state to LOAD\_DATA or LOAD\_INSTRUCTION to load data or instructions, respectively. The procedure for the AVR is then to put one word on the bus and toggle the clock line. The FPGA state STOP is used to signal the end of transfer. When the data is simply data, the first 8 lines of the FPGA input bus is used to transfer data one byte at a time. When the data are instructions for the FPGA, data are transferred one instruction (24 bit) at a time, and the first 24 lines of the bus are used. The entire procedure can be summarized by the following six steps:
 
 \begin{enumerate}
 \item AVR sets FPGA state to LOAD\_DATA or LOAD\_INSTRUCTION
 \item AVR puts 8 or 24 bits of data on the bus
 \item AVR toggles the Address increment CLK line
-\item When ready for more data, FPGA interrupts/acks AVR 
-\item Repeat stage 2 through 4
+\item Repeat stage 2 through 3
 \item AVR sets FPGA state to STOP
 \end{enumerate}
 

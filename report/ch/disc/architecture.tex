@@ -1,6 +1,6 @@
 \section {Architectural design}
 
-While still in the early phases of the project, multiple solutions as to how the data memory was suggested. The reason we decided to let the AVR send the FPGA all the data, and then let it store them to it's own local memory, was due to all the possible issues with shared memory. A shared memory would easily be prone to errors from synchronization problems for when to read and write, and to what addresses. Instead, we figured we'd just send all data from the AVR to the FPGA, and let it store them into it's own memory as it saw fit.\\
+While still in the early phases of the project, multiple solutions as to how the data memory was suggested. The reason we decided to let the AVR send the FPGA all the data, and then let it store them to its own local memory, was due to all the possible issues with shared memory. A shared memory would easily be prone to errors from synchronization problems for when to read and write, and to what addresses. Instead, we figured we'd just send all data from the AVR to the FPGA, and let it store them into its own memory as it saw fit.\\
 
 The program memory is separated on two chips, as we found no good 24 bit word memory, and instead combined two 16 bit ones.
 
