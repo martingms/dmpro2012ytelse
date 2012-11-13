@@ -1,20 +1,29 @@
 \section {The PCB}
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.8\textwidth]{fig/pcb/pcbwithoutcomp.jpg}
-  \caption{The PCB without Components}
-  \label{fig:pcb}
-\end{figure}
-When the PCB finally arrived from production we started soldering, this proved to be a bit
-more difficult than originally anticipated. First, we tested whether there were short circuit in the board itself. We used multimeter to test that there was no current that goes from different layer. Then, we started to solder with the power supply, one power plane at time, testing the board for short circuit after each iteration. The table 5.1 shows the observerd voltage from each plane. 
+
+\input{fig/pcb/pcbwithoutcomp}
+
+When the PCB finally arrived from production we started soldering, this proved
+to be a bit more difficult than originally anticipated. First, we tested whether
+there were short circuit in the board itself. We used multimeter to test that
+there was no current that goes from different layer. Then, we started to solder
+with the power supply, one power plane at time, testing the board for short
+circuit after each iteration. The table \TODO{5.1 must be a {\tt
+    \textbackslash ref}} 5.1 shows the observed voltage from each plane.
+
 \input{fig/pcb/voltageresult.tex}
 
-Then we started with AVR, getting the AVR in place was particularly difficult, but after asked Tufte we lent a glue stick to put some glue on it to get more friction, thus keeping it in place while we soldered.
+Then we started with AVR, getting the AVR in place was particularly difficult,
+but after asked Tufte we lent a glue stick to put some glue on it to get more
+friction, thus keeping it in place while we soldered.
 
-After about a days work we managed to completely destroy a pin on the AVR, therefore we had to start from scratch on a new board. On this new board we started with the AVR and FPGA, as they are the hardest components to solder. After each side on the AVR and FPGA, we tested for short circuits. As none were found, we moved on to the power supply, as well as JTAGs , FLASH and LEDs. In order to check the PCB was working, the AVR and FPGA groups tested the PCB board without the capacitors, after both groups tested that they could connect to the AVR and FPGA respectively, we began to solder the rest part of the PCB. 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.8\textwidth]{fig/pcb/pcbwithcomp.jpg}
-  \caption{The PCB With All The Components}
-  \label{fig:pcb}
-\end{figure}
+After about a days work we managed to completely destroy a pin on the AVR,
+therefore we had to start from scratch on a new board. On this new board we
+started with the AVR and FPGA, as they are the hardest components to
+solder. After each side on the AVR and FPGA, we tested for short circuits. As
+none were found, we moved on to the power supply, as well as JTAGs, FLASH and
+LEDs. In order to check the PCB was working, the AVR and FPGA groups tested the
+PCB board without the capacitors, after both groups tested that they could
+connect to the AVR and FPGA respectively, we began to solder the rest part of
+the PCB.
+
+\input{fig/pcb/pcbwithcomp}
