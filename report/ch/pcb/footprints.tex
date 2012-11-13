@@ -12,9 +12,11 @@ relative to each other, or running the IPC-wizard.
   With the pin-designations selected by googling the pinouts for SD-cards in
   general, and comparing a few of those hits to make sure that the results
   agreed \url{http://pinouts.ru/Memory/sdcard_pinout.shtml} ended up being what
-  we based the schematic-component based on. \CHECK{Mention that this was
-    particularly hard to decipher from the datasheet, and that we did need to
-    ask Gunnar for help at least once, just to read the datasheet?}
+  we based the schematic-component based on. This schematic was particularly hard
+  to read, to the point that we had to ask Tufte for help to understand it, and even
+  after that, there was no way to be sure precisely where the grounding pads were relative
+  to the rest of the SD-card-reader. We thus ended up with a bit of guesswork, and added
+  quite a bit of slack to those.
 \item VGA-plug \url{http://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocNm=82068_AMPLIMITE_Right-Angle_Posted_Conn&DocType=Catalog+Section&DocLang=English&PartCntxt=}
 \item Memory (TSOP54/TSOP44)
 The TSOP54/TSOP44 footprints were created using the IPC Footprint Wizard, as
