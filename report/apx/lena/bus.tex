@@ -1,6 +1,8 @@
-\chapter {LENA SCU bus}
+\section{LENA SCU bus}
 The LENA has two types of pins connected to the SCU. There are 9 I/O pins, and 29 input pins. The I/O pins are mostly used for the LENA to acknowledge transfers, but the 8 remaining pins can be used for the fallback solution of having the LENA transfer data back to the SCU. The 29 input pins are used to set the state of the LENA, acknowledge the LENA and as a 24 bit wide one-way data bus.
 
+\TODO{This is messy - should use a table instead. Then we can also reference
+  it.}
 \begin{itemize}
 \item LENA\_IO\_00 - Two way data (least significant bit)
 \item LENA\_IO\_01 - Two way data
