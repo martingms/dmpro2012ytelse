@@ -2,24 +2,34 @@
 
 Design choices: \\
 \subsection {Memory}
-Since we decided to have separate instruction/data-memories, as well as VGA-ram, and
-a dedicated memory for the AVR, we ended up with a total of 5 RAM-chips. The requirements
-on the various chips did differ a bit though, we needed 8-bit words for all data, but
-24 bit for instructions. Since 24-bit memory was out of production, and 32-bit memory
-was too expensive, we opted for using two 16-bit chips, with their address-lines connected
-together, and 8 ignored I/O-pins, thus in effect creating a 24-bit memory. Additionally,
-as we were unsure about how constant we could get our data-streams, an additional
-AVR-memory was added. This was chosen to be the same chip as the VGA-memory.
+The overall design for our machine calls for quite a bit of different memories. One of the
+earliest design choices that led to this was the decision to have separate instruction/data-memories.
+The reasoning behind this choice being that we could avoid the bottleneck that would be introduced
+from sharing memories. Since the requirements for these two memories differed in both size and word-width 
+we wound up with not only separate, but also different chips for this purpose (The data-memory required
+8-bit words, the instruction-width was 24-bit, and since we wanted to avoid using multiple memory accesses
+to get a complete instruction, we needed a wide enough memory chip for that purpose. 24-bit chips were out of
+production, and 32-bit memory was too expensive, thus the solution became 2x16-bit chips with their address-lines
+connected together and 8 ignored I/O-pins, effectively making them a 24-bit memory).
+
+Since we wanted to reduce the sharing of memories as much as possible, we also needed a separate memory for
+our VGA-controller, as that needed to read it's buffer as fast as possible without interfering with the speed
+of the rest of the system. This called for a memory that was big enough to hold atleast a full screen-frame,
+at 8-bit per pixel (since each pixel is an 8-bit greyscale pixel).
+
+To reduce the possibility of having too slow data-access from the AVR, an extra memory was added to work as
+a buffer for the AVR as well. This design choice was made AFTER ordering, which meant that we had to choose from
+the chips we had already ordered to fit this purpose. Since this was intended to carry data intended for the rest
+of the system, and as the rest of the system is working with data in 8-bit bytes, we ended up using one of the
+extra chips ordered as VGA-memory for this purpose.
 
 \subsection {VGA}
-While we had a goal of creating our own VGA-controller in the FPGA, we decided to have
-some fallback-option, thus, in addition to the neccessary pins and connectors for that
-solution, we also added the necessary connectors for the VGA-module that Festina Lente
-used last year.
+Our initial plans were to create our own VGA-controller in the FPGA, but since having video-output was mission-critical
+for our project, we really wanted to have a fallback-solution in case our own VGA-controller-solution ended up not working.
+To solve this, we added in the necessary connectors for the VGA-module that Festina Lente used last year.
 
 \subsection {Communication}
-We planned on using the SD-Card-reader as our main source of data/instructions, however
-in the same vein as the design choices for the VGA, we opted to also have a fallback-solution
-here, thus we also added USB and RS232 as fallback-solutions for getting data/communicating
-with the computer.
+We planned on using the SD-Card-reader as our main source of data/instructions, however, as our system would
+be completely useless unless we were able to get data into it at decent speeds, we opted to also have a fallback-solution
+here, thus we also added USB and RS232 as fallback-solutions for getting data/communicating with the computer.
 
