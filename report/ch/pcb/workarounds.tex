@@ -1,8 +1,10 @@
 \section {Problems and Workarounds}
 \subsection{Routing}
-Routing was the first problem we confronted during the designing the PCB board, we had to manually route the design, because we got some warnings due to the clearance of the board. We used auto-routing function provided by Altium, but the results was not satisfied. We tried to change some parameters to get better results, but it didn't work. Finally, we realized that we had to route manually, because we didn't have the enough room on the PCB board, because we had to design the PCB board as small as possible to cut down the budget. Then, we removed some unnecessary vias by checking the design manually. 
+Routing was the first problem we confronted during the designing the PCB board, we had to manually route the design, because we got some warnings due to the clearance of the board. We used the auto-routing function provided by Altium, 
+yet as it did not privode satisfying results, we tried to change some parameters to make them better, without success. Finally, we realized that we had to route a few wires manually. This was mostly motivated by our desire to not have vias as close to the pins as Altium placed them. Also, as to cut down the bugdet, we removed some unnecessary vias by wiring multiple grounds and powers together, where the design allowed us to. In this way, we got quite a few less vias. 
 \subsection{Soldering}
-Soldering was the bigest problem that we faced, none of the PCB group member had the experiences of it. We failed to solder on our first board, the reason was that we used too much tin on one of the AVR pins, then we tried to removed it, but one pin was destroyed unfortunately.\\
-Second try on the soldering was successful, but we still got some small problems. After the AVR and FPGA group tested that they could connect to the AVR and FPGA, there remained some soldering problems until they began to real test. Problems we found were lack of tin on the oscillator, two pins of data memory were not soldered steady.    
+Soldering was the bigest problem that we faced, none of the PCB group member had any experiences with it beforehand. We managed to destroy our first board, as we used too much tin on one of the AVR pins, and ruined them by using the tin removal unit wrongly.
+
+The next try, however, proved to be successful, but there still remained some minor problems. Problems we found were lack of tin on the oscillator, as well as a few of the FPGA pins. They were, as opposed to our problem with the first board, easily fixed, once discoverred.
 
 
