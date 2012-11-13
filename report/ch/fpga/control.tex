@@ -1,4 +1,4 @@
-\section{Control module}
+\section{Control Module}
 
 The control module is responsible for coordinating the activity of the
 other parts of the image processor and for data transfer into and within
@@ -20,6 +20,17 @@ initiating data transfers between the SIMD node array and the data RAM,
 and copying image data to the VGA controller.
 
 \subsection{States}
-\subsection{Control core}
+
+The operation of the image processor is fully controlled by the SCU. The
+SCU sets a state value that is used by the control module to select
+which components of the image processor are active. This is indicated by
+the red signals in figure \ref{fig:control-module}.
+
+The states recognized by the image processor are listed in table
+\ref{tab:states}.
+
+\input{fig/fpga/states}
+
+\subsection{Control Core}
 \subsection{DMA}
-\subsection{Program flow}
+\subsection{Program Flow}
