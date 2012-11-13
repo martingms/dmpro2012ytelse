@@ -3,10 +3,12 @@
 The control module is responsible for coordinating the activity of the
 other parts of the image processor and for data transfer within the
 image processor. A visual overview of the control module is given in
-figure \ref{fig:control}.
+figure \ref{fig:control-module}.
+
+\input{fig/fpga/control_module}
 
 The control module decodes the state signal set by the AVR, and enables,
-disables and resets components accordingly. It is responsible for
+disables and resets components accordingly. It is also responsible for
 performing data transfer between the AVR and the program/data RAM.
 
 The control module contains the CPU core that is used for non-SIMD
