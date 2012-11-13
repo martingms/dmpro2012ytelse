@@ -30,7 +30,7 @@ static const spi_options_t spiOptions =
   .modfdis      = 1
 };
 
-void mmc_init()
+Bool mmc_init()
 {
         // Assign I/Os to SPI.
         gpio_enable_module(SD_MMC_SPI_GPIO_MAP,
@@ -45,7 +45,7 @@ void mmc_init()
         spi_enable(SD_MMC_SPI);
 
         // Initialize SD/MMC driver with SPI clock (PBA).
-        sd_mmc_spi_init(spiOptions, PBA_SPEED);
+        return sd_mmc_spi_init(spiOptions, PBA_SPEED);
 }
 
 Ctrl_status mmc_status()

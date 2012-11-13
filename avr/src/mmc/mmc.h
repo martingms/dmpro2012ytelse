@@ -7,7 +7,7 @@
 // Initializes the SPI subsystem, selects SPI as GPIO function
 // and does some other SPI initialization needed before SD card
 // can be used either directly or by the file system
-void mmc_init();
+Bool mmc_init();
 
 // mmc_init must be called before this one. Returns
 // one of:
