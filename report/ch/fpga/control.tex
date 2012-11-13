@@ -34,11 +34,11 @@ The states recognized by the image processor are listed in table
 \subsection{Control Core}
 
 A schematic overview of the control core is given in figure
-\ref{fig:fpga-ctrl-core}. The core consist of a register bank of 21 bit
-registers, an ALU and a connection to the data RAM. The word width of 21
-bits was chosen to match the address width of the data RAM. This allows
-the control core to do pointer arithmetic referring to arbitrary words
-in the data RAM.
+\ref{fig:fpga-ctrl-core}. The control core consists of a register bank
+of 21 bit registers, an ALU and a connection to the data RAM. The word
+width of 21 bits was chosen to match the address width of the data RAM.
+This allows the control core to do pointer arithmetic referring to
+arbitrary words in the data RAM.
 
 \input{fig/fpga/fpga_ctrl_core}
 
@@ -61,5 +61,36 @@ instruction.
 The control core instruction set is specified in detail in appendix
 \ref{app:control-inst}.
 
-\subsection{DMA}
-\subsection{Program Flow}
+\subsection{DMA Module}
+
+Because of the common instruction stream between the SIMD array and the
+control core, the SIMD array will be inactive whenever the control core
+is busy. An important task that normally would be the control core's
+responsibility, is to load the SIMD array with new data from RAM and to
+store the processed data back to RAM. To maximize the utilization of
+the data RAM I/O capacity and the processing power of the SIMD array, a
+\emph{Direct Memory Access module} was devised.
+
+The DMA module performs loading of new SIMD data planes and storing of
+processed SIMD data planes \emph{in parallell} with the normal execution
+of program instructions. The nodes of the SIMD array have a separate
+register -- the S register -- that is reserved for the DMA module. The S
+registers are connected in a left-to-right direction throughout the
+array. The DMA module can send the contents of the S registers one step
+to the right by setting a \emph{step S} signal.
+
+With these accommodations of the SIMD array, the DMA module can load new
+data values to the S registers at the left edge of the SIMD array, send
+the step signal to have these value propagate into the array and read
+the old, processed data values from the S registers at the right edge of
+the array. The SIMD program executing simultaneously will operate on a
+different set of registers and will not be obstructed by the DMA data
+transfer.
+
+During DMA transfer, the data RAM is reserved for the DMA module and not
+available for the control core to use. To initiate a DMA transfer, the
+control core sets \emph{base addresses} for the reading of new data and
+for the writing of old data, in addition to address increments to be
+used for moving along the columns and rows of the current slice of the
+data. These parameters allow flexibility in how the data slices to be
+loaded into and stored out of the SIMD array, are laid out in memory.
