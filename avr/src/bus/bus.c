@@ -79,7 +79,7 @@ int bus_send_data(U32 word, int bus_offset, int bus_size) {
 		pin = word & bit_mask;
 		if (pin == 0) {
 			gpio_clr_gpio_pin(fpga_bus[i]);
-		} else if (pin == bit_mask){
+		} else {
 			gpio_set_gpio_pin(fpga_bus[i]);
 		}
 		bit_mask = bit_mask << 1;
@@ -88,13 +88,58 @@ int bus_send_data(U32 word, int bus_offset, int bus_size) {
 }
 
 
-
-__inline__ void bus_send_byte(U8 word) {
-	static U8 last = '\0';
-	portB->ovrt = (word ^ last) << 7;
-	portB->ovrt  = (1 << 19);				// Toggle clk line
-	last = word;
+static U8 last[3] = { 0, 0, 0 }; // data uses only middle byte
+void bus_send_data_byte(U8 byte) {
+	portB->ovrt = ((byte ^ last[1]) << 7);
+	portB->ovrt = 1<<19;
+	last[1] = byte;
 }
+
+void bus_send_data_word(U32 word) {
+	U8* ptr = (U8*)&word;
+
+	portB->ovrt = (((*ptr) ^ last[1]) << 7);
+	portB->ovrt  = 1<<19;
+	portB->ovrt = ((ptr[1] ^ ptr[0]) << 7);
+	portB->ovrt  = 1<<19;
+	portB->ovrt = ((ptr[2] ^ ptr[1]) << 7);
+	portB->ovrt  = 1<<19;
+	portB->ovrt = ((ptr[3] ^ ptr[2]) << 7);
+	portB->ovrt  = 1<<19;
+
+	last[1] = ptr[3];
+}
+
+void bus_send_data_words(U32 *words, size_t count) {
+	while(count--) {
+		bus_send_data_word(*words++);
+	}
+}
+
+// set all data pins low (needed between instruction send and data send)
+void bus_flush_data_bus() {
+	portB->ovrc = 0xFF << 7;
+}
+
+//void bus_send_instr_word(U32 instr) {
+//	// high byte of instr is not used (only 2..0)
+//	// 2 is "first"
+//
+//	int i;
+//	for (i = 0; i < 24; i++) {
+//		if (instr & (1 << (23 - i))) {
+//			gpio_set_gpio_pin(fpga_bus[FPGA_DATA_IN_BUS_OFFSET + i]);
+//		} else {
+//			gpio_clr_gpio_pin(fpga_bus[FPGA_DATA_IN_BUS_OFFSET + i]);
+//		}
+//	}
+//
+//	bus_toggle_inc_clk_line();
+//
+//	last[0] = (instr & 0x00FF0000) >> 16;
+//	last[1] = (instr & 0x0000FF00) >> 8;
+//	last[2] = (instr & 0x000000FF) >> 0;
+//}
 
 U8 bus_receive_data(void) {
 	U8 data = 0;

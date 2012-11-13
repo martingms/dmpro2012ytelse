@@ -12,14 +12,41 @@
 
 #define FPGA_IO_BUS_OFFSET 0
 #define FPGA_IO_BUS_SIZE 8
-#define FPGA_DATA_IN_BUS_OFFSET 9
-#define FPGA_DATA_IN_BUS_SIZE 24
+#define FPGA_DATA_IN_BUS_OFFSET 4
+#define FPGA_DATA_IN_BUS_SIZE 8
 #define FPGA_INC_CLK_LINE 33
 #define FPGA_SET_STATE_LINE 34
 #define FPGA_STATE_OFFSET 35
 #define FPGA_STATE_SIZE 3
 
-__inline__ void bus_send_byte(U8 word);
+
+/*! \brief puts a 8-bit byte on the data bus
+ * \param byte The byte to be sent
+ */
+void bus_send_data_byte(U8 byte);
+
+
+/*! \brief puts a 32-bit word on the data bus, one byte at the time
+ * \param word The word to be sent
+ */
+void bus_send_data_word(U32 word);
+
+
+/*! \brief puts count 32-bit words on the data bus
+ * \param words - pointer to data to send
+ * \param count - number of 32-bit words to send
+ */
+void bus_send_data_words(U32 *words, size_t count);
+
+
+/*! \brief puts the first 24 bits of the word on a 24-bit bus
+ * \param instr the instruction to send
+ */
+void bus_send_instr_word(U32 instr);
+
+
+/*! \brief flushes (sets data pins low) the data pins */
+void bus_flush_data_bus();
 
 /*! \brief Initializes the bus
  */

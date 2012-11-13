@@ -75,9 +75,9 @@ void fpga_send_data_from_file(const char *file) {
 			fpga_set_state(FPGA_STATE_LOAD_DATA);
 			ptr = sram_offset;
 			while (ptr != sram_curr_addr) {
-				bus_send_byte(*ptr++);
+				bus_send_data_byte(*ptr++);
 			}
-			bus_send_byte(*ptr++);
+			bus_send_data_byte(*ptr++);
 			sram_curr_addr = sram_offset;
 
 			LED_Toggle(LED7);
@@ -103,7 +103,7 @@ void fpga_send_data_from_memory(U8 *data, size_t size) {
 	int i;
 	for (i = 0; i < size; ++i) {
 		//acked = FALSE;
-		bus_send_byte(data[i]);
+		bus_send_data_byte(data[i]);
 		//while (acked == FALSE);												// S.4
 	}																		// S.5
 	//fpga_set_listener(DEFAULT_FPGA_LISTENER); //Denne linjen ødelegger for knappene
