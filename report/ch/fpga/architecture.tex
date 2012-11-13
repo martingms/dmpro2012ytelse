@@ -1,0 +1,50 @@
+\section{Architecture}
+
+\input{fig/fpga/architecture}
+
+% Mention clock rate and possibly the reason for choosing it somewhere
+
+An overview of the architecture of LENA as well as its memory and communication
+lines is shown in figure \ref{fig:fpga-architecture}. The data flows mostly
+through it in one direction. Data is received from the AVR and stored to the
+data memory. Then the data is read in parts from the data memory and sent
+through the SIMD array for processing. The result from the SIMD array is stored
+to the data memory again. At last, the data is copied from the data memory to
+the VGA memory and shown on screen.
+
+% Mention that the matrix is well suited for some image filters
+
+The processing element of LENA is the SIMD array. It is organized in a matrix,
+as specified by the assignment, and designed to process images. Each node
+processes one word at a time and can communicate with its four direct
+neighbours. To load the first data into the array, it is sent to the first row
+of nodes and copied to the right, passing through all the nodes until the last
+row. This is done by using a special register for sending data, called the
+S-register. Data is continously received by the first row, so the whole array is
+filled. At that time, data processing can start. The data is swapped onto
+another register of the node, and new data can be loaded through the S-register.
+When both data processing and transmission of new data is done, the registers
+are swapped again. At this point, we have results in the S-registers and can
+send this out to the right while loading new data from the left. The results is
+copied out of the array from the last row.
+
+Data communication between AVR, the SIMD nodes and the VGA controller is handled
+by the control module which communicates with the data- and program memory, and
+keeps track of the data location on these. The control module sends instructions
+to all of the SIMD nodes and is responsible for splitting the data and loading
+it into the SIMD array in correct order by setting the S-registers of the first
+row. It also retrieves the results from the last row of the array and stores it
+to the data memory.
+
+The FPGA receives data from the AVR on 24 input lines. This is enough to
+transmit one instruction per tramsmission. All of the instructions are copied
+onto the instruction memory before any other data is sent. The image data is
+sent at one word (8 bits) at a time. We considered using all 24 lines for data
+transmission, but as we tested the transmission rate, we realized that it was
+fast enough by only trasmitting one word at a time. This was easier to
+implement, and was therefore the chosen implementation.
+
+The SIMD array is created dynamically in VHDL, hence the number of cores is
+easily interchangable. The final number of cores in our implementation is only
+limited by the available space on the FPGA. We tried to fit as many nodes as
+possible, and the FPGA we used had enough space for 6 nodes.
