@@ -15,8 +15,9 @@ struct script {
 	char description[DEFAULT_STRING_MAX_LENGTH];
 	char fpga_bin_path[DEFAULT_STRING_MAX_LENGTH];
 	char data_type_directory[DEFAULT_STRING_MAX_LENGTH];
-	int transfer_delay;
+	int  transfer_delay;
 }selected_script;
+
 
 int load_script(char *script_path);
 void test_load_script(char *path);

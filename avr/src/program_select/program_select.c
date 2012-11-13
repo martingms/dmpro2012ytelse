@@ -34,6 +34,8 @@ int menu_size;
 volatile bool busy = TRUE;
 volatile bool reset;
 
+volatile U8 v_button;
+
 /*
  * Program select starts here
  */
@@ -43,7 +45,20 @@ void program_select_start(void) {
 		load_menu(STATE_SELECT_PROGRAM); 	// Load menu
 		busy = FALSE; 						// Start listening on buttons
 		reset = FALSE;
-		while (reset == FALSE);				// Wait for reset
+		while (reset == FALSE){				// Wait for reset
+			if ((v_button == UP_BUTTON) && (menu_item_selected > 0)) {
+				screen_move_cursor(-1);
+			}
+			else if ((v_button == DOWN_BUTTON) && (menu_item_selected + 1 < menu_size)) {
+				screen_move_cursor(1);
+			}
+			else if (v_button == ENTER_BUTTON) {
+				next_state();
+			} else continue;
+			v_button = 0;
+
+		}
+		screen_display_error_message("slutten av program_select_start");
 	}
 }
 
@@ -51,6 +66,10 @@ void program_select_start(void) {
  * Button interrupt routine
  */
 void button_push(U8 button) {
+	v_button = button;
+	return;
+
+
 	if (busy) return;
 	LED_On(button);
 
@@ -62,8 +81,7 @@ void button_push(U8 button) {
 	}
 	if (button == ENTER_BUTTON) {
 		next_state();
-		//TODO next_state() kjører til siste linjen, men returnerer aldri hit
-		screen_display_error_message("hei");
+		screen_display_error_message("Kommet ut av next_state");
 	}
 	LED_Off(button);
 }
@@ -95,6 +113,22 @@ void load_menu(int state) {
 	screen_draw_bitmap_on_screen();
 }
 
+//TODO midlertidig funksjon, brukes kun til testing
+void send_selected_file(void) {
+	fb_iterator_init(FS_FILE);				// Inits file iterator for files
+	fb_iterator_seek(menu_item_selected);	// Seeks to selected item
+	char *file = fb_iterator_next();
+	char file_full[sizeof(file)+3];
+	file_full[0] = 'A';
+	file_full[1] = ':';
+	file_full[2] = '/';
+	file_full[3] = '\0';
+
+	fpga_send_data_from_file(strcat(file_full, file));
+	reset = TRUE;
+	//screen_display_error_message("slutten av send_selected_file");
+}
+
 /*
  * Go to next state of program
  */
@@ -102,20 +136,18 @@ void next_state(void) {
 	int rc;
 	char *file;
 	if (current_state == STATE_SELECT_PROGRAM) {
-		//send_selected_file();
-		//return;
-
-		fb_iterator_init(FS_FILE);				// Inits file iterator for files
-		fb_iterator_seek(menu_item_selected);	// Seeks to selected item
+		//set_file_type(PROGRAM);
+		fb_iterator_seek(menu_item_selected+1);	// Seeks to selected item TODO er seek 1-indeksert??
 		file = fb_iterator_next();
-		char file_full[sizeof(file)+3];
+		fb_iterator_terminate();
+		char file_full[strlen(file)+3];
 		file_full[0] = 'A';
 		file_full[1] = ':';
 		file_full[2] = '/';
 		file_full[3] = '\0';
-		rc = load_script(strcat(file_full, file)); 				// Tries to load the program script
-		fb_iterator_terminate();
+		rc = load_script(strcat(file_full, file)); // Tries to load the program script
 		if (!rc) {
+			//screen_display_error_messagef("Lines in selected script\n1. %s\n2. %s\n3. %s\n4. %d\n", selected_script.description, selected_script.fpga_bin_path, selected_script.data_type_directory, selected_script.transfer_delay);
 			load_menu(STATE_SELECT_DATA);
 		} else {
 			screen_display_error_messagef("Could not load script\n%s\n", file_full);
@@ -123,6 +155,24 @@ void next_state(void) {
 	}
 
 	else if (current_state == STATE_SELECT_DATA) {
+
+		//  	------------[TODO tmp, fjern]---------------
+		//set_file_type(DATA);
+		fb_iterator_terminate();
+		fb_iterator_init(FS_FILE);					// Init for directories
+		fb_iterator_set_ext(DATA_FILE_SUFFIX);		// Set extension
+		fb_iterator_seek(menu_item_selected);
+		char *file = fb_iterator_next();
+		screen_display_error_messagef("selected %d\n%s\n", menu_item_selected, file);
+		char file_full[strlen(file)+3];
+		file_full[0] = 'A';
+		file_full[1] = ':';
+		file_full[2] = '/';
+		file_full[3] = '\0';
+		fpga_send_data_from_file(strcat(file_full, file));
+		return;
+		//  	--------------------------------------------
+
 		fb_iterator_init(FS_DIR);
 		fb_iterator_seek(menu_item_selected);
 		file = fb_iterator_next();
@@ -130,6 +180,7 @@ void next_state(void) {
 		run_fpga_program();
 		fb_iterator_terminate();
 	}
+	//screen_display_error_message("siste linje i next_state");
 }
 
 /*
@@ -158,27 +209,13 @@ void set_file_type(enum data_type type) {
 	current_type = type;
 }
 
-//TODO midlertidig funksjon, brukes kun til testing
-void send_selected_file(void) {
-	fb_iterator_init(FS_FILE);				// Inits file iterator for files
-	fb_iterator_seek(menu_item_selected);	// Seeks to selected item
-	char *file = fb_iterator_next();
-	char file_full[sizeof(file)+3];
-	file_full[0] = 'A';
-	file_full[1] = ':';
-	file_full[2] = '/';
-	file_full[3] = '\0';
-
-	fpga_send_data_from_file(strcat(file_full, file));
-}
-
 /*
  * Final stage: run program on FPGA
  */
 void run_fpga_program(void) {
 #define PATH_SIZE strlen(selected_data_unit_path)
 	char *buffer;
-	bool bmp;
+	//bool bmp;
 	busy = TRUE; // Stop listening on buttons
 
 	fpga_send_program(selected_script.fpga_bin_path); // Send program to FPGA
