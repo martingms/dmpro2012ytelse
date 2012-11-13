@@ -64,20 +64,13 @@ void fpga_send_data_from_file(const char *file) {
 	U8 *sram_curr_addr = (U8*)sram_offset;
 	U8* ptr = sram_curr_addr;
 
-
-#define FRAME_SIZE 76800
-
 	while (read_so_far < fs) {
 		int rd = read(fd, (void*)sram_curr_addr, BUFFER_SIZE);
 		read_so_far += rd;
-		sram_curr_addr += BUFFER_SIZE;
-		if (read_so_far % FRAME_SIZE == 0) {
+		sram_curr_addr += rd;
+		if (read_so_far % FRAME_BUFFER_SIZE == 0) {
 			fpga_set_state(FPGA_STATE_LOAD_DATA);
-			ptr = sram_offset;
-			while (ptr != sram_curr_addr) {
-				bus_send_data_byte(*ptr++);
-			}
-			bus_send_data_byte(*ptr++);
+			bus_send_data_words((U32*)sram_offset, FRAME_BUFFER_SIZE);
 			sram_curr_addr = sram_offset;
 
 			LED_Toggle(LED7);
@@ -99,13 +92,14 @@ void fpga_send_data_from_memory(U8 *data, size_t size) {
 	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
 
 	fpga_set_state(FPGA_STATE_LOAD_DATA);											// S.1
+	bus_send_data_words((U32*)data, size);
 	//fpga_set_listener(&receive_ack);
-	int i;
-	for (i = 0; i < size; ++i) {
-		//acked = FALSE;
-		bus_send_data_byte(data[i]);
-		//while (acked == FALSE);												// S.4
-	}																		// S.5
+//	int i;
+//	for (i = 0; i < size; ++i) {
+//		//acked = FALSE;
+//		bus_send_data_byte(data[i]);
+//		//while (acked == FALSE);												// S.4
+//	}																		// S.5
 	//fpga_set_listener(DEFAULT_FPGA_LISTENER); //Denne linjen ødelegger for knappene
 	fpga_set_state(FPGA_STATE_STOP);										// S.6
 }
@@ -172,7 +166,7 @@ int program_from_memory(U32 *buffer) {
 
 
 // ------[GENERIC SEND FUNCTION]-------//
-int fpga_send_program(char *program_path) {
+int fpga_send_program(const char *program_path) {
 
 	// Wait for SD card
 	while (mmc_status() != CTRL_GOOD);
@@ -190,29 +184,17 @@ int fpga_send_program(char *program_path) {
 	int fs = fsaccess_file_get_size(fd);
 	int read_so_far = 0;
 
-	U8* sram_offset = FRAME_BUFFER;
-	U8 *sram_curr_addr = (U8*)sram_offset;
-	U8* ptr = sram_curr_addr;
+	fpga_set_state(FPGA_STATE_LOAD_INSTRUCTION);
 
-	// Read from SD into buffer
+	// Read from SD into buffer and send (borrowing FRAME_BUFFER for this, which should be OK)
 	while (read_so_far < fs) {
-		int rd = read(fd, (void*)sram_curr_addr, BUFFER_SIZE);
+		int rd = read(fd, (void*)FRAME_BUFFER, BUFFER_SIZE);
 		read_so_far += rd;
-		sram_curr_addr += rd;
+		bus_send_program(FRAME_BUFFER, rd);
 	}
 
-	int i,j;
-	U32 instruction;
-	U32 tmp;
-	for (i=0; i<fs; i+=3) {
-		instruction = (sram_offset[i] << 16) | (sram_offset[i+1] << 8) | sram_offset[i+2];
-		bus_send_data(instruction, FPGA_DATA_IN_BUS_OFFSET, INSTRUCTION_WORD_LENGTH*8);
-	}
-
+	fpga_set_state(FPGA_STATE_STOP);
 	close(fd);
-	LED_On(LED3);
-
-	//fpga_set_state(FPGA_STATE_STOP);	//TODO redundant
 }
 
 

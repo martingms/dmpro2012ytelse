@@ -31,7 +31,7 @@ void fpga_send_data_from_memory(U8 *data, size_t n_bytes);
 /*! \brief Sends instructions to the FPGA from file
  * \param *program_path The path to the program
  */
-int fpga_send_program(char *program_path);
+int fpga_send_program(const char *program_path);
 
 
 
