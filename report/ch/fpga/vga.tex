@@ -32,14 +32,16 @@ a (8-bit greyscale) pixel fetched from the memory controller at the appropriate
 time.
 
 \subsection{Circuitry}
-\TODO{Insert small circuit diagram of the physical parts} When designing the
-circuit we had to choose between a black-box\TODO{Call it something else?} DAC
-and making our own. Preliminary research on the VGA-protocol showed that for
-our purposes and our fairly low requirements on quality, making the DAC with
-simple resistors in parallel, with each resistor doubling in resistance for
-each step from the most significant bit to the least significant, would be
-sufficient. We thought this would be easier to debug, and especially easier to
-prototype.
-
-We ended up supporting greyscale and color with our circuit, but for now only
-greyscale is implemented on the FPGA-side.
+\input{fig/fpga/vga-circuit}
+When designing the circuit we had to choose between a black-box\TODO{Call it
+something else?} DAC and making our own. Preliminary research on the
+VGA-protocol showed that for our purposes and our fairly low requirements on
+quality, making the DAC with simple resistors in parallel, with each resistor
+doubling in resistance for each step from the most significant bit to the least
+significant, would be sufficient. We thought this would be easier to debug, and
+especially easier to prototype. The resulting circuit can be seen in Fig
+\ref{fig:vga-circuit}. Since color was a nice-to-have in case we had time to
+spare and not at all a priority, we made the decision to greatly simplify the
+design by making the switch from greyscale to color a manual operation of
+moving a set of jumpers. This way we reduced both pin-use on the FPGA and the
+complexity of the circuit.
