@@ -226,3 +226,53 @@ void str2img_read_block(U8 *data) {
 		}
 	}
 }
+
+
+// functions to write to existing picture :)
+static unsigned char *osd_ptr;
+static unsigned char osd_row;
+static unsigned char osd_col;
+void str2img_osd_init(unsigned char *sram) {
+	osd_ptr = sram;
+	osd_row = 0;
+	osd_col = 0;
+}
+
+void str2img_osd_set_cursor(unsigned int row, unsigned int col) {
+	osd_row = row;
+	osd_col = col;
+}
+unsigned char str2img_osd_get_cursor_row() {
+	return osd_row;
+}
+unsigned char str2img_osd_get_cursor_col() {
+	return osd_col;
+}
+void str2img_osd_reset() {
+	osd_row = 0;
+	osd_col = 0;
+}
+void str2img_osd_putc(char c) {
+	unsigned char *l = lut(c);
+
+	int y, x;
+	unsigned char *ptr = osd_ptr + 320 * osd_row + osd_col;
+	for (x = 0; x < 8; x++) {
+		for (y = 0; y < 16; y++) {
+			ptr[320 * y + x] ^= (l[y] & (1<<(7-x))) ? 0 : 255;
+		}
+	}
+
+	if (osd_col < 319) {
+		osd_col+=8;
+	} else {
+		osd_col = 0;
+		osd_row+=16;
+	}
+}
+void str2img_osd_write(const char *str) {
+	char c;
+	while ( (c = *str++) != '\0') {
+		str2img_osd_putc(c);
+	}
+}

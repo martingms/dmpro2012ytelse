@@ -38,4 +38,13 @@ unsigned int str2img_get_cursor_row();
 // writes the entire image to the specified address. must be able to hold 320*240 bytes.
 void str2img_read_block(unsigned char *data);
 
+// OSD (on screen display)!
+void str2img_osd_init(unsigned char *sram);
+void str2img_osd_set_cursor(unsigned int row, unsigned int col);
+unsigned char str2img_osd_get_cursor_row();
+unsigned char str2img_osd_get_cursor_col();
+void str2img_osd_reset();
+void str2img_osd_putc(char c);
+void str2img_osd_write(const char *str);
+
 #endif
