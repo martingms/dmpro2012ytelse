@@ -191,6 +191,7 @@ def __assembleInstrFile__(input, output):
 						w.write(instr[i:i+4] + ' ')
 					w.write('\n')
 				else:
+					w.write(chr(0))
 					w.write(chr(int(instr[0:8], 2)))
 					w.write(chr(int(instr[8:16], 2)))
 					w.write(chr(int(instr[16:24], 2)))
