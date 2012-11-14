@@ -1,45 +1,5 @@
 \section{LENA SCU bus}
-The LENA has two types of pins connected to the SCU. There are 9 I/O pins, and 29 input pins. The I/O pins are mostly used for the LENA to acknowledge transfers, but the 8 remaining pins can be used for the fallback solution of having the LENA transfer data back to the SCU. The 29 input pins are used to set the state of the LENA, acknowledge the LENA and as a 24 bit wide one-way data bus.
+The LENA has two types of pins connected to the SCU. There are 9 I/O pins and 29 input pins. The I/O pins are mostly used for the LENA to acknowledge transfers, but the 8 remaining pins can be used for the fallback solution of having LENA transfer data back to the SCU. The 29 input pins are used to set LENA's state, acknowledge LENA and as a 24 bit wide one-way data bus used to transfer data and instructions to the LENA. Table \ref{tab:iobus} and \ref{tab:inbus} shows the pin mapping of the bus.
 
-\TODO{This is messy - should use a table instead. Then we can also reference
-  it.}
-\begin{itemize}
-\item LENA\_IO\_00 - Two way data (least significant bit)
-\item LENA\_IO\_01 - Two way data
-\item LENA\_IO\_02 - Two way data
-\item LENA\_IO\_03 - Two way data
-\item LENA\_IO\_04 - Two way data
-\item LENA\_IO\_05 - Two way data
-\item LENA\_IO\_06 - Two way data
-\item LENA\_IO\_07 - Two way data (most significant bit)
-\item LENA\_IO\_CTRL - Interrupt / Ack from LENA.
-\item LENA\_IN\_00 - Data (least significant bit)
-\item LENA\_IN\_01 - Data
-\item LENA\_IN\_02 - Data
-\item LENA\_IN\_03 - Data
-\item LENA\_IN\_04 - Data
-\item LENA\_IN\_05 - Data
-\item LENA\_IN\_06 - Data
-\item LENA\_IN\_07 - Data
-\item LENA\_IN\_08 - Data
-\item LENA\_IN\_09 - Data
-\item LENA\_IN\_10 - Data
-\item LENA\_IN\_11 - Data
-\item LENA\_IN\_12 - Data
-\item LENA\_IN\_13 - Data
-\item LENA\_IN\_14 - Data
-\item LENA\_IN\_15 - Data
-\item LENA\_IN\_16 - Data
-\item LENA\_IN\_17 - Data
-\item LENA\_IN\_18 - Data
-\item LENA\_IN\_19 - Data
-\item LENA\_IN\_20 - Data
-\item LENA\_IN\_21 - Data
-\item LENA\_IN\_22 - Data
-\item LENA\_IN\_23 - Data (most significant bit)
-\item LENA\_IN\_24 - Address increment CLK
-\item LENA\_IN\_25 - Set LENA state
-\item LENA\_IN\_26 - LENA STATE (least significant bit)
-\item LENA\_IN\_27 - LENA STATE
-\item LENA\_IN\_28 - LENA STATE (most significant bit)
-\end{itemize}
+\input{fig/apx/bus_pin_mapping}
+
