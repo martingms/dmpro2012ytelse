@@ -256,18 +256,18 @@ void str2img_osd_putc(char c) {
 	unsigned char *l = lut(c);
 
 	int y, x;
-	unsigned char *ptr = osd_ptr + 320 * osd_row + osd_col;
+	unsigned char *ptr = osd_ptr + 320 * osd_row * 16 + osd_col * 8;
 	for (x = 0; x < 8; x++) {
 		for (y = 0; y < 16; y++) {
 			ptr[320 * y + x] ^= (l[y] & (1<<(7-x))) ? 0 : 255;
 		}
 	}
 
-	if (osd_col < 319) {
-		osd_col+=8;
+	if (osd_col < 39) {
+		osd_col++;
 	} else {
 		osd_col = 0;
-		osd_row+=16;
+		osd_row++;
 	}
 }
 void str2img_osd_write(const char *str) {
