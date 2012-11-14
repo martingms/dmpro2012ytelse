@@ -223,6 +223,20 @@ architecture behavioral of toplevel is
 		);
 	end component;
 	
+	component memory_from_file is
+		generic (
+			word_width : natural;
+			address_width : natural;
+			file_name : string
+		);
+		port (
+			clk : in std_logic;
+			write_enable : in std_logic;
+			addr : in std_logic_vector(address_width - 1 downto 0);
+			data : inout std_logic_vector(word_width - 1 downto 0)
+		);
+	end component;
+	
 	component memory_empty is
 		generic (
 			word_width : natural;
@@ -488,6 +502,7 @@ begin
 	begin
 		if execute = '1' then
 			instruction_register_mem_data_filtered <= instruction_register_mem_data;
+--			instruction_register_mem_data_filtered <= "100011101110100000001000";
 		else
 			instruction_register_mem_data_filtered <= (others => '0');
 		end if;
@@ -512,15 +527,28 @@ begin
 			dma_cmd => dma_command,
 			dma_params => dma_parameter);
 	
-	block_prog_ram: memory_empty
+--	block_prog_ram: memory_empty
+--		generic map (
+--			word_width => RAM_PROGRAM_WORD_WIDTH,
+--			address_width => 13
+--		)
+--		port map (
+--			clk => clk_cpu,
+--			write_enable => block_prog_ram_write,
+--			addr => block_prog_ram_addr(12 downto 0),
+--			data => block_prog_ram_data
+--		);
+	
+	block_prog_ram: memory_from_file
 		generic map (
 			word_width => RAM_PROGRAM_WORD_WIDTH,
-			address_width => 13
+			address_width => 8,
+			file_name => "control/test_program.dat"
 		)
 		port map (
 			clk => clk_cpu,
 			write_enable => block_prog_ram_write,
-			addr => block_prog_ram_addr(12 downto 0),
+			addr => block_prog_ram_addr(7 downto 0),
 			data => block_prog_ram_data
 		);
 
