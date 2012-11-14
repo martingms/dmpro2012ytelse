@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include "sram.h"
 #include "button.h"
+#include "timer.h"
 #include "compiler.h"
 
 
@@ -40,7 +41,7 @@ void wait_for_click(U8 b) {
 }
 
 void screen_display_error_message(char *message) {
-#define DELAY 30000000
+//#define DELAY 30000000
 	str2img_clear();
 	str2img_set_cursor(0,0);
 	str2img_writeline(SCREEN_LINE_ERROR);
@@ -57,8 +58,9 @@ void screen_display_error_message(char *message) {
 	while (halt);	// Wait for click
 	LED_On(LED7);
 	button_remove_tmp_listener();*/
-	volatile int i = DELAY;
-	while (i--);
+	timer_sleep(3000);
+//	volatile int i = DELAY;
+//	while (i--);
 
 	screen_load_data_to_bitmap(current_type);
 	screen_draw_bitmap_on_screen();
