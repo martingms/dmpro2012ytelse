@@ -1,44 +1,49 @@
 \section{Communication with LENA}
 \label{sec:SCU-LENA-communication}
 
-This section documents how the SCU communicates and controls the LENA. The communication is usually performed by the SCU assigning a state to the LENA, followed by some data transfer. A full pin reference can be found at the end of this section.
+This section documents how the SCU communicates and controls the LENA. The communication is usually performed by the SCU assigning a state to the LENA, followed by some data transfer. A full pin reference can be found in appendix A. \TODO hvordan referere til appendix A?
 
 \subsection{LENA states}
 
-The SCU can set the LENA to 5 different states, controlling the LENA's behaviour. The states are set with a 3-line bus (LENA IN 26 through 28) and a line which when toggled, indicates that the LENA should set its state to the state currently on the bus. The three state lines represent a binary number, the states and their number are as follows:
+The SCU can set LENA to 5 different states, controlling LENA's behaviour. The states are set with a 3-line bus and a fourth line which when toggled, indicates that the LENA should set its state to the state currently on the bus. The three state lines represent a binary number refering to one of the states. The different states are listed in table \ref{tab:states}.
 
-\begin{description}
-\item[000] STOP (default state) 
-\item[001] RUN
-\item[010] LOAD\_DATA (LENA receives data from SCU) 
-\item[011] STORE\_DATA (LENA stores data to SCU)
-\item[100] LOAD\_INSTRUCTION (LENA receives instructions from SCU) 
-\end{description}
-
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l l r} \toprule
+    \thx{Name} & \thx{Description} & \thx{Comment}\\ \midrule
+    STOP & LENA stops & default state \\ \midrule
+    RUN & LENA runs program \\ \midrule
+    LOAD\_DATA & LENA receives data \\ \midrule
+    STORE\_DATA & SCU receives data & not used \\ \midrule
+    LOAD\_INSTRUCTION & LENA receives instructions\\ \bottomrule
+  \end{tabular}
+  \caption{LENA states}
+  \label{tab:states}
+\end{table}
 
 \subsection{SCU transfers data to the LENA}
 
-When the SCU transfers data, it first sets the LENA state to LOAD\_DATA or LOAD\_INSTRUCTION to load data or instructions respectively. The procedure for the SCU is then to put one word on the bus, toggle the clock line and repeat. The LENA state STOP is used to signal the end of transfer. When the data are simply data, the first 8 lines of the LENA input bus is used to transfer data one byte at a time. When the data are instructions for the LENA, data are transfered one instruction (24 bit) at a time, and the first 24 lines of the bus are used. The entire procedure can be summarized by the following six steps:
+When the SCU transfers data, it first sets the LENA state to LOAD\_DATA or LOAD\_INSTRUCTION to load data or instructions respectively. The procedure for the SCU is then to put one word on the bus, toggle the clock line and repeat. The LENA state STOP is used to signal the end of transfer. When the data are simply data, the first 8 lines of the LENA input bus is used to transfer data one byte at a time. When the data are instructions for the LENA, data are transfered one instruction (24 bit) at a time, and the first 24 lines of the bus are used. %The entire procedure can be summarized by the following six steps:
 
-\begin{enumerate}
-\item SCU sets LENA state to LOAD\_DATA or LOAD\_INSTRUCTION
-\item SCU puts 8 or 24 bits of data on the bus
-\item SCU toggles the Address increment CLK line
-\item Repeat stage 2 through 3
-\item SCU sets LENA state to STOP
-\end{enumerate}
+%\begin{enumerate}
+%\item SCU sets LENA state to LOAD\_DATA or LOAD\_INSTRUCTION
+%\item SCU puts 8 or 24 bits of data on the bus
+%\item SCU toggles the Address increment CLK line
+%\item Repeat stage 2 through 3
+%\item SCU sets LENA state to STOP
+%\end{enumerate}
 
 \subsection{LENA transfers data to the SCU}
 The LENA has the ability to transfer data back to the SCU. This is a fallback routine, implemented in case of a bottleneck or failure in the VGA controller on the LENA. In this case, the LENA can transfer the processed data back to the SCU for storage or to be sent through an alternative VGA controller. In this transfer the data bus are 8 pins connected to the LENA's I/O pins.
 
-This transfer is rather unusual because it is, unlike all other operations, not initiated by the SCU. The LENA will initiate the transfer by putting one byte on the bus, and then interrupt the SCU. After the SCU has acknowledged, another byte can be transfered. The first four bytes of the transfer will represent, as a 32 bit unsigned integer, the number of bytes of actual data to be transfered. The entire procedure can be summarized by the following five steps, where \emph{x} is the amount of actual data.
+This transfer is rather unusual because it is, unlike all other operations, not initiated by the SCU. The LENA will initiate the transfer by putting one byte on the bus, and then interrupt the SCU. After the SCU has acknowledged, another byte can be transfered. The first four bytes of the transfer will represent, as a 32 bit unsigned integer, the number of bytes of actual data to be transfered. %The entire procedure can be summarized by the following five steps, where \emph{x} is the amount of actual data.
 
-\begin{enumerate}
-\item LENA puts one byte of data on the bus
-\item LENA interrupts SCU (signaling there is data on the bus)
-\item SCU reads one byte of data from the bus
-\item When ready for more data, SCU toggles the Address increment CLK line
-\item Repeat stage 1 through 4 \emph{x} times
-\end{enumerate}
+%\begin{enumerate}
+%\item LENA puts one byte of data on the bus
+%\item LENA interrupts SCU (signaling there is data on the bus)
+%\item SCU reads one byte of data from the bus
+%\item When ready for more data, SCU toggles the Address increment CLK line
+%\item Repeat stage 1 through 4 \emph{x} times
+%\end{enumerate}
 
 
