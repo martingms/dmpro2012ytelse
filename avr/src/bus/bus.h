@@ -48,6 +48,12 @@ void bus_send_instr_word(U32 instr);
 /*! \brief flushes (sets data pins low) the data pins */
 void bus_flush_data_bus();
 
+/*! sends a program (from memory) to the FPGA.
+ * \param program pointer to the program to send
+ * \param bytes the number of bytes to send
+ */
+void bus_send_program(U8 *program, size_t bytes);
+
 /*! \brief Initializes the bus
  */
 void bus_init(void);
