@@ -223,11 +223,10 @@ architecture behavioral of toplevel is
 		);
 	end component;
 	
-	component memory_from_file is
+	component memory_empty is
 		generic (
 			word_width : natural;
-			address_width : natural;
-			file_name : string
+			address_width : natural
 		);
 		port (
 			clk : in std_logic;
@@ -246,9 +245,9 @@ architecture behavioral of toplevel is
 	signal execute : std_logic;
 	signal reset : std_logic;
 	
-	signal test_prog_ram_write : std_logic;
-	signal test_prog_ram_addr : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
-	signal test_prog_ram_data : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
+	signal block_prog_ram_write : std_logic;
+	signal block_prog_ram_addr : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
+	signal block_prog_ram_data : std_logic_vector(RAM_PROGRAM_WORD_WIDTH - 1 downto 0);
 	
 	signal program_loader_mem_addr : std_logic_vector(RAM_PROGRAM_ADDRESS_WIDTH - 1 downto 0);
 	signal program_loader_mem_write : std_logic;
@@ -294,8 +293,8 @@ architecture behavioral of toplevel is
 	signal prog_ram_write_tmp : std_logic;
 begin
 	
-	prog_ram_addr <= prog_ram_addr_tmp;
-	prog_ram_write <= prog_ram_write_tmp;
+--	prog_ram_addr <= prog_ram_addr_tmp;
+--	prog_ram_write <= prog_ram_write_tmp;
 	
 	vga_value(1 downto 0) <= (others => '0');
 	
@@ -352,17 +351,17 @@ begin
 			in1_addr => program_loader_mem_addr,
 			in1_data => program_loader_mem_data,
 			
-			out_write_enable => prog_ram_write_tmp,
-			out_addr => prog_ram_addr_tmp,
-			out_data => prog_ram_data
---			out_write_enable => test_prog_ram_write,
---			out_addr => test_prog_ram_addr,
---			out_data => test_prog_ram_data
+--			out_write_enable => prog_ram_write_tmp,
+--			out_addr => prog_ram_addr_tmp,
+--			out_data => prog_ram_data
+			out_write_enable => block_prog_ram_write,
+			out_addr => block_prog_ram_addr,
+			out_data => block_prog_ram_data
 		);
 
---	prog_ram_addr <= (others => '0');
---	prog_ram_data <= (others => 'Z');
---	prog_ram_write <= '1';
+	prog_ram_addr <= (others => '0');
+	prog_ram_data <= (others => 'Z');
+	prog_ram_write <= '1';
 	
 	data_ram_mux: ram_mux
 		generic map (
@@ -489,7 +488,6 @@ begin
 	begin
 		if execute = '1' then
 			instruction_register_mem_data_filtered <= instruction_register_mem_data;
---			instruction_register_mem_data_filtered <= "100011101110100000001000";
 		else
 			instruction_register_mem_data_filtered <= (others => '0');
 		end if;
@@ -514,17 +512,16 @@ begin
 			dma_cmd => dma_command,
 			dma_params => dma_parameter);
 	
---	test_prog_ram: memory_from_file
---		generic map (
---			word_width => RAM_PROGRAM_WORD_WIDTH,
---			address_width => 8,
---			file_name => "control/test_program.dat"
---		)
---		port map (
---			clk => clk_cpu,
---			write_enable => test_prog_ram_write,
---			addr => test_prog_ram_addr(7 downto 0),
---			data => test_prog_ram_data
---		);
+	block_prog_ram: memory_empty
+		generic map (
+			word_width => RAM_PROGRAM_WORD_WIDTH,
+			address_width => 13
+		)
+		port map (
+			clk => clk_cpu,
+			write_enable => block_prog_ram_write,
+			addr => block_prog_ram_addr(12 downto 0),
+			data => block_prog_ram_data
+		);
 
 end behavioral;

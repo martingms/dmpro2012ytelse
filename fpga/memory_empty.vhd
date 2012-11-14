@@ -19,16 +19,20 @@ architecture syn of memory_empty is
 	constant word_count : natural := 2 ** address_width;
 	type ram_type is array(0 to word_count - 1) of bit_vector(word_width - 1 downto 0);
 	signal ram : ram_type;
+	attribute ram_style : string;
+	attribute ram_style of ram : signal is "block";
 	
 begin
 
-	process (write_enable, addr, data)
+	process (clk, write_enable, addr, data)
 	begin
-		if write_enable = '1' then
-			data <= (others => 'Z') after 10 ns;
-			ram(conv_integer(addr)) <= to_bitvector(data) after 10 ns;
-		else
-			data <= to_stdlogicvector(ram(conv_integer(addr))) after 10 ns;
+		if rising_edge(clk) then
+			if write_enable = '0' then -- Write
+				data <= (others => 'Z');
+				ram(conv_integer(addr)) <= to_bitvector(data);
+			else -- Read
+				data <= to_stdlogicvector(ram(conv_integer(addr)));
+			end if;
 		end if;
 	end process;
 	
