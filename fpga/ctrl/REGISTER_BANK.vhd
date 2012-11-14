@@ -35,8 +35,8 @@ entity CTRL_REGISTER is
 		
 		data0_in					:	in	 STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
 		
-		data1_out				:	out STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
-		data2_out				:	out STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
+		data1_out				:	out STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0) := (others => '0');
+		data2_out				:	out STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0) := (others => '0');
 
 		dma_params				:	out STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
 		vga_addr					:	out STD_LOGIC_VECTOR (CTRL_WORD_WIDTH-1 downto 0);
@@ -54,13 +54,13 @@ architecture Behavioral of CTRL_REGISTER is
 
 begin
 
-	REGISTERS : process(clk, reset, write)
+	REGISTERS : process(clk, reset, adr0, data0_in, write)
 	begin
 		if reset='1' then
 			for i in 0 to NUM_REG-1 loop
 				REGS(i) <= (others => '0');
 			end loop;
-		elsif rising_edge(CLK) then
+		elsif falling_edge(CLK) then
 			if write='1' then
 				REGS(to_integer(unsigned(adr0)))<=data0_in;
 			end if;
