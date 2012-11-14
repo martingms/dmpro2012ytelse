@@ -1,7 +1,5 @@
 \section{System Architecture}
 
-\input{fig/sys-over/arch-fig}
-
 A general concern when designing large systems is the accidental
 complexity\cite[p.~8-9]{holt2004uml} one may create by poor design choices early
 on. Many solutions designed to reduce accidental complexity are based around
@@ -12,6 +10,8 @@ problem, it is unacceptable in systems where one or multiple of the system
 requirements are a performance increase in one or both of these domains. As one
 of our main requirements is focus on performance, we have to accept a certain
 level of inherent complexity.
+
+\input{fig/sys-over/arch-fig}
 
 To remedy the complexity which comes from our requirements, we focused on making
 it possible to isolate errors and make it possible to test the individual
@@ -29,7 +29,6 @@ implementation on the LENA architecture. We also included a VGA connector
 connected to the AVR, in case the LENA architecture would be unable to work the
 VGA part.
 
-% TODO: I/O device discussion, memory discussion, word size
 To be able to process data, we need an I/O device which serves the machine with
 data it should process. As we were unsure of what would be the easiest to
 implement, we included both a serial, USB and SD card on the PCB.
@@ -44,25 +43,3 @@ SCU to memory. In addition, one would have to read data instructions as well. As
 all these different parts require relatively much memory, and as they all are
 frequently accessed, it would be favourable to have them in different parts to
 be able to parallelise it.
-
-The word width of the LENA system is an important aspect of the system which
-have a critical impact on performance. Our choice between small and large
-register\TODO{Word size? But shouldn't confuse the reader between the size of
-  the registers on the SIMD nodes and the instruction size either} size, and
-small and large instruction sets will have a huge impact on the number of cores
-we are able to get on the FPGA. On one side, we have the Massively Parallel
-Processor\cite{potter1985mpp} with 1 bit per core and focuses on many cores to
-speed up the system. On the other side, we have Intel's MMX instructions which
-allows one to do multiple, single instructions on different 64-bit and 128-bit
-registers and is used to speed up e.g. image processing\cite{lee2004h264}. As
-both techniques certainly work, we have to find the one which gives us the most
-performance and is realizable within the resource constraints. Certainly, we
-need to have multiple cores to fulfil NFR4, but the overall goal is to get
-performance. If we get a better performance by allowing more operations on the
-system, we should do that instead.
-
-From calculations\TODO{Should we have the calculations?} and an estimated guess
-on how complex such a system would be, we set ourselves\TODO{set ourselves?
-  Sounds very wrong} on a system with 8 bit register size and 24 bit instruction
-size. From our assumptions, we could get around 16 SIMD nodes and an instruction
-set with reasonably efficient instructions for image processing.

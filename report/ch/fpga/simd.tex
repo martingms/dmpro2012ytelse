@@ -1,79 +1,80 @@
-\section{SIMD-nodes}
+\section{SIMD nodes}
 
-\TODO{This is very detailed and more of a documentation, rather than an
-  explanation of how the SIMD nodes work. This section should be rewritten
-  entirely (as per issue \#3).}
+SIMD nodes are the main processing cores of the image processor and are responsible for carrying out data processing-instructions in paralell. They share the same instruction set and executes the same instruction, hence Single Instruction Multiple Data (SIMD) and operates on an 8-bit word size, as most of the processor does.
 
-All SIMD nodes shares the same instruction set and execute instructions in
-parallel. {\tt Word} size is 8 bit. Each SIMD node is fully equipped with
-registers, an aritmetic logic unit (ALU), message passing and instruction
-handling through the SIMD Node instruction set, which is explained within this
-section.
+Each SIMD node is fully equipped with a register bank, an aritmetic logic unit (ALU), message passing with adjacent nodes and an instruction decoder for the SIMD node instruction set, explained in detail in subsequent section.
 
-The schematic of a SIMD node is shown in figure
-\ref{fig:fpga-simd-arch}. \TODO{Talk around the figure}
+The schematic of a single SIMD node is shown in figure \ref{fig:fpga-simd-arch} details the entire datapath for the node. Different parts of the instruction and other inputs and outputs to and from the node are all labled with red lables. In this section we will reffer to this image when explaining the different components.
+
+\TODO{Fix signal labels in arhitecture image to differentiate between input, output and instruction}
 
 \input{fig/fpga/fpga-simd-arch}
 
 \subsection{Components}
-In order to the keep the signals to a minimum, the SIMD node is nicely divided
-into separate components which makes up the datapath for the node.
 
-\subsection{Instruction Decoder}
-The instruction decoder is the control component of a node. It takes the opcode
-of the instruction and sets control signals for all the other components in the
-node.
+\TODO{This pharagraph is kind of VHDL implementation specific. Should we keep it?}
 
-\subsection{I/O Controller}
+In order to the keep the ammount of intermediate signals to a minimum, as well as better reusability accross other parts of the processor, the SIMD node is nicely divided into separate, stand-alone, components which when linked together makes up the datapath for the node.
 
-\subsection{Register Bank}
+\subsubsection{Instruction Decoder}
 
-\subsection{ALU}
+\TODO{List all the different OP-codes and their meaning.}
 
-\subsection{S Register}
-The source data register, S REG for short, is a special purpose register within
-the SIMD node. S REG holds the next source data for the node. It is partly
-controlled by the instruction set for the node and partly controlled by a
-special {\tt step} signal from the DMA.
+When an instructions is first recieved by a SIMD node the first 5-bits (enable, mask and OP-code) are fed directly into the Instruction Decoder. The decoder will then set up the correct control signals other components based on the current state of the SIMD node and instruction OP-code.
 
-This register also has the capability to receive data from the left node,
-through the {\tt s\_in}-bus, and passing it along to node on the right through
-the {\tt s\_out}-bus when instructed by the {\tt step} signal. This allows a
-simultaneous data transfer while the node is busy processing.
+\subsubsection{Communication}
+The Communication component controlls outbound data from the SIMD node to adjacent SIMD nodes in the grid array. It can either send data from 4 registers out on north-, south-, east- and west-bound links, forward incoming links in an clockwise spiral according to \ref{fig:fpga-simd-datacom} or keep the previously outgoing data. The latter is very important in order for branching to work correctly; where some SIMD nodes, depending on their state, may store incoming data in one register and others SIMD nodes in an other register. 
 
-Rising the value on the {\tt swap} control signal will write the result from the
-ALU to the S\_REG and copy the data from the S\_REG out to the {\tt s\_new} bus,
-ultimately writing this data to the register bank.
+The clockwise spiral forwarding is an optimized way of distributing a 3x3 array of source data to all the SIMD nodes in the grid array using only 3-clock cycles.
 
-\subsection{State Register}
-
-\subsection{Registers}
-Each SIMD node have $2^4 = 16$ general purpose registers. 4 of these are
-available for general storage when executing instructions. The remaining 2
-registers are the special purpose registers {\tt \$zero} and {\tt \$state}.
+\subsubsection{Register Bank}
+Each SIMD node is equpped with $2^4 = 16$ general purpose registers. 14 of which are available for general storage during acecution. The remaining 2 are reserved for the special purpose registers {\tt \$zero} and {\tt \$state}.
 
 \input{fig/fpga/simd-registers}
 
-\subsection{State-register}
+The register bank has specially designed with the four way data transfer in mind. It supports reading, or writing, 4 registers at once or reading 2 registers and writing 1 register within one clockcycle. 
 
-\subsection{Zero-register}
+\subsubsection{Arithmetic Logic Unit}
+
+\TODO{List the 8 ALU functions some where with their binary prepresentation.}
+
+The ALU implemented is a very simple {\tt 8}-bit ALU supporting only 8 instructions. The main reason for only implementing the most basic arithmetic instruction was to save space in the instruction set, since all SIMD node instructions carries the 3-bit ALU function at the end, and to reduce the pysical size of the node. 
+
+\TODO{Add some supporting refferences.}
+
+Upon investigating image processing algorithmes we found that many of these,  Median Filter and Salt and Pepper noice reduction, only need these 8 ALU operations in order to perform their work. Besides; more high level arithmetic, such as multiply and divide, can be implemented using addition and subtraction.
+
+\subsubsection{Source Data Register}
+The source data register, S REG for short, is a special purpose register within
+the SIMD node which holds the next source data for the SIMD node. It is partly controlled by the SIMD node instruction set and partly by a special {\tt step} signal sent from the DMA.
+
+An importnat attribute of the S REG is it's capability to receive data from the left node and passing it along to node on the right when instructed by the {\tt step} signal. This allows for a simultaneous data transfer while the node is otherwise busy processing.
+
+\subsubsection{State Register}
+In order to handle branches the SIMD node must have some internal state. The State Register is, as all other registers, 8-bit. The least significant bit is the current state wich is sent out from the node and to the Instruction Decoder unit within the SIMD node.
+
+The State Register can be written and read as any other register in the Register Bank and the state can hence be shifted left or right in order to acheave nested branches.
 
 \subsection{BRAM and SRAM}
+
+\TODO{Where to put this?}
+
 BRAM or SRAM is not available from the SIMD node.
 
 \subsection{Instruction Set}
 
 \input{fig/fpga/fpga-simd-datacom}
 
-
 \subsection{Branching}
+\CHECK{Should this be added to the appendix or something?}
+
 Since all nodes run the same instructions, both parts of a branch must be
 executed. Nodes are setting the {\tt state} to 1 in order to indicate that they
 are executing within that part of the branch.
 
 \input{fig/fpga/single-level-branching}
 
-\subsection{Multilevel branching}
+\subsubsection{Multilevel branching}
 Since state register is 8 it is possible to have up-to 8 nested branches by
 shifting the current state to the left and adding the new state to the
 end. Below \TODO{Refer to table, not relative to where it is placed} are the
