@@ -174,7 +174,7 @@ NET "avr_data_in[7]" LOC = P54;
 NET "avr_data_in[6]" LOC = P51;
 NET "avr_data_in[5]" LOC = P43;
 NET "avr_data_in[4]" LOC = P32;
-NET "avr_data_in[3]" LOC = P199;
+NET "avr_data_in[3]" LOC = P175;
 NET "avr_data_in[2]" LOC = P20;
 NET "avr_data_in[1]" LOC = P14;
 NET "avr_data_in[0]" LOC = P6;
@@ -207,5 +207,5 @@ NET "state[0]" LOC = P183;
 #NET "state[0]" LOC = P86;
 
 #	state_ready : in std_logic);								-- FPGA_IN_25
-NET "state_ready" LOC = P175;
+#NET "state_ready" LOC = P175;
 #NET "state_ready" CLOCK_DEDICATED_ROUTE = FALSE;

@@ -36,8 +36,7 @@ entity toplevel is
 		avr_interrupt : out std_logic;							-- FPGA_IO_CTRL
 		
 		-- AVR state control
-		state : in std_logic_vector(2 downto 0);				-- FPGA_IN_[28-26]
-		state_ready : in std_logic);								-- FPGA_IN_25
+		state : in std_logic_vector(2 downto 0));				-- FPGA_IN_[28-26]
 		
 end toplevel;
 
@@ -57,7 +56,6 @@ architecture behavioral of toplevel is
 		port ( 
            clk : in STD_LOGIC;
            state_in : in  STD_LOGIC_VECTOR (2 downto 0);
-           state_ready : in  STD_LOGIC;
            load_program : out  STD_LOGIC;
            load_data : out  STD_LOGIC;
            execute : out  STD_LOGIC;
@@ -240,6 +238,7 @@ architecture behavioral of toplevel is
 	end component;
 	
 	signal clk_vga : std_logic;
+	signal clk_vga_mem : std_logic;
 	signal clk_cpu : std_logic;
 	
 	signal load_program : std_logic;
@@ -300,7 +299,7 @@ begin
 	
 	vga_value(1 downto 0) <= (others => '0');
 	
---	vga_value(9 downto 4) <= prog_ram_addr_tmp(5 downto 0);
+--	vga_value(9 downto 2) <= instruction_register_mem_data(7 downto 0);
 --	vga_value(3) <= prog_ram_write_tmp;
 --	vga_value(2) <= avr_data_in_ready;
 	
@@ -308,14 +307,14 @@ begin
 		port map (
 			CLKIN_IN => clk,
 			CLKDV_OUT => clk_vga,
-			CLKFX_OUT => clk_cpu
+			CLKFX_OUT => clk_cpu,
+			CLK0_OUT => clk_vga_mem
 		);
 		
 	inst_state_register: state_register 
 		port map ( 
            clk => clk_cpu,
            state_in => state,
-           state_ready => state_ready,
            load_program => load_program,
            load_data => load_data,
            execute => execute,
@@ -323,7 +322,7 @@ begin
 
 	inst_vgacontroller : vgacontroller
 		port map (
-			clk => clk_cpu,
+			clk => clk_vga_mem,
 			clk_vga => clk_vga,
 			
 			greytone => vga_value(9 downto 2),
@@ -490,6 +489,7 @@ begin
 	begin
 		if execute = '1' then
 			instruction_register_mem_data_filtered <= instruction_register_mem_data;
+--			instruction_register_mem_data_filtered <= "100011101110100000001000";
 		else
 			instruction_register_mem_data_filtered <= (others => '0');
 		end if;
