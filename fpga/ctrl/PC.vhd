@@ -36,26 +36,43 @@ entity PROGRAM_COUNTER is
 		
 		instr_addr					: out STD_LOGIC_VECTOR(CTRL_IADDR_BUS-1 downto 0)
 	);
+	
 end PROGRAM_COUNTER;
 
 architecture Behavioral of PROGRAM_COUNTER is
+	signal waiting					: STD_LOGIC := '0';
+	signal waiting_addr			: STD_LOGIC_VECTOR(CTRL_IADDR_BUS-1 downto 0) := (others => '0');
 	signal pc						: STD_LOGIC_VECTOR(CTRL_IADDR_BUS-1 downto 0) := (others => '0');
-	signal res						: STD_LOGIC := '0';
+	signal res						: STD_LOGIC_VECTOR(1 downto 0) := "00";
+	signal sel						: INTEGER := 0;
 begin
 
 	process(clk, reset, pc) begin			
 		if (reset='1') then
 			pc							<= (others => '0');
-			res						<= '0';
-		elsif (rising_edge(clk)) then
-			if (branch='1' and res='1') then
-				pc						<= jump_addr;
+			res						<= "00";
+			sel						<= 0;
+		elsif (rising_edge(clk)) then			
+			-- Branch if branch is pending and ALU res
+			if (waiting='1' and alu_res='1') then
+					pc					<= waiting_addr;	
+					waiting			<= '0';
+			
+			-- Save branch addr
+			elsif (branch='1') then
+				waiting 				<= '1';
+				waiting_addr		<= jump_addr;
+				pc						<= unsigned(pc) + 1;
+			
+			-- Jump
 			elsif (jump='1') then
 				pc						<= jump_addr;
+				
+			-- Normal PC incr.
 			else
-				pc						<= UNSIGNED(pc) + 1 ;
+				waiting				<='0';
+				pc						<= unsigned(pc) + 1;
 			end if;
-			res						<= alu_res;
 		end if;
 		
 		instr_addr					<= pc;

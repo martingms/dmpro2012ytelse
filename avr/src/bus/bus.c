@@ -119,15 +119,17 @@ void bus_send_data_words(U32 *words, size_t count) {
 // set all data pins low (needed between instruction send and data send)
 void bus_flush_data_bus() {
 	portB->ovrc = 0xFF << 7;
+	last[1] = '\0';
 }
 
 // sends a program (using 24-bit bus width) to the FPGA
 void bus_send_program(U8 *program, size_t bytes) {
 	U8 *ptr = program, stop = program + bytes;
 	while (ptr < stop) {
-		bus_send_data((ptr[0] << 16) | (ptr[1] << 8) | ptr[2], FPGA_DATA_IN_BUS_OFFSET, 24);
+		bus_send_data((U32)(((U32)ptr[1] << 16) | ((U32)ptr[2] << 8) | (U32)ptr[3]),
+				FPGA_DATA_IN_BUS_OFFSET, 24);
 		portB->ovrt = 1<<19;
-		ptr += 3;
+		ptr += 4;
 	}
 }
 
