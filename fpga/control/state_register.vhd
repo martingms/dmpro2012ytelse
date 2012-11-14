@@ -33,7 +33,6 @@ entity state_register is
     Port ( 
            clk : in STD_LOGIC;
            state_in : in  STD_LOGIC_VECTOR (2 downto 0);
-           state_ready : in  STD_LOGIC;
 			  reset : out STD_LOGIC;
            load_program : out  STD_LOGIC;
            load_data : out  STD_LOGIC;
