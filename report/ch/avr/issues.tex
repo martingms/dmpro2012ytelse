@@ -3,7 +3,21 @@
 
 \subsection{SPI}
 \label{sec:avr-spi-issues}
+Reading from SD-card over SPI turned out to be the single biggest bottleneck of
+our system. This was in part due to the serial nature of SPI, but also the poorly optimized SPI driver from the Atmel Software Framework.
 
+The limitations of SPI is not something we could change. Our microcontroller does not have hardware support for using the 4-bit SD protocol, which left us with SPI as our only choice. We ended up running the SD-card on a frequency of 39 MHz, which gives us a theoretical upper speed bound of 4.88 MB/s. In practice, we managed to reach around 1.1 MB/s.
+
+While we ended up at around 1.1 MB/s, the speed was only approximately 300 kB/s before we started optimizing the software framework. Some of the biggest changes we made, were:
+\begin{itemize}
+	\item \textbf{Compiler optimizations} - Turning on -O3 roughly doubled the performance
+	\item \textbf{Function inlining} - We inlined the functions spiRead and spiWrite, which were called from a tight loop. This gave a minor speed improvement
+	\item \textbf{Less status-checking in between reads} - the original code busy-waited on several SPI status registers in between each call to spiRead, some of which we knew to be unneccesary in this specific context.
+	\item \textbf{Multiple block reads} - Patching the software framework with support for the Multiple Block Read-command allowed us to transfer an arbitrarily large number of sectors without addressing each individually.
+	\item \textbf{SDHC support} - This helped us mostly because SDHC cards support frequencies up to 50MHz, as opposed to the 25MHz of standard SD. Higher frequencies gave us an almost linear speedup
+\end{itemize}
+
+After implementing these optimzations, the AVR was capable of pushing out around 12 FPS to the FPGA. That is, around 920 kB/s. As we managed to reach our goal of 10 FPS, we didn't optmize it any further. However, using the PDCA (peripheral DMA controller of the AVR), we could have effectively eliminated the 25\% time spent sending to the FPGA while the SD-card waited. Thus, giving as a framerate of around 16 FPS.
 
 \subsection{Serial}
 
