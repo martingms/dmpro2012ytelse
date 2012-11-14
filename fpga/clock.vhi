@@ -1,5 +1,5 @@
 
--- VHDL Instantiation Created from source file clock.vhd -- 22:25:17 11/04/2012
+-- VHDL Instantiation Created from source file clock.vhd -- 15:49:56 11/14/2012
 --
 -- Notes: 
 -- 1) This instantiation template has been automatically generated using types
