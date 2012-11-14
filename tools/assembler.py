@@ -4,12 +4,12 @@ import sys
 import optparse
 import re
 
-# @todo: add support for control core instructions
 # @todo: add support for mask bit keyword
-# @todo: CISC instructions; mul, branch (lables)
+# @todo: CISC instructions; mul, div?
 
 verbose 	= False
 group		= False
+modelsim	= False
 labels 	= {}
 regs 		= {
 	'R0'		: '0000',
@@ -28,8 +28,8 @@ regs 		= {
 	'R13' 		: '1101', 
 	'R14' 		: '1110',
 	'R15'		: '1111',
-	'VADDR'	: '1101',
-	'VDATA'	: '1110',
+	'VADDR'		: '1101',
+	'VDATA'		: '1110',
 	'DMAP'		: '1111',
 	'ZERO'		: '0000', 
 	'STATE' 	: '1111'
@@ -56,14 +56,14 @@ instrs 	= {
 	},
 	# Two operands instructions
 	's' : {
-		'move' : '000', # move R1 R2
+		'move' 	: '000', # move R1 R2
 		'sll'	: '110', #  sll R1 R2
 		'srl'	: '111'  #  srl R1 R2
 	},
 	# Jump / branch instructions
 	'j' : {
-		'jump'   : '0100', #   jump label
-		'branch' : '0101'  # branch label
+		'jump'  : '0100', #   jump label
+		'beq'	: '0101'  # branch label
 	},
 	
 	# M-Format instructions
@@ -128,8 +128,8 @@ def __assembleNodeInstr__(instr):
 	elif fn in instrs['s']	: output = __assembleNodeInstrN__('0', '0000', instrs['s'][fn], params, 2)
 	elif fn in instrs['m']	: output = __assembleNodeInstrN__('0', '0' + instrs['m'][fn], '000', params, 4)
 	elif fn == "swap"		: output = __assembleNodeInstrN__('0', '0010', '000', params, 2)
-	elif fn == "nop"			: output = __assembleNodeInstrN__('0', '0000', '000', "", 0)
-	else						: sys.exit("error: Unrecognized NODE instruction: '" + fn + " " + params + "'")
+	elif fn == "nop"		: output = __assembleNodeInstrN__('0', '0000', '000', "", 0)
+	else					: sys.exit("error: Unrecognized NODE instruction: '" + fn + " " + params + "'")
 	
 	return output
 
@@ -144,11 +144,11 @@ def __assembleCtrlInstr__(instr):
 	# ctrl op fn params #params 
 	if fn in instrs['r']	: output = __assembleNodeInstrN__('1', '0000', instrs['r'][fn], params, 3)
 	elif fn in instrs['i']	: output = __assembleNodeInstrN__('1', '0001', instrs['i'][fn], params, 3)
+	elif fn in instrs['s']	: output = __assembleNodeInstrN__('1', '0000', instrs['s'][fn], params, 2)
 	elif fn in instrs['j']	: output = __assembleCtrlJump__(instrs['j'][fn], params)
-	#elif fn in instrs['m']	: output = __assembleNodeInstrN__('0', '0' + instrs['m'][fn], '000', params, 4)
-	#elif fn == "swap"		: output = __assembleNodeInstrN__('0', '0010', '000', params, 2)
-	#elif fn == "nop"		: output = __assembleNodeInstrN__('0', '0000', '000', "", 0)
-	else						: sys.exit("error: Unrecognized CTRL instruction: '" + fn + " " + params + "'")
+	elif fn == "lw"			: output = __assembleNodeInstrN__('1', '0010', '000', params, 2)
+	elif fn == "nop"		: output = __assembleNodeInstrN__('1', '0000', '000', "", 0)
+	else					: sys.exit("error: Unrecognized CTRL instruction: '" + fn + " " + params + "'")
 	
 	return output
 
@@ -188,8 +188,10 @@ def __assembleInstrFile__(input, output):
 				if group:
 					w.write(str(addr) + ' ')
 					for i in range(0, len(instr), 4):
-						w.write(instr[i:i+4] + ' ')
+						w.write('' + instr[i:i+4] + ' ')
 					w.write('\n')
+				elif modelsim:
+					w.write('IRAM(' + str(addr) + ') <= "' + instr + '";\n')
 				else:
 					w.write(chr(0))
 					w.write(chr(int(instr[0:8], 2)))
@@ -223,7 +225,7 @@ def dec2bin( dec, target ):
 
 # Main function
 def main():
-	global group, verbose
+	global group, verbose, modelsim
 	
 	p = optparse.OptionParser()
 	p.add_option('--node', '-n', help="assemble a single SIMD Node instruction", metavar="INSTR")
@@ -231,16 +233,18 @@ def main():
 	p.add_option('--input', '-i', help="assemble an entire FPGA program file", metavar="INPUT_FILE")
 	p.add_option('--output', '-o', default="", help="assembled FPGA program binary file", metavar="OUTPUT_FILE")
 	p.add_option('--group', '-d', action="store_true", default=False, help="Group instructions into logical groups for debuging")
+	p.add_option('--modelsim', '-m', action="store_true", default=False, help="Make modelsim instructions")
 	p.add_option('--verbose', '-v', action="store_true", default=False, help="print status messages to stdout")
 	options, arguments = p.parse_args()
 	
 	if options.group: group = True
 	if options.verbose: verbose = True
+	if options.modelsim: modelsim = True
 	if options.input and not options.output: options.output = re.sub("(\\.\\w+)$", ".bin", options.input)
 	
 	if options.input				: sys.stderr.write(__assembleInstrFile__(options.input, options.output)+'\n')
-	elif options.node			: sys.stderr.write('> ' + __assembleNodeInstr__(options.node)+'\n')
-	elif options.ctrl			: sys.stderr.write('> ' + __assembleCtrlInstr__(options.node)+'\n')
+	elif options.node				: sys.stderr.write('> ' + __assembleNodeInstr__(options.node)+'\n')
+	elif options.ctrl				: sys.stderr.write('> ' + __assembleCtrlInstr__(options.ctrl)+'\n')
 	else							: sys.exit("Unknown command line tool command")
 
 if __name__ == '__main__':
