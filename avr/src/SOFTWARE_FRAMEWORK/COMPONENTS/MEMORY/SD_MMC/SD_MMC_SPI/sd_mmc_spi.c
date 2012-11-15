@@ -230,6 +230,7 @@ Bool sd_mmc_spi_internal_init(void)
 //!   The memory is ready     -> OK (always)
 Bool sd_mmc_spi_init(spi_options_t spiOptions, unsigned int pba_hz)
 {
+
   // Setup SPI registers according to spiOptions.
   spi_setupChipReg(SD_MMC_SPI, &spiOptions, pba_hz);
 
@@ -1226,6 +1227,7 @@ Bool sd_mmc_spi_read_sector_to_ram(void *ram)
 Bool sd_mmc_spi_read_multiple_sectors_to_ram(void *ram, unsigned char ucNbrSectors)
 {
 	U8 *_ram = ram;
+	static avr32_spi_t *spi = (avr32_spi_t*)SD_MMC_SPI;
 
 	// wait for MMC not busy
 	if (KO == sd_mmc_spi_wait_not_busy())
@@ -1235,7 +1237,7 @@ Bool sd_mmc_spi_read_multiple_sectors_to_ram(void *ram, unsigned char ucNbrSecto
 
 	// issue command
 	if(card_type == SD_CARD_2_SDHC) {
-		r1 = sd_mmc_spi_command(MMC_READ_MULTIPLE_BLOCKS, gl_ptr_mem >> 9);
+	r1 = sd_mmc_spi_command(MMC_READ_MULTIPLE_BLOCKS, gl_ptr_mem >> 9);
 	} else {
 		r1 = sd_mmc_spi_command(MMC_READ_MULTIPLE_BLOCKS, gl_ptr_mem);
 	}
@@ -1261,11 +1263,11 @@ Bool sd_mmc_spi_read_multiple_sectors_to_ram(void *ram, unsigned char ucNbrSecto
 			return KO;
 		}
 
-		for(i=0;i<MMC_SECTOR_SIZE;i++)
-		{
-			((avr32_spi_t*)SD_MMC_SPI)->tdr = 0xFF;
-			while (!(((avr32_spi_t*)SD_MMC_SPI)->sr & AVR32_SPI_SR_RDRF_MASK));
-			*_ram++ = ((avr32_spi_t*)SD_MMC_SPI)->rdr;
+		int ctr = MMC_SECTOR_SIZE;
+		while (ctr--) {
+			spi->tdr = 0xFF;
+			while (!(spi->sr & AVR32_SPI_SR_RDRF_MASK));
+			*_ram++ = spi->rdr;
 		}
 
 		gl_ptr_mem += MMC_SECTOR_SIZE;        	// Update the memory pointer.

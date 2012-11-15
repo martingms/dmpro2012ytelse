@@ -6,6 +6,7 @@
 #include "serial.h"
 #include "filebrowser.h"
 #include "str2img.h"
+#include "timer.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -147,7 +148,7 @@ void next_state(void) {
 		file_full[3] = '\0';
 		rc = load_script(strcat(file_full, file)); // Tries to load the program script
 		if (!rc) {
-			//screen_display_error_messagef("Lines in selected script\n1. %s\n2. %s\n3. %s\n4. %d\n", selected_script.description, selected_script.fpga_bin_path, selected_script.data_type_directory, selected_script.transfer_delay);
+//			screen_display_error_messagef("Lines in selected script\n1. %s\n2. %s\n3. %s\n4. %d\n", selected_script.description, selected_script.fpga_bin_path, selected_script.data_type_directory, selected_script.transfer_delay);
 			load_menu(STATE_SELECT_DATA);
 		} else {
 			screen_display_error_messagef("Could not load script\n%s\n", file_full);
@@ -237,8 +238,7 @@ void run_fpga_program(void) {
 
 			fpga_send_data_from_file(data_path); // Send data to FPGA
 			fpga_run(); // Run FPGA (waits for ACK)
-			volatile int i = selected_script.transfer_delay;
-			while (i--);		// Sleeps
+			timer_sleep(selected_script.transfer_delay * 1000);
 		}
 	} else {
 		fpga_run(); // No data -> just run

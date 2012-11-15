@@ -1,54 +1,47 @@
 \section{VGA-controller}
 
-\TODO{Sort of a braindump, feel free to prune or rewrite whatever.}
+We learned early on that last years group had problems with their off-the-shelf
+VGA-controller being a major bottle-neck, and was only able to squeeze out less
+than one frame per second. Since one of our goals ({\sc FR1}, see Table
+\ref{fig:func-req}) with this project was to hit a minimum frame rate of ten
+frames per second, going down the same route with the same controller was
+obviously off the table.
 
-\subsection{Motivation}
-\TODO{Should this be a subsection at all?} We learned early on that last years
-group had problems with their off-the-shelf VGA-controller being a major
-bottle-neck, and were unable to squeeze out more than sub one frame per second
-\TODO{Rephrase?}. Since one of our goals \TODO{Which goal?} in this project was
-to hit a minimum frame rate of 10 per second, going down the same route with the
-same controller was obviously off the table.
-
-After having scoured the net for higher-performing VGA-controllers in our
+After having scoured the Internet for higher-performing VGA-controllers in our
 price-range without any luck, and after consulting with Jahre, we decided on
 implementing our own VGA-controller within the FPGA.
 
-\subsection{The design}
-
 \input{fig/fpga/vga}
 
-\subsubsection{FPGA design}
-
-\subsubsubsection{Memory handling}
+\subsection{Design}
 We recognized the importance of allowing the control core to dump pixels to the
 VGA-controller at its own pace without having to meet certain timing criteria,
-so a physical memory and hence a memory controller was needed.  Since the FPGA
+so a physical memory and hence a memory controller was needed. Since the FPGA
 is running on 50MHz and the pixel clock should be running on approximately
-25MHz, a fairly simple solution for dividing the memory between the control core
-and the actual pixel pusher\TODO{Find a more serious name?} was found: The pixel
-pusher must be able to read from memory at most every other cycle, so the
-remaining cycles are all free for the control core to use.  To simplify the
-design as much as possible, the memory controller simply alternates every cycle
-between writing whatever is asserted on the signals from the control core and
-reading a pixel for the pixel pusher.
+25MHz, a fairly simple solution for dividing the memory between the control
+core and the actual signal generator was found: The signal generator must be
+able to read from memory at most every other cycle, so the remaining cycles are
+all free for the control core to use. To simplify the design as much as
+possible, the memory controller simply alternates every cycle between writing
+whatever is asserted on the signals from the control core and reading a pixel
+for the signal generator.
 
-\subsubsubsection{Pixel pusher} \TODO{Again, better name?}
-The part that actually yields the output is pretty straightforward. It simply
-calculates when to pulse the V-sync and H-sync signals for a given resolution,
-and outputs a (8-bit greyscale) pixel fetched from the memory controller at the
-appropriate time.
-\TODO{There isn't much more to it. Get more technical?}
+The signal generator itself is pretty straightforward. It simply calculates
+when to pulse the V-sync and H-sync signals for a given resolution, and outputs
+a (8-bit greyscale) pixel fetched from the memory controller at the appropriate
+time.
 
-\subsubsection{Circuitry}
-\TODO{Insert small circuit diagram of the physical parts?}
+\subsection{Circuitry}
+\input{fig/fpga/vga-circuit}
 When designing the circuit we had to choose between a black-box\TODO{Call it
-something else?} DAC and rolling our own. Preliminary research on the
-VGA-protocol showed that for our purposes and fairly low requirements on
+something else?} DAC and making our own. Preliminary research on the
+VGA-protocol showed that for our purposes and our fairly low requirements on
 quality, making the DAC with simple resistors in parallel, with each resistor
 doubling in resistance for each step from the most significant bit to the least
-significant, would do just fine. We thought this would be easier to debug, and
-especially easier to prototype.
-
-We ended up supporting greyscale and color with our circuit, but for now only
-greyscale is implemented on the FPGA-side.
+significant, would be sufficient. We thought this would be easier to debug, and
+especially easier to prototype. The resulting circuit can be seen in Fig
+\ref{fig:vga-circuit}. Since color was a nice-to-have in case we had time to
+spare and not at all a priority, we made the decision to greatly simplify the
+design by making the switch from greyscale to color a manual operation of
+moving a set of jumpers. This way we reduced both pin-use on the FPGA and the
+complexity of the circuit.

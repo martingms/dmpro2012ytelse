@@ -77,6 +77,7 @@ static unsigned char opening_bracket[] = { 255, 241, 247, 247, 247, 247, 247, 24
 static unsigned char closing_bracket[] = { 255, 199, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 199, 255 };
 static unsigned char pipe[] = { 255, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 247, 255 };
 static unsigned char asterisk[] = { 255, 255, 255, 255, 255, 247, 213, 227, 227, 201, 255, 255, 255, 255, 255, 255 };
+static unsigned char equal[] = { 255, 255, 255, 255, 255, 128, 255, 255, 128, 255, 255, 255, 255, 255, 255, 255 };
 
 static unsigned char *lut(char chr) {
 	switch (chr) {
@@ -153,6 +154,7 @@ static unsigned char *lut(char chr) {
 		case ']': return closing_bracket;
 		case '|': return pipe;
 		case '*': return asterisk;
+		case '=': return equal;
 		default:
 			return question;
 	}
@@ -232,8 +234,8 @@ void str2img_read_block(U8 *data) {
 static unsigned char *osd_ptr;
 static unsigned char osd_row;
 static unsigned char osd_col;
-void str2img_osd_init(unsigned char *sram) {
-	osd_ptr = sram;
+void str2img_osd_init(unsigned char *fb) {
+	osd_ptr = fb;
 	osd_row = 0;
 	osd_col = 0;
 }
@@ -273,6 +275,14 @@ void str2img_osd_putc(char c) {
 void str2img_osd_write(const char *str) {
 	char c;
 	while ( (c = *str++) != '\0') {
-		str2img_osd_putc(c);
+		switch (c) {
+		case '\n':
+			osd_col = 0;
+			osd_row++;
+			break;
+		default:
+			str2img_osd_putc(c);
+			break;
+		}
 	}
 }
