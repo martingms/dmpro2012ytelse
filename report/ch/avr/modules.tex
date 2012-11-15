@@ -29,7 +29,7 @@ into several modules that behave largely independently of eachother.
 	performance penalty. Therefore we've chosen to implement what is not performance
 	critical with FAT. \\
 \end{comment}
-	FAT & A file system implementation with easy to use framework code available. But
+	FAT & A file system implementation with easy to use framework code available. However,
 	using it also incurs a performance penalty and is not used in performance critical
 	sections. \\
 	\hline
@@ -52,7 +52,7 @@ into several modules that behave largely independently of eachother.
 \end{comment}
 	RS232 & A protocol for communication with a PC over the serial port. Very simple to
 	use and is very useful for debugging. There was an issue with it, however [\ref{sec:avr-serial-issues}]
-	and is not used past the EVK1100 test board. \\
+	and it is not used past the EVK1100 test board. \\
 	\hline
 	SMC/EBI & The AVR uses an External Bus Interface to connect to external memories,
 	both SRAM and SDRAM. As our AVR has 512K of SRAM attached, the EBI is
@@ -84,8 +84,8 @@ into several modules that behave largely independently of eachother.
 	interrupts and button click callbacks. \CHECK{this does not exists as of
 	right now, but it might in the future :)}\\
 \end{comment}
-	LEDs & Functions for turning the LEDs on and off. Useful for shining, not shining or
-	blinking to show information about internal state of the AVR. \\
+	LEDs & Functions for turning the LEDs on and off. Useful for
+	blinking lights to show information about internal state of the AVR / debugging. \\
 	\hline
 	JTAG & JTAG is an interface used to connect the AVR to a computer. This
 	allows us to flash the AVR, debug and profile our programs using

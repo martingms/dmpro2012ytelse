@@ -23,11 +23,11 @@ After implementing these optimzations, the AVR was capable of pushing out around
 \subsection{Serial}
 \label{sec:avr-serial-issues}
 Communicating with the AVR over the serial port worked perfectly fine on the EVK1100. However, on 256
-Shades of Gray it did not work. The reason it did not work was never discovered, as after hours of
-debugging and looking over the schematics. At this point Str2img was completed and so debugging, which
-was the main purpose of the serial communication, could be done by writing text to screen. And so
-further work on the Serial port was dropped since it was a fruitless endeavor. Initially, serial
-communication would give no output whatsoever. The only obvious error with the serial device, was that
-the TXD/CTS (T for Transmitt) pins were wired into RXD/RTS (R for receive), and vice versa. Swapping
-these by re-routing headers resulted in garbage output instead of nothing (but only whenever the avr
-actually wrote to the serial), so we were close to solving the issue, but it has been left for dead.
+Shades of Gray it did not work. The reason it did not work was never discovered, despite hours of
+debugging and looking over the schematics. Initially, serial communication would give no output
+whatsoever. The only obvious error with the serial device, was that the TXD/CTS (T for Transmitt)
+pins were wired into RXD/RTS (R for receive), and vice versa. Swapping these by re-routing headers
+resulted in garbage output instead of nothing (but only whenever the avr actually wrote to the serial),
+so we were close to solving the issue. However, Str2img was completed, and so debugging which
+was the main purpose of the serial communication, could be done by writing text to screen. Further
+work on the Serial port was therefore dropped since it was now a fruitless endeavor.
