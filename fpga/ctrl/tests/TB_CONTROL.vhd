@@ -32,13 +32,13 @@ use IEEE.NUMERIC_STD.ALL;
 library WORK;
 use WORK.FPGA_CONSTANT_PKG.ALL;
 
-ENTITY TB_CONTROLL IS
-END TB_CONTROLL;
+ENTITY TB_CONTROL IS
+END TB_CONTROL;
 
-ARCHITECTURE behavior OF TB_CONTROLL IS 
+ARCHITECTURE behavior OF TB_CONTROL IS 
 
 	-- Component Declaration
-	COMPONENT CONTROLL is
+	COMPONENT CONTROL is
 		Port (
 			clk 							: in	STD_LOGIC;
 			reset 						: in	STD_LOGIC;
@@ -127,7 +127,7 @@ DRAM(11) <= "10001011";
 DRAM(12) <= "10001100";
 	
 	-- Component Instantiation
-	uut: CONTROLL PORT MAP(
+	uut: CONTROL PORT MAP(
 		clk 						=> clk,
 		reset 					=>	reset,
 											
