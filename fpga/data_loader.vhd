@@ -47,13 +47,16 @@ begin
 	clock_internal_signals: process(clk)
 	begin
 		if rising_edge(clk) then
-			running <= next_running;
-			toggle_in_value <= next_toggle_in_value;
-			data <= avr_data_in;
 			if reset = '1' then
+				running <= '0';
 				address <= (others => '0');
+				toggle_in_value <= avr_data_in_ready;
+				data <= (others => '0');
 			else
+				running <= next_running;
 				address <= next_address;
+				toggle_in_value <= next_toggle_in_value;
+				data <= avr_data_in;
 			end if;
 		end if;
 	end process;

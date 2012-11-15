@@ -300,21 +300,10 @@ architecture behavioral of toplevel is
 	
 	signal vga_addr_in : std_logic_vector(RAM_VGA_ADDRESS_WIDTH - 1 downto 0);
 	signal vga_pixel_in : std_logic_vector(RAM_VGA_WORD_WIDTH - 1 downto 0);
+	signal vga_pixel_out : std_logic_vector(7 downto 0);
 	
 	signal simd_array_state : std_logic;
-
-	signal prog_ram_addr_tmp : std_logic_vector(15 downto 0);
-	signal prog_ram_write_tmp : std_logic;
 begin
-	
---	prog_ram_addr <= prog_ram_addr_tmp;
---	prog_ram_write <= prog_ram_write_tmp;
-	
-	vga_value(1 downto 0) <= (others => '0');
-	
---	vga_value(9 downto 2) <= instruction_register_mem_data(7 downto 0);
---	vga_value(3) <= prog_ram_write_tmp;
---	vga_value(2) <= avr_data_in_ready;
 	
 	inst_clock: clock
 		port map (
@@ -338,7 +327,7 @@ begin
 			clk => clk_vga_mem,
 			clk_vga => clk_vga,
 			
-			greytone => vga_value(9 downto 2),
+			greytone => vga_pixel_out,
 			hSync => vga_h_sync,
 			vSync => vga_v_sync,
 			
@@ -349,6 +338,11 @@ begin
 			mem_we => vga_ram_write,
 			mem_data => vga_ram_data
 		);
+	
+	vga_value(9 downto 5) <= vga_pixel_out(7 downto 3);
+	vga_value(4 downto 2) <= state;
+--	vga_value(9 downto 2) <= avr_data_in(7 downto 0);
+	vga_value(1 downto 0) <= (others => '0');
 	
 	program_ram_mux: ram_mux
 		generic map (
@@ -365,17 +359,17 @@ begin
 			in1_addr => program_loader_mem_addr,
 			in1_data => program_loader_mem_data,
 			
---			out_write_enable => prog_ram_write_tmp,
---			out_addr => prog_ram_addr_tmp,
---			out_data => prog_ram_data
-			out_write_enable => block_prog_ram_write,
-			out_addr => block_prog_ram_addr,
-			out_data => block_prog_ram_data
+			out_write_enable => prog_ram_write,
+			out_addr => prog_ram_addr,
+			out_data => prog_ram_data
+--			out_write_enable => block_prog_ram_write,
+--			out_addr => block_prog_ram_addr,
+--			out_data => block_prog_ram_data
 		);
 
-	prog_ram_addr <= (others => '0');
-	prog_ram_data <= (others => 'Z');
-	prog_ram_write <= '1';
+--	prog_ram_addr <= (others => '0');
+--	prog_ram_data <= (others => 'Z');
+--	prog_ram_write <= '1';
 	
 	data_ram_mux: ram_mux
 		generic map (
@@ -539,17 +533,17 @@ begin
 --			data => block_prog_ram_data
 --		);
 	
-	block_prog_ram: memory_from_file
-		generic map (
-			word_width => RAM_PROGRAM_WORD_WIDTH,
-			address_width => 8,
-			file_name => "control/test_program.dat"
-		)
-		port map (
-			clk => clk_cpu,
-			write_enable => block_prog_ram_write,
-			addr => block_prog_ram_addr(7 downto 0),
-			data => block_prog_ram_data
-		);
+--	block_prog_ram: memory_from_file
+--		generic map (
+--			word_width => RAM_PROGRAM_WORD_WIDTH,
+--			address_width => 8,
+--			file_name => "control/test_program.dat"
+--		)
+--		port map (
+--			clk => clk_cpu,
+--			write_enable => block_prog_ram_write,
+--			addr => block_prog_ram_addr(7 downto 0),
+--			data => block_prog_ram_data
+--		);
 
 end behavioral;

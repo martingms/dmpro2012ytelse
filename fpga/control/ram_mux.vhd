@@ -80,9 +80,7 @@ begin
 			out_addr <= in1_addr;
 			if in1_write_enable = '1' then
 				out_data <= (others => 'Z');
-				in1_data <= out_data;
 			else
-				in1_data <= (others => 'Z');
 				out_data <= in1_data;
 			end if;
 		end if;

@@ -33,6 +33,8 @@ architecture syn of memory_from_file is
 	end function;
 	
 	signal ram : ram_type := init_ram_from_file(file_name);
+	attribute ram_style : string;
+	attribute ram_style of ram : signal is "block";
 	
 begin
 
