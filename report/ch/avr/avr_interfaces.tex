@@ -1,6 +1,6 @@
 \section{AVR hardware}
 
-This section documents the hardware consideration we have to make in relation to the AVR in our project. Also included are spesifics in regards to what choices were made in regards to AVR specific hardware.
+This section documents the hardware considerations we had to make in relation to the AVR in our project. Also included are specifics in regard to what choices were made in terms of AVR specific hardware.
 
 The AVR had a number of considerations in mapping the pinout. First off we wanted to have a number of functions that required specific pins on the AVR to mention some:
 
@@ -11,7 +11,7 @@ The AVR had a number of considerations in mapping the pinout. First off we wante
 \item EBI (avrMemory)
 \end{enumerate}
 
-We also wanted to have some visual input and debugging tools for the project (buttons and leds). These were also connected to the AVR, we did however not have to take that into account mapping pins as they can be fitted on any GPIO pin. This allowed us greater flexibility in terms of what had to go where and made it possible to fit the other interfaces on the AVR better.
+We also wanted to have some visual input and debugging tools for the project (buttons and leds). These were also connected to the AVR. We did however not have to take that into account mapping pins as they can be fitted on any GPIO pin. This allowed us greater flexibility in terms of what had to go where and made it possible to fit the other interfaces on the AVR better.
 
 Same goes for the VGA controller we had mapped up to the AVR. Seeing as this neither required specific ports on the AVR, we fit this in where there were leftover pins when the rest was mapped out.
 
@@ -20,17 +20,17 @@ As for the actual pinout of the AVR, refer to the appendix.
 
 \subsection{AVR crystal}
 
-Previous years have chosen to have multiple crystals for the AVR. Our AVR has support for up to 3 crystals where 2 are high frequency crystals that can be used as external clocks for the AVR. The last crystal is a low frequency crystal that is needed if one intends to make use of power saving functions in the AVR or are in need of real time measurement on the AVR.
+Previous years have chosen to have multiple crystals for the AVR. Our AVR has support for up to 3 crystals, where 2 are high frequency crystals that can be used as external clocks for the AVR. The last crystal is a low frequency crystal that is needed if one intends to make use of power saving functions in the AVR or are in need of real time measurement on the AVR. \TODO{dette kan også gjøres med interne klokker på hhv. 115kHz og 32kHz. skrive om?}
 
-As we were to optimize for performance we tried to use the most of the given resources. This including saving pins wherever we could, and as such we have gone with only one crystal. This crystal is connected to port 0 on the AVR and has a socket. We ordered a number of crystals in order to make sure that we could adapt to most any requirements that may or may not have been clear to us at the time of the design.
+As we were to optimize for performance we tried to use the most of the given resources. This included saving pins wherever we could, and as such we have gone with only one crystal. This crystal is connected to port 0 on the AVR and has a socket. We ordered a number of crystals in order to make sure that we could adapt to most any requirements that may or may not have been clear to us at the time of the design.
 
 \subsection{SD card}
 
-We also needed a storage medium. Since previous years have had good results with using SD cards, this was what we chose as well. However, working on the design we encountered a few problems in regards to the SD card, mostly in regards to performance more about this refer to the SD card implementation section.
+We also needed a storage medium. Since previous years have had good results with using SD cards, this was what we chose as well. However, working on the design we encountered a few problems in regard to the SD card, mostly in regard to performance more about this refer to the SD card implementation section. \TODO {rewrite or fix reference?}
 
 \subsection{Serial port}
 
-The serial feature was implemented as a way of debugging. This is connected to USART0 on the AVR and was not a crucial part of the design, but rather a way for us to communicate and get quantifiable data from the AVR. We decided having serial access would be handy as there is only so much data you can get out of 8 blinking leds. The serial implementation had some issues in regards to our mapping of the lines to the port, this was partly tried to solve by remapping the lines over the header.
+The serial feature was implemented as a way of debugging. This is connected to USART0 on the AVR and was not a crucial part of the design, but rather a way for us to communicate and get quantitative data from the AVR. We decided that having serial access would be handy as there is only so much data you can get out of 8 blinking leds. The serial implementation had some issues in regard to our mapping of the lines to the port, this was partly tried to solve by remapping the lines over the header.
 
 \subsection{USB connectivity}
 
@@ -38,10 +38,10 @@ Our AVR also supports USB. We decided to map up the USB even though we were doub
  
 \subsection{EBI (avrMemory)}
 
-Early in the design process we came to doubt whether the SD card would perform as well as we needed it to. In order to try to safeguard us from total failure in a case where this would come true (which it did) we gave the AVR a seperate memory in order to be able to have a buffer for data comming from the SD card or from the FPGA. The AVR itself does not have enough memory for even a single frame of video and as such this was after some discussion deemed a worthwhile use of ports at the expense of some I/O lines to the FPGA.
+Early in the design process, we came to doubt whether the SD card would perform as well as we needed it to. In order to try to safeguard us from total failure in a case where this would come true (which it did) we gave the AVR a separate memory in order to be able to have a buffer for data coming from the SD card or from the FPGA. The AVR itself does not have enough memory for even a single frame of video, which is why -- after some discussion -- we deemed it a worthwhile use of ports at the expense of some I/O lines to the FPGA.
 
 \subsection{VGA controller}
 
-Questioning whether or not we would be able to implement a VGA controller on the FPGA, we thought it wise to have a backup to get picture on a screen in case this should fail. The VGA controller is a prebuilt type that has been previously used in projects with some success. We added this as a backup where we would pipe data back to the AVR for display on screen should the FPGA VGA controller fail.
+Questioning whether or not we would be able to implement a VGA controller on the FPGA, we thought it wise to have a backup to get a picture on the screen in case this should fail. The VGA controller is a prebuilt type that has been previously used in projects with some success. We added this as a backup where we would pipe data back to the AVR for display on screen, should the FPGA VGA controller fail.
 
 
