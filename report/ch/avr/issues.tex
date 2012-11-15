@@ -15,10 +15,19 @@ While we ended up at around 1.1 MB/s, the speed was only approximately 300 kB/s 
 	\item \textbf{Less status-checking in between reads} - the original code busy-waited on several SPI status registers in between each call to spiRead, some of which we knew to be unneccesary in this specific context.
 	\item \textbf{Multiple block reads} - Patching the software framework with support for the Multiple Block Read-command allowed us to transfer an arbitrarily large number of sectors without addressing each individually.
 	\item \textbf{SDHC support} - This helped us mostly because SDHC cards support frequencies up to 50MHz, as opposed to the 25MHz of standard SD. Higher frequencies gave us an almost linear speedup
+	\item \textbf{Bypass filesystem} - We bypass the filesystem entirely when reading data input to the FPGA. We discovered that the filesystem adds a fairly significant overhead (10-20\%), even with large logical sector sizes in FAT, as well as large read buffers. We decided to simply bypass the problem by limiting the filesystem to the first half of the SD-card, and read blocks from the latter half of the card directly. The block offsets og block count of each data source is specified in the script file.
 \end{itemize}
 
 After implementing these optimzations, the AVR was capable of pushing out around 12 FPS to the FPGA. That is, around 920 kB/s. As we managed to reach our goal of 10 FPS, we didn't optmize it any further. However, using the PDCA (peripheral DMA controller of the AVR), we could have effectively eliminated the 25\% time spent sending to the FPGA while the SD-card waited. Thus, giving as a framerate of around 16 FPS.
 
 \subsection{Serial}
-
-
+\label{sec:avr-serial-issues}
+Communicating with the AVR over the serial port worked perfectly fine on the EVK1100. However, on 256
+Shades of Gray it did not work. The reason it did not work was never discovered, as after hours of
+debugging and looking over the schematics. At this point Str2img was completed and so debugging, which
+was the main purpose of the serial communication, could be done by writing text to screen. And so
+further work on the Serial port was dropped since it was a fruitless endeavor. Initially, serial
+communication would give no output whatsoever. The only obvious error with the serial device, was that
+the TXD/CTS (T for Transmitt) pins were wired into RXD/RTS (R for receive), and vice versa. Swapping
+these by re-routing headers resulted in garbage output instead of nothing (but only whenever the avr
+actually wrote to the serial), so we were close to solving the issue, but it has been left for dead.

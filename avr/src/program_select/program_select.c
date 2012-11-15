@@ -7,6 +7,9 @@
 #include "filebrowser.h"
 #include "str2img.h"
 #include "timer.h"
+#include "sram.h"
+
+#include "sd_mmc_spi.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +28,7 @@
 #define DOWN_BUTTON 	2
 #define ENTER_BUTTON 	4
 
-char *selected_data_unit_path;
+char selected_data_unit_path[DEFAULT_STRING_MAX_LENGTH];
 
 enum data_type current_type;
 int current_state;
@@ -159,26 +162,36 @@ void next_state(void) {
 
 		//  	------------[TODO tmp, fjern]---------------
 		//set_file_type(DATA);
-		fb_iterator_terminate();
-		fb_iterator_init(FS_FILE);					// Init for directories
-		fb_iterator_set_ext(DATA_FILE_SUFFIX);		// Set extension
-		fb_iterator_seek(menu_item_selected);
-		char *file = fb_iterator_next();
-		screen_display_error_messagef("selected %d\n%s\n", menu_item_selected, file);
-		char file_full[strlen(file)+3];
-		file_full[0] = 'A';
-		file_full[1] = ':';
-		file_full[2] = '/';
-		file_full[3] = '\0';
-		fpga_send_data_from_file(strcat(file_full, file));
-		return;
+//		fb_iterator_terminate();
+//		fb_iterator_init(FS_FILE);					// Init for directories
+//		fb_iterator_set_ext(DATA_FILE_SUFFIX);		// Set extension
+//		fb_iterator_seek(menu_item_selected);
+//		char *file = fb_iterator_next();
+//		screen_display_error_messagef("selected %d\n%s\n", menu_item_selected, file);
+//		char file_full[strlen(file)+3];
+//		file_full[0] = 'A';
+//		file_full[1] = ':';
+//		file_full[2] = '/';
+//		file_full[3] = '\0';
+//		fpga_send_data_from_file(strcat(file_full, file));
+//		return;
 		//  	--------------------------------------------
 
 		fb_iterator_init(FS_DIR);
 		fb_iterator_seek(menu_item_selected);
 		file = fb_iterator_next();
-		selected_data_unit_path = file; // Sets the data directory
-		run_fpga_program();
+
+		// BUGFIX: (?)
+		strcpy(selected_data_unit_path, file);
+
+		data_blk_src_t data_info;
+		if (data_file_parse(selected_data_unit_path, &data_info) == 0) {
+			run_fpga_program_from_sd(&data_info);
+		} else {
+			run_fpga_program_from_file();
+		}
+
+//		selected_data_unit_path = file; // Sets the data directory
 		fb_iterator_terminate();
 	}
 	//screen_display_error_message("siste linje i next_state");
@@ -213,7 +226,7 @@ void set_file_type(enum data_type type) {
 /*
  * Final stage: run program on FPGA
  */
-void run_fpga_program(void) {
+void run_fpga_program_from_file(void) {
 #define PATH_SIZE strlen(selected_data_unit_path)
 	char *buffer;
 	//bool bmp;
@@ -248,3 +261,48 @@ void run_fpga_program(void) {
 	reset = TRUE; // Resets the AVR-program
 }
 
+void run_fpga_program_from_sd(data_blk_src_t *data_info) {
+	// stop listening on buttons
+	busy = TRUE;
+
+	// send the program
+	fpga_send_program(selected_script.fpga_bin_path);
+
+	unsigned int blocks_per_frame = 150; // 320*240/512
+	unsigned int first_block = data_info->block_addr; // start reads here
+	unsigned int num_frames = data_info->frame_count; // read this many frames
+
+	int i;
+	char *txt = FRAME_OSD;
+	for (i=0; i < num_frames; i++) {
+
+		// run if the FPGA has data to run on
+		if (i > 0) {
+			fpga_set_state(FPGA_STATE_RUN);
+		}
+
+		// read a single frame
+		sd_mmc_spi_read_open(first_block + blocks_per_frame * i);
+		sd_mmc_spi_read_multiple_sectors_to_ram(FRAME_BUFFER, blocks_per_frame);
+
+		// OSD
+		str2img_osd_reset();
+		static double last_time = 0;
+		double time = timer_get_ms();
+		sprintf(txt, "FPS %2.2f [time left: %ds]\n", 1000.0 / (time - last_time),
+				(int)((time - last_time) * (num_frames - i) / 1000));
+		int foo = 40 * i / num_frames;
+		str2img_osd_write(txt);
+		while(foo--)
+			str2img_osd_putc('=');
+		last_time = time;
+		// END OSD
+
+		// set state to "load data" and send to fpga
+		fpga_set_state(FPGA_STATE_LOAD_DATA);
+		bus_send_data_words((U32*)FRAME_BUFFER, blocks_per_frame * 512 / 4);
+
+		LED_Toggle(LED2);
+	}
+	fpga_set_state(FPGA_STATE_STOP);
+}

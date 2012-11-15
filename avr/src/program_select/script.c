@@ -151,3 +151,33 @@ int load_script(char *script_path) {
 //	seprintf("Data type dir:\t%s\n", selected_script.data_type_directory);
 //	seprintf("Transfer delay:\t%d\n", selected_script.transfer_delay);
 //}
+
+int data_file_parse(const char *path, data_blk_src_t *result) {
+	int fd = open(path, O_RDONLY);
+	if (fd < 0) {
+		LED_On((1 << LED_COUNT) - 1);
+		while(1);
+		return fd;
+	}
+
+	char *buf = DATA_FILE_PARSE;
+	if (read(fd, buf, DATA_FILE_PARSE_SIZE) < 1) {
+		LED_On((1 << LED_COUNT) - 1);
+		while(1);
+		return fd;
+	}
+
+	unsigned int ba = -1, fc = -1;
+	sscanf(buf, "%u %u", &ba, &fc);
+
+	if (ba > SD_RAW_ACCESS_MIN_BLOCK && ba < SD_RAW_ACCESS_MAX_BLOCK) {
+		return 1;
+	}
+	if (fc <= 0) {
+		return 2;
+	}
+
+	result->block_addr = ba;
+	result->frame_count = fc;
+	return 0;
+}
