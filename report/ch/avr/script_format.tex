@@ -1,6 +1,6 @@
 \section{Script format}
 
-The programs on {\sc 256 Shades of Gray} will at the top level be a script file containing information such as the LENA binary program, the compatible data type (video, still picture, etc.) and speed of execution. The user will select a script, and will then get to choose a data unit of the compatible data type to run the program with.
+The programs on {\sc 256 Shades of Gray} will at the top level be a script file containing information such as the LENA binary program, what kind of data it supports and speed of execution. The user will select a script, and will then get to choose a data unit of the compatible data type to run the program with.
 
 The script is a text file containing four lines. The individual lines will contain the following information:
 
@@ -11,14 +11,17 @@ The script is a text file containing four lines. The individual lines will conta
 \item Transmission delay of each file in ms (typically framerate)
 \end{enumerate}
 
-\subsection{Directory structure}
+\subsection{File system utilization}
+{
+To ease the handling of data on the SD card, we chose to use the FAT file system. The file system contains files such scripts, fpga programs and data pointers. However, because of the performance limiting downside of the FAT file system the data is actually placed outside of the file system. The transfer speed of data is crucual to our system's performance, and this increased our framerate substantially. We were still able to use the file system to create an abstraction to this. The file system contains data files containing pointers to the memory location of the actual data. The data pointer files on the file system is a text file containing two numbers. The first number points to the start of the actual data on the SD card, and the second number represent the size of the data.
+}
 
-The different levels of the directory structure has its own use. The user will first choose a script from the first directory, and then a data unit from the second directory. The data at the root directory, the first level, is data associated with the script files. This level contains data types, fpga executables and the script files themselves. The data types are directories and the content of these directories represent the second level, the data units. A data unit is a collection of files viewed as a unit in the sense that a program can only be loaded with one unit at a time. A data unit can for instance be a still picture or an animation. Each data unit is also a directory, and their content represent the third level, the individual data unit files. When the selected data type is still pictures, the available data units will only contain one bitmap file. When, however, the data type is video, the data units will contain a set of bitmap files numbered after the order in which they should be loaded into the FPGA. %The file extention of the data unit files are '.lenna'.
+%The different levels of the directory structure has its own use. The user will first choose a script from the first directory, and then a data unit from the second directory. The data at the root directory, the first level, is data associated with the script files. This level contains data types, fpga executables and the script files themselves. The data types are directories and the content of these directories represent the second level, the data units. A data unit is a collection of files viewed as a unit in the sense that a program can only be loaded with one unit at a time. A data unit can for instance be a still picture or an animation. Each data unit is also a directory, and their content represent the third level, the individual data unit files. When the selected data type is still pictures, the available data units will only contain one bitmap file. When, however, the data type is video, the data units will contain a set of bitmap files numbered after the order in which they should be loaded into the FPGA. 
 
-The directory levels can be summarized accordingly:
-\begin{enumerate}
-\item \emph{Data type directories}, referred to as ``data types''.
-\item \emph{Data unit directories}, referred to as ``data units''.
-\item \emph{Data unit files}, all files that makes up a data unit.
-\end{enumerate}
+%The directory levels can be summarized accordingly:
+%\begin{enumerate}
+%\item \emph{Data type directories}, referred to as ``data types''.
+%\item \emph{Data unit directories}, referred to as ``data units''.
+%\item \emph{Data unit files}, all files that makes up a data unit.
+%\end{enumerate}
  
