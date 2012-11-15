@@ -55,7 +55,8 @@ into several modules that behave largely independently of eachother.
 	and is not used past the EVK1100 test board. \\
 	\hline
 	SMC/EBI & The AVR uses an External Bus Interface to connect to external memories,
-	both SRAM and SDRAM.
+	both SRAM and SDRAM. As our AVR has 512K of SRAM attached, the EBI is
+	our way of communicating with it.
 	The SMC (Static Memory Controller) is a part of the EBI that provides us
 	with a nice, memory-mapped interface to our external SRAM. \\
 	\hline
@@ -72,7 +73,7 @@ into several modules that behave largely independently of eachother.
 	the monitor. Primary use is debugging and creating the menu the users are presented
 	with when the AVR resets. \\
 	\hline
-	Program & This is the library responsible for presenting the user with an
+	Program & This is responsible for presenting the user with an
 	interface to select the program to run. It is built on top of other
 	utility libraries such as Str2Img and our FPGA abstraction layer. \\
 	\hline

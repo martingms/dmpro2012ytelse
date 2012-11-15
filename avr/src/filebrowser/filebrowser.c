@@ -100,6 +100,7 @@ int fb_iterator_seek(int i){
 	//Seeker reached end of directory without successfully seeking i files
 	//with file extension ext.
 	if(i>=0)return ERROR_INDEX_OUT_OF_BOUNDS;
+	iterator_index = j;
 	return 0;
 }
 
