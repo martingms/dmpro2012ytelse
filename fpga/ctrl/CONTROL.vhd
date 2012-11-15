@@ -22,7 +22,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 library WORK;
 use WORK.FPGA_CONSTANT_PKG.ALL;
 
-entity CONTROLL is
+entity CONTROL is
 	Port (
 		clk 							: in  STD_LOGIC;
 		reset 						: in  STD_LOGIC;
@@ -43,9 +43,9 @@ entity CONTROLL is
 		dma_cmd						: out STD_LOGIC_VECTOR(CTRL_DMA_CMD_BUS-1 downto 0);
 		dma_params					: out STD_LOGIC_VECTOR(CTRL_DMA_DAT_BUS-1 downto 0)
 	);
-end CONTROLL;
+end CONTROL;
 
-architecture Behavioral of CONTROLL is
+architecture Behavioral of CONTROL is
 ----------------------------------------------------------------------------------
 --	INSTRUCTION DECODER
 ----------------------------------------------------------------------------------

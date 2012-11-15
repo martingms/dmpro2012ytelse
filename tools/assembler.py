@@ -161,47 +161,56 @@ def __assembleInstrFile__(input, output):
 	addr = 0
 	r = open(input, 'r')
 	w = open(output, 'wb')
-	for instr in r:
-		instr = re.sub("#[^$]+", "", instr) # remove comments
-		instr = instr.strip()
-		if instr:
+	instructions = r.readlines()
+
+	for i in range(len(instructions)):
+		instructions[i] = re.sub("#[^$]+", "", instructions[i]) # remove comments
+		instructions[i] = instructions[i].strip()
+		if instructions[i]:
 			# Check for label
-			m = re.search("^(\\w+):$", instr, re.I | re.S)
+			m = re.search("^(\\w+):$", instructions[i], re.I | re.S)
 			if m and m.group(1):
 				debug("Label '" + m.group(1) + "' mapped to addr " + str(addr) + "")
 				labels[m.group(1)] = addr
+				instructions[i] = ""
 			else:
-				instr = instr.partition(" ");
-				if not instr[2]: sys.exit("error: Invalid instruction {instr[2] = " + instr[2] + "}")
-				
-				# Assemble instruction
-				if instr[0] == "node":
-					instr = __assembleNodeInstr__(instr[2])
-				elif instr[0] == "ctrl":  
-					instr = __assembleCtrlInstr__(instr[2])
-				else: sys.exit("error: Invalid instruction {instr[1] = " + instr[0] + "}")
-				
-				# Print Debug
-				debug('>' + instr)
-				
-				# Write to file
-				if group:
-					w.write(str(addr) + ' ')
-					for i in range(0, len(instr), 4):
-						w.write('' + instr[i:i+4] + ' ')
-					w.write('\n')
-				elif modelsim:
-					w.write('IRAM(' + str(addr) + ') <= "' + instr + '";\n')
-				else:
-					w.write(chr(0))
-					w.write(chr(int(instr[0:8], 2)))
-					w.write(chr(int(instr[8:16], 2)))
-					w.write(chr(int(instr[16:24], 2)))
-				
-				# Increment addr
 				addr += 1
 		else:
 			debug('Skipping empty instruction line')
+
+	addr = 0
+
+	for instr in instructions:
+		if instr:
+			instr = instr.partition(" ");
+			if not instr[2]: sys.exit("error: Invalid instruction {instr[2] = " + instr[2] + "}")
+
+			# Assemble instruction
+			if instr[0] == "node":
+				instr = __assembleNodeInstr__(instr[2])
+			elif instr[0] == "ctrl":
+				instr = __assembleCtrlInstr__(instr[2])
+			else: sys.exit("error: Invalid instruction {instr[1] = " + instr[0] + "}")
+
+			# Print Debug
+			debug('>' + instr)
+
+			# Write to file
+			if group:
+				w.write(str(addr) + ' ')
+				for i in range(0, len(instr), 4):
+					w.write('' + instr[i:i+4] + ' ')
+				w.write('\n')
+			elif modelsim:
+				w.write('IRAM(' + str(addr) + ') <= "' + instr + '";\n')
+			else:
+				w.write(chr(0))
+				w.write(chr(int(instr[0:8], 2)))
+				w.write(chr(int(instr[8:16], 2)))
+				w.write(chr(int(instr[16:24], 2)))
+
+			# Increment addr
+			addr += 1
 		
 	r.close()
 	w.close()

@@ -200,7 +200,7 @@ architecture behavioral of toplevel is
 		);
 	end component;
 	
-	component CONTROLL is
+	component CONTROL is
 		Port (
 			clk 							: in  STD_LOGIC;
 			reset 						: in  STD_LOGIC;
@@ -508,7 +508,7 @@ begin
 		end if;
 	end process filter_instructions;
 	
-	inst_control: CONTROLL
+	inst_control: CONTROL
 		port map (
 			clk => clk_cpu,
 			reset => reset,
