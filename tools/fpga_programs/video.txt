@@ -1,0 +1,26 @@
+    ctrl nop
+    ctrl addi R1 ZERO 150
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+
+screen_loop:
+
+    ctrl addi VADDR ZERO 0
+
+pixel_loop:
+
+    ctrl lw VDATA VADDR
+    ctrl addi VADDR VADDR 1
+
+    ctrl beq screen_loop
+    ctrl slt ZERO R1 VADDR
+    ctrl nop
+
+    ctrl jump pixel_loop
