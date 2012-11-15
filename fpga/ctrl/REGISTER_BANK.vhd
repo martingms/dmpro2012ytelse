@@ -60,7 +60,7 @@ begin
 			for i in 0 to NUM_REG-1 loop
 				REGS(i) <= (others => '0');
 			end loop;
-		elsif falling_edge(CLK) then
+		elsif rising_edge(CLK) then
 			if write='1' then
 				REGS(to_integer(unsigned(adr0)))<=data0_in;
 			end if;

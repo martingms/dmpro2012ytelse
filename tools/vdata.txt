@@ -1,0 +1,36 @@
+ctrl nop
+ctrl addi R1 ZERO 150
+ctrl add R2 ZERO ZERO	
+shift:
+	ctrl sll R1 R1			# R1 <= R1 << 1
+	ctrl addi R2 R2 1		# R2 <= R2 + 1
+	ctrl beq shift			# Top of the loop branch 
+	ctrl slti ZERO R2 9		# Branch if R2 < 9
+
+# Load data program
+program1:
+	ctrl add VADDR ZERO ZERO
+	ctrl add VDATA ZERO ZERO
+
+# Load real data
+load1:
+	ctrl lw VDATA VADDR
+	ctrl addi VADDR VADDR 1
+	ctrl beq load1
+	ctrl slt ZERO VADDR R1 
+	ctrl nop
+
+# Load data program
+program2:
+	ctrl add VADDR ZERO ZERO
+	ctrl add VDATA ZERO ZERO
+
+# Load dummy data
+load2:
+	ctrl addi VADDR VADDR 1
+	ctrl beq load2
+	ctrl slt ZERO VADDR R1 
+	ctrl nop
+	
+# Restart
+ctrl jump program1
