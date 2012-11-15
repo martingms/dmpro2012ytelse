@@ -89,8 +89,17 @@ char *fb_iterator_next(){
 }
 
 int fb_iterator_seek(int i){
-	if(i>=filecount) return 1;
-	iterator_index = i;
+	if(i>=filecount) return ERROR_INDEX_OUT_OF_BOUNDS;
+	if(i<0) return ERROR_INDEX_OUT_OF_BOUNDS;
+	int j = 0;
+	while(i>=0 && j<filecount){
+		nav_filelist_goto(j++);
+		if(nav_file_checkext(ext))i--;
+	}
+
+	//Seeker reached end of directory without successfully seeking i files
+	//with file extension ext.
+	if(i>=0)return ERROR_INDEX_OUT_OF_BOUNDS;
 	return 0;
 }
 

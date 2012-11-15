@@ -21,7 +21,7 @@ extern char currentDirectory[];
 #define ERROR_NO_NAV_ID				-3;
 #define ERROR_UNKNOWN				-4;
 #define ERROR_EXTENSION_TOO_LONG	-5;
-
+#define ERROR_INDEX_OUT_OF_BOUNDS	-6;
 /* \brief changes the current directory.
  * Copies the content of newdir into currentDirectory until a null
  * character is copied. Newdir MUST be null-terminated.

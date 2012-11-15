@@ -1,94 +1,106 @@
 \section{AVR Modules}
-As the AVR is responsible for performing a lot of tasks, its
-functionality is split into a number of more or less independent
-modules, each responsible for a specific job or interfacing with a
-specific subsystem.
-
-In this section, we will give an overview of the AVR in terms of its
-modules, what they do and how they interact. Figure
-\ref{fig:avr-modules} shows an overview of some of the more important
-modules which we will give a more detailed description of in this section.
-
 \input{fig/avr/modules}
 
-\subsection{Peripherals}
-\subsubsection{SD over SPI}
-We decided early on to use SD-cards as our main source of data. These
-are easy to communicate with, and easy to use framework code that we
-could build on already exists.
+The AVR is responsible for controlling the entire system, and has several
+important tasks and functionalities related to this. These have been split
+into several modules that behave largely independently of eachother.
 
-Even though SD-cards typically support several protocols of
-communication, our specific AVR's lack of hardware support for the 4-bit
-SD transfer mode left us with SPI as our only choice. While SPI is
-simple to use, it is also fairly slow. Our performance issues with SPI
-is detailed further in section \ref{sec:avr-spi-issues}.
-
-\subsubsection{FAT}
-Managing storage of multiple data sources ourselves on top of a block
-device such as SD is tiresome. A file system makes it a lot easier
-to manage several data sources simultaneously. For that reason we ended
-up adding a FAT filesystem on top of our SD-card, even though it incurs
-a performance penalty. \CHECK{are we using FAT, or reading blocks
-directly? both?}
-\TODO{reference to comparison benchmarks in appendix?}
-
-\subsubsection{FPGA/GPIO}
-As explained further in section \ref{sec:avr-fpga-communication}, we
-will communicate with the FPGA over a 8/24-bit interface. On the AVR,
-GPIO (General Purpose Input/Output) is the subsystem responsible for
-reading and writing the pins on this bus.
-
-On top of GPIO, we wrote our code to abstract some of the details of
-GPIO, and provide a more natural interface for us to use.\TODO{more on
-this?}
-
-\subsubsection{RS232}
-RS232 is our protocol of choice for serial communication with a PC. It
-was chosen for its simplicity, on both the AVR and PC side. It was never
-intended to transfer large amounts of data, but rather be a simple
-interface for us to get debugging information out of the AVR.
-
-\subsubsection{SMC/EBI}
-The AVR uses a External Bus Interface to connect to external memories,
-both SRAM and SDRAM. As our AVR has 512K of SRAM attached, the EBI is
-our way of communicating with it.
-
-The SMC (Static Memory Controller) is a part of the EBI that provides us
-with a nice, memory-mapped interface to our external SRAM.
-
-\subsection{Utility libraries}
-To simplify certain tasks, we have written a number of small utility
-libraries to handle small, specific tasks.
-
-\subsubsection{BMP}
-In case we want to read standard bitmap-files from SD, we need a way to
-extract the raw pixel values from these files and send them in the
-correct order to the FPGA (BMP files store images bottom-up, not
-top-down). This library takes care of this task.
-
-\subsubsection{Str2Img}
-Str2Img is a small text-to-image library that we use to render the menu
-the users are presented with when the AVR resets.
-
-\subsubsection{Program}
-This is the library responsible for presenting the user with an
-interface to select the program to run. It is built on top of other
-utility libraries such as Str2Img and our FPGA abstraction layer.
-
-\subsubsection{Buttons}
-The user navigates the menu and controls the AVR using buttons. This is
-a thin simplification layer built on top of GPIO that handles the
-interrupts and button click callbacks. \CHECK{this does not exists as of
-right now, but it might in the future :)}
-
-\subsubsection{LEDs}
-The main purpose of the LEDs are to tell the user that "something is
-happening". These require no abstraction layer of their own, but are
-mentioned here because they are used fairly ubiquitously in our code.
-
-\subsection{Programming/Debugging}
-\subsubsection{JTAG}
-JTAG is the interface we use to connect the AVR to a computer. This
-allows us to flash the AVR, debug and profile our programs using
-familiar-looking tools: avr32program, avr32-gdb and avr32-gprof,
-for flashing, debugging and profiling, respectively.
+\begin{table}[htbp]
+\centering
+\begin{tabular}{l|p{10cm}}
+\begin{comment}
+	SD over SPI & We decided early on to use SD-cards as our main source of data. These
+	are easy to communicate with, and easy to use framework code that we
+	could build on already exists.
+	Even though SD-cards typically support several protocols of
+	communication, our specific AVR's lack of hardware support for the 4-bit
+	SD transfer mode left us with SPI as our only choice. While SPI is
+	simple to use, it is also fairly slow. Our performance issues with SPI
+	is detailed further in section \ref{sec:avr-spi-issues}. \\
+\end{comment}
+	SD over SPI & A simple to use source of data / data storage, with easy to use
+	framework code available. It's rather slow, however, as the AT32UC3A0 only has
+	support for SPI. [\ref{sec:avr-spi-issues}]. \\
+	\hline
+\begin{comment}
+	FAT & Managing storage of multiple data sources ourselves on top of a block
+	device such as SD is difficult. A file system makes it a lot easier
+	to manage several data sources simultaneously. However, it also incurs a
+	performance penalty. Therefore we've chosen to implement what is not performance
+	critical with FAT. \\
+\end{comment}
+	FAT & A file system implementation with easy to use framework code available. But
+	using it also incurs a performance penalty and is not used in performance critical
+	sections. \\
+	\hline
+\begin{comment}
+	FPGA/GPIO & As explained further in section \ref{sec:avr-fpga-communication}, we
+	will communicate with the FPGA over a 8/24-bit interface. On the AVR,
+	GPIO (General Purpose Input/Output) is the subsystem responsible for
+	reading and writing the pins on this bus.
+	On top of GPIO, we wrote our code to abstract some of the details of
+	GPIO, and provide a more natural interface for us to use. \\
+\end{comment}
+	FPGA/GPIO & Interface for communicating with the FPGA. It is built on top of GPIO
+	and provides a natural interface without low level details of GPIO. \\
+	\hline
+\begin{comment}
+	RS232 & RS232 is our protocol of choice for serial communication with a PC. It
+	was chosen for its simplicity, on both the AVR and PC side. It was never
+	intended to transfer large amounts of data, but rather be a simple
+	interface for us to get debugging information out of the AVR. \\
+\end{comment}
+	RS232 & A protocol for communication with a PC over the serial port. Very simple to
+	use and is very useful for debugging. There was an issue with it, however [\ref{sec:avr-serial-issues}]
+	and is not used past the EVK1100 test board. \\
+	\hline
+	SMC/EBI & The AVR uses an External Bus Interface to connect to external memories,
+	both SRAM and SDRAM. As our AVR has 512K of SRAM attached, the EBI is
+	our way of communicating with it.
+	The SMC (Static Memory Controller) is a part of the EBI that provides us
+	with a nice, memory-mapped interface to our external SRAM. \\
+	\hline
+\begin{comment}
+	BMP & In case we want to read standard bitmap-files from SD, we need a way to
+	extract the raw pixel values from these files and send them in the
+	correct order to the FPGA (BMP files store images bottom-up, not
+	top-down). This library takes care of this task. Deprecated since we
+	decided to implement the actual image reading as reading raw data without
+	even a file system. \\
+	\hline
+\end{comment}
+	Str2Img & Str2Img is a small text-to-image library that we use to render text on
+	the monitor. Primary use is debugging and creating the menu the users are presented
+	with when the AVR resets. \\
+	\hline
+	Program & This is the library responsible for presenting the user with an
+	interface to select the program to run. It is built on top of other
+	utility libraries such as Str2Img and our FPGA abstraction layer. \\
+	\hline
+\begin{comment}
+	\hline
+	Button & The user navigates the menu and controls the AVR using buttons. This is
+	a thin simplification layer built on top of GPIO that handles the
+	interrupts and button click callbacks. \CHECK{this does not exists as of
+	right now, but it might in the future :)}\\
+\end{comment}
+	LEDs & Functions for turning the LEDs on and off. Useful for shining, not shining or
+	blinking to show information about internal state of the AVR. \\
+	\hline
+	JTAG & JTAG is an interface used to connect the AVR to a computer. This
+	allows us to flash the AVR, debug and profile our programs using
+	familiar-looking tools: avr32program, avr32-gdb and avr32-gprof,
+	for flashing, debugging and profiling, respectively. \\
+\end{tabular}
+\caption{AVR modules}
+\label{tab:asdasd}
+\end{table}
+\begin{comment}
+\TODO{FAT: reference to comparison benchmarks in appendix?}
+\TODO{FGPA/GPIO: more?}
+\TODO{Button: predictive writing is never a good idea, that's a surefire way of ending up with outright wrong/contradictive things in our report.}
+\TODO{Program: This isn't really a library then, is it?}
+\TODO{BMP: Should we remove it? It was like a 10 minute job to make and is utterly useless now...} 
+\TODO{SMC/EBI: What? The INTERNAL sram is on the EXTERNAL bus interface? That makes no sense!}
+\TODO{JTAG: what use have we had of avr32-gdb and avr32-gprof? Is use of these described in the report? if not why are we mentioning them?}
+\end{comment}
