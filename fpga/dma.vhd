@@ -49,14 +49,14 @@ architecture behavioral of dma is
 	-- Internal state
 	
 	type state_record is record
-		active : std_logic;
-		row : natural range 0 to simd_rows;
-		col : natural range 0 to simd_cols;
-		read_addr : std_logic_vector(mem_addr_width - 1 downto 0);
-		write_addr : std_logic_vector(mem_addr_width - 1 downto 0);
-		step_s : std_logic;
-		secondary_action_phase : std_logic;
-		memory_assert_phase : std_logic;
+		active 						: std_logic;
+		row 							: natural range 0 to simd_rows;
+		col 							: natural range 0 to simd_cols;
+		read_addr 					: std_logic_vector(mem_addr_width - 1 downto 0);
+		write_addr 					: std_logic_vector(mem_addr_width - 1 downto 0);
+		step_s						: std_logic;
+		secondary_action_phase 	: std_logic;
+		memory_assert_phase 		: std_logic;
 	end record;
 	
 	signal state : state_record := ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0', '0');
@@ -71,25 +71,25 @@ begin
 				state <= ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0', '0');
 			elsif enable = '1' then
 				case command is
-					when "0100" => read_active <= parameter(0);
-					when "0101" => read_base_addr <= parameter(mem_addr_width - 1 downto 0);
-					when "0110" => read_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
-					when "0111" => read_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
-					when "1000" => write_active <= parameter(0);
-					when "1001" => write_base_addr <= parameter(mem_addr_width - 1 downto 0);
-					when "1010" => write_horizontal_incr <= parameter(mem_addr_width - 1 downto 0);
-					when "1011" => write_vertical_incr <= parameter(mem_addr_width - 1 downto 0);
+					when "0100" => read_active 				<= parameter(0);
+					when "0101" => read_base_addr 			<= parameter(mem_addr_width - 1 downto 0);
+					when "0110" => read_horizontal_incr 	<= parameter(mem_addr_width - 1 downto 0);
+					when "0111" => read_vertical_incr 		<= parameter(mem_addr_width - 1 downto 0);
+					when "1000" => write_active 				<= parameter(0);
+					when "1001" => write_base_addr 			<= parameter(mem_addr_width - 1 downto 0);
+					when "1010" => write_horizontal_incr 	<= parameter(mem_addr_width - 1 downto 0);
+					when "1011" => write_vertical_incr 		<= parameter(mem_addr_width - 1 downto 0);
 					when "0001" =>
-						state.secondary_action_phase <= '0';
-						state.memory_assert_phase <= '0';
-						state.step_s <= '0';
-						state.read_addr <= read_base_addr;
-						state.write_addr <= write_base_addr;
-						state.row <= 0;
-						state.col <= simd_cols - 1;
-						state.active <= '1';
+						state.secondary_action_phase 			<= '0';
+						state.memory_assert_phase 				<= '0';
+						state.step_s 								<= '0';
+						state.read_addr							<= read_base_addr;
+						state.write_addr 							<= write_base_addr;
+						state.row 									<= 0;
+						state.col 									<= simd_cols - 1;
+						state.active 								<= '1';
 					when others =>
-						state <= next_state;
+						state 										<= next_state;
 				end case;
 			end if;
 		end if;

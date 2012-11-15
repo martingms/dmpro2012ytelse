@@ -26,8 +26,6 @@
 #include "program_select.h"
 
 
-static char sprintf_buf[256];
-
 pcl_freq_param_t pcl_freq_param = {
                 .cpu_f = CPU_SPEED,
                 .pba_f = PBA_SPEED,
@@ -63,6 +61,7 @@ void init(void) {
 	// SD card
 	mmc_init();
 
+	// Files
 	b_fsaccess_init();
 
 	 // SRAM

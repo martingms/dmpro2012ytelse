@@ -1,4 +1,6 @@
 \section{LENA SCU bus}
+\label{app:lena-scu-bus}
+
 The LENA has two types of pins connected to the SCU. There are 9 I/O pins and 29 input pins. The I/O pins are mostly used for the LENA to acknowledge transfers, but the 8 remaining pins can be used for the fallback solution of having LENA transfer data back to the SCU. The 29 input pins are used to set LENA's state, acknowledge LENA and as a 24 bit wide one-way data bus used to transfer data and instructions to the LENA. Table \ref{tab:iobus} and \ref{tab:inbus} shows the pin mapping of the bus.
 
 \input{fig/apx/bus_pin_mapping}
