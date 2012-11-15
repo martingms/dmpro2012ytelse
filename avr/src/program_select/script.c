@@ -46,13 +46,14 @@ int load_script(char *script_path) {
 	int fpga_bin_path_len = (strstr(str, "\n") - str);
 	strncpy(selected_script.fpga_bin_path, str, fpga_bin_path_len);
 
-//	// data_type_directory
-	str += fpga_bin_path_len + 1;
-	int data_type_dir_len = (strstr(str, "\n") - str);
-	strncpy(selected_script.data_type_directory, str, data_type_dir_len);
+	// data_type_directory
+//	str += fpga_bin_path_len + 1;
+//	int data_type_dir_len = (strstr(str, "\n") - str);
+//	strncpy(selected_script.data_type_directory, str, data_type_dir_len);
 
-//	// transfer_delay
-	str += data_type_dir_len + 1;
+	// transfer_delay
+//	str += data_type_dir_len + 1;
+	str += fpga_bin_path_len + 1;
 	int transfer_delay_len = fs - (str - (char*)SCRIPT_LOAD);
 	char buf[10];
 	strncpy(buf, str, transfer_delay_len);
@@ -142,15 +143,6 @@ int load_script(char *script_path) {
 	selected_script.transfer_delay = atoi(delay_buffer);
 	return 0;
 }
-
-//void test_load_script(char *path) {
-//	load_script(path);
-//	seprintf("Loaded contents of %s:", path);
-//	seprintf("Description: \t%s\n", selected_script.description);
-//	seprintf("FPGA bin path:\t%s\n", selected_script.fpga_bin_path);
-//	seprintf("Data type dir:\t%s\n", selected_script.data_type_directory);
-//	seprintf("Transfer delay:\t%d\n", selected_script.transfer_delay);
-//}
 
 int data_file_parse(const char *path, data_blk_src_t *result) {
 	int fd = open(path, O_RDONLY);

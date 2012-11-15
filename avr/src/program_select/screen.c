@@ -41,7 +41,7 @@ void wait_for_click(U8 b) {
 }
 
 void screen_display_error_message(char *message) {
-//#define DELAY 30000000
+#define ERROR_MSG_SLEEP 3000
 	str2img_clear();
 	str2img_set_cursor(0,0);
 	str2img_writeline(SCREEN_LINE_ERROR);
@@ -58,9 +58,7 @@ void screen_display_error_message(char *message) {
 	while (halt);	// Wait for click
 	LED_On(LED7);
 	button_remove_tmp_listener();*/
-	timer_sleep(3000);
-//	volatile int i = DELAY;
-//	while (i--);
+	timer_sleep(ERROR_MSG_SLEEP);
 
 	screen_load_data_to_bitmap(current_type);
 	screen_draw_bitmap_on_screen();
@@ -121,6 +119,7 @@ void screen_load_data_to_bitmap(enum data_type type) {
 			str2img_write(SCREEN_LINE_EMPTY);
 		}
 		visible_items.last = visible_items.first + remaining_spots;
+
 	} else {
 		visible_items.first = 0;
 		visible_items.last = menu_size-1;
@@ -129,25 +128,29 @@ void screen_load_data_to_bitmap(enum data_type type) {
 
 
 	// Seek to the first file
-	rc = fb_iterator_seek(visible_items.first);
-	if (rc) {
-		screen_display_error_messagef("Error, could not seek to file, return code is %d\n", rc);
-	}
-
-	// Gets file names and write them to bmp
-	for (i=0, j=visible_items.first; i < SCREEN_MAX_ITEMS; ++i, ++j) {
-		if (fb_iterator_has_next()) {
-			if (j == menu_item_selected) {				// Adds prefix
-				str2img_putc(SCREEN_PREFIX_SELECTED_ITEM);
-			} else {
-				str2img_putc(SCREEN_PREFIX_ITEM);
-			}
-			str2img_putc(' ');
-			str2img_writeline(fb_iterator_next());
-
-		} else {		// No more files
-			str2img_write(SCREEN_LINE_EMPTY);
+	if (menu_size > 0) {
+		rc = fb_iterator_seek(visible_items.first);
+		if (rc) {
+			screen_display_error_messagef("Error, could not seek to file, return code is %d\n", rc);
 		}
+		// Gets file names and write them to bmp
+		for (i=0, j=visible_items.first; i < SCREEN_MAX_ITEMS; ++i, ++j) {
+			if (fb_iterator_has_next()) {
+				if (j == menu_item_selected) {				// Adds prefix
+					str2img_putc(SCREEN_PREFIX_SELECTED_ITEM);
+				} else {
+					str2img_putc(SCREEN_PREFIX_ITEM);
+				}
+				str2img_putc(' ');
+				str2img_writeline(fb_iterator_next());
+
+			} else {		// No more files
+				str2img_write(SCREEN_LINE_EMPTY);
+			}
+		}
+	} else {
+		str2img_writeline("  no files");
+		str2img_set_cursor(SCREEN_HEIGHT-2,0);
 	}
 
 	// Sets bottom of screen

@@ -6,7 +6,7 @@
 // FILE SUFFICES
 #define LENA_EXECUTABLE_SUFFIX 	"lena"
 #define DATA_FILE_SUFFIX 		"data"
-#define BMP_FILE_SUFFIX			"bmp"
+//#define BMP_FILE_SUFFIX			"bmp"
 #define SCRIPT_FILE_SUFFIX 		"script"
 
 // STRINGS AND ARRAY MAXIMUMS
@@ -31,7 +31,7 @@ void program_select_start();
 void button_push(U8 button);
 void load_menu(int state);
 void next_state(void);
-void run_fpga_program_from_file(void);
+//void run_fpga_program_from_file(void);
 void run_fpga_program_from_sd(data_blk_src_t *data_info);
 int load_script(char *script_path);
 
