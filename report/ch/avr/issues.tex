@@ -1,7 +1,7 @@
 \section{Issues}
 \TODO{write!}
 
-\subsection{\ac{SPI}}
+\subsection{SPI}
 \label{sec:avr-spi-issues}
 Reading from the \ac{SD} card over \ac{SPI} turned out to be the single biggest
 bottleneck of our system. This was in part due to the serial nature of \ac{SPI},
@@ -18,20 +18,20 @@ before we started optimizing the software framework. Some of the biggest changes
 we made were
 \begin{description}
 \item[Compiler optimizations] Turning on -O3 roughly doubled
-  the performance
-\item[Function inlining] We inlined the functions spiRead and
-  spiWrite, which were called from a tight loop. This gave a minor speed
-  improvement
-\item[Less status-checking in between reads] The original code busy-waited on
-  several \ac{SPI} status registers in between each call to spiRead, some of
-  which we knew to be unneccesary in this specific context.
+  the performance.
+\item[Function inlining] We inlined the functions {\tt spiRead} and
+  {\tt spiWrite}, which were called from a tight loop. This gave a minor speed
+  improvement.
+\item[Less status checking in between reads] The original code busy-waited on
+  several \ac{SPI} status registers in between each call to {\tt spiRead}, some
+  of which we knew to be unneccesary in this specific context.
 \item[Multiple block reads] Patching the software framework with support for the
   Multiple Block Read-command allowed us to transfer an arbitrarily large number
   of sectors without addressing each individually.
 \item[SDHC support] This helped us mostly because \ac{SDHC} cards support
   frequencies up to 50MHz, as opposed to the 25MHz of standard \ac{SD}. Higher
-  frequencies gave us an almost linear speedup
-\item[Bypass filesystem] We bypass the filesystem entirely when reading data
+  frequencies gave us an almost linear speedup.
+\item[Bypass filesystem] We bypassed the filesystem entirely when reading data
   input to the \ac{FPGA}. We discovered that the filesystem adds a fairly
   significant overhead (10-20\%), even with large logical sector sizes in
   \ac{FAT}, as well as large read buffers. We decided to simply bypass the
