@@ -2,76 +2,109 @@
 
 The text below describes what we are going to do to test the system, and
 includes what we expect as a result for each test. The functional requirements
-are repeated here to ease reading.
+are repeated here to ease reading. Some of the tests may contain
+dependencies\footnotemark. If so, they are specified.
+
+\footnotetext{Even though the functional requirements are independent of
+  eachother, the tests may be simplified by adding dependencies to other
+  functional requirements.}
 
 {\sc Functional Requirement 1}
-\begin{addmargin}[2cm]{0cm}
+\begin{Test}
   {\em \FRI}
 
-  {\sc Test:} Foo
+  {\sc Test:} Create a program which views a video through a \ac{VGA} port with
+  the specified resolution, which runs at least with as many frames per second
+  specified.
 
-  {\sc Pass criteria:} Bar
-\end{addmargin}
+  {\sc Pass criteria:} The video shows correctly on the device connected to the
+  \ac{VGA} port and runs at least as fast as specified.
+  
+  {\sc Dependencies:} FR3, FR5
+\end{Test}
 
 {\sc Functional Requirement 2}
-\begin{addmargin}[2cm]{0cm}
+\begin{Test}
   {\em \FRII}
   
-  {\sc Test:} Foo
+  {\sc Test:} Create a program which views a grid of $x \times y$ pixels, each
+  corresponding to a cell in Conway's Game of
+  Life\cite{gardner1970mathematical}. The game should run at least $N$ turns.
 
-  {\sc Pass criteria:} Bar
-\end{addmargin}
+  {\sc Pass criteria:} The Game of Life runs as defined, and is shown properly
+  on the device connected to the \ac{VGA} port.
+
+  {\sc Dependencies:} FR3, FR5
+\end{Test}
 
 {\sc Functional Requirement 3}
-\begin{addmargin}[2cm]{0cm}
+\begin{Test}
   {\em \FRIII}
   
-  {\sc Test:} Foo
+  {\sc Test:} Create a program which utilizes one of the \ac{VGA} ports on the
+  board and writes an image to it.
 
-  {\sc Pass criteria:} Bar
-\end{addmargin}
+  {\sc Pass criteria:} The image is shown on the device which is connected to
+  the \ac{VGA}.
+\end{Test}
 
 {\sc Functional Requirement 4}
-\begin{addmargin}[2cm]{0cm}
+\begin{Test}
   {\em \FRIV}
   
-  {\sc Test:} Foo
+  {\sc Test:} Create a program for the \ac{SCU} which turns on \acp{LED}
+  depending on which button is pressed.
 
-  {\sc Pass criteria:} Bar
-\end{addmargin}
+  {\sc Pass criteria:} The \acp{LED} should be lit up when the corresponding
+  button is pressed.
+
+  {\sc Dependencies:} FR5
+\end{Test}
 
 {\sc Functional Requirement 5}
-\begin{addmargin}[2cm]{0cm}
+\begin{Test}
   {\em \FRV}
   
-  {\sc Test:} Foo
+  {\sc Test:} Create a program for the \ac{SCU} which turns the \acp{LED} on in
+  a pattern easily recognizeable. All \acp{LED} must be utilized at some point
+  in the pattern.
 
-  {\sc Pass criteria:} Bar
-\end{addmargin}
+  {\sc Pass criteria:} The LEDs lights up in the pattern expected.
+\end{Test}
 
+\newpage % Hack to make it look properly
 {\sc Functional Requirement 6}
-\begin{addmargin}[2cm]{0cm}
+\begin{Test}
   {\em \FRVI}
   
-  {\sc Test:} Foo
+  {\sc Test:} Create one or several assembly programs which together utilizes
+  all different aspects of the assembler. Then verify that the programs made
+  correspond to the correct instructions through analysis of the output.
 
-  {\sc Pass criteria:} Bar
-\end{addmargin}
+  {\sc Pass criteria:} The output generated should correspond to the instruction
+  set specification, and should jump to labels correctly.
+\end{Test}
 
 {\sc Functional Requirement 7}
-\begin{addmargin}[2cm]{0cm}
+\begin{Test}
   {\em \FRVII}
   
-  {\sc Test:} Foo
+  {\sc Test:} Create a $3\times3$ median filter in the instruction set of the
+  machine, load it up on the machine along with one or several image files or
+  videos, and make it run. It should view the video or image with a median
+  filter applied.
 
-  {\sc Pass criteria:} Bar
-\end{addmargin}
+  {\sc Pass criteria:} The median filter is visibly applied on the image or
+  video chosen.
+
+  {\sc Dependencies:} FR3
+\end{Test}
 
 %%% Template below:
 %%{\sc Functional Requirement 7}
-%%\begin{addmargin}[2cm]{0cm}
+%%\begin{Test}
 %%  {\em \FRI}
 %%  {\sc Test:} Foo
 %%
 %%  {\sc Pass criteria:} Bar
-%%\end{addmargin}
+%%\end{Test}
