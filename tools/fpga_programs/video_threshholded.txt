@@ -21,12 +21,12 @@ pixel_loop:
     ctrl nop
 
     ctrl beq threshhold_black # If pixel-value is less than set threshhold value,
-    ctrl slt ZERO VDATA R2    # jump to threshhold_black.
+    ctrl slt ZERO R2 VDATA    # jump to threshhold_black.
     ctrl nop
 
-    ctrl beq threshhold_white # If it is greater, jump to threshhold_white.
-    ctrl slt ZERO R2 VDATA
+    ctrl add VDATA ZERO ZERO  # If not, set pixel to white
     ctrl nop
+    ctrl jump inc_vaddr
 
 inc_vaddr:
     ctrl nop
@@ -40,11 +40,6 @@ inc_vaddr:
 
 threshhold_black:
     ctrl addi VDATA ZERO 255
-    ctrl nop
-    ctrl jump inc_vaddr
-
-threshhold_white:
-    ctrl add VDATA ZERO ZERO
     ctrl nop
     ctrl jump inc_vaddr
 
