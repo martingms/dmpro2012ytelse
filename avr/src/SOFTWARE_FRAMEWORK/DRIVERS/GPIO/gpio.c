@@ -164,7 +164,7 @@ void gpio_enable_gpio(const gpio_map_t gpiomap, unsigned int size)
 void gpio_enable_gpio_pin(unsigned int pin)
 {
   volatile avr32_gpio_port_t *gpio_port = &GPIO.port[pin >> 5];
-  gpio_port->oderc = 1 << (pin & 0x1F);
+  gpio_port->oders = 1 << (pin & 0x1F); // jeg byttet fra oderc(!) (Håkon)
   gpio_port->gpers = 1 << (pin & 0x1F);
 }
 

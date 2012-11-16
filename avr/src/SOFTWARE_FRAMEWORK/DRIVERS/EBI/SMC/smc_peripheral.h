@@ -56,7 +56,7 @@
 #define SMC_DBW                8 // 16
 
 //! Whether 8-bit SM chips are connected on the SMC
-#define SMC_8_BIT_CHIPS        false
+#define SMC_8_BIT_CHIPS        true
 
 // NWE setup length = (128* NWE_SETUP[5] + NWE_SETUP[4:0])
 //! Unit: ns.

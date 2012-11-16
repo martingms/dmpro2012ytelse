@@ -39,6 +39,9 @@ void bus_send_data_word(U32 word);
 void bus_send_data_words(U32 *words, size_t count);
 
 
+void bus_send_data_bytes(U8 *bytes, size_t count);
+
+
 /*! \brief puts the first 24 bits of the word on a 24-bit bus
  * \param instr the instruction to send
  */
