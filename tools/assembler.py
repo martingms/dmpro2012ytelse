@@ -47,12 +47,12 @@ instrs 	= {
 	# I-Format instruction
 	# Quick translation into R-Format 
 	'i' : {
-		'addi'	: '000', # addi R1 R2 R3
-		'subi'	: '001', # subi R1 R2 R3
-		'slti'	: '010', # subi R1 R2 R3
-		'andi'	: '011', # andi R1 R2 R3
-		'ori'	: '100', #  ori R1 R2 R3
-		'eqi'	: '101'  #  eqi R1 R2 R3
+		'addi'	: '000', # addi R1 R2 CONST
+		'subi'	: '001', # subi R1 R2 CONST
+		'slti'	: '010', # subi R1 R2 CONST
+		'andi'	: '011', # andi R1 R2 CONST
+		'ori'	: '100', #  ori R1 R2 CONST
+		'eqi'	: '101'  #  eqi R1 R2 CONST
 	},
 	# Two operands instructions
 	's' : {
