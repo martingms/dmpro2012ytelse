@@ -32,15 +32,12 @@ syn keyword lenaDmaInstr set_write_vertical_incr start
 syn keyword lenaReg R0 R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12 R13 R14
 syn keyword lenaReg R15 VDATA VADDR ZERO DMA
 
-syn match lenaJumpLabel "[\w]+\:"
-syn match lenaJumpLabelInline "(beq|branch|jump) \@<=([\w]+)"
+syn match lenaJumpLabel "[a-zA-Z0-9_]\+\:"
+syn match lenaJumpLabelInline "(beq|branch|jump) \@<=([a-zA-Z0-9_]\+)"
 syn match lenaInteger contained "[-+]\=\d\+"
 
-syn match lenaComment "#[\w ]+"
+syn match lenaComment "#.*"
 
-if main_syntax == "css"
-  syn sync minlines=10
-endif
 
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
