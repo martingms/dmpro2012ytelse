@@ -1,13 +1,13 @@
 \section {Architectural design}
 \TODO{Graph of memory-architechture} In the early phases of the project,
 multiple solutions as to how the data memory should work were suggested. We
-decided to let the AVR send all the data to the FPGA, and then let it store them
-to its own local memory. The reason we chose this over shared memory was all the
-potential issues one may get with such a solution. A shared memory would easily
-be prone to errors from synchronization problems such as knowing when, and to
-which addresses, a read/write operation should read/write. We figured that we
-would rather send all data from the AVR to the FPGA, and let it store them into
-its own memory as it saw fit.
+decided to let the AVR send all the data to the \ac{FPGA}, and then let it store
+them to its own local memory. The reason we chose this over shared memory was
+all the potential issues one may get with such a solution. A shared memory would
+easily be prone to errors from synchronization problems such as knowing when,
+and to which addresses, a read/write operation should read/write. We figured
+that we would rather send all data from the AVR to the \ac{FPGA}, and let it
+store them into its own memory as it saw fit.
 
 The program memory\CHECK{Program memory separated? This is news to me.} is
 separated on two chips. The reason for this is mainly that we found no good 24
@@ -20,24 +20,25 @@ gave us the needed memory, we went for the cheaper option.
   and on-chip AVR memory} As we got deeper into the techincal parts of our
 system, we figured we needed two additional memories. One for the AVR, as it had
 little on-chip memory, and thus might get some issues as it reads data from the
-SD card in blocks.\CHECK{(?)} Another argument for adding this memory was to
-ensure our backup solution would work. As the FPGA then would have to send data
-back to the AVR, the AVR would have to store it somewhere.
+\ac{SD} card in blocks.\CHECK{(?)} Another argument for adding this memory was
+to ensure our backup solution would work. As the \ac{FPGA} then would have to
+send data back to the AVR, the AVR would have to store it somewhere.
 
-In addition would a shared VGA and data memory possibly obstruct the flow of
-data from the AVR. As data for the VGA would be both read and written
-frequently, the VGA needed its own memory, rather than sharing memory with the
-AVR itself. As we were supposed to optimize for performance, we had to take
+In addition would a shared \ac{VGA} and data memory possibly obstruct the flow
+of data from the AVR. As data for the \ac{VGA} would be both read and written
+frequently, the \ac{VGA} needed its own memory, rather than sharing memory with
+the AVR itself. As we were supposed to optimize for performance, we had to take
 possible bottlenecks into consideration. We therefore invested in an extra
 memory chip.
 
 \CHECK{Find out if serial works} We had multiple redundancies to avoid potential
 errors which would have rendered our whole system unusable. This was recommended
 by Jahre, and previous groups had done so as well. In order to send data into
-the system, our two main options would be to use the SD-card or the mini-USB
-plug. We had serial and JTAG for debugging purposes. For the output we had the
-two VGA options. Also, we used headers so as to be able to alter our pin usage,
-if need be.\CHECK{What has headers to do with redundancy? It's just
-  convenience.} Luckily, both SD card and and our own VGA worked, and we
-therefore had no need of the redundancies. \TODO{Motivate the need for the
-  redundancies as well, instead of just saying they were unneccesary}
+the system, our two main options would be to use the \ac{SD} card or the mini
+\ac{USB} plug. We had serial and \ac{JTAG} for debugging purposes. For the
+output we had the two \ac{VGA} options. Also, we used headers so as to be able
+to alter our pin usage, if need be.\CHECK{What has headers to do with
+  redundancy?  It's just convenience.} Luckily, both \ac{SD} card and and our
+own \ac{VGA} worked, and we therefore had no need of the
+redundancies. \TODO{Motivate the need for the redundancies as well, instead of
+  just saying they were unneccesary}

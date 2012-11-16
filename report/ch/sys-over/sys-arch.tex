@@ -15,31 +15,31 @@ level of inherent complexity.
 
 To remedy the complexity which comes from our requirements, we focused on making
 it possible to isolate errors and make it possible to test the individual
-components as fast as possible: The LENA architecture was tested through VHDL
-test benches, the VGA component in the LENA architecture was tested with LEDs
-and buttons on the board, and the AVR part of the LENA system was tested through
-the VGA contact on the board. By doing this, we can safely assume that errors
-occuring when connecting different components is due to errors in the protocol
-implementation(s).
+components as fast as possible: The \ac{LENA} architecture was tested through
+\ac{VHDL} test benches, the \ac{VGA} component in the \ac{LENA} architecture was
+tested with \acp{LED} and buttons on the board, and the \ac{AVR} part of the
+\ac{LENA} system was tested through the \ac{VGA} contact on the board. By doing
+this, we can safely assume that errors occuring when connecting different
+components is due to errors in the protocol implementation(s).
 
 Figure \ref{fig:sys-over-arch-fig} shows our resulting architecture. Buttons and
-LEDs made it easy to confirm that the VGA operates properly for simple
-programs. A VGA connector made it possible to quickly test and debug the VGA
-implementation on the LENA architecture. We also included a VGA connector
-connected to the AVR, in case the LENA architecture would be unable to work the
-VGA part.
+\acp{LED} made it easy to confirm that the \ac{VGA} operates properly for simple
+programs. A \ac{VGA} connector made it possible to quickly test and debug the
+\ac{VGA} implementation on the \ac{LENA} architecture. We also included a
+\ac{VGA} connector connected to the AVR, in case the \ac{LENA} architecture
+would be unable to work the \ac{VGA} part.
 
-To be able to process data, we need an I/O device which serves the machine with
-data it should process. As we were unsure of what would be the easiest to
-implement, we included both a serial, USB and SD card on the PCB.
+To be able to process data, we need an \ac{I/O} device which serves the machine
+with data it should process. As we were unsure of what would be the easiest to
+implement, we included both a serial, \ac{USB} and \ac{SD} card on the \ac{PCB}.
 
-The LENA architecture has three different memory components: One for the VGA
-component, one for instructions and one for data. The main reason for this is
-that an image processing system in general need much memory. The VGA module
-needs to constantly send out the image to the VGA port, so it needs to keep the
-old image in memory. The LENA architecture should have one image in memory which
-it can send to the SIMD nodes, and one image which is currently read from the
-SCU to memory. In addition, one would have to read data instructions as well. As
-all these different parts require relatively much memory, and as they all are
-frequently accessed, it would be favourable to have them in different parts to
-be able to parallelise it.
+The \ac{LENA} architecture has three different memory components: One for the
+\ac{VGA} component, one for instructions and one for data. The main reason for
+this is that an image processing system in general need much memory. The
+\ac{VGA} module needs to constantly send out the image to the \ac{VGA} port, so
+it needs to keep the old image in memory. The \ac{LENA} architecture should have
+one image in memory which it can send to the \ac{SIMD} nodes, and one image
+which is currently read from the \ac{SCU} to memory. In addition, one would have
+to read data instructions as well. As all these different parts require
+relatively much memory, and as they all are frequently accessed, it would be
+favourable to have them in different parts to be able to parallelise it.

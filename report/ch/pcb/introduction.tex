@@ -12,7 +12,7 @@ production, and 32-bit memory was too expensive, thus the solution became 2x16-b
 connected together and 8 ignored I/O-pins, effectively making them a 24-bit memory).
 
 Since we wanted to reduce the sharing of memories as much as possible, we also needed a separate memory for
-our VGA-controller, as that needed to read it's buffer as fast as possible without interfering with the speed
+our \ac{VGA} controller, as that needed to read it's buffer as fast as possible without interfering with the speed
 of the rest of the system. This called for a memory that was big enough to hold atleast a full screen-frame,
 at 8-bit per pixel (since each pixel is an 8-bit greyscale pixel).
 
@@ -20,15 +20,17 @@ To reduce the possibility of having too slow data-access from the AVR, an extra 
 a buffer for the AVR as well. This design choice was made AFTER ordering, which meant that we had to choose from
 the chips we had already ordered to fit this purpose. Since this was intended to carry data intended for the rest
 of the system, and as the rest of the system is working with data in 8-bit bytes, we ended up using one of the
-extra chips ordered as VGA-memory for this purpose.
+extra chips ordered as \ac{VGA} memory for this purpose.
 
-\subsection{VGA}
-Our initial plans were to create our own VGA-controller in the FPGA, but since having video-output was mission-critical
-for our project, we really wanted to have a fallback-solution in case our own VGA-controller-solution ended up not working.
-To solve this, we added in the necessary connectors for the VGA-module that Festina Lente used last year.
+\subsection{\ac{VGA}}
+Our initial plans were to create our own \ac{VGA} controller in the \ac{FPGA}, but since having video-output was mission-critical
+for our project, we really wanted to have a fallback-solution in case our own
+\ac{VGA} controller solution ended up not working.
+To solve this, we added in the necessary connectors for the \ac{VGA} module that Festina Lente used last year.
 
 \subsection {Communication}
-We planned on using the SD-Card-reader as our main source of data/instructions, however, as our system would
-be completely useless unless we were able to get data into it at decent speeds, we opted to also have a fallback-solution
-here, thus we also added USB and RS232 as fallback-solutions for getting data/communicating with the computer.
+We planned on using the \ac{SD} card reader as our main source of data/instructions, however, as our system would
+be completely useless unless we were able to get data into it at decent speeds,
+we opted to also have a fallback solution
+here, thus we also added \ac{USB} and RS232 as fallbacksolutions for getting data/communicating with the computer.
 

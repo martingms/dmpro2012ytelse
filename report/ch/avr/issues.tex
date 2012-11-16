@@ -1,33 +1,63 @@
 \section{Issues}
 \TODO{write!}
 
-\subsection{SPI}
+\subsection{\ac{SPI}}
 \label{sec:avr-spi-issues}
-Reading from SD-card over SPI turned out to be the single biggest bottleneck of
-our system. This was in part due to the serial nature of SPI, but also the poorly optimized SPI driver from the Atmel Software Framework.
+Reading from the \ac{SD} card over \ac{SPI} turned out to be the single biggest
+bottleneck of our system. This was in part due to the serial nature of \ac{SPI},
+but also the poorly optimized \ac{SPI} driver from the Atmel Software Framework.
 
-The limitations of SPI is not something we could change. Our microcontroller does not have hardware support for using the 4-bit SD protocol, which left us with SPI as our only choice. We ended up running the SD-card on a frequency of 39 MHz, which gives us a theoretical upper speed bound of 4.88 MB/s. In practice, we managed to reach around 1.1 MB/s.
+The limitations of \ac{SPI} is not something we could change. Our
+microcontroller does not have hardware support for using the 4-bit \ac{SD}
+protocol, which left us with \ac{SPI} as our only choice. We ended up running
+the \ac{SD} card on a frequency of 39 MHz, which gives us a theoretical upper
+speed bound of 4.88 MB/s. In practice, we managed to reach around 1.1 MB/s.
 
-While we ended up at around 1.1 MB/s, the speed was only approximately 300 kB/s before we started optimizing the software framework. Some of the biggest changes we made, were:
-\begin{itemize}
-	\item \textbf{Compiler optimizations} - Turning on -O3 roughly doubled the performance
-	\item \textbf{Function inlining} - We inlined the functions spiRead and spiWrite, which were called from a tight loop. This gave a minor speed improvement
-	\item \textbf{Less status-checking in between reads} - the original code busy-waited on several SPI status registers in between each call to spiRead, some of which we knew to be unneccesary in this specific context.
-	\item \textbf{Multiple block reads} - Patching the software framework with support for the Multiple Block Read-command allowed us to transfer an arbitrarily large number of sectors without addressing each individually.
-	\item \textbf{SDHC support} - This helped us mostly because SDHC cards support frequencies up to 50MHz, as opposed to the 25MHz of standard SD. Higher frequencies gave us an almost linear speedup
-	\item \textbf{Bypass filesystem} - We bypass the filesystem entirely when reading data input to the FPGA. We discovered that the filesystem adds a fairly significant overhead (10-20\%), even with large logical sector sizes in FAT, as well as large read buffers. We decided to simply bypass the problem by limiting the filesystem to the first half of the SD-card, and read blocks from the latter half of the card directly. The block offsets og block count of each data source is specified in the script file.
-\end{itemize}
+While we ended up at around 1.1 MB/s, the speed was only approximately 300 kB/s
+before we started optimizing the software framework. Some of the biggest changes
+we made were
+\begin{description}
+\item[Compiler optimizations] Turning on -O3 roughly doubled
+  the performance
+\item[Function inlining] We inlined the functions spiRead and
+  spiWrite, which were called from a tight loop. This gave a minor speed
+  improvement
+\item[Less status-checking in between reads] The original code busy-waited on
+  several \ac{SPI} status registers in between each call to spiRead, some of
+  which we knew to be unneccesary in this specific context.
+\item[Multiple block reads] Patching the software framework with support for the
+  Multiple Block Read-command allowed us to transfer an arbitrarily large number
+  of sectors without addressing each individually.
+\item[SDHC support] This helped us mostly because \ac{SDHC} cards support
+  frequencies up to 50MHz, as opposed to the 25MHz of standard \ac{SD}. Higher
+  frequencies gave us an almost linear speedup
+\item[Bypass filesystem] We bypass the filesystem entirely when reading data
+  input to the \ac{FPGA}. We discovered that the filesystem adds a fairly
+  significant overhead (10-20\%), even with large logical sector sizes in
+  \ac{FAT}, as well as large read buffers. We decided to simply bypass the
+  problem by limiting the filesystem to the first half of the \ac{SD} card, and
+  read blocks from the latter half of the card directly. The block offsets og
+  block count of each data source is specified in the script file.
+\end{description}
 
-After implementing these optimzations, the AVR was capable of pushing out around 12 FPS to the FPGA. That is, around 920 kB/s. As we managed to reach our goal of 10 FPS, we didn't optmize it any further. However, using the PDCA (peripheral DMA controller of the AVR), we could have effectively eliminated the 25\% time spent sending to the FPGA while the SD-card waited. Thus, giving as a framerate of around 16 FPS.
+After implementing these optimzations, the AVR was capable of pushing out around
+12 FPS to the \ac{FPGA}, around 920 kB/s. As we managed to reach our goal of 10
+FPS, we didn't optmize it any further. However, using the \ac{PDCA}, we could
+have effectively eliminated the 25\% time spent sending to the \ac{FPGA} while
+the \ac{SD} card waited. Thus, giving as a framerate of around 16
+FPS. \TODO{This must be rewritten}
 
 \subsection{Serial}
 \label{sec:avr-serial-issues}
-Communicating with the AVR over the serial port worked perfectly fine on the EVK1100. However, on 256
-Shades of Gray it did not work. The reason it did not work was never discovered, despite hours of
-debugging and looking over the schematics. Initially, serial communication would give no output
-whatsoever. The only obvious error with the serial device, was that the TXD/CTS (T for Transmitt)
-pins were wired into RXD/RTS (R for receive), and vice versa. Swapping these by re-routing headers
-resulted in garbage output instead of nothing (but only whenever the avr actually wrote to the serial),
-so we were close to solving the issue. However, Str2img was completed, and so debugging which
-was the main purpose of the serial communication, could be done by writing text to screen. Further
-work on the Serial port was therefore dropped since it was now a fruitless endeavor.
+Communicating with the AVR over the serial port worked perfectly fine on the
+EVK1100. However, on 256 Shades of Gray it did not work. The reason it did not
+work was never discovered, despite hours of debugging and looking over the
+schematics. Initially, serial communication would give no output whatsoever. The
+only obvious error with the serial device was that the TXD/CTS (T for Transmit)
+pins were wired into RXD/RTS (R for Receive), and vice versa. Swapping these by
+re-routing headers resulted in garbage output instead of nothing (but only
+whenever the avr actually wrote to the serial), so we were close to solving the
+issue. However, Str2img was completed, and so debugging which was the main
+purpose of the serial communication, could be done by writing text to
+screen. Further work on the Serial port was therefore dropped since it was now a
+fruitless endeavor.
