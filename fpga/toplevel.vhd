@@ -251,7 +251,7 @@ architecture behavioral of toplevel is
 	end component;
 	
 	signal clk_vga : std_logic;
-	signal clk_vga_mem : std_logic;
+	signal clk_mem : std_logic;
 	signal clk_cpu : std_logic;
 	
 	signal load_program : std_logic;
@@ -310,7 +310,7 @@ begin
 			CLKIN_IN => clk,
 			CLKDV_OUT => clk_vga,
 			CLKFX_OUT => clk_cpu,
-			CLK0_OUT => clk_vga_mem
+			CLK0_OUT => clk_mem
 		);
 		
 	inst_state_register: state_register 
@@ -324,7 +324,7 @@ begin
 
 	inst_vgacontroller : vgacontroller
 		port map (
-			clk => clk_vga_mem,
+			clk => clk_mem,
 			clk_vga => clk_vga,
 			
 			greytone => vga_pixel_out,
@@ -413,7 +413,7 @@ begin
 	
 	inst_program_loader: program_loader
 		port map (
-			clk => clk_cpu,
+			clk => clk_mem,
 			enable => load_program,
 			reset => reset,
 			
@@ -428,7 +428,7 @@ begin
 	
 	inst_data_loader: data_loader
 		port map (
-			clk => clk_cpu,
+			clk => clk_mem,
 			enable => load_data,
 			reset => reset,
 			
