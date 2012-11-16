@@ -1,15 +1,16 @@
 \section{Requirements Specification}
-
+\begin{comment}
 \input{fig/intro/nonfunc}
-
+ % Vi are supposed to write about the (non)functional requirements of the
+ % project. Not about (non)functional requirements and their importance
+ % in general, the reader already knows what these are and their importance.
 Creating a computer without specifying functional requirements would make it
 difficult to both see how well we are progressing and to figure out if we've
 actually reached our goal in the end. Non-functional requirements are important
 to realize the computer: Both price and components were set by the assignment as
 non-functional requirements. As such, both functional and non-functional
 requirements were written down to give ourselves clear goals and
-specifications. The non-functional requirements are shown in table
-\ref{fig:nonfunc-req}. 
+specifications. 
 
 \input{fig/intro/func}
 
@@ -26,3 +27,33 @@ computer specialized for image processing has less usability than a generally
 programmable computer. {\sc FR3} and {\sc FR7} makes it easier to show that the
 computer is capable of processing images, whereas {\sc FR4 - FR6} makes it
 easier to use, debug and create programs for the computer.
+\end{comment}
+\input{fig/intro/func}
+Several functional and Non-functional requirements were given to us by our
+instructor, Magnus Jahre, and some were decided by the group as goals we
+though realizable or just to help us see the progress. Table \ref{fig:func-req}, which shows the functional
+requirements, includes a relative priority between the different requirements.
+This priority tells us what we have focused on, as well as what is important in
+terms of success of the computer. Clearly, focusing on performance, as
+specified in {\sc FR1}, is more important than having developer tools for the machine ({\sc FR6}).
+\CHECK{Ensure FR numbers are correct.}
+
+{\sc FR1} ensure the focus on performance. {\sc FR2} ensures that we do not end
+up with a system which is not generally programmable. This is important, as a
+computer specialized for image processing has less usability than a generally
+programmable computer. {\sc FR3} and {\sc FR7} makes it easier to show that the
+computer is capable of processing images, whereas {\sc FR4 - FR6} makes it
+easier to use, debug and create programs for the computer.
+
+\input{fig/intro/nonfunc}
+
+Table \ref{fig:nonfunc-req} shows the non-functional requirements. These were
+all determined by Jahre. They are all treated as absolute requirements, and our
+design has been centered around these requirements. {\sc NFR1} and {\sc NFR2} gave us little
+choice in what hardware to use, and naturally these have been used. {\sc NFR3} limits
+what peripherals we can use to relatively cheap things. {\sc NFR4} leads to some design
+choices when designing the image processor, we can't just make any set of SIMD cores, we have
+to make this specific type!  {\sc NFR5} leads to some design choices for the entire system.
+Our goal is performance, and we don't have to care about other concerns such as energy
+consumption, just to get performance as good as possible without the system burning up.
+\ref{fig:nonfunc-req}
