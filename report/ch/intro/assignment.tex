@@ -1,7 +1,10 @@
 \section{Assignment}
 The task given was to create an {\em array-based} parallel image processor with
-focus on performance. After some calculations\TODO{Should we show the actual
-  calculations?}, we decided to escalate our goal to a parallel image processor
+focus on performance. An array processor is a grid of processing elements, where each of the
+processing elements are only able to communicate with its north, south, east and
+west neighbours. All the processing elements will perform the same instruction
+at all times. After some calculations\TODO{Should we show the actual
+  calculations? YES.}, we decided to escalate our goal to a parallel image processor
 with enough throughput to show a low quality unprocessed video, as a proof of
 concept.
 
@@ -13,11 +16,6 @@ accidents\cite{aufrere2003coll-avoid}. Image processing in general is also
 highly applicable in the medical field\cite{luong2009medical-image,
   sternberg1983biomedical} and in the petroleum
 industry\cite{ferrari2007steam-images}.
-
-An array processor is a grid of processing elements, where each of the
-processing elements are only able to communicate with its north, south, east and
-west neighbours. All the processing elements must perform the same instruction
-at all times.
 
 \subsection{Original Assignment Text}
 
