@@ -1,4 +1,5 @@
     ctrl nop
+    ctrl addi R2 ZERO 255
     ctrl addi R1 ZERO 150
     ctrl sll R1 R1
     ctrl sll R1 R1
@@ -15,6 +16,8 @@
 pixel_loop:
 
     ctrl lw VDATA VADDR
+    ctrl nop
+    ctrl sub VDATA R2 VDATA
     ctrl nop
     ctrl addi VADDR VADDR 1
 
