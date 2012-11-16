@@ -101,7 +101,7 @@ void fpga_send_data_from_memory(U8 *data, size_t size) {
 //		//while (acked == FALSE);												// S.4
 //	}																		// S.5
 	//fpga_set_listener(DEFAULT_FPGA_LISTENER); //Denne linjen ødelegger for knappene
-	fpga_set_state(FPGA_STATE_STOP);										// S.6
+	fpga_set_state(FPGA_STATE_RUN);										// S.6
 }
 
 

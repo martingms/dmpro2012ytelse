@@ -15,6 +15,7 @@
 pixel_loop:
 
     ctrl lw VDATA VADDR
+    ctrl lw VDATA VADDR
     ctrl nop
     ctrl addi VADDR VADDR 1
 

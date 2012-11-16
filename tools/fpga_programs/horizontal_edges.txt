@@ -1,0 +1,47 @@
+    ctrl nop
+	ctrl addi R4 ZERO 20	# threshold
+	ctrl nop
+	ctrl addi R3 ZERO 0		# prev value
+	ctrl nop
+    ctrl addi R2 ZERO 230	# threshold
+	ctrl nop
+    ctrl addi R1 ZERO 150	# 76800
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+	ctrl nop
+    ctrl addi VADDR ZERO 0
+
+pixel_loop:	# here starts the main loop
+    ctrl lw VDATA VADDR			# current value
+	ctrl addi R5 ZERO 255		# offset to avoid negative numbers (R5 = 255)
+	ctrl add R5 R5 VDATA		# R5 = R5 + VDATA
+    ctrl sub R5 R5 R3			# R5 = current - previous
+	ctrl add R3 VDATA ZERO		# store VDATA as previous value
+	ctrl beq gt_zero
+	ctrl slt ZERO R5 R2			# go to else-case
+	ctrl addi VDATA ZERO 0		# set pixel to white
+	ctrl jump cont				# jump past "set to white"
+	ctrl nop
+
+gt_zero: # "falling edge"
+	ctrl addi VDATA ZERO 255	# set to white
+
+cont:	# by now, VDATA is either 0 or 255
+	ctrl addi VADDR VADDR 1		# increment VGA memory address
+	ctrl nop
+    ctrl beq infinite_loop		# exit program?
+    ctrl slt ZERO R1 VADDR
+    ctrl nop
+    ctrl jump pixel_loop		# repeat
+	ctrl nop
+
+infinite_loop: # we're finished
+    ctrl nop
+    ctrl jump infinite_loop

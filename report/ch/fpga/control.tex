@@ -8,23 +8,23 @@ figure \ref{fig:control-module}.
 \input{fig/fpga/control_module}
 
 The control module decodes the state signal set by the AVR, and enables,
-disables and resets components accordingly. It is responsible for
-performing data transfers between the AVR and the program/data memories,
-and for transferring data internally, between the SIMD node array, data
-RAM and the VGA screen buffer.
+disables and resets components accordingly. It is responsible for performing
+data transfers between the AVR and the program/data memories, and for
+transferring data internally, between the \ac{SIMD} node array, data \ac{RAM}
+and the \ac{VGA} screen buffer.
 
-The control module contains the CPU core that is used for the non-SIMD
-instructions embedded in a program. This CPU core, henceforth referred
-to as the \emph{control core}, is mainly concerned with loop control,
-initiating data transfers between the SIMD node array and the data RAM,
-and copying image data to the VGA controller.
+The control module contains the \ac{CPU} core that is used for the non-\ac{SIMD}
+instructions embedded in a program. This \ac{CPU} core, henceforth referred to
+as the \emph{control core}, is mainly concerned with loop control, initiating
+data transfers between the \ac{SIMD} node array and the data RAM, and copying
+image data to the \ac{VGA} controller.
 
 \subsection{States}
 
-The operation of the image processor is fully controlled by the SCU. The
-SCU sets a state value that is used by the control module to select
-which components of the image processor are active. This is indicated by
-the red signals in figure \ref{fig:control-module}.
+The operation of the image processor is fully controlled by the \ac{SCU}. The
+\ac{SCU} sets a state value that is used by the control module to select which
+components of the image processor are active. This is indicated by the red
+signals in figure \ref{fig:control-module}.
 
 The states recognized by the image processor are listed in table
 \ref{tab:states}.
@@ -35,62 +35,60 @@ The states recognized by the image processor are listed in table
 
 A schematic overview of the control core is given in figure
 \ref{fig:fpga-ctrl-core}. The control core consists of a register bank
-of 21 bit registers, an ALU and a connection to the data RAM. The word
-width of 21 bits was chosen to match the address width of the data RAM.
+of 21 bit registers, an \ac{ALU} and a connection to the data \ac{RAM}. The word
+width of 21 bits was chosen to match the address width of the data \ac{RAM}.
 This allows the control core to do pointer arithmetic referring to
-arbitrary words in the data RAM.
+arbitrary words in the data \ac{RAM}.
 
 \input{fig/fpga/fpga_ctrl_core}
 
-To send pixels to the VGA controller, two of the registers are dedicated
-to contain an address and a pixel value, respectively. The contents of
-these registers are constantly sent to the VGA controller. By
-incrementing and loading RAM values into these registers, using the
-control core's regular instruction set, the control core program can
-upload images to the VGA screen buffer.
+To send pixels to the \ac{VGA} controller, two of the registers are dedicated to
+contain an address and a pixel value, respectively. The contents of these
+registers are constantly sent to the \ac{VGA} controller. By incrementing and
+loading\ac{RAM} values into these registers, using the control core's regular
+instruction set, the control core program can upload images to the \ac{VGA}
+screen buffer.
 
-A third register is wired to the DMA controller, to enable 21 bit wide
-DMA parameters to be set programmatically.
+A third register is wired to the \ac{DMA} controller, to enable 21 bit wide
+\ac{DMA} parameters to be set programmatically.
 
-The control core runs instructions from the same instruction stream as
-the SIMD nodes, and thus the control core and the SIMD array share a
-common program counter. The leftmost bit in the instructions specifies
-whether the instruction is a control core instruction or a SIMD
-instruction.
+The control core runs instructions from the same instruction stream as the
+\ac{SIMD} nodes, and thus the control core and the \ac{SIMD} array share a
+common program counter. The leftmost bit in the instructions specifies whether
+the instruction is a control core instruction or a \ac{SIMD} instruction.
 
 The control core instruction set is specified in detail in appendix
 \ref{app:control-inst}.
 
 \subsection{DMA Module}
 
-Because of the common instruction stream between the SIMD array and the
-control core, the SIMD array will be inactive whenever the control core
-is busy. An important task that normally would be the control core's
-responsibility, is to load the SIMD array with new data from RAM and to
-store the processed data back to RAM. To maximize the utilization of
-the data RAM I/O capacity and the processing power of the SIMD array, a
-\emph{Direct Memory Access module} was devised.
+Because of the common instruction stream between the \ac{SIMD} array and the
+control core, the \ac{SIMD} array will be inactive whenever the control core is
+busy. An important task that normally would be the control core's
+responsibility, is to load the \ac{SIMD} array with new data from \ac{RAM} and
+to store the processed data back to \ac{RAM}. To maximize the utilization of the
+data \ac{RAM} \ac{I/O} capacity and the processing power of the \ac{SIMD} array,
+a \emph{Direct Memory Access module} was devised.
 
-The DMA module performs loading of new SIMD data planes and storing of
-processed SIMD data planes \emph{in parallell} with the normal execution
-of program instructions. The nodes of the SIMD array have a separate
-register -- the S register -- that is reserved for the DMA module. The S
+The \ac{DMA} module performs loading of new \ac{SIMD} data planes and storing of
+processed \ac{SIMD} data planes \emph{in parallell} with the normal execution
+of program instructions. The nodes of the \ac{SIMD} array have a separate
+register -- the S register -- that is reserved for the \ac{DMA} module. The S
 registers are connected in a left-to-right direction throughout the
-array. The DMA module can send the contents of the S registers one step
+array. The \ac{DMA} module can send the contents of the S registers one step
 to the right by setting a \emph{step S} signal.
 
-With these accommodations of the SIMD array, the DMA module can load new
-data values to the S registers at the left edge of the SIMD array, send
-the step signal to have these value propagate into the array and read
-the old, processed data values from the S registers at the right edge of
-the array. The SIMD program executing simultaneously will operate on a
-different set of registers and will not be obstructed by the DMA data
-transfer.
+With these accommodations of the \ac{SIMD} array, the \ac{DMA} module can load
+new data values to the S registers at the left edge of the \ac{SIMD} array, send
+the step signal to have these value propagate into the array and read the old,
+processed data values from the S registers at the right edge of the array. The
+\ac{SIMD} program executing simultaneously will operate on a different set of
+registers and will not be obstructed by the \ac{DMA} data transfer.
 
-During DMA transfer, the data RAM is reserved for the DMA module and not
-available for the control core to use. To initiate a DMA transfer, the
-control core sets \emph{base addresses} for the reading of new data and
-for the writing of old data, in addition to address increments to be
-used for moving along the columns and rows of the current slice of the
-data. These parameters allow flexibility in how the data slices to be
-loaded into and stored out of the SIMD array, are laid out in memory.
+During \ac{DMA} transfer, the data \ac{RAM} is reserved for the \ac{DMA} module
+and not available for the control core to use. To initiate a \ac{DMA} transfer,
+the control core sets \emph{base addresses} for the reading of new data and for
+the writing of old data, in addition to address increments to be used for moving
+along the columns and rows of the current slice of the data. These parameters
+allow flexibility in how the data slices to be loaded into and stored out of the
+\ac{SIMD} array, are laid out in memory.

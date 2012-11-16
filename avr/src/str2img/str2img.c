@@ -67,7 +67,8 @@ static unsigned char _8[] = { 255, 255, 193, 156, 190, 156, 193, 156, 190, 190, 
 static unsigned char _9[] = { 255, 255, 193, 157, 188, 190, 190, 156, 192, 252, 153, 195, 255, 255, 255, 255 };
 static unsigned char _0[] = { 255, 255, 193, 221, 156, 190, 182, 182, 190, 156, 221, 193, 255, 255, 255, 255 };
 static unsigned char space[] = { 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255 };
-static unsigned char ndash[] = { 255, 255, 255, 255, 255, 255, 255, 195, 255, 255, 255, 255, 255, 255, 255, 255 };
+static unsigned char ndash[] = { 255, 255, 255, 255, 255, 255, 255, 231, 255, 255, 255, 255, 255, 255, 255, 255 };
+static unsigned char mdash[] = { 255, 255, 255, 255, 255, 255, 255, 195, 255, 255, 255, 255, 255, 255, 255, 255 };
 static unsigned char underscore[] = { 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0, 255, 255 };
 static unsigned char dot[] = { 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 247, 247, 255, 255, 255, 255 };
 static unsigned char exclamation[] = { 255, 255, 247, 247, 247, 247, 247, 247, 247, 255, 255, 247, 255, 255, 255, 255 };
@@ -144,6 +145,7 @@ static unsigned char *lut(char chr) {
 		case '8': return _8;
 		case '9': return _9;
 		case '-': return ndash;
+		case '~': return mdash;
 		case '_': return underscore;
 		case '.': return dot;
 		case '!': return exclamation;

@@ -1,0 +1,48 @@
+    ctrl nop
+
+    ctrl addi R2 ZERO 127 # Threshholding value.
+
+    ctrl addi R1 ZERO 150 # 150 << 9 = 320*240.
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+
+    ctrl addi VADDR ZERO 0 # Start at first pixel.
+
+
+pixel_loop:
+    ctrl lw VDATA VADDR # Load word at VADDR into VDATA.
+    ctrl nop
+
+    ctrl beq threshhold_black # If pixel-value is less than set threshhold value,
+    ctrl slt ZERO R2 VDATA    # jump to threshhold_black.
+    ctrl nop
+
+    ctrl add VDATA ZERO ZERO  # If not, set pixel to white
+    ctrl nop
+    ctrl jump inc_vaddr
+
+inc_vaddr:
+    ctrl nop
+    ctrl addi VADDR VADDR 1
+
+    ctrl beq infinite_loop
+    ctrl slt ZERO R1 VADDR
+    ctrl nop
+
+    ctrl jump pixel_loop
+
+threshhold_black:
+    ctrl addi VDATA ZERO 255
+    ctrl nop
+    ctrl jump inc_vaddr
+
+infinite_loop:
+    ctrl nop
+    ctrl jump infinite_loop

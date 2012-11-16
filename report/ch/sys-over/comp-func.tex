@@ -3,44 +3,45 @@
 This section describes the different components and their functionality. A list
 of ordered parts can be found in \ref{app:ordered-parts}.
 
-\subsection{SCU}\TODO{Have we mentioned the SCU somewhere?}
+\subsection{SCU}
 
-The microcontroller is mainly used to send data from the SD card to the LENA
-architecture. It also converts data from the BMP format\TODO{Does it actually do
-  that?} to a format LENA is able to process. LENA can be started and stopped by
-the SCU, and it is also responsible for sending the wanted program to LENA,
-which stores it in the instruction memory. 
+The microcontroller is mainly used to send data from the \ac{SD} card to the
+\ac{LENA} architecture. It also converts data from the \ac{BMP} to a format
+\ac{LENA} is able to process. \ac{LENA} can be started and stopped by the
+\ac{SCU}, and it is also responsible for sending the wanted program to
+\ac{LENA}, which stores it in the instruction memory.
 
-Selecting programs is done by the SCU. This is done by listening on the buttons
-we have on the machine.
+Selecting programs is done by the \ac{SCU}. This is done by listening on the
+buttons we have on the machine.
 
 \subsection{LENA}
 
 NF4 constrained our high level choices on the image processor architecture:
 There was a requirement that we had to have multiple cores arranged in a
 matrix. As the matrix would perform image processing, it was natural for us to
-choose a SIMD architecture. Many image processing algorithms do the exact same
-operation on every pixel, and having a SIMD architecture reduces both
-complexity and size needed per core on the FPGA significantly.
+choose a \ac{SIMD} architecture. Many image processing algorithms do the exact
+same operation on every pixel, and having a \ac{SIMD} architecture reduces both
+complexity and size needed per core on the \ac{FPGA} significantly.
 
-Other design choices that followed was the introduction of a control core, a DMA
-and a VGA controller. The control core is responsible for sending data to the
-SIMD nodes and the VGA controller, whereas the DMA is responsible for writing
-data from the SIMD nodes back into memory. The VGA controller is responsible for
-handling the VGA memory and sending the correct signals to the VGA port. In
-addition, as the SIMD nodes usually depend heavily on their neighbour's data, we
-decided to have ``dummy nodes'' outside the real SIMD nodes. Their only function
-is to transmit data to the edge nodes. As such, we can still utilize the edge
-nodes for computation when neighbour data is needed.
+Other design choices that followed was the introduction of a control core, a
+\ac{DMA} and a \ac{VGA} controller. The control core is responsible for sending
+data to the \ac{SIMD} nodes and the \ac{VGA} controller, whereas the \ac{DMA} is
+responsible for writing data from the \ac{SIMD} nodes back into memory. The
+\ac{VGA} controller is responsible for handling the \ac{VGA} memory and sending
+the correct signals to the \ac{VGA} port. In addition, as the \ac{SIMD} nodes
+usually depend heavily on their neighbour's data, we decided to have ``dummy
+nodes'' outside the real \ac{SIMD} nodes. Their only function is to transmit
+data to the edge nodes. As such, we can still utilize the edge nodes for
+computation when neighbour data is needed.
 
 \subsubsection{Word size}
 
-The word size of the LENA system is an important aspect of the system which
+The word size of the \ac{LENA} system is an important aspect of the system which
 have a critical impact on performance. Our choice between small and large
 register\TODO{Word size? But shouldn't confuse the reader between the size of
   the registers on the SIMD nodes and the instruction size either} size, and
 small and large instruction sets will have a huge impact on the number of cores
-we are able to get on the FPGA. On one side, we have the Massively Parallel
+we are able to get on the \ac{FPGA}. On one side, we have the Massively Parallel
 Processor\cite{potter1985mpp} with 1 bit per core and focuses on many cores to
 speed up the system. On the other side, we have Intel's MMX instructions which
 allows one to do multiple, single instructions on different 64-bit and 128-bit
@@ -54,29 +55,30 @@ system, we should do that instead.
 From calculations\TODO{Should we have the calculations?} and an estimated guess
 on how complex such a system would be, we set ourselves\TODO{set ourselves?
   Sounds very wrong} on a system with 8 bit register size and 24 bit instruction
-size. From our assumptions, we could get around 16 SIMD nodes and an instruction
-set with reasonably efficient instructions for image processing.
+size. From our assumptions, we could get around 16 \ac{SIMD} nodes and an
+instruction set with reasonably efficient instructions for image processing.
 
 \subsubsection{Memory}
 
 The memory is split over three different chips: The data memory, the instruction
-memory and the VGA memory. All of the RAM is asynchronous SRAM, based on
-previous projects success with it\cite{berg2011festinalente}along with the
-speed. The main reason for this choice was mostly due to frequent reading and
-writing, but also because larger SRAM modules were more costly than multiple
-SRAM modules with less memory. An additional benefit from this is that the
-complexity is lowered: Fewer potential collisions on RAM reading and writing
-occurs since fewer parts read and write to the different RAM chips.
+memory and the \ac{VGA} memory. All of the \ac{RAM} is asynchronous \ac{SRAM},
+based on previous projects success with it\cite{berg2011festinalente}along with
+the speed. The main reason for this choice was mostly due to frequent reading
+and writing, but also because larger \ac{SRAM} modules were more costly than
+multiple \ac{SRAM} modules with less memory. An additional benefit from this is
+that the complexity is lowered: Fewer potential collisions on \ac{RAM} reading
+and writing occurs since fewer parts read and write to the different \ac{RAM}
+chips.
 
 \subsubsection*{Instruction Memory}
 
-We ended up with a 24-bit instruction set for both SIMD nodes and the control
-core. As we ended up with a 16-bit program counter, the maximal instruction
-count would be 64,000 and the memory chip size is chosen on that basis. While it
-may sound like few operations when one know that the SIMD nodes cannot jump, it
-is in practice more than enough. To see why, note that the control core can
-simulate loops and may start the image algorithm over when a part of the image
-has been finished processing.
+We ended up with a 24-bit instruction set for both \ac{SIMD} nodes and the
+control core. As we ended up with a 16-bit program counter, the maximal
+instruction count would be 64,000 and the memory chip size is chosen on that
+basis. While it may sound like few operations when one know that the \ac{SIMD}
+nodes cannot jump, it is in practice more than enough. To see why, note that the
+control core can simulate loops and may start the image algorithm over when a
+part of the image has been finished processing.
 
 \subsubsection*{Data Memory}
 

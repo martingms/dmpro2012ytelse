@@ -1,11 +1,13 @@
-The System Control Unit (SCU), is implemented on an AT32UC3A0512 AVR microcontroller. This was both an advantage and a disadvantage to us. The same AVR had been used in several previous projects which allowed us to learn from their success and failures to a greater degree. At the same time this spesific AVR gave us some issues, especially in regard to performance on the SD card.
+The \acf{SCU} is implemented on an AT32UC3A0512 AVR microcontroller. This was both an advantage and a disadvantage to us. The same AVR had been used in several previous projects which allowed us to learn from their success and failures to a greater degree. At the same time this specific AVR gave us some issues, especially in regard to performance on the \ac{SD} card.
 
-\begin{comment}
-Denna prosess tingen hører ikke hjemme under 'introduction'
+As the name implies, the \ac{SCU} is the controlling unit in
+our system. The \ac{SCU} is in charge of setting up both \ac{LENA}'s instruction
+and data memory. \ac{LENA} Starts when it is set to a run state by the
+\ac{SCU}. After the processing is done the \ac{LENA} will let the \ac{SCU} know
+that the work has been completed by setting an interrupt bit. It's then up to
+the \ac{SCU} to decide what to do next.
 
-When we first started working on the SCU we focused mostly on the hardware mappings as this was needed for the PCB to be delivered. We made sure to make it as similar as possible to the EVK1100 test card which we had avaliable. This made it possible for us to begin writing and testing some of our code before the PCB arrived. Having completed this we were able to start thinking about the code and to define what we figured we would need in terms of functions and headers for our application. Granted this was not set in stone as much of the design was yet to be determined, but it gave us a starting point to which we were able to work and improve upon.
-\end{comment}
-
-As the name implies, we intended for the SCU to be the controlling unit in our system. The SCU is in charge of setting up both LENA's instruction and data memory. LENA Starts when it is set to a run state by the SCU. After the processing is done the LENA will let the SCU know that the work has been completed by setting an interrupt bit. It's then up to the SCU to decide what to do next.
-
-The SCU also implements the user interface for the project. With the help of the VGA implementation on the LENA it is able to display a menu to the user which allows for selection of a program and data set from the SD card connected to the SCU.
+The \ac{SCU} also implements the user interface for the project. With the help
+of the \ac{VGA} implementation on the \ac{LENA} it is able to display a menu to
+the user which allows for selection of a program and data set from the \ac{SD}
+card connected to the \ac{SCU}.
