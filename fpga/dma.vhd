@@ -219,6 +219,8 @@ begin
 			simd_addr <= (others => '0');
 			simd_data_out <= (others => '0');
 			simd_write <= '0';
+			
+			step_s <= '0';
 		end if;
 	end process run_dma;
 

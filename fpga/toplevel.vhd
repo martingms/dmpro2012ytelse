@@ -339,9 +339,11 @@ begin
 			mem_data => vga_ram_data
 		);
 	
-	vga_value(9 downto 5) <= vga_pixel_out(7 downto 3);
-	vga_value(4 downto 2) <= state;
---	vga_value(9 downto 2) <= avr_data_in(7 downto 0);
+--	vga_value(9 downto 5) <= vga_pixel_out(7 downto 3);
+--	vga_value(4 downto 3) <= dma_simd_addr;
+--	vga_value(2) <= dma_step_s;
+	vga_value(9 downto 3) <= control_core_mem_addr(6 downto 0);
+	vga_value(2) <= control_core_mem_write;
 	vga_value(1 downto 0) <= (others => '0');
 	
 	program_ram_mux: ram_mux
@@ -462,8 +464,8 @@ begin
 			enable => execute,
 			reset => reset,
 			
---			command => dma_command,
-			command => (others => '0'),
+			command => dma_command,
+--			command => (others => '0'),
 			parameter => dma_parameter,
 			
 			mem_addr => dma_mem_addr,
@@ -482,8 +484,8 @@ begin
 		port map (
 			clk => clk_cpu,
 			reset => reset,
---			instr => instruction_register_mem_data,
-			instr => (others => '0'),
+			instr => instruction_register_mem_data,
+--			instr => (others => '0'),
 			node_step => dma_step_s,
 
 			data_write => dma_simd_write,
@@ -496,7 +498,6 @@ begin
 	begin
 		if execute = '1' then
 			instruction_register_mem_data_filtered <= instruction_register_mem_data;
---			instruction_register_mem_data_filtered <= "100011101110100000001000";
 		else
 			instruction_register_mem_data_filtered <= (others => '0');
 		end if;
