@@ -5,25 +5,24 @@ meant we either had to look for them on the internet, or create some ourselves.
 This usually meant either staring at datasheets and carefully placing pins
 relative to each other, or running the IPC wizard.
 
-\subsection{We made the following footprints ourselves}
+\subsection{We made the following footprints ourselves}\TODO{Den kan ikke hete dette altså.}
 \input{fig/pcb/footprintswemade}
-\begin{itemize}
-\item \ac{SD} card With the pin-designations selected by googling the pinouts
-  for SD-cards in general, and comparing a few of those hits to make sure that
+\begin{description}
+\item[SD card] With the pin-designations selected by googling the pinouts for
+  \ac{SD} cards in general, and comparing a few of those hits to make sure that
   the results agreed
   this\footnote{\url{http://pinouts.ru/Memory/sdcard_pinout.shtml}} ended up
   being what we based the schematic-component based on. This
   schematic\footnote{\url{http://katalog.we-online.de/em/datasheet/693063010911.pdf}}
   schematic was particularly hard to read, to the point that we had to ask Tufte
   for help to understand it, and even after that, there was no way to be sure
-  precisely where the grounding pads were relative to the rest of the
-  SD-card-reader. We thus ended up with a bit of guesswork, and added quite a
-  bit of slack to the ground-pads by simply adding extra tin to these pads.
-\item Memory (TSOP54/TSOP44)
-The TSOP54/TSOP44 footprints were created using the IPC Footprint Wizard, as
-their datasheets fitted nicely with the Small Outline Package setting in that
-Wizard.
-\end {itemize}
+  precisely where the grounding pads were relative to the rest of the \ac{SD}
+  card reader. We thus ended up with a bit of guesswork, and added quite a bit
+  of slack to the ground-pads by simply adding extra tin to these pads.
+\item[Memory (TSOP54/TSOP44)] The TSOP54/TSOP44 footprints were created using
+  the IPC Footprint Wizard, as their datasheets fitted nicely with the Small
+  Outline Package setting in that Wizard.
+\end{description}
 
 \subsection{Footprints from other sources:}
 As Festina Lente used some components that we also ended up using, we decided,
