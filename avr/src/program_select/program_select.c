@@ -250,7 +250,7 @@ void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 
 		// set state to "load data" and send to fpga
 		fpga_set_state(FPGA_STATE_LOAD_DATA);
-		bus_send_data_words((U32*)FRAME_BUFFER, blocks_per_frame * 512 / 4);
+		bus_send_data_bytes((U32*)FRAME_BUFFER, blocks_per_frame * 512);
 
 		LED_Toggle(LED2);
 	}
