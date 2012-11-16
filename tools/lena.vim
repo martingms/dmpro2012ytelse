@@ -33,8 +33,8 @@ syn keyword lenaReg R0 R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12 R13 R14
 syn keyword lenaReg R15 VDATA VADDR ZERO DMA
 
 syn match lenaJumpLabel "[a-zA-Z0-9_]\+\:"
-syn match lenaJumpLabelInline "(beq|branch|jump) \@<=([a-zA-Z0-9_]\+)"
-syn match lenaInteger contained "[-+]\=\d\+"
+syn match lenaJumpLabelInline "\(\(beq\|branch\|jump\) \)\@<=\([a-zA-Z0-9_]\+\)"
+syn match lenaInteger "[0-9]\+"
 
 syn match lenaComment "#.*"
 
