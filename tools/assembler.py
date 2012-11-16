@@ -12,7 +12,8 @@ group		= False
 modelsim	= False
 labels 	= {}
 regs 		= {
-	'R0'		: '0000',
+	'ZERO'		: '0000',  # the same as R0
+	'R0'		: '0000',  # the same as ZERO
 	'R1'		: '0001', 
 	'R2'		: '0010', 
 	'R3'		: '0011', 
@@ -28,14 +29,27 @@ regs 		= {
 	'R13' 		: '1101', 
 	'R14' 		: '1110',
 	'R15'		: '1111',
-	'VADDR'		: '1101',
-	'VDATA'		: '1110',
-	'DMAP'		: '1111',
-	'ZERO'		: '0000', 
-	'STATE' 	: '1111'
+	'VADDR'		: '1101',  # VGA Address (ctrl)
+	'VDATA'		: '1110',  # VGA Data (ctrl)
+	'DMA'		: '1111',  # DMA parameters (ctrl)
+	'STATE' 	: '1111'   # Node State (simd)
 }
+
+# DMA Commands
+dcmds	= {
+	'set_read_active'               : '0100',
+    'set_read_base_addr'            : '0101',
+    'set_read_horizontal_incr'      : '0110',
+    'set_read_vertical_incr'        : '0111',
+    'set_write_active'              : '1000',
+    'set_write_base_addr'           : '1001',
+    'set_write_horizontal_incr'     : '1010',
+    'set_write_vertical_incr'       : '1011',
+    'start'                         : '0001'
+}
+
 instrs 	= {
-	# R-Format instruction
+	# R-Format instructions
 	'r' : {
 		'add'	: '000', # add R1 R2 R3
 		'sub'	: '001', # sub R1 R2 R3
@@ -44,8 +58,7 @@ instrs 	= {
 		'or'	: '100', #  or R1 R2 R3
 		'eq'	: '101'  #  eq R1 R2 R3
 	},
-	# I-Format instruction
-	# Quick translation into R-Format 
+	# I-Format instructions
 	'i' : {
 		'addi'	: '000', # addi R1 R2 CONST
 		'subi'	: '001', # subi R1 R2 CONST
@@ -62,8 +75,9 @@ instrs 	= {
 	},
 	# Jump / branch instructions
 	'j' : {
-		'jump'  : '0100', #   jump label
-		'beq'	: '0101'  # branch label
+		'jump'  : '0100', #   jump to label
+		'branch': '0101', # branch to label
+		'beq'	: '0101'  # branch to label
 	},
 	
 	# M-Format instructions
@@ -85,6 +99,16 @@ def __assembleCtrlJump__(op, label):
 	
 	return bin + str(addr) + '000'
 
+# Assemble CTRL DMA comands
+def __assembleCtrlDma__(op, cmd):
+	bin = '1' + op
+	if not cmd: sys.exit("error: Instruction expects DMA command.")
+	if cmd not in dcmds: sys.exit("error: DMA comamnd does not exist.")
+	
+	cmd = dec2bin(dcmds[cmd], 16)
+	
+	return bin + str(cmd) + '000'	
+	
 # Assemble node instruction
 def __assembleNodeInstrN__(ctrl, op, fn, params, n):
 	bin  = ctrl + op 
@@ -139,7 +163,7 @@ def __assembleCtrlInstr__(instr):
 
 	instr 		= instr.partition(" ");
 	fn 			= instr[0]
-	params 	= instr[2]
+	params 		= instr[2]
 	
 	# ctrl op fn params #params 
 	if fn in instrs['r']	: output = __assembleNodeInstrN__('1', '0000', instrs['r'][fn], params, 3)
@@ -148,6 +172,7 @@ def __assembleCtrlInstr__(instr):
 	elif fn in instrs['j']	: output = __assembleCtrlJump__(instrs['j'][fn], params)
 	elif fn == "lw"			: output = __assembleNodeInstrN__('1', '0010', '000', params, 2)
 	elif fn == "nop"		: output = __assembleNodeInstrN__('1', '0000', '000', "", 0)
+	elif fn == "dma"		: output =  __assembleCtrlDma__('1000', params)
 	else					: sys.exit("error: Unrecognized CTRL instruction: '" + fn + " " + params + "'")
 	
 	return output
