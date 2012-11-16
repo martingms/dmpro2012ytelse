@@ -1,15 +1,19 @@
 	ctrl nop
-	ctrl addi R3 ZERO 0		# R3 = black
+	ctrl addi R3 ZERO 0			# R3 = black
 	ctrl addi R4 ZERO 255		# R4 = white
 
 start:
 	ctrl nop
 	ctrl addi VADDR ZERO 0		# Clear VGA address
-	ctrl addi R1 ZERO 0		# Rows = 0
+	ctrl addi R1 ZERO 0			# Rows = 0
 	ctrl addi R5 R3 0
 	ctrl addi R3 R4 0
 	ctrl addi R4 R5 0
-
+	
+	ctrl dma set_read_active0
+	
+	node add R1 R2 R3
+	
 whiteblack:
 	ctrl nop
 	ctrl addi R2 ZERO 0 		# Cols = 0
@@ -17,7 +21,7 @@ whiteblack:
 wb_white_start:
 	ctrl nop
 	ctrl addi VDATA R3 0
-	ctrl addi R2 R2 1 		# Increment cols
+	ctrl addi R2 R2 1 			# Increment cols
 	ctrl addi VADDR VADDR 1
 	ctrl beq wb_white_start
 	ctrl slti ZERO R2 160
@@ -28,13 +32,13 @@ wb_white_start:
 wb_black_start:
 	ctrl nop
 	ctrl addi VDATA R4 0
-	ctrl addi R2 R2 1 		# Increment cols
+	ctrl addi R2 R2 1 			# Increment cols
 	ctrl addi VADDR VADDR 1
 	ctrl beq wb_black_start
 	ctrl slti ZERO R2 160
 	ctrl nop
 
-	ctrl addi R1 R1 1 		# Increment rows
+	ctrl addi R1 R1 1 			# Increment rows
 	ctrl beq whiteblack
 	ctrl slti ZERO R1 120
 	ctrl nop
@@ -48,7 +52,7 @@ blackwhite:
 bw_black_start:
 	ctrl nop
 	ctrl addi VDATA R4 0
-	ctrl addi R2 R2 1 		# Increment cols
+	ctrl addi R2 R2 1 			# Increment cols
 	ctrl addi VADDR VADDR 1
 	ctrl beq bw_black_start
 	ctrl slti ZERO R2 160
@@ -59,13 +63,13 @@ bw_black_start:
 bw_white_start:
 	ctrl nop
 	ctrl addi VDATA R3 0
-	ctrl addi R2 R2 1 		# Increment cols
+	ctrl addi R2 R2 1 			# Increment cols
 	ctrl addi VADDR VADDR 1
 	ctrl beq bw_white_start
 	ctrl slti ZERO R2 160
 	ctrl nop
 
-	ctrl addi R1 R1 1 		# Increment rows
+	ctrl addi R1 R1 1 			# Increment rows
 	ctrl beq blackwhite
 	ctrl slti ZERO R1 120
 	ctrl nop

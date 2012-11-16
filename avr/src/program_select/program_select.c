@@ -214,6 +214,13 @@ void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 	// stop listening on buttons
 	busy = TRUE;
 
+	// used for FPS counter
+	static double last_time = 0;
+	static double total_time = 0;
+
+	// where to put OSD
+	str2img_osd_init(FRAME_BUFFER);
+
 	// send the program
 	fpga_send_program(selected_script.fpga_bin_path);
 
@@ -237,20 +244,27 @@ void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 
 		// OSD
 		str2img_osd_reset();
-		static double last_time = 0;
+		str2img_osd_set_cursor(0, 17);
 		double time = timer_get_ms();
-		sprintf(txt, "FPS %2.2f [time left: %ds]\n", 1000.0 / (time - last_time),
-				(int)((time - last_time) * (num_frames - i) / 1000));
-		int foo = 40 * i / num_frames;
+		sprintf(txt, "FPS %2.2f [ETA %ds]\n", 1000.0 / (time - last_time),
+				(int)((total_time / i) * (num_frames - i) / 1000));
+
 		str2img_osd_write(txt);
-		while(foo--)
-			str2img_osd_putc('=');
+		str2img_osd_putc('[');
+
+		int foo = 38 * i / num_frames;
+		int ctr;
+		for (ctr = 0; ctr < 38; ctr++) {
+			str2img_osd_putc(ctr < foo ? '|' : '-');
+		}
+		str2img_osd_putc(']');
+		total_time += time - last_time;
 		last_time = time;
 		// END OSD
 
 		// set state to "load data" and send to fpga
 		fpga_set_state(FPGA_STATE_LOAD_DATA);
-		bus_send_data_words((U32*)FRAME_BUFFER, blocks_per_frame * 512 / 4);
+		bus_send_data_bytes(FRAME_BUFFER, blocks_per_frame * 512);
 
 		LED_Toggle(LED2);
 	}

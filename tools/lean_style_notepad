@@ -3,31 +3,31 @@
         <Settings>
             <Global caseIgnored="no" />
             <TreatAsSymbol comment="no" commentLine="no" />
-            <Prefix words1="no" words2="no" words3="no" words4="yes" />
+            <Prefix words1="no" words2="no" words3="no" words4="no" />
         </Settings>
         <KeywordLists>
-            <Keywords name="Delimiters">000000</Keywords>
+            <Keywords name="Delimiters">000/00</Keywords>
             <Keywords name="Folder+"></Keywords>
             <Keywords name="Folder-"></Keywords>
             <Keywords name="Operators">:</Keywords>
             <Keywords name="Comment"> 1 2 0#</Keywords>
-            <Keywords name="Words1">ctrl node</Keywords>
-            <Keywords name="Words2">nop add sub eq slt and or addi subi eqi slti andi ori sll srl beq branch jump move swap</Keywords>
+            <Keywords name="Words1">ctrl</Keywords>
+            <Keywords name="Words2">nop add sub eq slt and or addi subi eqi slti andi ori sll srl beq branch jump move swap send store fwrd lw dma set_read_active set_read_base_addr set_read_horizontal_incr set_read_vertical_incr set_write_active set_write_base_addr set_write_horizontal_incr set_write_vertical_incr start</Keywords>
             <Keywords name="Words3">R0 R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12 R13 R14 R15 VDATA VADDR ZERO DMA</Keywords>
-            <Keywords name="Words4">:</Keywords>
+            <Keywords name="Words4">node</Keywords>
         </KeywordLists>
         <Styles>
             <WordsStyle name="DEFAULT" styleID="11" fgColor="C0C0C0" bgColor="400000" colorStyle="1" fontStyle="1" />
             <WordsStyle name="FOLDEROPEN" styleID="12" fgColor="000000" bgColor="FFFFFF" fontStyle="0" />
             <WordsStyle name="FOLDERCLOSE" styleID="13" fgColor="000000" bgColor="FFFFFF" fontStyle="0" />
-            <WordsStyle name="KEYWORD1" styleID="5" fgColor="FF0000" bgColor="000000" colorStyle="1" fontStyle="1" />
-            <WordsStyle name="KEYWORD2" styleID="6" fgColor="8080C0" bgColor="FFFFFF" colorStyle="1" fontStyle="0" />
+            <WordsStyle name="KEYWORD1" styleID="5" fgColor="FF0000" bgColor="000000" colorStyle="1" fontStyle="0" />
+            <WordsStyle name="KEYWORD2" styleID="6" fgColor="8080C0" bgColor="000000" colorStyle="1" fontStyle="0" />
             <WordsStyle name="KEYWORD3" styleID="7" fgColor="008000" bgColor="000000" colorStyle="1" fontStyle="0" />
-            <WordsStyle name="KEYWORD4" styleID="8" fgColor="FFFFFF" bgColor="FF0000" fontStyle="0" />
+            <WordsStyle name="KEYWORD4" styleID="8" fgColor="FFFF00" bgColor="000000" colorStyle="1" fontStyle="0" />
             <WordsStyle name="COMMENT" styleID="1" fgColor="C0C0C0" bgColor="000000" fontStyle="0" />
             <WordsStyle name="COMMENT LINE" styleID="2" fgColor="C0C0C0" bgColor="808080" colorStyle="1" fontStyle="2" />
             <WordsStyle name="NUMBER" styleID="4" fgColor="0080FF" bgColor="FFFFFF" colorStyle="1" fontStyle="0" />
-            <WordsStyle name="OPERATOR" styleID="10" fgColor="FF0000" bgColor="FFFFFF" colorStyle="1" fontStyle="1" />
+            <WordsStyle name="OPERATOR" styleID="10" fgColor="FFFFFF" bgColor="FFFFFF" colorStyle="1" fontStyle="1" />
             <WordsStyle name="DELIMINER1" styleID="14" fgColor="000000" bgColor="FFFFFF" fontStyle="0" />
             <WordsStyle name="DELIMINER2" styleID="15" fgColor="000000" bgColor="FFFFFF" fontStyle="0" />
             <WordsStyle name="DELIMINER3" styleID="16" fgColor="000000" bgColor="FFFFFF" fontStyle="0" />

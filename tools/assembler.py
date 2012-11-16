@@ -248,7 +248,8 @@ def debug(str) :
 # Decimal to binary converter
 def dec2bin( dec, target ):
 	b = bin(int(dec));
-	b = b[2:(target+2)]
+	b = b[2:] # remove binary prefix
+	if len(b) > target: sys.exit("error: Integer overflow")
 
 	# Add target length padding
 	for i in range(len(b), target) : b = '0' + b
@@ -277,7 +278,7 @@ def main():
 	if options.input				: sys.stderr.write(__assembleInstrFile__(options.input, options.output)+'\n')
 	elif options.node				: sys.stderr.write('> ' + __assembleNodeInstr__(options.node)+'\n')
 	elif options.ctrl				: sys.stderr.write('> ' + __assembleCtrlInstr__(options.ctrl)+'\n')
-	else							: sys.exit("Unknown command line tool command")
+	else							: sys.exit("error: Unknown command line tool command")
 
 if __name__ == '__main__':
 	main()

@@ -162,7 +162,7 @@ int data_file_parse(const char *path, data_blk_src_t *result) {
 	unsigned int ba = -1, fc = -1;
 	sscanf(buf, "%u %u", &ba, &fc);
 
-	if (ba > SD_RAW_ACCESS_MIN_BLOCK && ba < SD_RAW_ACCESS_MAX_BLOCK) {
+	if (ba < SD_RAW_ACCESS_MIN_BLOCK || ba > SD_RAW_ACCESS_MAX_BLOCK) {
 		return 1;
 	}
 	if (fc <= 0) {
