@@ -105,9 +105,7 @@ def __assembleCtrlDma__(op, cmd):
 	if not cmd: sys.exit("error: Instruction expects DMA command.")
 	if cmd not in dcmds: sys.exit("error: DMA comamnd does not exist.")
 	
-	cmd = dec2bin(dcmds[cmd], 16)
-	
-	return bin + str(cmd) + '000'	
+	return bin + '000000000000' + dcmds[cmd] + '000'	
 	
 # Assemble node instruction
 def __assembleNodeInstrN__(ctrl, op, fn, params, n):
