@@ -45,7 +45,7 @@ arbitrary words in the data \ac{RAM}.
 To send pixels to the \ac{VGA} controller, two of the registers are dedicated to
 contain an address and a pixel value, respectively. The contents of these
 registers are constantly sent to the \ac{VGA} controller. By incrementing and
-loading\ac{RAM} values into these registers, using the control core's regular
+loading \ac{RAM} values into these registers, using the control core's regular
 instruction set, the control core program can upload images to the \ac{VGA}
 screen buffer.
 
@@ -72,7 +72,7 @@ a \emph{Direct Memory Access module} was devised, allowing us to overlap computa
 and communication.
 
 The \ac{DMA} module performs loading of new \ac{SIMD} data planes and storing of
-processed \ac{SIMD} data planes \emph{in parallell} with the normal execution
+processed \ac{SIMD} data planes \emph{in parallel} with the normal execution
 of program instructions. The nodes of the \ac{SIMD} array have a separate
 register -- the S register -- that is reserved for the \ac{DMA} module. The S
 registers are connected in a left-to-right direction throughout the

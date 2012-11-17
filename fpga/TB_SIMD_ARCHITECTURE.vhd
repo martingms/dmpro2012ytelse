@@ -153,6 +153,7 @@ IRAM(68) <= "101000000000000111110000";
 IRAM(69) <= "100000000000000000000000";
 IRAM(70) <= "101000000000001000101000";
 
+
 	DRAM(0) <= "10000000";
 	DRAM(1) <= "10000001";
 	DRAM(2) <= "10000010";
@@ -200,14 +201,14 @@ IRAM(70) <= "101000000000001000101000";
 	data_ram : process(daddr)
 	begin
 		if (dwrite='0') then
-			ddata_in(0) <= '1'; --daddr(20);
-			ddata_in(1) <= '1'; --daddr(17);
-			ddata_in(2) <= '1'; --daddr(16);
-			ddata_in(3) <= '0'; --daddr(10);
-			ddata_in(4) <= '1'; --daddr(8);
-			ddata_in(5) <= '0'; --daddr(5);
-			ddata_in(6) <= '1'; --daddr(1);
-			ddata_in(7) <= '0'; --daddr(0);
+			ddata_in(0) <= daddr(20);
+			ddata_in(1) <= daddr(17);
+			ddata_in(2) <= daddr(16);
+			ddata_in(3) <= daddr(10);
+			ddata_in(4) <= daddr(8);
+			ddata_in(5) <= daddr(5);
+			ddata_in(6) <= daddr(1);
+			ddata_in(7) <= daddr(0);
 		end if;
 	end process;
 	

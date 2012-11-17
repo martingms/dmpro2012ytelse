@@ -183,6 +183,12 @@ begin
 				end if;
 			end if;
 			
+			if action = "00" then
+				mem_addr <= (others => '0');
+				mem_data <= (others => 'Z');
+				mem_write <= '1'; -- Read
+			end if;
+			
 			-- If done with the current cell, step counters and update addresses
 			if cell_done = '1' and assert_done = '1' then
 				if state.row = simd_rows - 1 then
