@@ -18,7 +18,8 @@ class LenaLexer(RegexLexer):
         'root': [
             include('whitespace'),
             include('keyword'),
-            (r'[0-9]+', Number.Integer)
+            (r'[0-9]+', Number.Integer),
+            (r'[ \t]*[a-zA-Z0-9_]+\:', Name) # Jump-labels.
         ],
         'whitespace': [
             (r'\n', Text),
