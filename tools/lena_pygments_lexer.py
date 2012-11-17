@@ -4,7 +4,7 @@
 #  run python _mapping.py in that directory.
 #
 
-from pygments.lexer import RegexLexer, include
+from pygments.lexer import RegexLexer, include, bygroups
 from pygments.token import *
 
 __all__ = ['LenaLexer']
@@ -20,7 +20,8 @@ class LenaLexer(RegexLexer):
             include('keyword'),
             (r'[0-9]+', Number.Integer),
             (r'[ \t]*[a-zA-Z0-9_]+\:', Name), # Jump-labels.
-            (r'\b(beq|branch|jump)\b[ \t]+([a-zA-Z0-9_]+)', bygroups(Keyword, Name))
+            (r'\b(beq|branch|jump)\b([ \t]+)([a-zA-Z0-9_]+)',
+             bygroups(Keyword, Text, Name))
         ],
         'whitespace': [
             (r'\n', Text),
