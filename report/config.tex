@@ -59,9 +59,40 @@ Trygve Aaberge\\
 \usepackage{graphicx}
 \usepackage{tabularx}
 \usepackage{comment}
-\usepackage[hidelinks]{hyperref} % Links
+\usepackage{hyperref}
 \usepackage{appendix}
-\usepackage{acronym}
+\usepackage[nohyperlinks]{acronym}
+
+%%% Fine-tuning of this classicthesis
+
+\newcounter{dummy} % Fikser hyperref-feil (?)
+\usepackage{textcomp} % Fikser feilmelding om at fonter er bytta ut
+\usepackage{scrhack} % Fikser warnings i listings
+
+\usepackage{xspace} % Fikser mellomrom etter makroer.
+\usepackage{mparhack} % Margins, how do they work.
+\usepackage{fixltx2e} % Generell "fiks" på diverse andre fails
+                      % (ser ut til å funke?)
+
+%%% Hyperref setup
+\hypersetup{
+    %draft, % Fjerner alle lenker. Kjekt for 
+    colorlinks=true, linktocpage=true, pdfstartpage=3, pdfstartview=FitV,
+    % Fjern kommenteringa på lenkene under for svarte lenker
+    % colorlinks=false, linktocpage=false, pdfborder={0 0 0},
+    breaklinks=true, pdfpagemode=UseNone, pageanchor=true, 
+    pdfpagemode=UseOutlines,plainpages=false, bookmarksnumbered, 
+    bookmarksopen=true, bookmarksopenlevel=1, hypertexnames=true, 
+    pdfhighlight=/O,
+    urlcolor=webbrown, linkcolor=RoyalBlue, citecolor=webgreen, 
+    % pagecolor=RoyalBlue,
+    % urlcolor=Black, linkcolor=Black, citecolor=Black, %pagecolor=Black,
+    pdftitle={\ourTitle},
+    pdfauthor={\textcopyright\ C. Bru et al, \ourUni, \ourFaculty},
+    pdfsubject={\ourProject},
+}
+
+\renewcommand{\bflabel}[1]{{#1}\hfill}
 
 %\usepackage{listings} % loaded by classicthesis
 
