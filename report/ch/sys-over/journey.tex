@@ -27,6 +27,8 @@ data, and loads the data. Finally, the \ac{SCU} allows \ac{LENA} to run. The
 \ac{SIMD} node has data to work with, every node ``picks up'' the data and
 places it in a special register.
 
+\input{fig/sys-over/journey}
+
 The control core then sends the instruction the \ac{SIMD} nodes should use
 next. In addition, the control core starts sending in new data into the
 \ac{SIMD} nodes, to minimize latency. When the \ac{SIMD} nodes have finished
