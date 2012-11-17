@@ -25,7 +25,7 @@ entity MUX is
 		selector						: in  STD_LOGIC;
 		bus_in0 						: in  STD_LOGIC_VECTOR (N-1 downto 0);
 		bus_in1 						: in  STD_LOGIC_VECTOR (N-1 downto 0);
-		bus_out 						: out STD_LOGIC_VECTOR (N-1 downto 0)
+		bus_out 						: out STD_LOGIC_VECTOR (N-1 downto 0) := (others => '0')
 	);
 end MUX;
 

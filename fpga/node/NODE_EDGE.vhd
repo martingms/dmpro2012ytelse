@@ -59,7 +59,7 @@ architecture Behavioral of NODE_EDGE is
 ----------------------------------------------------------------------------------
 --	INSTRUCTION DECODER
 ----------------------------------------------------------------------------------
-	signal ctrl_s_swap			: STD_LOGIC;
+	signal ctrl_s_swap			: STD_LOGIC													:= '0';
 
 ----------------------------------------------------------------------------------
 --	SOURCE DATA REGISTER
@@ -97,7 +97,7 @@ begin
 		s_out							=> sr_out
 	);
 
-	process (clk, reset, tmp_n_out, tmp_s_out, tmp_e_out, tmp_w_out) begin
+	process (clk, reset, instr, tmp_n_out, tmp_s_out, tmp_e_out, tmp_w_out) begin
 		if (reset = '1') then
 			tmp_n_out				<= (others => '0');
 			tmp_s_out				<= (others => '0');

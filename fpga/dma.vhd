@@ -152,10 +152,19 @@ begin
 					mem_data <= (others => 'Z');
 					mem_write <= '1'; -- Read
 					
+					simd_addr <= (others => '0');
+					simd_data_out <= (others => '0');
+					simd_write <= '0';
+					
 					next_state.memory_assert_phase <= '1';
 				else
+					mem_addr <= state.read_addr;
+					mem_data <= (others => 'Z');
+					mem_write <= '1'; -- Read
+					
 					simd_addr <= conv_std_logic_vector(state.row, simd_addr_width);
 					simd_data_out <= mem_data;
+
 					simd_write <= '1';
 					
 					next_state.memory_assert_phase <= '0';
@@ -174,6 +183,10 @@ begin
 					
 					next_state.memory_assert_phase <= '1';
 				else
+					simd_addr <= conv_std_logic_vector(state.row, simd_addr_width);
+					simd_data_out <= (others => '0');
+					simd_write <= '0';
+					
 					mem_addr <= (others => '0');
 					mem_data <= (others => 'Z');
 					mem_write <= '1'; -- Read
@@ -187,6 +200,10 @@ begin
 				mem_addr <= (others => '0');
 				mem_data <= (others => 'Z');
 				mem_write <= '1'; -- Read
+					
+				simd_addr <= (others => '0');
+				simd_data_out <= (others => '0');
+				simd_write <= '0';
 			end if;
 			
 			-- If done with the current cell, step counters and update addresses
