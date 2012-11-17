@@ -491,6 +491,7 @@ begin
 			data_write => dma_simd_write,
 			row_sel => dma_simd_addr,
 			data_in => dma_simd_data_out,
+--			data_in => (others => '1'),
 			data_out => dma_simd_data_in,
 			state_out => simd_array_state);
 	

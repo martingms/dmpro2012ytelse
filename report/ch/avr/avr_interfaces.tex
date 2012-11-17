@@ -12,7 +12,7 @@ mention some:
 \item Serial port
 \item \ac{SD} card
 \item \ac{USB} connectivity
-\item \ac{EBI} (avrMemory)
+\item \ac{EBI} AVR memory
 \end{enumerate}
 
 We also wanted to have some visual input and debugging tools for the project
@@ -28,13 +28,15 @@ there were leftover pins when the rest was mapped out.
 As for the actual pinout of the AVR, refer to the appendix.
 \TODO{Add appendix on this}
 
-\subsection{AVR crystal}
+\begin{description}
+
+\item[AVR crystal] \hfill
 
 Previous years have chosen to have multiple crystals for the AVR. Our AVR has support for up to 3 crystals, where 2 are high frequency crystals that can be used as external clocks for the AVR. The last crystal is a low frequency crystal that is needed if one intends to make use of power saving functions in the AVR or are in need of real time measurement on the AVR. \TODO{dette kan også gjøres med interne klokker på hhv. 115kHz og 32kHz. skrive om?}
 
 As we were to optimize for performance we tried to use the most of the given resources. This included saving pins wherever we could, and as such we have gone with only one crystal. This crystal is connected to port 0 on the AVR and has a socket. We ordered a number of crystals in order to make sure that we could adapt to most any requirements that may or may not have been clear to us at the time of the design.
 
-\subsection{SD card} % \ac inside sections messes up TOC
+\item[SD card]  \hfill % \ac inside sections messes up TOC
 
 We also needed a storage medium. Since previous years have had good results with
 using \ac{SD} cards, this was what we chose as well. However, working on the
@@ -42,20 +44,20 @@ design we encountered a few problems in regard to the \ac{SD} card, mostly in
 regard to performance more about this refer to the \ac{SD} card implementation
 section. \TODO {rewrite or fix reference?}
 
-\subsection{Serial port}
+\item[Serial port]  \hfill
 
 The serial feature was implemented as a way of debugging. This is connected to
 \ac{USART} 0 on the AVR and was not a crucial part of the design, but rather a way for us to communicate and get quantitative data from the AVR. We decided that having serial access would be handy as there is only so much data you can get out of 8 blinking LEDs. The serial implementation had some issues in regard to our mapping of the lines to the port, this was partly tried to solve by remapping the lines over the header.
 
-\subsection{USB connectivity}
+\item[USB connectivity]  \hfill 
 
 Our AVR also supports \ac{USB}. We decided to map up the \ac{USB} even though we were doubtful we would have much use for it, due to both having \ac{SD} card and serial for debugging purposes. This feature therefore was given a low priority and was not implemented in the final design due to time constraints.
  
-\subsection{EBI (avrMemory)}
+\item[External Bus Interface - AVR Memory]  \hfill 
 
 Early in the design process, we came to doubt whether the \ac{SD} card would perform as well as we needed it to. In order to try to safeguard us from total failure in a case where this would come true (which it did) we gave the AVR a separate memory in order to be able to have a buffer for data coming from the \ac{SD} card or from the \ac{FPGA}. The AVR itself does not have enough memory for even a single frame of video, which is why -- after some discussion -- we deemed it a worthwhile use of ports at the expense of some \ac{I/O} lines to the FPGA.
 
-\subsection{VGA controller}
+\item[VGA controller]  \hfill
 
 Questioning whether or not we would be able to implement a \ac{VGA} controller
 on the \ac{FPGA}, we thought it wise to have a backup to get a picture on the
@@ -64,4 +66,4 @@ has been previously used in projects with some success. We added this as a
 backup where we would pipe data back to the AVR for display on screen, should
 the \ac{FPGA} \ac{VGA} controller fail.
 
-
+\end{description}
