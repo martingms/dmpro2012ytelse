@@ -7,7 +7,12 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 package FPGA_CONSTANT_PKG is
-
+	
+	-- NODE ARRAY
+	constant NODE_ARRAY_ROW_ADDR	: integer	:= 2;
+	constant NODE_ARRAY_ROWS		: integer	:= 2;
+	constant NODE_ARRAY_COLS		: integer	:= 2;
+	
 	-- NODE INSTRUCTION SET
 	constant NODE_INSTR_OP			: integer	:= 3;
 	constant NODE_INSTR_OP_R		: STD_LOGIC_VECTOR(NODE_INSTR_OP-1 downto 0) := "000";
