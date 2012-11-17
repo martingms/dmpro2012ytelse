@@ -1,4 +1,4 @@
-\section {The PCB}
+\section {PCB testing}
 
 \input{fig/pcb/pcbwithoutcomp}
 
@@ -10,18 +10,5 @@ there was no current passing from one layer to another. Then, we started to sold
 circuit after each iteration. The table \ref{fig:pcb} shows the observed voltage from each plane.
 
 \input{fig/pcb/voltageresult.tex}
-
-After that we started soldering the AVR. Getting the AVR in place was particularly difficult,
-but after asking Tufte, we lent a glue stick to put some glue on. The increased friction helped keeping the AVR in place during soldering.
-
-After about a days work we managed to completely destroy a pin on the AVR,
-therefore we had to start from scratch on a new board. On this new board we
-started with the AVR and \ac{FPGA}, as they were the hardest components to
-solder. After each side on the AVR and \ac{FPGA}, we tested for short
-circuits. As none were found, we moved on to the power supply, as well as
-\acp{JTAG}, FLASH and \acp{LED}. In order to check the \ac{PCB} was working, the
-AVR and \ac{FPGA} groups tested the \ac{PCB} board without the capacitors, after
-both groups tested that they could connect to the AVR and \ac{FPGA}
-respectively, we began to solder the rest part of the \ac{PCB}.
 
 \input{fig/pcb/pcbwithcomp}

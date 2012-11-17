@@ -1,7 +1,6 @@
 \section {Design Choices}
 
 \subsection {Memory}
-\subsubsection{Design}
 The overall design for our machine calls for quite a bit of different, separate memories. One for Data,
 one for Instructions and one for the VGA. The data, VGA and AVR memories use 8-bit chips to match
 their word size. And the instruction memory uses 2x16-bit chips with address-lines connected
@@ -41,21 +40,6 @@ extra chips ordered as \ac{VGA} memory for this purpose.
 Forresten, da vart det så kort at jeg bare tødde det in i avsnittet over. Må få jobbet prosess-delene inn igjen et eller annet sted!
 ~Mads
 \end{comment}
-
-\subsubsection{process}
-
-As discussed earlier, as one of our earliest design choices we chose 3 separate memories to allow overlap of
-memory accesses. Since the requirements for the data/instruction memories differed in both size and word-width 
-we wound up with not only separate, but also different chips for this purpose. The same choice meant we also
-needed a separate memory for our \ac{VGA} controller, as that needed to read it's buffer as fast as possible
-without interfering with the speed of the rest of the system. This called for a memory that was big enough to
-hold atleast a full screen-frame, at 8-bit per pixel (since each pixel is an 8-bit greyscale pixel).
-
-To reduce the possibility of having too slow data-access from the AVR, an extra memory was added to work as
-a buffer for the AVR as well. This design choice was made {\em after} ordering, which meant that we had to choose from
-the chips we had already ordered to fit this purpose. Since this was intended to carry data intended for the rest
-of the system, and as the rest of the system is working with data in 8-bit bytes, we ended up using one of the
-extra chips ordered as \ac{VGA} memory for this purpose.
 
 \subsection{VGA}
 Our initial plans were to create our own \ac{VGA} controller in the \ac{FPGA}, but since having video-output was mission-critical
