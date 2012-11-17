@@ -19,8 +19,8 @@ components as fast as possible: The \ac{LENA} architecture was tested through
 \ac{VHDL} test benches, the \ac{VGA} component in the \ac{LENA} architecture was
 tested with \acp{LED} and buttons on the board, and the AVR part of the
 \ac{LENA} system was tested through the \ac{VGA} contact on the board. By doing
-this, we can safely assume that errors occuring when connecting different
-components is due to errors in the protocol implementation(s).
+this, we can assume that errors occuring when connecting different components is
+due to errors in the protocol implementation(s).
 
 Figure \ref{fig:sys-over-arch-fig} shows our resulting architecture. Buttons and
 \acp{LED} made it easy to confirm that the \ac{VGA} operates properly for simple
@@ -31,7 +31,8 @@ should fail to implement its \ac{VGA} module.
 
 To be able to process data, we need an \ac{I/O} device which serves the machine
 with data it should process. As we were unsure of what would be the easiest to
-implement, we included both a serial, \ac{USB} and \ac{SD} card on the \ac{PCB}.
+implement, we included both a serial port, a \ac{USB} port and a \ac{SD} card
+reader on the \ac{PCB}.
 
 The \ac{LENA} architecture has three different memory components: One for the
 \ac{VGA} component, one for instructions and one for data. The main reason for
@@ -40,7 +41,7 @@ this is that image processing systems in general need a lot of memory. The
 it needs to keep the old image in memory. The \ac{LENA} architecture should have
 one image in memory which it can send to the \ac{SIMD} nodes, and one image
 which is currently read from the \ac{SCU} to memory. In addition, one would have
-to read data instructions as well. All these different parts require
-relatively much memory, and they are all frequently accessed. Therefore it would
-be favourable to have them as separate components so that memory accesses can be
+to read data instructions as well. All these different parts require relatively
+much memory, and they are all frequently accessed. Therefore, it would be
+favourable to have them as separate components so that memory access can be
 parallelised.
