@@ -6,7 +6,7 @@ some interesting issues.
 
 A major downside of this approach was the fact that this completely serialized
 our work on the Schematic, since we could not make concurrent changes to our
-single document. This limited the parallelism of our workflow to one person at a
+single document. This limited the parallelism of our work flow to one person at a
 time working on the schematic.  In the meantime, the other people in the
 \ac{PCB} group did whatever could be done without touching the
 schematic. (Making footprints, verifying design, looking up parts and data
@@ -15,7 +15,7 @@ something of a bottleneck for the schematic work.
 
 However, having the overall control of the entire thing in one document
 did help to smooth out quite a few issues we met along the road. For instance,
-we were having quite a few issues with netlabels. This was quite easy to
+we were having quite a few issues with net labels. This was quite easy to
 untangle when everything was in one document with 0 ports, as getting the
 complete overview was very readable with this approach. We also avoided the need
 to use any buses this way, although we did end up with one or two for the sake
@@ -34,16 +34,16 @@ allow for easy reading of the schematic.
 We initially worked from the assumption that all pins should be connected to a
 bus, and then that bus should be connected to the pins in the other end. This
 gave us some issues with duplicate naming. After digging through quite a bit of
-Altium documentation, we became assured that simply wire-labelling the pins
+Altium documentation, we became assured that simply wire-labeling the pins
 would create the necessary connections. This is because any pin/wire with the
 same name as any other pin/wire will be connected by definition in Altium.
 
 This arguably made for a less readable schematic, as the bus-connected solution
 was quite a lot easier to follow when tracing. However, as our schematic still
 is logically grouped, it is not very hard to find the correct connections even
-without the busses drawn in. We are quite sure that given a logical overview of
+without the buses drawn in. We are quite sure that given a logical overview of
 which components are directly connected to each other, finding the various pins
-that perform this connection should be trivial even without the busses/wires
+that perform this connection should be trivial even without the buses/wires
 drawn in.
 
 \TODO{Overordnet forklaring av hvordan (JN: ???)}

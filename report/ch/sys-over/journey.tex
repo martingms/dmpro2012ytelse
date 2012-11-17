@@ -1,15 +1,15 @@
 \section{An Image's Odyssey through the System}
 
-To quickly summarize the previous sections, let us take a quick example on how
-the complete system will process a video, an image or something like the game of
-life.
+To summarize the previous sections, let us take a quick example on how the
+complete system will process a video, an image or something like the Game of
+Life.
 
 At first, the machine is powered up, and all the components wake up from their
 sleep. \ac{LENA} will reload its \ac{FPGA} setup from flash, and the \ac{SCU}
 will do the same. When these are ready to run, the \ac{SCU} creates a menu and
 sends it to \ac{LENA}, which will in turn show the menu trough the \ac{VGA} port
-it has control over. Whenever the user pushes the buttons, the menu is updated,
-and a new image is sent over to \ac{LENA}.
+it has control over. Whenever a user push any of the buttons, the menu is
+updated and a new menu image is sent over to \ac{LENA}.
 
 When we have chosen the program to run and the data it should run on, the
 \ac{SCU} sets the \ac{LENA} state to a state where it is able to receive
@@ -17,15 +17,14 @@ instructions. It then loads the instructions the program contains to
 \ac{LENA}. The \ac{SCU} then sets the state to a state where it is able to load
 data, and loads the data. Finally, the \ac{SCU} allows \ac{LENA} to run. The
   \ac{SCU} will feed \ac{LENA} with more data after some time, depending on what
-  data stream we have chosen and what program we decided to run.
+  data stream we have chosen and what program we have decided to run.
 
-\ac{LENA} has now all it needs to compute data. \TODO{A figure here showing this
-  odyssey would be sweet.} The control core starts by sending data to the
-\ac{SIMD} array. This is done by putting the different values on multiple
-``conveyor belts'' which lies below the \ac{SIMD} node. \TODO{This is very
-  illustrative, but not technically correct. Is that an issue?} When every
-\ac{SIMD} node has data to work with, every node ``picks up'' the data and
-places it in a special register.
+\ac{LENA} has now all it needs to perform its instructions. The control core
+starts by sending data to the \ac{SIMD} array. This is done by putting the
+different values on multiple ``conveyor belts'' which lies below the \ac{SIMD}
+node. \TODO{This is very illustrative, but not technically correct. Is that an
+  issue?} When every \ac{SIMD} node has data to work with, every node ``picks
+up'' the data and places it in a special register.
 
 \input{fig/sys-over/journey}
 
@@ -34,19 +33,22 @@ next. In addition, the control core starts sending in new data into the
 \ac{SIMD} nodes, to minimize latency. When the \ac{SIMD} nodes have finished
 processing this data, they swap the finished result with the new data on the
 ``conveyor belt''. The control core puts on new data, and the finished results
-are moved on and out of the ``conveyor belt'' to a \ac{DMA}. The \ac{DMA} takes
-the finished result and puts it back in to the data memory. \TODO{I am not 100\%
-  that this is right. Could someone confirm this?}
+are moved on and out of the ``conveyor belt'' to the \ac{DMA}. The \ac{DMA}
+takes the finished result and puts it back into the data memory. \TODO{I am not
+  100\% that this is right. Could someone confirm this?} Note that Figure
+\ref{fig:image-journey} does not show this, as the figure would thus be hard to
+understand otherwise.
 
 The control core then takes the results from memory and sends them to the
 \ac{VGA} module, which finally sends the image to the device connected to the
-\ac{VGA} port. The device, a screen, for instance, then views the processed
+\ac{VGA} port. The device, a screen, for instance, then displays the processed
 image.
 
-The odyssey has ended for our image, but there is still work to be done. If
-we are playing a video, more images will be processed in the way described
+The odyssey has ended for our image, but there is still work to be done. If we
+are playing a video, more images will be processed in the way described
 above. If we are doing something entirely different | for instance, playing Game
 of Life | we may just keep working on the result from last iteration until the
 end of time. If we stop before that, the \ac{SCU} will stop \ac{LENA} by turning
 its state to a stop state. The \ac{SCU} will then set up the original menu, and
-our machine is ready to let new images go on another odyssey.
+our machine is ready to let new images go on another odyssey with another
+program.

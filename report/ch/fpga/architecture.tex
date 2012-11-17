@@ -14,13 +14,13 @@ the \ac{VGA} memory and shown on screen.
 
 The processing part of \ac{LENA} is the \ac{SIMD} array. It is organized in a matrix, as
 specified by the assignment, and designed to process images. Each node processes
-one word at a time and can communicate with its four direct neighbours. This
+one word at a time and can communicate with its four direct neighbors. This
 makes the processor well suited for applying 3x3 image filters, such as Laplace.
 
 To first load the data into the \ac{SIMD} array, it is sent to the first column of
 the nodes and copied to the right, passing through all the nodes until the last
 column.  This is done by using a special register for sending data, called the
-S-register. Data is continously received by the first column, so the whole array
+S-register. Data is continuously received by the first column, so the whole array
 is filled. At that time, data processing can start. The data is swapped onto
 another register of the node, and new data can be loaded through the S-register.
 When both data processing and transmission of new data is done, the registers
@@ -37,16 +37,16 @@ setting the S-registers of the first column. It also retrieves the results from
 the last column of the array and stores it to the data memory.
 
 The \ac{FPGA} receives data from the AVR on 24 input lines. This is enough to
-transmit one instruction per tramsmission. All of the instructions are copied
+transmit one instruction per transmission. All of the instructions are copied
 into the instruction memory before any other data is sent. The image data is
-sent at one word (8 bits) at a time. We considered using all 24 lines for data
+sent one word (8 bits) at a time. We considered using all 24 lines for data
 transmission, but as we tested the transmission rate, we realized that it was
-fast enough by only trasmitting one word at a time. This was easier to
+fast enough by only sending one word at a time. This was easier to
 implement, and was therefore the chosen implementation.
 
 The \ac{SIMD} array is created dynamically in \ac{VHDL}, hence the number of
-cores is easily interchangable. The final number of cores in our implementation
+cores is easily interchangeable. The final number of cores in our implementation
 is only limited by the available space on the \ac{FPGA}. We tried to fit as many
 nodes as possible, and the \ac{FPGA} we used had enough space for 6 nodes.
 \TODO{Jahre vil at det skal komme bedre fram at dette ikke er noe vi kan gjøre noe med, med strek under "the FPGA we used".
-Nevnte i diskusjon om non-functional requirements at dette ikke er noe vi kan gjøre noe med, er det nokk?}
+Nevnte i diskusjon om non-functional requirements at dette ikke er noe vi kan gjøre noe med, er det nok?}

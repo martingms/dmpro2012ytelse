@@ -103,6 +103,9 @@ begin
 			tmp_s_out				<= (others => '0');
 			tmp_e_out				<= (others => '0');
 			tmp_w_out				<= (others => '0');
+			ctrl_s_swap				<= '0';
+		elsif (instr(23) = '1') then
+			ctrl_s_swap				<= '0';
 		elsif rising_edge(clk) then
 			CASE instr(21 downto 19) IS
 				-- S-data swap

@@ -1,5 +1,5 @@
 \section{User interface}
-The \ac{UI} is a simple program running on the \ac{SCU} letting the user control the {\sc 256 Shades of Gray}. The \ac{UI} has three states in which the user goes through: Select program, select data and run program. The \ac{UI} is implemented by converting text into bitmap files and sending theese files to \ac{LENA} for output to VGA. The user can use the buttons to scroll through a menu of, and choose, a program and a data file respectively. When a data file is chosen, the \ac{SCU} will run the selected program with the selected data on \ac{LENA}, and then reset after the program has terminated.
+The \ac{UI} is a simple program running on the \ac{SCU} letting the user control the {\sc 256 Shades of Gray}. The \ac{UI} has three states in which the user goes through: Select program, select data and run program. The \ac{UI} is implemented by converting text into bitmap files and sending these files to \ac{LENA} for output to VGA. The user can use the buttons to scroll through a menu of, and choose, a program and a data file respectively. When a data file is chosen, the \ac{SCU} will run the selected program with the selected data on \ac{LENA}, and then reset after the program has terminated.
 
 
 \subsection{Script format}
@@ -10,7 +10,7 @@ contain the following information:
 \begin{enumerate}
 \item Program name
 \item Location of \ac{LENA} program binary file
-\item Interval in ms (time between each job, typically 1000/framerate)
+\item Interval in ms (time between each job, typically 1000/frame rate)
 \end{enumerate}
 
 \subsection{File system utilization}
@@ -18,7 +18,7 @@ To ease the handling of data on the SD card, we chose to use the FAT
 file system. The file system contains files such as scripts, \ac{LENA} programs
 and data pointers. Because of the performance limitations of the \ac{ASF} FAT driver, the data is actually
 placed outside of the file system. The transfer speed of data is crucial to our
-system's performance, and this increased the framerate substantially. We were
+system's performance, and this increased the frame rate substantially. We were
 still able to use the file system to create an abstraction for this. The file
 system contains data files containing "pointers" to the memory location of the
 actual data. The data pointer files on the file system is a text file containing
