@@ -19,25 +19,23 @@ data, and loads the data. Finally, the \ac{SCU} allows \ac{LENA} to run. The
   \ac{SCU} will feed \ac{LENA} with more data after some time, depending on what
   data stream we have chosen and what program we have decided to run.
 
-\ac{LENA} has now all it needs to perform its instructions. The control core
-starts by sending data to the \ac{SIMD} array. This is done by putting the
-different values on multiple ``conveyor belts'' which lies below the \ac{SIMD}
-node. \TODO{This is very illustrative, but not technically correct. Is that an
-  issue?} When every \ac{SIMD} node has data to work with, every node ``picks
-up'' the data and places it in a special register.
-
 \input{fig/sys-over/journey}
 
+\ac{LENA} has now all it needs to perform its instructions. The control core
+starts by activating the \ac{DMA}. The \ac{DMA} starts sending data from memory
+to the \ac{SIMD} array. This is done by putting the different values on multiple
+``conveyor belts'' which lies below the \ac{SIMD} node. \TODO{This is very
+  illustrative, but not technically correct. Is that an issue?} When every
+\ac{SIMD} node has data to work with, every node ``picks up'' the data and
+places it in a special register.
+
 The control core then sends the instruction the \ac{SIMD} nodes should use
-next. In addition, the control core starts sending in new data into the
-\ac{SIMD} nodes, to minimize latency. When the \ac{SIMD} nodes have finished
-processing this data, they swap the finished result with the new data on the
-``conveyor belt''. The control core puts on new data, and the finished results
-are moved on and out of the ``conveyor belt'' to the \ac{DMA}. The \ac{DMA}
-takes the finished result and puts it back into the data memory. \TODO{I am not
-  100\% that this is right. Could someone confirm this?} Note that Figure
-\ref{fig:image-journey} does not show this, as the figure would thus be hard to
-understand otherwise.
+next. In parallel, the \ac{DMA} starts sending in new data into the \ac{SIMD}
+nodes, to minimize latency. When the \ac{SIMD} nodes have finished processing
+this data, they swap the finished result with the new data on the ``conveyor
+belt''. The \ac{DMA} puts on new data, and the finished results are moved on and
+out of the ``conveyor belt''. The \ac{DMA} takes the finished result and puts it
+back into the data memory.
 
 The control core then takes the results from memory and sends them to the
 \ac{VGA} module, which finally sends the image to the device connected to the
