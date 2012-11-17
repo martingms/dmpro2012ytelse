@@ -1,0 +1,20 @@
+ctrl addi R1 ZERO 1
+ctrl addi R2 ZERO 2
+ctrl addi R3 ZERO 3
+
+node addi R1 ZERO 100
+node swap R1 R1
+
+ctrl addi DMA ZERO 100
+ctrl dma start
+ctrl nop
+ctrl nop
+ctrl nop
+ctrl nop
+ctrl nop
+ctrl addi DMA ZERO 1
+ctrl dma set_read_active
+
+sleep:
+	ctrl nop
+	ctrl jump sleep
