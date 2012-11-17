@@ -1,19 +1,4 @@
     ctrl nop
-    ctrl addi R1 ZERO 150           # R1 = 320*240
-    ctrl sll R1 R1
-    ctrl sll R1 R1
-    ctrl sll R1 R1
-    ctrl sll R1 R1
-    ctrl sll R1 R1
-    ctrl sll R1 R1
-    ctrl sll R1 R1
-    ctrl sll R1 R1
-    ctrl sll R1 R1
-
-    ctrl addi VADDR ZERO 0          # VADDR = 0
-
-    node addi R2 ZERO 0
-    node swap R2 R2
 
     ctrl addi DMA ZERO 0
     ctrl dma set_read_active
@@ -21,17 +6,6 @@
 
     ctrl addi DMA ZERO 1
     ctrl dma set_write_active
-    ctrl nop
-
-    ctrl addi DMA ZERO 151
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl dma set_write_base_addr    # write base addr = 19328
     ctrl nop
 
     ctrl addi DMA ZERO 160
@@ -47,6 +21,18 @@
     ctrl addi DMA DMA 1
     ctrl dma set_write_horizontal_incr
     ctrl nop
+
+    ctrl addi R6 ZERO 100
+    ctrl addi DMA ZERO 100
+    node addi R2 ZERO 0
+
+dma_loop:
+    ctrl addi DMA DMA 2
+    ctrl dma set_write_base_addr    # write base addr = 19328
+    ctrl nop
+
+    node addi R2 R2 2
+    node swap ZERO R2
 
     ctrl dma start
     ctrl nop
@@ -80,6 +66,24 @@
     ctrl nop
     ctrl nop
     ctrl nop
+
+    ctrl subi R6 R6 1
+    ctrl beq dma_loop
+    ctrl slt ZERO ZERO R6
+    ctrl nop
+
+    ctrl addi R1 ZERO 150           # R1 = 320*240
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+
+    ctrl addi VADDR ZERO 0          # VADDR = 0
 
 pixel_loop:
 
