@@ -1,63 +1,62 @@
 library ieee;
-use ieee.STD_LOGIC_1164.all;
-use ieee.STD_LOGIC_arith.all;
-use ieee.STD_LOGIC_unsigned.all;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
 
 entity dma is
 	generic (
-		word_width 					: natural := 8;
-		mem_addr_width 			: natural := 21;
-		simd_rows 					: natural := 5;
-		simd_cols 					: natural := 5;
-		simd_addr_width 			: natural := 5
-	);
+		word_width : natural := 8;
+		mem_addr_width : natural := 21;
+		simd_rows : natural := 5;
+		simd_cols : natural := 5;
+		simd_addr_width : natural := 5);
 		
 	port (
-		clk 							: in  STD_LOGIC;
-		reset 						: in  STD_LOGIC;
-		enable 						: in  STD_LOGIC;
+		clk : in std_logic;
+		enable : in std_logic;
+		reset : in std_logic;
 		
-		command 						: in  STD_LOGIC_VECTOR(3 downto 0);
-		parameter 					: in  STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0);
+		command : in std_logic_vector(3 downto 0);
+		parameter : in std_logic_vector(mem_addr_width - 1 downto 0);
 		
-		mem_addr 					: out STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0);
-		mem_data_in 				: in  STD_LOGIC_VECTOR(word_width - 1 downto 0);
-		mem_data_out 				: out STD_LOGIC_VECTOR(word_width - 1 downto 0);
-		mem_write 					: out STD_LOGIC := '0';
+		mem_addr : out std_logic_vector(mem_addr_width - 1 downto 0);
+		mem_data : inout std_logic_vector(word_width - 1 downto 0);
+		mem_write : out std_logic;
 		
-		simd_addr 					: out STD_LOGIC_VECTOR(simd_addr_width - 1 downto 0);
-		simd_data_in 				: in  STD_LOGIC_VECTOR(word_width - 1 downto 0);
-		simd_data_out 				: out STD_LOGIC_VECTOR(word_width - 1 downto 0);
-		simd_write 						: out STD_LOGIC := '0';
+		simd_addr : out std_logic_vector(simd_addr_width - 1 downto 0);
+		simd_data_in : in std_logic_vector(word_width - 1 downto 0);
+		simd_data_out : out std_logic_vector(word_width - 1 downto 0);
+		simd_write : out std_logic;
 		
-		active						: out STD_LOGIC;
-		step_s 						: out STD_LOGIC
-	);
+		active : out std_logic;
+		step_s : out std_logic);
 end dma;
 
 architecture behavioral of dma is
 
 	-- Configurable settings
-	signal read_active : STD_LOGIC := '0';
-	signal read_base_addr : STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0) := (others => '0');
-	signal read_horizontal_incr : STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0) := (others => '0');
-	signal read_vertical_incr : STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0) := (others => '0');
 	
-	signal write_active : STD_LOGIC := '0';
-	signal write_base_addr : STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0) := (others => '0');
-	signal write_horizontal_incr : STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0) := (others => '0');
-	signal write_vertical_incr : STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0) := (others => '0');
+	signal read_active : std_logic := '0';
+	signal read_base_addr : std_logic_vector(mem_addr_width - 1 downto 0) := (others => '0');
+	signal read_horizontal_incr : std_logic_vector(mem_addr_width - 1 downto 0) := (others => '0');
+	signal read_vertical_incr : std_logic_vector(mem_addr_width - 1 downto 0) := (others => '0');
 	
-	-- Internal state	
+	signal write_active : std_logic := '0';
+	signal write_base_addr : std_logic_vector(mem_addr_width - 1 downto 0) := (others => '0');
+	signal write_horizontal_incr : std_logic_vector(mem_addr_width - 1 downto 0) := (others => '0');
+	signal write_vertical_incr : std_logic_vector(mem_addr_width - 1 downto 0) := (others => '0');
+	
+	-- Internal state
+	
 	type state_record is record
-		active 						: STD_LOGIC;
+		active 						: std_logic;
 		row 							: natural range 0 to simd_rows;
 		col 							: natural range 0 to simd_cols;
-		read_addr 					: STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0);
-		write_addr 					: STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0);
-		step_s						: STD_LOGIC;
-		secondary_action_phase 	: STD_LOGIC;
-		memory_assert_phase 		: STD_LOGIC;
+		read_addr 					: std_logic_vector(mem_addr_width - 1 downto 0);
+		write_addr 					: std_logic_vector(mem_addr_width - 1 downto 0);
+		step_s						: std_logic;
+		secondary_action_phase 	: std_logic;
+		memory_assert_phase 		: std_logic;
 	end record;
 	
 	signal state : state_record := ('0', 0, 0, (mem_addr_width - 1 downto 0 => '0'), (mem_addr_width - 1 downto 0 => '0'), '0', '0', '0');
@@ -97,93 +96,90 @@ begin
 	end process update_signals;
 	
 	run_dma: process (state, enable)
-		variable in_padding 			: STD_LOGIC;
-		variable should_read 		: STD_LOGIC;
-		variable should_write 		: STD_LOGIC;
-		variable action 				: STD_LOGIC_VECTOR(1 downto 0); -- "00" for noop, "01" for read, "10" for write
-		variable cell_done 			: STD_LOGIC := '0';
-		variable assert_done 		: STD_LOGIC := '0';
+		variable in_padding : std_logic;
+		variable should_read : std_logic;
+		variable should_write : std_logic;
+		variable action : std_logic_vector(1 downto 0); -- "00" for noop, "01" for read, "10" for write
+		variable cell_done : std_logic := '0';
+		variable assert_done : std_logic := '0';
 	begin
 		if enable = '1' and state.active = '1' then
 			-- Set external signals
-			step_s 						<= state.step_s;
-			active 						<= state.active;
+			step_s <= state.step_s;
+			active <= state.active;
 			
 			-- Update internal state
-			next_state 					<= state;
-			next_state.step_s 		<= '0';
+			next_state <= state;
+			next_state.step_s <= '0';
 			
 			if state.row = 0 or state.row = simd_rows - 1 or state.col = 0 or state.col = simd_cols - 1 then
-				in_padding 				:= '1';
+				in_padding := '1';
 			else
-				in_padding 				:= '0';
+				in_padding := '0';
 			end if;
 			
-			should_read 				:= read_active;
-			should_write 				:= write_active and not in_padding;
+			should_read := read_active;
+			should_write := write_active and not in_padding;
 			
 			if should_read = '1' and should_write = '1' then
 				-- Use internal state to determine whether to read or to write
 				if state.secondary_action_phase = '0' then
-					action 				:= "01"; -- Read first
-					cell_done 			:= '0';  -- Not done
+					action := "01"; -- Read first
+					cell_done := '0'; -- Not done
 				else
-					action 				:= "10"; -- Write second
-					cell_done 			:= '1';  -- Done after this
+					action := "10"; -- Write second
+					cell_done := '1'; -- Done after this
 				end if;
-				assert_done 			:= '0';
+				assert_done := '0';
 			elsif should_read = '1' then
-				action 					:= "01";
-				cell_done 				:= '1';
-				assert_done 			:= '0';
+				action := "01";
+				cell_done := '1';
+				assert_done := '0';
 			elsif should_write = '1' then
-				action 					:= "10";
-				cell_done 				:= '1';
-				assert_done 			:= '0';
+				action := "10";
+				cell_done := '1';
+				assert_done := '0';
 			else
-				action 					:= "00";
-				cell_done 				:= '1';
-				assert_done 			:= '1';
+				action := "00";
+				cell_done := '1';
+				assert_done := '1';
 			end if;
 			
 			-- Perform read action
 			if action(0) = '1' then
 				if state.memory_assert_phase = '0' then
-					mem_addr 			<= state.read_addr;
-					mem_data_out 		<= (others => 'Z');
-					mem_write 			<= '1'; -- Read
+					mem_addr <= state.read_addr;
+					mem_data <= (others => 'Z');
+					mem_write <= '1'; -- Read
 					
 					next_state.memory_assert_phase <= '1';
 				else
-					simd_addr 			<= CONV_STD_LOGIC_VECTOR(state.row, simd_addr_width);
-					simd_data_out 		<= mem_data_in;
-					simd_write 			<= '1';
+					simd_addr <= conv_std_logic_vector(state.row, simd_addr_width);
+					simd_data_out <= mem_data;
+					simd_write <= '1';
 					
 					next_state.memory_assert_phase <= '0';
 					next_state.secondary_action_phase <= '1';
-					assert_done 		:= '1';
+					assert_done := '1';
 				end if;
-			end if;
-			
-			-- Perform write action
-			if action(1) = '1' then
+			elsif action(1) = '1' then
 				if state.memory_assert_phase = '0' then
-					simd_addr 			<= CONV_STD_LOGIC_VECTOR(state.row, simd_addr_width);
-					simd_data_out 		<= (others => '0');
-					simd_write 			<= '0';
+					simd_addr <= conv_std_logic_vector(state.row, simd_addr_width);
+					simd_data_out <= (others => '0');
+					simd_write <= '0';
 					
-					mem_addr 			<= state.write_addr;
-					mem_data_out 		<= simd_data_in;
-					mem_write 			<= '0'; -- Write
+					mem_addr <= state.write_addr;
+					mem_data <= simd_data_in;
+					mem_write <= '0'; -- Write
 					
 					next_state.memory_assert_phase <= '1';
 				else
-					mem_addr 			<= (others => '0');
-					mem_data_out 		<= (others => 'Z');
-					mem_write 			<= '1'; -- Read
+					mem_addr <= (others => '0');
+					mem_data <= (others => 'Z');
+					mem_write <= '1'; -- Read
 					
 					next_state.memory_assert_phase <= '0';
-					assert_done 		:= '1';
+					assert_done := '1';
 				end if;
 			end if;
 			
@@ -214,7 +210,7 @@ begin
 			active <= '0';
 			
 			mem_addr <= (others => '0');
-			mem_data_out <= (others => 'Z');
+			mem_data <= (others => 'Z');
 			mem_write <= '1'; -- Read
 			
 			simd_addr <= (others => '0');

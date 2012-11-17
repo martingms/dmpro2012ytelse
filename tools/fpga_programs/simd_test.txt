@@ -12,7 +12,7 @@
 
     ctrl addi VADDR ZERO 0          # VADDR = 0
 
-    node addi R2 ZERO 0
+    node addi R2 ZERO 56
     node swap R2 R2
 
     ctrl addi DMA ZERO 0
@@ -23,15 +23,8 @@
     ctrl dma set_write_active
     ctrl nop
 
-    ctrl addi DMA ZERO 151
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl sll DMA DMA
-    ctrl dma set_write_base_addr    # write base addr = 19328
+    ctrl addi DMA ZERO 4
+    ctrl dma set_write_base_addr    # write base addr = 4
     ctrl nop
 
     ctrl addi DMA ZERO 160
@@ -41,7 +34,7 @@
 
     ctrl addi R4 ZERO 160           # R4 = 320
     ctrl sll R4 R4
-    ctrl add DMA ZERO R4        # DMA = R4 * 3 + 1 = 640 + 320 + 1
+    ctrl add DMA ZERO R4        	# DMA = R4 * 3 + 1 = 640 + 320 + 1
     ctrl add DMA DMA R4
     ctrl add DMA DMA R4
     ctrl addi DMA DMA 1

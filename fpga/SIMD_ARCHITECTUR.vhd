@@ -84,8 +84,8 @@ architecture Behavioral of SIMD_ARCHITECTUR is
 		generic (
 			word_width 				: natural := CTRL_DDATA_BUS;
 			mem_addr_width 		: natural := CTRL_DADDR_BUS;
-			simd_rows 				: natural := NODE_ARRAY_COLS;
-			simd_cols 				: natural := NODE_ARRAY_ROWS;
+			simd_rows 				: natural := NODE_ARRAY_COLS + 2;
+			simd_cols 				: natural := NODE_ARRAY_ROWS + 2;
 			simd_addr_width 		: natural := NODE_ARRAY_ROW_ADDR
 		);	
 		port (
@@ -97,8 +97,7 @@ architecture Behavioral of SIMD_ARCHITECTUR is
 			parameter 				: in  STD_LOGIC_VECTOR(CTRL_DMA_DAT_BUS-1 downto 0);
 			
 			mem_addr 				: out STD_LOGIC_VECTOR(CTRL_DADDR_BUS-1 downto 0);
-			mem_data_in 			: in  STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
-			mem_data_out 			: out STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+			mem_data 				: inout STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
 			mem_write 				: out STD_LOGIC;
 			
 			simd_addr 				: out STD_LOGIC_VECTOR(NODE_ARRAY_ROW_ADDR-1 downto 0);
@@ -112,8 +111,7 @@ architecture Behavioral of SIMD_ARCHITECTUR is
 	end component;
 
 	signal dma_mem_addr 			: STD_LOGIC_VECTOR(CTRL_DADDR_BUS-1 downto 0);
-	--signal dma_mem_data_in 		: STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
-	signal dma_mem_data_out		: STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+	signal dma_mem_data			: STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
 	signal dma_mem_write 		: STD_LOGIC;
 
 	signal simd_addr 				: STD_LOGIC_VECTOR(NODE_ARRAY_ROW_ADDR-1 downto 0);
@@ -160,8 +158,7 @@ begin
 		command 						=> dma_cmd,
 		parameter 					=> dma_params,
 		mem_addr 					=> dma_mem_addr,
-		mem_data_in 				=> ddata_in,
-		mem_data_out				=> dma_mem_data_out,
+		mem_data						=> dma_mem_data,
 		mem_write 					=> dma_mem_write,	
 		simd_addr 					=> simd_addr,
 		simd_data_in 				=> simd_data_in,
@@ -171,18 +168,21 @@ begin
 		step_s 						=> node_step
 	);
 	
-	ram_mux : process (clk, dma_active, dma_mem_addr, dma_mem_write, dma_mem_data_out, ctrl_daddr) begin
-		ddata_out					<= dma_mem_data_out;
+	ram_mux : process (clk, dma_active, dma_mem_addr, dma_mem_write, dma_mem_data, ctrl_daddr) begin
 		if (dma_active='1') then
 			daddr						<= dma_mem_addr;
 			if (dma_mem_write='0') then
+				dma_mem_data		<= (others => 'Z');
+				ddata_out			<= dma_mem_data;
 				dwrite				<= '1';
 			else 
+				dma_mem_data		<= ddata_in;
+				ddata_out			<= (others => '0');
 				dwrite				<= '0';
 			end if;
 		else
 			daddr						<= ctrl_daddr;
-			dwrite					<= '0';
+			dwrite					<= '0';			
 		end if;
 	end process;
 end Behavioral;
