@@ -34,7 +34,7 @@ entity PROGRAM_COUNTER is
 		branch						: in  STD_LOGIC;
 		alu_res						: in  STD_LOGIC;
 		
-		instr_addr					: out STD_LOGIC_VECTOR(CTRL_IADDR_BUS-1 downto 0)
+		instr_addr					: out STD_LOGIC_VECTOR(CTRL_IADDR_BUS-1 downto 0) := (others => '0')
 	);
 	
 end PROGRAM_COUNTER;
