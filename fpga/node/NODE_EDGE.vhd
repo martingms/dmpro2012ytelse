@@ -97,7 +97,7 @@ begin
 		s_out							=> sr_out
 	);
 
-	process (clk, reset, tmp_n_out, tmp_s_out, tmp_e_out, tmp_w_out) begin
+	process (clk, reset, instr, tmp_n_out, tmp_s_out, tmp_e_out, tmp_w_out) begin
 		if (reset = '1') then
 			tmp_n_out				<= (others => '0');
 			tmp_s_out				<= (others => '0');
@@ -106,7 +106,7 @@ begin
 			ctrl_s_swap				<= '0';
 		elsif (instr(23) = '1') then
 			ctrl_s_swap				<= '0';
-		elsif rising_edge(clk) then
+		else
 			CASE instr(21 downto 19) IS
 				-- S-data swap
 				WHEN  NODE_INSTR_OP_S  =>
