@@ -16,7 +16,7 @@ mention some:
 \end{enumerate}
 
 We also wanted to have some visual input and debugging tools for the project
-(buttons and leds). These were also connected to the AVR. We did however not
+(buttons and LEDs). These were also connected to the AVR. We did however not
 have to take that into account mapping pins as they can be fitted on any
 \ac{GPIO} pin. This allowed us greater flexibility in terms of what had to go
 where and made it possible to fit the other interfaces on the AVR better.
@@ -45,7 +45,7 @@ section. \TODO {rewrite or fix reference?}
 \subsection{Serial port}
 
 The serial feature was implemented as a way of debugging. This is connected to
-\ac{USART} 0 on the AVR and was not a crucial part of the design, but rather a way for us to communicate and get quantitative data from the AVR. We decided that having serial access would be handy as there is only so much data you can get out of 8 blinking leds. The serial implementation had some issues in regard to our mapping of the lines to the port, this was partly tried to solve by remapping the lines over the header.
+\ac{USART} 0 on the AVR and was not a crucial part of the design, but rather a way for us to communicate and get quantitative data from the AVR. We decided that having serial access would be handy as there is only so much data you can get out of 8 blinking LEDs. The serial implementation had some issues in regard to our mapping of the lines to the port, this was partly tried to solve by remapping the lines over the header.
 
 \subsection{USB connectivity}
 

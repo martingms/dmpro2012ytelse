@@ -19,7 +19,7 @@ components as fast as possible: The \ac{LENA} architecture was tested through
 \ac{VHDL} test benches, the \ac{VGA} component in the \ac{LENA} architecture was
 tested with \acp{LED} and buttons on the board, and the AVR part of the
 \ac{LENA} system was tested through the \ac{VGA} contact on the board. By doing
-this, we can assume that errors occuring when connecting different components is
+this, we can assume that errors occurring when connecting different components is
 due to errors in the protocol implementation(s).
 
 Figure \ref{fig:sys-over-arch-fig} shows our resulting architecture. Buttons and
@@ -43,5 +43,5 @@ one image in memory which it can send to the \ac{SIMD} nodes, and one image
 which is currently read from the \ac{SCU} to memory. In addition, one would have
 to read data instructions as well. All these different parts require relatively
 much memory, and they are all frequently accessed. Therefore, it would be
-favourable to have them as separate components so that memory access can be
+favorable to have them as separate components so that memory access can be
 parallelised.

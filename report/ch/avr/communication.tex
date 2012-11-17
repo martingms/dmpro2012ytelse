@@ -9,9 +9,9 @@ be found in appendix \ref{app:lena-scu-bus}.
 \subsection{LENA states}
 
 The \ac{SCU} can set \ac{LENA} to 5 different states, controlling \ac{LENA}'s
-behaviour. The states are set with a 3-line bus and a fourth line which when
+behavior. The states are set with a 3-line bus and a fourth line which when
 toggled, indicates that the \ac{LENA} should set its state to the state
-currently on the bus. The three state lines represent a binary number refering
+currently on the bus. The three state lines represent a binary number referring
 to one of the states. The different states are listed in table \ref{tab:states}.
 
 \input{fig/avr/lena-states}
@@ -23,7 +23,7 @@ respectively. The procedure for the \ac{SCU} is then to put one word on the bus,
 toggle the clock line and repeat. The \ac{LENA} state STOP is used to signal the
 end of transfer. When the data are simply data, the first 8 lines of
 the\ac{LENA} input bus is used to transfer data one byte at a time. When the
-data are instructions for the \ac{LENA}, data are transfered one instruction (24
+data are instructions for the \ac{LENA}, data are transferred one instruction (24
 bit) at a time, and the first 24 lines of the bus are used.
 %The entire procedure can be summarized by the following six steps:
 
@@ -46,7 +46,7 @@ connected to the \ac{LENA}'s \ac{I/O} pins.
 This transfer is rather unusual because it is, unlike all other operations, not
 initiated by the \ac{SCU}. The \ac{LENA} will initiate the transfer by putting
 one byte on the bus, and then interrupt the \ac{SCU}. After the \ac{SCU} has
-acknowledged, another byte can be transfered. The first four bytes of the
+acknowledged, another byte can be transferred. The first four bytes of the
 transfer will represent, as a 32 bit unsigned integer, the number of bytes of
 actual data to be transferred.
 %The entire procedure can be summarized by the following five steps, where \emph{x} is the amount of actual data.

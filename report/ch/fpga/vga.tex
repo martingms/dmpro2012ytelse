@@ -1,6 +1,6 @@
 \section{VGA-controller}
 
-We learned early on that last years group had problems with their off-the-shelf
+We learned early on that last years' group had problems with their off-the-shelf
 \ac{VGA}-controller being a major bottleneck, and was only able to squeeze out less
 than one frame per second. Since one of our goals ({\sc FR1}, see Table
 \ref{fig:func-req}) with this project was to hit a minimum frame rate of ten
@@ -8,7 +8,7 @@ frames per second, going down the same route with the same controller was
 obviously off the table.
 
 After having scoured the Internet for higher-performing \ac{VGA}-controllers in our
-price-range without any luck, and after consulting with Jahre, we decided on
+price range without any luck, and after consulting with Jahre, we decided on
 implementing our own \ac{VGA}-controller within the \ac{FPGA}.
 
 \input{fig/fpga/vga}
@@ -32,7 +32,7 @@ a (8-bit greyscale) pixel fetched from the memory controller at the appropriate
 time.
 
 \subsection{Circuitry}
-\input{fig/fpga/vga-circuit} When designing the circuit we had to choose between
+\input{fig/fpga/vga-circuit} When designing the circuit, we had to choose between
 a black-box\TODO{Call it something else?} \ac{DAC} and making our
 own. Preliminary research on the \ac{VGA}-protocol showed that for our purposes
 and our fairly low requirements on quality, making the \ac{DAC} with simple

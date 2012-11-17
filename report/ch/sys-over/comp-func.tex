@@ -30,10 +30,10 @@ data to the \ac{SIMD} nodes and the \ac{VGA} controller, whereas the \ac{DMA} is
 responsible for writing data from the \ac{SIMD} nodes back into memory. The
 \ac{VGA} controller is responsible for handling the \ac{VGA} memory and sending
 the correct signals to the \ac{VGA} port. In addition, as the \ac{SIMD} nodes
-usually depend heavily on their neighbour's data, we decided to have ``dummy
+usually depend heavily on their neighbor's data, we decided to have ``dummy
 nodes'' outside the real \ac{SIMD} nodes. Their only function is to transmit
 data to the edge nodes. As such, we can still utilize the edge nodes for
-computation when neighbour data is needed.
+computation when neighbor data is needed.
 
 \subsubsection{Word size}
 
@@ -49,7 +49,7 @@ allows one to do multiple, single instructions on different 64-bit and 128-bit
 registers and is used to speed up e.g. image processing\cite{lee2004h264}. As
 both techniques certainly work, we have to find the one which gives us the most
 performance and is realizable within the resource constraints. Certainly, we
-need to have multiple cores to fulfil NFR4, but the overall goal is to get
+need to have multiple cores to fulfill NFR4, but the overall goal is to get
 performance. If we get a better performance by allowing more operations in the
 \ac{SIMD} nodes, we should do that instead.
 
@@ -74,7 +74,6 @@ complexity is lowered: Fewer potential collisions on \ac{RAM} reading and
 writing occurs since fewer parts read and write to the different \ac{RAM} chips.
 
 \subsubsection*{Instruction Memory}
-
 We ended up with a 24-bit instruction set for both \ac{SIMD} nodes and the
 control core. As we ended up with a 16-bit program counter, the maximal
 instruction count would be 64,000 and the memory chip size is chosen on that

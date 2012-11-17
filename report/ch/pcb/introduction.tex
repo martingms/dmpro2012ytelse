@@ -28,7 +28,7 @@ connected together and 8 ignored I/O-pins, effectively making them a 24-bit memo
 
 Since we wanted to reduce the sharing of memories as much as possible, we also needed a separate memory for
 our \ac{VGA} controller, as that needed to read it's buffer as fast as possible without interfering with the speed
-of the rest of the system. This called for a memory that was big enough to hold atleast a full screen-frame,
+of the rest of the system. This called for a memory that was big enough to hold at least a full screen-frame,
 at 8-bit per pixel (since each pixel is an 8-bit greyscale pixel).
 
 To reduce the possibility of having too slow data-access from the AVR, an extra memory was added to work as
@@ -50,5 +50,5 @@ To solve this, we added in the necessary connectors for the \ac{VGA} module that
 \subsection {Communication}
 We planned on using the \ac{SD} card reader as our main source of data/instructions, however, as our system would
 be completely useless unless we were able to get data into it at decent speeds, we opted to also have a fallback
-solution here, thus we also added \ac{USB} and RS232 as fallbacksolutions for getting data/communicating with the
+solution here, thus we also added \ac{USB} and RS232 as fallback solutions for getting data/communicating with the
 computer.

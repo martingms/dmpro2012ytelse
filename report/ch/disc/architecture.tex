@@ -1,5 +1,5 @@
 \section {Architectural design}
-\TODO{Graph of memory-architechture} In the early phases of the project,
+\TODO{Graph of memory-architecture} In the early phases of the project,
 multiple solutions as to how the data memory should work were suggested. We
 decided to let the AVR send all the data to the \ac{FPGA}, and then let it store
 them to its own local memory. The reason we chose this over shared memory was
@@ -17,7 +17,7 @@ gave us the needed memory, we went for the cheaper option.
 \TODO{See if we really need to say this in the PCB-chapter too}
 
 \TODO {find out exactly what was the issue here, with the SD card, frame size,
-  and on-chip AVR memory} As we got deeper into the techincal parts of our
+  and on-chip AVR memory} As we got deeper into the technical parts of our
 system, we figured we needed two additional memories. One for the AVR, as it had
 little on-chip memory, and thus might get some issues as it reads data from the
 \ac{SD} card in blocks.\CHECK{(?)} Another argument for adding this memory was
@@ -41,4 +41,4 @@ to alter our pin usage, if need be.\CHECK{What has headers to do with
   redundancy?  It's just convenience.} Luckily, both \ac{SD} card and and our
 own \ac{VGA} worked, and we therefore had no need of the
 redundancies. \TODO{Motivate the need for the redundancies as well, instead of
-  just saying they were unneccesary}
+  just saying they were unnecessary}
