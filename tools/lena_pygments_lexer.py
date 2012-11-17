@@ -19,7 +19,8 @@ class LenaLexer(RegexLexer):
             include('whitespace'),
             include('keyword'),
             (r'[0-9]+', Number.Integer),
-            (r'[ \t]*[a-zA-Z0-9_]+\:', Name) # Jump-labels.
+            (r'[ \t]*[a-zA-Z0-9_]+\:', Name), # Jump-labels.
+            (r'\b(beq|branch|jump)\b[ \t]+([a-zA-Z0-9_]+)', bygroups(Keyword, Name))
         ],
         'whitespace': [
             (r'\n', Text),
@@ -32,7 +33,7 @@ class LenaLexer(RegexLexer):
 
             # Keywords
             (r'\b(nop|addi|sub|eq|slt|and|or|add|subi|eqi|slti'
-             r'|andi|ordi|sll|srl|beq|branch|jump|jump|move|swap'
+             r'|andi|ordi|sll|srl|move|swap'
              r'|send|store|fwrd|lw|dma)\b', Keyword),
 
             # DMA
