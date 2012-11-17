@@ -5,36 +5,35 @@ Macaos for creating production-files, as we feel it might be useful to note down
 what we learned for those that come after us.
 
 \begin{enumerate}
-\item Visit the Macaos homepage and apply for a license-key \TODO{(see below
-  \ldots) should be footnote instead}(see below for
-  link), remember to leave some time for a reply on this, as these requests seem
-  to be handled manually.
+\item Visit the Macaos homepage and apply for a license
+  key\footnote{\url{http://www.macaos.com/products/me/get}}, remember to leave
+  some time for a reply on this, as these requests seem to be handled manually.
 \item In Altium Designer, use File-Fabrication Outputs-Gerber Files. See
-  Macaos-documentation for decent settings, take specific care regarding the
-  Digit-format, and zero-suppression settings.
+  Macaos documentation for decent settings, take specific care regarding the
+  Digit format, and zero-suppression settings.
 \item In Altium Designer, use File-Fabrication Outputs-NC Drill Files. As above,
-  see the Macaos-documentation for proper settings, they are likely the same as
+  see the Macaos documentation for proper settings, they are likely the same as
   in the Gerber Files.
-\item The necessary files should now exist in your Project-folder under
+\item The necessary files should now exist in your Project folder under
   ``Project Outputs for Projectname''.
-\item Install and open Macaos. You will be asked for a license-key, which you
-  should have gotten along with the download-link.
+\item Install and open Macaos. You will be asked for a license key, which you
+  should have gotten along with the download link.
 \item Click ``Import''.
-\item At this point it might be useful to have file-endings enabled in
-  Explorer, so open an Explorer-window, and go to Tools, Folder-Options, and
+\item At this point it might be useful to have file endings enabled in
+  Explorer, so open an Explorer window, and go to Tools, Folder-Options, and
   remove the checkmark for ``Hide extensions for known file types''.
 \item Click ``Open Files''.
 \item Select the relevant files for import, crossreferencing against the
-  Altium-documentation might give a decent idea about which files go where.
+  Altium documentation might give a decent idea about which files go where.
   Importing all the files might be a good idea, as you might have an easier time
   selecting the correct files when watching the preview of each file.
 \item Bind the files to their respective layers. Most of the layers should be
   easily spottable, like GTO for Notation Top, GTS for Top Solder Mask, GP1 and
-  GP2 for internal layers 1 and 2, \TODO{long sentence, fixme} (take care to
-  make sure these are not negative, if so then select Negative Layer 1/2 instead
-  of Inner Layer 1/2), the Copper-layers will likely be GTL and GBL, make sure
-  these are correct too. Additional files include the Keepout (GKO), which can
-  be used as ``Board''.
+  GP2 for internal layers 1 and 2. Take care to make sure these are not
+  negative. If som then select Negative Layer 1/2 instead of Inner Layer 1/2.
+  The Copper layers will likely be GTL and GBL. make sure these are correct
+  too. Additional files include the Keepout (GKO), which can be used as
+  ``Board''.
 \item Verify that the drill files are properly selected, by clicking on ``Drill
   Tools'' in Macaos. You will probably have to link a text file ending in
   -RoundHoles.txt to ``Drill''. At this point it might also be a good idea to
@@ -60,9 +59,9 @@ what we learned for those that come after us.
 
 Useful links:
 \begin{itemize}
-\item \url{http://www.macaos.com/products/me/get} - Applying for a
+\item \url{http://www.macaos.com/products/me/get} | Applying for a
   Macaos-license
-\item \url{http://www.macaos.com/support/gerber/other} - Generating Gerber-files
-\item \url{http://wiki.altium.com/display/ADOH/Gerber+Output+Options} -
+\item \url{http://www.macaos.com/support/gerber/other} | Generating Gerber-files
+\item \url{http://wiki.altium.com/display/ADOH/Gerber+Output+Options} |
   Altium-information about generated Gerber-files.
 \end{itemize}

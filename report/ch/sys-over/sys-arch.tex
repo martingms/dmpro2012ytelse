@@ -27,7 +27,7 @@ Figure \ref{fig:sys-over-arch-fig} shows our resulting architecture. Buttons and
 programs. A \ac{VGA} connector made it possible to quickly test and debug the
 \ac{VGA} implementation on the \ac{LENA} architecture. We also included a
 \ac{VGA} connector connected to the AVR, in case the \ac{LENA} architecture
-would be unable to work the \ac{VGA} part.
+should fail to implement its \ac{VGA} module.
 
 To be able to process data, we need an \ac{I/O} device which serves the machine
 with data it should process. As we were unsure of what would be the easiest to
@@ -35,11 +35,12 @@ implement, we included both a serial, \ac{USB} and \ac{SD} card on the \ac{PCB}.
 
 The \ac{LENA} architecture has three different memory components: One for the
 \ac{VGA} component, one for instructions and one for data. The main reason for
-this is that an image processing system in general need much memory. The
-\ac{VGA} module needs to constantly send out the image to the \ac{VGA} port, so
+this is that image processing systems in general need a lot of memory. The
+\ac{VGA} module needs to constantly send out an image to the \ac{VGA} port, so
 it needs to keep the old image in memory. The \ac{LENA} architecture should have
 one image in memory which it can send to the \ac{SIMD} nodes, and one image
 which is currently read from the \ac{SCU} to memory. In addition, one would have
-to read data instructions as well. As all these different parts require
-relatively much memory, and as they all are frequently accessed, it would be
-favourable to have them in different parts to be able to parallelise it.
+to read data instructions as well. All these different parts require
+relatively much memory, and they are all frequently accessed. Therefore it would
+be favourable to have them as separate components so that memory accesses can be
+parallelised.

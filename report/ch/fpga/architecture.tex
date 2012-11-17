@@ -38,7 +38,7 @@ the last column of the array and stores it to the data memory.
 
 The \ac{FPGA} receives data from the AVR on 24 input lines. This is enough to
 transmit one instruction per tramsmission. All of the instructions are copied
-onto the instruction memory before any other data is sent. The image data is
+into the instruction memory before any other data is sent. The image data is
 sent at one word (8 bits) at a time. We considered using all 24 lines for data
 transmission, but as we tested the transmission rate, we realized that it was
 fast enough by only trasmitting one word at a time. This was easier to
@@ -48,3 +48,5 @@ The \ac{SIMD} array is created dynamically in \ac{VHDL}, hence the number of
 cores is easily interchangable. The final number of cores in our implementation
 is only limited by the available space on the \ac{FPGA}. We tried to fit as many
 nodes as possible, and the \ac{FPGA} we used had enough space for 6 nodes.
+\TODO{Jahre vil at det skal komme bedre fram at dette ikke er noe vi kan gjøre noe med, med strek under "the FPGA we used".
+Nevnte i diskusjon om non-functional requirements at dette ikke er noe vi kan gjøre noe med, er det nokk?}

@@ -162,10 +162,7 @@ begin
 					next_state.secondary_action_phase <= '1';
 					assert_done := '1';
 				end if;
-			end if;
-			
-			-- Perform write action
-			if action(1) = '1' then
+			elsif action(1) = '1' then
 				if state.memory_assert_phase = '0' then
 					simd_addr <= conv_std_logic_vector(state.row, simd_addr_width);
 					simd_data_out <= (others => '0');

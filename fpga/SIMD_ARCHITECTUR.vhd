@@ -30,8 +30,13 @@ entity SIMD_ARCHITECTUR is
 		idata							: in  STD_LOGIC_VECTOR(CTRL_IDATA_BUS-1 downto 0);
 		iaddr							: out STD_LOGIC_VECTOR(CTRL_IADDR_BUS-1 downto 0);
 		
-		ddata							: in  STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
-		daddr							: out STD_LOGIC_VECTOR(CTRL_DADDR_BUS-1 downto 0)
+		ddata_in						: in  STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+		ddata_out					: out STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+		daddr							: out STD_LOGIC_VECTOR(CTRL_DADDR_BUS-1 downto 0);
+		dwrite						: out STD_LOGIC;
+
+		vdata							: out STD_LOGIC_VECTOR(CTRL_VDATA_BUS-1 downto 0);
+		vaddr							: out STD_LOGIC_VECTOR(CTRL_VADDR_BUS-1 downto 0)
 	);
 end SIMD_ARCHITECTUR;
 
@@ -54,8 +59,7 @@ architecture Behavioral of SIMD_ARCHITECTUR is
 		);
 	end component;
 	
-	signal vdata					: STD_LOGIC_VECTOR(CTRL_VDATA_BUS-1 downto 0);
-	signal vaddr					: STD_LOGIC_VECTOR(CTRL_VADDR_BUS-1 downto 0);
+	signal ctrl_daddr				: STD_LOGIC_VECTOR(CTRL_DADDR_BUS-1 downto 0);
 	
 	signal dma_cmd					: STD_LOGIC_VECTOR(CTRL_DMA_CMD_BUS-1 downto 0);
 	signal dma_params				: STD_LOGIC_VECTOR(CTRL_DMA_DAT_BUS-1 downto 0);
@@ -67,7 +71,7 @@ architecture Behavioral of SIMD_ARCHITECTUR is
 			instr 					: in  STD_LOGIC_VECTOR (NODE_IDATA_BUS-1 downto 0);
 			node_step 				: in  STD_LOGIC;		
 			data_write				: in  STD_LOGIC;
-			row_sel 					: in  STD_LOGIC_VECTOR (1 downto 0);
+			row_sel 					: in  STD_LOGIC_VECTOR (NODE_ARRAY_ROW_ADDR-1 downto 0);
 			data_in 					: in  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
 			data_out 				: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0) := (others => '0');
 			state_out				: out STD_LOGIC
@@ -76,46 +80,47 @@ architecture Behavioral of SIMD_ARCHITECTUR is
 	
 	signal simd_array_state		: STD_LOGIC;
 	
-	component dma is
+	component dma is			
 		generic (
-			word_width				: natural := 8;
-			mem_addr_width 		: natural := 21;
-			simd_rows 				: natural := 5;
-			simd_cols 				: natural := 5;
-			simd_addr_width 		: natural := 5);
-			
+			word_width 				: natural := CTRL_DDATA_BUS;
+			mem_addr_width 		: natural := CTRL_DADDR_BUS;
+			simd_rows 				: natural := NODE_ARRAY_COLS + 2;
+			simd_cols 				: natural := NODE_ARRAY_ROWS + 2;
+			simd_addr_width 		: natural := NODE_ARRAY_ROW_ADDR
+		);	
 		port (
-			clk 						: in    STD_LOGIC;
-			enable 					: in    STD_LOGIC;
-			reset 					: in    STD_LOGIC;
+			clk 						: in  STD_LOGIC;
+			enable 					: in  STD_LOGIC;
+			reset 					: in  STD_LOGIC;
 			
-			command 					: in    STD_LOGIC_VECTOR(3 downto 0);
-			parameter 				: in    STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0);
+			command 					: in  STD_LOGIC_VECTOR(CTRL_DMA_CMD_BUS-1 downto 0);
+			parameter 				: in  STD_LOGIC_VECTOR(CTRL_DMA_DAT_BUS-1 downto 0);
 			
-			mem_addr 				: out   STD_LOGIC_VECTOR(mem_addr_width - 1 downto 0);
-			mem_data 				: inout STD_LOGIC_VECTOR(word_width - 1 downto 0);
-			mem_write 				: out   STD_LOGIC;
+			mem_addr 				: out STD_LOGIC_VECTOR(CTRL_DADDR_BUS-1 downto 0);
+			mem_data 				: inout STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+			mem_write 				: out STD_LOGIC;
 			
-			simd_addr 				: out   STD_LOGIC_VECTOR(simd_addr_width - 1 downto 0);
-			simd_data_in 			: in    STD_LOGIC_VECTOR(word_width - 1 downto 0);
-			simd_data_out 			: out   STD_LOGIC_VECTOR(word_width - 1 downto 0);
-			simd_write 				: out   STD_LOGIC;
+			simd_addr 				: out STD_LOGIC_VECTOR(NODE_ARRAY_ROW_ADDR-1 downto 0);
+			simd_data_in 			: in  STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+			simd_data_out 			: out STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+			simd_write 				: out STD_LOGIC;
 			
-			active 					: out   STD_LOGIC;
-			step_s 					: out   STD_LOGIC
+			active 					: out STD_LOGIC;
+			step_s 					: out STD_LOGIC
 		);
 	end component;
 
-	signal mem_addr 				: STD_LOGIC_VECTOR(21 - 1 downto 0);
-	signal mem_data 				: STD_LOGIC_VECTOR(8 - 1 downto 0);
-	signal mem_write 				: STD_LOGIC;
+	signal dma_mem_addr 			: STD_LOGIC_VECTOR(CTRL_DADDR_BUS-1 downto 0);
+	signal dma_mem_data			: STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+	signal dma_mem_write 		: STD_LOGIC;
 
-	signal simd_addr 				: STD_LOGIC_VECTOR(5 - 1 downto 0);
-	signal simd_data_out 		: STD_LOGIC_VECTOR(8 - 1 downto 0);
-	signal simd_write 			: STD_LOGIC_VECTOR(8 - 1 downto 0);
+	signal simd_addr 				: STD_LOGIC_VECTOR(NODE_ARRAY_ROW_ADDR-1 downto 0);
+	signal simd_data_in	 		: STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+	signal simd_data_out 		: STD_LOGIC_VECTOR(CTRL_DDATA_BUS-1 downto 0);
+	signal simd_write 			: STD_LOGIC;
 
-	signal active 					: STD_LOGIC;
-	signal step_s 					: STD_LOGIC;
+	signal dma_active 			: STD_LOGIC;
+	signal node_step 				: STD_LOGIC;
 
 begin
 	SIMD_CTRL : CONTROL port map (
@@ -124,8 +129,8 @@ begin
 		state							=> simd_array_state,
 		idata							=> idata,
 		iaddr							=> iaddr,
-		ddata							=> ddata,
-		daddr							=> daddr,
+		ddata							=> ddata_in,
+		daddr							=> ctrl_daddr,
 		--daddr_write				=> daddr_write,
 		vdata							=> vdata,
 		vaddr							=> vaddr,
@@ -136,14 +141,48 @@ begin
 	
 	SIMD_ARR : SIMD_ARRAY port map (
 		clk 							=> clk,
-		reset 						=> clk,
+		reset 						=> reset,
 		instr 						=> idata,
-		node_step 					=> '0',
-		data_write					=> clk,
-		row_sel 						=> clk,
-		data_in 						=> clk,
-		data_out 					=> clk,
-		state_out					=> clk
+		node_step 					=> node_step,
+		data_write					=> simd_write,
+		row_sel 						=> simd_addr,
+		data_in 						=> simd_data_out,
+		data_out 					=> simd_data_in,
+		state_out					=> simd_array_state
 	);
-
+	
+	SIMD_DMA : DMA port map (
+		clk 							=> clk,
+		enable 						=> '1',
+		reset 						=> reset,
+		command 						=> dma_cmd,
+		parameter 					=> dma_params,
+		mem_addr 					=> dma_mem_addr,
+		mem_data						=> dma_mem_data,
+		mem_write 					=> dma_mem_write,	
+		simd_addr 					=> simd_addr,
+		simd_data_in 				=> simd_data_in,
+		simd_data_out 				=> simd_data_out,
+		simd_write 					=> simd_write,
+		active 						=> dma_active,
+		step_s 						=> node_step
+	);
+	
+	ram_mux : process (clk, dma_active, dma_mem_addr, dma_mem_write, dma_mem_data, ctrl_daddr) begin
+		if (dma_active='1') then
+			daddr						<= dma_mem_addr;
+			if (dma_mem_write='0') then
+				dma_mem_data		<= (others => 'Z');
+				ddata_out			<= dma_mem_data;
+				dwrite				<= '1';
+			else 
+				dma_mem_data		<= ddata_in;
+				ddata_out			<= (others => '0');
+				dwrite				<= '0';
+			end if;
+		else
+			daddr						<= ctrl_daddr;
+			dwrite					<= '0';			
+		end if;
+	end process;
 end Behavioral;

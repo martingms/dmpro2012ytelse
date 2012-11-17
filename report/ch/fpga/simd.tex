@@ -18,6 +18,7 @@ explaining the different components.
 \TODO{Fix signal labels in arhitecture image to differentiate between input, output and instruction}
 
 \input{fig/fpga/fpga-simd-arch}
+\TODO{Jahre nevner at det må tydeligjøres hva som er busser og hva som er signaler}
 
 \subsection{Components}
 
@@ -50,6 +51,7 @@ other register.
 The clockwise spiral forwarding is an optimized way of distributing a 3x3 array
 of source data to all the \ac{SIMD} nodes in the grid array using only 3-clock
 cycles. \TODO{We made this one ourselves! note that down}
+\TODO{Jahre vil at dettte skal forklares bedre}
 
 \subsubsection{Register Bank}
 Each \ac{SIMD} node is equpped with $2^4 = 16$ general purpose registers. 14 of
@@ -64,7 +66,7 @@ registers and writing 1 register within one clockcycle.
 
 \subsubsection{Arithmetic Logic Unit}
 
-\TODO{List the 8 ALU functions some where with their binary prepresentation.}
+\TODO{List the 8 ALU functions somewhere with their binary prepresentation.}
 
 The \ac{ALU} implemented is a very simple {\tt 8}-bit \ac{ALU} supporting only 8
 instructions. The main reason for only implementing the most basic arithmetic
@@ -75,10 +77,10 @@ pysical size of the node.
 \TODO{Add some supporting references.}
 
 Upon investigating image processing algorithmes we found that many of these,
-Median Filter and Salt and Pepper noice reduction, only need these 8 \ac{ALU}
+Median Filter and Salt and Pepper noise reduction, only need these 8 \ac{ALU}
 operations in order to perform their work. Besides; more high level arithmetic,
 such as multiply and divide, can be implemented using addition and subtraction.
-
+\TODO{Jahre skriver: "2 Er ikke mange. Hvilke andre har dere kikket på?"}
 \subsubsection{Source Data Register}
 The source data register (S REG), is a special purpose register within the
 \ac{SIMD} node which holds the next source data for the \ac{SIMD} node. It is

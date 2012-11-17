@@ -2,12 +2,13 @@
 
 This section describes the different components and their functionality. A list
 of ordered parts can be found in \ref{app:ordered-parts}.
-
+\TODO{Jahre vil ha figur(er)}
 \subsection{SCU}
 
 The microcontroller is mainly used to send data from the \ac{SD} card to the
 \ac{LENA} architecture. It also converts data from the \ac{BMP} to a format
-\ac{LENA} is able to process. \ac{LENA} can be started and stopped by the
+\ac{LENA} is able to process.\CHECK{Vi bruker ikke BMP lenger, kanskje vi skal omformulere dette?}
+\ac{LENA} can be started and stopped by the
 \ac{SCU}, and it is also responsible for sending the wanted program to
 \ac{LENA}, which stores it in the instruction memory.
 
@@ -36,8 +37,8 @@ computation when neighbour data is needed.
 
 \subsubsection{Word size}
 
-The word size of the \ac{LENA} system is an important aspect of the system which
-have a critical impact on performance. Our choice between small and large
+The word size of the \ac{LENA} architecture is an important aspect of the system which
+has a major impact on performance. Our choice between small and large
 register\TODO{Word size? But shouldn't confuse the reader between the size of
   the registers on the SIMD nodes and the instruction size either} size, and
 small and large instruction sets will have a huge impact on the number of cores
@@ -52,33 +53,35 @@ need to have multiple cores to fulfil NFR4, but the overall goal is to get
 performance. If we get a better performance by allowing more operations on the
 system, we should do that instead.
 
-From calculations\TODO{Should we have the calculations?} and an estimated guess
-on how complex such a system would be, we set ourselves\TODO{set ourselves?
-  Sounds very wrong} on a system with 8 bit register size and 24 bit instruction
+From calculations\TODO{Should we have the calculations? JA. Jahre ønsker at det skal
+være med en figur som viser ytelse som funksjon av ord-størrelse.} and an educated guess
+on how complex such a system would be, we chose 8 bit register size and 24 bit instruction
 size. From our assumptions, we could get around 16 \ac{SIMD} nodes and an
 instruction set with reasonably efficient instructions for image processing.
+\TODO{Jahre skrev at dette var muligens vårt  viktigste designvalg og der burde
+skrivers mer om motivasjon, "motiver!".}
 
 \subsubsection{Memory}
 
 The memory is split over three different chips: The data memory, the instruction
 memory and the \ac{VGA} memory. All of the \ac{RAM} is asynchronous \ac{SRAM},
-based on previous projects success with it\cite{berg2011festinalente}along with
+based on previous projects success with it\cite{berg2011festinalente} along with
 the speed. The main reason for this choice was mostly due to frequent reading
-and writing, but also because larger \ac{SRAM} modules were more costly than
-multiple \ac{SRAM} modules with less memory. An additional benefit from this is
-that the complexity is lowered: Fewer potential collisions on \ac{RAM} reading
-and writing occurs since fewer parts read and write to the different \ac{RAM}
-chips.
+and writing, but also because one larger \ac{SRAM} module was more costly than
+multiple smaller \ac{SRAM} modules, even in sum (i.e. cheaper / MB). An
+additional benefit from this is that the complexity is lowered: Fewer potential
+collisions on \ac{RAM} reading and writing occurs since fewer parts read and
+write to the different \ac{RAM} chips.
 
 \subsubsection*{Instruction Memory}
 
 We ended up with a 24-bit instruction set for both \ac{SIMD} nodes and the
 control core. As we ended up with a 16-bit program counter, the maximal
 instruction count would be 64,000 and the memory chip size is chosen on that
-basis. While it may sound like few operations when one know that the \ac{SIMD}
-nodes cannot jump, it is in practice more than enough. To see why, note that the
-control core can simulate loops and may start the image algorithm over when a
-part of the image has been finished processing.
+basis. While it may sound like few operations, especially considering how the
+\ac{SIMD} nodes cannot jump or branch, it is still more than enough. To see
+why, note that the control core can simulate loops and may start the image
+processing algorithm over when a part of the image has been finished processing.
 
 \subsubsection*{Data Memory}
 

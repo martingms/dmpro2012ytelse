@@ -41,7 +41,7 @@ This allows the control core to do pointer arithmetic referring to
 arbitrary words in the data \ac{RAM}.
 
 \input{fig/fpga/fpga_ctrl_core}
-
+\TODO{Jahre syntes fig/fpga/fpga\_ctrl\_core ble for liten}
 To send pixels to the \ac{VGA} controller, two of the registers are dedicated to
 contain an address and a pixel value, respectively. The contents of these
 registers are constantly sent to the \ac{VGA} controller. By incrementing and
@@ -68,7 +68,8 @@ busy. An important task that normally would be the control core's
 responsibility, is to load the \ac{SIMD} array with new data from \ac{RAM} and
 to store the processed data back to \ac{RAM}. To maximize the utilization of the
 data \ac{RAM} \ac{I/O} capacity and the processing power of the \ac{SIMD} array,
-a \emph{Direct Memory Access module} was devised.
+a \emph{Direct Memory Access module} was devised, allowing us to overlap computation
+and communication.
 
 The \ac{DMA} module performs loading of new \ac{SIMD} data planes and storing of
 processed \ac{SIMD} data planes \emph{in parallell} with the normal execution
@@ -86,7 +87,7 @@ processed data values from the S registers at the right edge of the array. The
 registers and will not be obstructed by the \ac{DMA} data transfer.
 
 During \ac{DMA} transfer, the data \ac{RAM} is reserved for the \ac{DMA} module
-and not available for the control core to use. To initiate a \ac{DMA} transfer,
+and not available for the control core. To initiate a \ac{DMA} transfer,
 the control core sets \emph{base addresses} for the reading of new data and for
 the writing of old data, in addition to address increments to be used for moving
 along the columns and rows of the current slice of the data. These parameters

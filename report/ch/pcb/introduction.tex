@@ -1,10 +1,25 @@
 \section {Design Choices}
 
 \subsection {Memory}
-The overall design for our machine calls for quite a bit of different memories. One of the
+The overall design for our machine calls for quite a bit of different, separate memories. One for Data,
+one for Instructions and one for the VGA. The data, VGA and AVR memories use 8-bit chips to match
+their word size. And the instruction memory uses 2x16-bit chips with address-lines connected
+together and 8 ignored I/O-pins, to match its 24-bit word size.
+\begin{comment}
+Tok dette ut siden dette allerede er diskutert tidligere i rapporten
+~Mads
+
+One of the
 earliest design choices that led to this was the decision to have separate instruction/data-memories.
 The reasoning behind this choice being that we could avoid the bottleneck that would be introduced
-from sharing memories. Since the requirements for these two memories differed in both size and word-width 
+from sharing memories.
+\end{comment}
+
+\begin{comment}
+Skrev om for å skille ut prosess
+~Mads
+
+Since the requirements for the data/instruction memories differed in both size and word-width 
 we wound up with not only separate, but also different chips for this purpose (The data-memory required
 8-bit words, the instruction-width was 24-bit, and since we wanted to avoid using multiple memory accesses
 to get a complete instruction, we needed a wide enough memory chip for that purpose. 24-bit chips were out of
@@ -17,10 +32,14 @@ of the rest of the system. This called for a memory that was big enough to hold 
 at 8-bit per pixel (since each pixel is an 8-bit greyscale pixel).
 
 To reduce the possibility of having too slow data-access from the AVR, an extra memory was added to work as
-a buffer for the AVR as well. This design choice was made AFTER ordering, which meant that we had to choose from
+a buffer for the AVR as well. This design choice was made {\em after} ordering, which meant that we had to choose from
 the chips we had already ordered to fit this purpose. Since this was intended to carry data intended for the rest
 of the system, and as the rest of the system is working with data in 8-bit bytes, we ended up using one of the
 extra chips ordered as \ac{VGA} memory for this purpose.
+
+Forresten, da vart det så kort at jeg bare tødde det in i avsnittet over. Må få jobbet prosess-delene inn igjen et eller annet sted!
+~Mads
+\end{comment}
 
 \subsection{VGA}
 Our initial plans were to create our own \ac{VGA} controller in the \ac{FPGA}, but since having video-output was mission-critical
@@ -30,7 +49,6 @@ To solve this, we added in the necessary connectors for the \ac{VGA} module that
 
 \subsection {Communication}
 We planned on using the \ac{SD} card reader as our main source of data/instructions, however, as our system would
-be completely useless unless we were able to get data into it at decent speeds,
-we opted to also have a fallback solution
-here, thus we also added \ac{USB} and RS232 as fallbacksolutions for getting data/communicating with the computer.
-
+be completely useless unless we were able to get data into it at decent speeds, we opted to also have a fallback
+solution here, thus we also added \ac{USB} and RS232 as fallbacksolutions for getting data/communicating with the
+computer.
