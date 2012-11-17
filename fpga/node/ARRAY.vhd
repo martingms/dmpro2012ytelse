@@ -120,8 +120,8 @@ begin
 					w_out					=> W_OUT  ( row   )( ((col-1)*8)+7   downto  (col-1)*8),
 					w_in					=> E_OUT  ( row   )( ((col-1)*8)+7   downto  (col-1)*8),
 					step 					=> node_step,
-					sr_out				=> S_DATA ( row-1 )(  (col*8)+7      downto   col*8),
-					sr_in					=> S_DATA ( row-1 )( ((col-1)*8)+7   downto  (col-1)*8)
+					sr_in					=> S_DATA ( row-1 )( ((col-1)*8)+7   downto  (col-1)*8),
+					sr_out				=> S_DATA ( row-1 )(  (col*8)+7      downto   col*8)
 				);
 			end generate CORE;
 			
@@ -141,8 +141,8 @@ begin
 					w_out					=> W_OUT  ( row   )( ((col-1)*8)+7   downto  (col-1)*8),
 					w_in					=> E_OUT  ( row   )( ((col-1)*8)+7   downto  (col-1)*8),
 					step 					=> node_step,
-					sr_out				=> S_DATA ( row-1 )(  (col*8)+7      downto   col*8),
-					sr_in					=> S_DATA ( row-1 )( ((col-1)*8)+7   downto  (col-1)*8)
+					sr_in					=> S_DATA ( row-1 )( ((col-1)*8)+7   downto  (col-1)*8),
+					sr_out				=> S_DATA ( row-1 )(  (col*8)+7      downto   col*8)
 				);
 			end generate EDGE;
 			
@@ -161,14 +161,23 @@ begin
 				state_out			<= '1';
 			end if;
 			
-			-- Node data in
+			-- Node data in/out
 			if (data_write = '1') then
-				S_DATA(to_integer(unsigned(row_sel)))(7 downto 0) <= data_in;
+				CASE row_sel IS
+					WHEN "01" => S_DATA(1)(7 downto 0) <= data_in;
+					WHEN "10" => S_DATA(2)(7 downto 0) <= data_in;
+					WHEN "11" => S_DATA(3)(7 downto 0) <= data_in;
+					WHEN OTHERS => S_DATA(0)(7 downto 0) <= data_in;
+				END CASE;
+				end if;
 			end if;
-		end if;
-		
-		-- Node data out
-		data_out <= S_DATA(to_integer(unsigned(row_sel)))(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+
+			CASE row_sel IS
+				WHEN "01" => data_out <= S_DATA(1)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+				WHEN "10" => data_out <= S_DATA(2)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+				WHEN "11" => data_out <= S_DATA(3)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+				WHEN OTHERS => data_out <= S_DATA(0)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+			END CASE;
 	end process;
 	
 end Behavioral;
