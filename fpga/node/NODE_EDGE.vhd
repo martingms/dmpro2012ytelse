@@ -106,7 +106,7 @@ begin
 			ctrl_s_swap				<= '0';
 		elsif (instr(23) = '1') then
 			ctrl_s_swap				<= '0';
-		else
+		elsif rising_edge(clk) then
 			CASE instr(21 downto 19) IS
 				-- S-data swap
 				WHEN  NODE_INSTR_OP_S  =>
