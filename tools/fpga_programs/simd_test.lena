@@ -1,6 +1,6 @@
     ctrl nop
 
-    ctrl addi DMA ZERO 0
+    ctrl addi DMA ZERO 1
     ctrl dma set_read_active
     ctrl nop
 
@@ -11,6 +11,7 @@
     ctrl addi DMA ZERO 160
     ctrl sll DMA DMA
     ctrl dma set_write_vertical_incr
+    ctrl dma set_read_vertical_incr
     ctrl nop
 
     ctrl addi R4 ZERO 160           # R4 = 320
@@ -20,6 +21,7 @@
     ctrl add DMA DMA R4
     ctrl addi DMA DMA 1
     ctrl dma set_write_horizontal_incr
+    ctrl dma set_read_horizontal_incr
     ctrl nop
 
     ctrl addi R7 ZERO 3             # R7: Row start address accumulator
@@ -34,13 +36,33 @@ dma_loop:
 
 dma_row_loop:
     ctrl dma set_write_base_addr    # write base addr = 19328
+    ctrl dma set_read_base_addr    # write base addr = 19328
     ctrl addi DMA DMA 2
     ctrl nop
 
     node addi R2 R2 8
-    node swap ZERO R2
+    node swap R3 R2
+    node swap R2 R3
 
     ctrl dma start
+    ctrl nop
+
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
     ctrl nop
 
     ctrl nop
@@ -98,6 +120,7 @@ dma_row_loop:
 
 pixel_loop:
 
+    ctrl lw VDATA VADDR
     ctrl lw VDATA VADDR
     ctrl nop
     ctrl addi VADDR VADDR 1
