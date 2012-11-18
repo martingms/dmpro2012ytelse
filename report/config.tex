@@ -54,6 +54,7 @@ Trygve Aaberge\\
 
 %%% Packages
 
+
 \usepackage{scrextend}
 \usepackage{float}
 \usepackage{graphicx}
@@ -64,7 +65,6 @@ Trygve Aaberge\\
 \usepackage[nohyperlinks]{acronym}
 
 %%% Fine-tuning of this classicthesis
-
 \newcounter{dummy} % Fikser hyperref-feil (?)
 \usepackage{textcomp} % Fikser feilmelding om at fonter er bytta ut
 \usepackage{scrhack} % Fikser warnings i listings
@@ -94,16 +94,21 @@ Trygve Aaberge\\
 
 \renewcommand{\bflabel}[1]{{#1}\hfill}
 
-%\usepackage{listings} % loaded by classicthesis
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[chapter]{minted}
+
+\renewcommand\listoflistingscaption{List of Listings}
+
+\newminted{lena}{frame=single}
 
 \usepackage{amsmath, amssymb}
 %% Note: eulermath is sweet for equations, but requires a 500 mb font bundle
 %% installed. Better leave it off and remember to flip it on before sending.
-\usepackage[dottedtoc,listings,%eulermath,
+\usepackage[dottedtoc,%eulermath,%listings,
             floatperchapter,drafting % remember to remove this one
             ]{classicthesis}
 \setlength{\parskip}{\bigskipamount}
 \setlength{\parindent}{0pt}
 \usepackage{tikz}
 
-\renewcommand{\lstlistlistingname}{List of Listings}
+%\renewcommand{\lstlistlistingname}{List of Listings}

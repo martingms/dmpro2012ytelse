@@ -36,8 +36,9 @@
     
     %%% LIST OF LISTINGS
     \refstepcounter{dummy}
-    \pdfbookmark[1]{\lstlistlistingname}{lol}
-    \lstlistoflistings 
+    \pdfbookmark[1]{\listoflistingscaption}{lol}
+    \renewcommand{\figurename}{Listing}
+    \listoflistings
     \vspace*{8ex}
     
     %%% LIST OF ACRONYMS AND ABBREVIATIONS
