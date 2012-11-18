@@ -2,7 +2,8 @@
 
 To summarize the previous sections, let us take a quick example on how the
 complete system will process a video, an image or something like the Game of
-Life.
+Life. We will not go into deep details, and as such, some figurative language is
+used to simplify complex parts of the system.
 
 At first, the machine is powered up, and all the components wake up from their
 sleep. \ac{LENA} will reload its \ac{FPGA} setup from flash, and the \ac{SCU}
@@ -24,10 +25,9 @@ data, before it does exactly that. Finally, the \ac{SCU} allows \ac{LENA} to run
 \ac{LENA} now has all it needs to perform its instructions. The control core
 starts by activating the \ac{DMA}. The \ac{DMA} starts sending data from memory
 to the \ac{SIMD} array. This is done by putting the different values on multiple
-``conveyor belts'' which lies below the \ac{SIMD} node. \TODO{This is very
-  illustrative, but not technically correct. Is that an issue?} When every
-\ac{SIMD} node has data to work with, every node ``picks up'' the data and
-places it in a special register.
+``conveyor belts'' which lies below the \ac{SIMD} node. When every \ac{SIMD}
+node has data to work with, every node ``picks up'' the data and places it in a
+special register.
 
 The control core then sends the instruction the \ac{SIMD} nodes should use
 next. In parallel, the \ac{DMA} starts sending in new data into the \ac{SIMD}
