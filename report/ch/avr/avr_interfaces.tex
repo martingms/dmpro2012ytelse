@@ -5,9 +5,7 @@ the the microcontroller used in the SCU, the AVR AT32UC3A0, hereby refered to as
 Also included are specifics in regard to what choices
 were made in terms of AVR specific hardware. 
 
-The AVR had a number of considerations in mapping the pinout. First off we
-wanted to have a number of functions that required specific pins on the AVR to
-mention some: \TODO {dette avsnittet m. punktlista er litt uklar, foreslår omskriving eller fjerning}
+Trying to design and plan the hardware associated with the AVR we quickly realized that there were some components that required more planning and more careful placing than the rest. Mostly this was because they either had to be connected to special hardware (spesific pins) or needed physical proximity in order to be as effective as possible. To mention some of these:
 
 \begin{enumerate}
 \item Serial port
