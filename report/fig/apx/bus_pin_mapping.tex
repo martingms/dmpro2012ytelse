@@ -2,18 +2,18 @@
   \centering
   \begin{tabular}{l l} \toprule
     \thx{Line} & \thx{Usage}\\ \midrule
-	LENA\_IO\_00 & Two way data bus (least significant bit)\\
-	LENA\_IO\_01 & Two way data bus\\
-	LENA\_IO\_02 & Two way data bus\\
-	LENA\_IO\_03 & Two way data bus\\
-	LENA\_IO\_04 & Two way data bus\\
-	LENA\_IO\_05 & Two way data bus\\
-	LENA\_IO\_06 & Two way data bus\\
-	LENA\_IO\_07 & Two way data bus (most significant bit)\\
+	LENA\_IO\_00 & Data bus (least significant bit)\\
+	LENA\_IO\_01 & Data bus\\
+	LENA\_IO\_02 & Data bus\\
+	LENA\_IO\_03 & Data bus\\
+	LENA\_IO\_04 & Data bus\\
+	LENA\_IO\_05 & Data bus\\
+	LENA\_IO\_06 & Data bus\\
+	LENA\_IO\_07 & Data bus (most significant bit)\\
 	LENA\_IO\_CTRL & Interrupt / Ack from LENA.\\
   \end{tabular}
-  \caption{LENA-SCU I/O bus}
-  \label{tab:iobus}
+  \caption{LENA out bus}
+  \label{tab:outbus}
 \end{table}
 
 \begin{table}[h]
@@ -44,13 +44,21 @@
 	LENA\_IN\_21 & Data bus\\
 	LENA\_IN\_22 & Data bus\\
 	LENA\_IN\_23 & Data bus (most significant bit)\\
-	LENA\_IN\_24 & Data bus ready\\
-	LENA\_IN\_25 & Set LENA state\\
-	LENA\_IN\_26 & LENA STATE (least significant bit)\\
-	LENA\_IN\_27 & LENA STATE\\
-	LENA\_IN\_28 & LENA STATE (most significant bit)\\ \bottomrule
+	LENA\_IN\_24 & Data bus ready\\ \bottomrule
   \end{tabular}
-  \caption{LENA-SCU in bus}
+  \caption{LENA in bus}
   \label{tab:inbus}
 \end{table}
 
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l l} \toprule
+    \thx{Line} & \thx{Usage}\\ \midrule
+	LENA\_IN\_25 & Set LENA state\\
+	LENA\_IN\_26 & State bus (least significant bit)\\
+	LENA\_IN\_27 & State bus\\
+	LENA\_IN\_28 & State bus (most significant bit)\\ \bottomrule
+  \end{tabular}
+  \caption{LENA state bus}
+  \label{tab:statebus}
+\end{table}
