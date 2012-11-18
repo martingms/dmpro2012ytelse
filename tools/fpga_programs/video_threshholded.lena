@@ -26,7 +26,6 @@ pixel_loop:
 
     ctrl add VDATA ZERO ZERO  # If not, set pixel to white
     ctrl nop
-    ctrl jump inc_vaddr
 
 inc_vaddr:
     ctrl nop

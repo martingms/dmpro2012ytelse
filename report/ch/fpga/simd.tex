@@ -3,26 +3,32 @@
 \ac{SIMD} nodes are the main processing cores of the image processor and are
 responsible for carrying out data processing instructions in parallel. They
 share the same instruction set and executes the same instruction, hence
-\acf{SIMD} and operates on an 8-bit word size, as most of the processor does.
+\acf{SIMD}. It operates on an 8-bit word size, as most of the
+architecture\TODO{architecture/machine question again} does.
 
 Each \ac{SIMD} node is fully equipped with a register bank, an \ac{ALU}, message
 passing with adjacent nodes and an instruction decoder for the \ac{SIMD} node
 instruction set, explained in detail in subsequent sections.
 
-The schematic of a single \ac{SIMD} node is shown in figure
-\ref{fig:fpga-simd-arch} details the entire data path for the node. Different
-parts of the instruction and other inputs and outputs to and from the node are
-all labeled with red labels. In this section we will refer to this image when
-explaining the different components.
+The schematic of a single \ac{SIMD} node is shown in Figure
+\ref{fig:fpga-simd-arch}, and details the entire data path for the
+node. Different parts of the instruction and other inputs and outputs to and
+from the node are all labeled with \TODO{Again, colour print}red labels. In this
+section we will refer to this image when explaining the different components.
 
-\TODO{Fix signal labels in architecture image to differentiate between input, output and instruction}
+\TODO{Fix signal labels in architecture image to differentiate between input,
+  output and instruction. Jahre nevner at det må tydeligjøres hva
+  som er busser og hva som er signaler}
 
 \input{fig/fpga/fpga-simd-arch}
-\TODO{Jahre nevner at det må tydeligjøres hva som er busser og hva som er signaler}
 
 \subsection{Components}
 
-\TODO{This paragraph is kind of VHDL implementation specific. Should we keep it?}
+{\em \color{red} This paragraph is kind of VHDL implementation specific. Should
+  we keep it?
+
+  JN: Good question. I think so, but that's my gut feeling. However, it needs to
+  be split up. It is currently one sentence.}
 
 In order to the keep the amount of intermediate signals to a minimum, as well
 as better reusability across other parts of the processor, the \ac{SIMD} node
@@ -31,27 +37,28 @@ together makes up the data path for the node.
 
 \subsubsection{Instruction Decoder}
 
-\TODO{List all the different OP-codes and their meaning.}
-
 When an instruction is first received by a \ac{SIMD} node, the first 5 bits
 (enable, mask and opcode) are fed directly into the Instruction Decoder. The
 decoder will then set up the correct control signals other components based on
-the current state of the \ac{SIMD} node and instruction opcode.
+the current state of the \ac{SIMD} node and instruction opcode. For a list all
+\ac{SIMD} instructions, see Appendix \ref{apx:simd-instruction-set}.
 
 \subsubsection{Communication}
-The Communication component controls outbound data from the \ac{SIMD} node to
+The communication component controls outbound data from the \ac{SIMD} node to
 adjacent \ac{SIMD} nodes in the grid array. It can either send data from 4
-registers out on north-, south-, east- and west-bound links, forward incoming
-links in an clockwise spiral according to \ref{fig:fpga-simd-datacom} or keep
-the previously outgoing data. The latter is very important in order for
-branching to work correctly; where some \ac{SIMD} nodes, depending on their
-state, may store incoming data in one register and others \ac{SIMD} nodes in an
-other register.
+registers out on north-, south-, east- and westbound links, forward incoming
+links in an clockwise spiral as in Figure \ref{fig:fpga-simd-datacom}, or keep
+the previously outgoing data. The latter is critical to ensure correctness when
+branching. \ac{SIMD} nodes may store incoming data, depending on their
+state. For instance, one group of \ac{SIMD} nodes may store incoming data in one
+register, whereas other \ac{SIMD} nodes may place them in another register, or
+perhaps not at all.
 
-The clockwise spiral forwarding is an optimized way of distributing a 3$\times$3 array
-of source data to all the \ac{SIMD} nodes in the grid array using only 3 clock
-cycles. \TODO{We made this one ourselves! note that down}
-\TODO{Jahre vil at dettte skal forklares bedre}
+The clockwise spiral forwarding is an optimized way of distributing a 3$\times$3
+array of source data to all the \ac{SIMD} nodes in the grid array using only 3
+clock cycles, compared to ??? cycles when not using the clockwise
+spiral. \TODO{We made this one ourselves! note that down. Jahre vil at dette
+  skal forklares bedre}
 
 \subsubsection{Register Bank}
 Each \ac{SIMD} node is equipped with $2^4 = 16$ general purpose registers, 14 of
@@ -61,7 +68,7 @@ reserved for the special purpose registers {\tt \$zero} and {\tt \$state}.
 \input{fig/fpga/simd-registers}
 
 The register bank has been specially designed with the four-way data transfer in
-mind. It supports reading, or writing, 4 registers at once or reading 2
+mind. It supports reading or writing 4 registers at once, or reading 2
 registers and writing 1 register within one clock cycle.
 
 \subsubsection{Arithmetic Logic Unit}
@@ -70,22 +77,26 @@ registers and writing 1 register within one clock cycle.
 
 The \ac{ALU} implemented is a very simple {\tt 8}-bit \ac{ALU} supporting only 8
 instructions. The main reason for only implementing the most basic arithmetic
-instruction was to save space in the instruction set, since all \ac{SIMD} node
-instructions carries the 3-bit \ac{ALU} function at the end, and to reduce the
+instruction was to save space in the instruction set. All \ac{SIMD} node
+instructions carries the 3-bit \ac{ALU} function at the end, which reduces the
 physical size of the node.
 
-\TODO{Add some supporting references.}
+\TODO{Add some supporting references!!!}
 
-Upon investigating image processing algorithms, we found that many of these,
-Median Filter and Salt and Pepper noise reduction, only need these 8 \ac{ALU}
-operations in order to perform their work. Besides; more high level arithmetic,
-such as multiply and divide, can be implemented using addition and subtraction.
-\TODO{Jahre skriver: "2 Er ikke mange. Hvilke andre har dere kikket på?"}
+Upon investigating image processing algorithms, we found that many of these need
+only 8 \ac{ALU} operations in order to perform their work. As an example, Median
+Filter, Salt and Pepper noise reduction, {\color{red} add more here}. More high
+level arithmetic, such as multiply and divide by constants, can be implemented
+through a series of additions, subtractions and shifts. \TODO{Jahre skriver: "2
+  Er ikke mange. Hvilke andre har dere kikket på?"}
+
 \subsubsection{Source Data Register}
 The source data register (S REG), is a special purpose register within the
 \ac{SIMD} node which holds the next source data for the \ac{SIMD} node. It is
 partly controlled by the \ac{SIMD} node instruction set and partly by a special
-{\tt step} signal sent from the \ac{DMA}.
+{\tt step} signal sent from the \ac{DMA}. \TODO{Og her er det tredje gangen vi
+  introduserer dette S registeret vårt. Vi må plassere det et sted, og kun nevne
+  det andre steder.}
 
 An important attribute of the S REG is its capability to receive data from the
 left node and passing it along to node on the right when instructed by the {\tt
@@ -94,38 +105,32 @@ otherwise busy processing.
 
 \subsubsection{State Register}
 In order to handle branches, the \ac{SIMD} node must have some internal
-state. The State Register is, as all the other registers, 8-bit. The least
-significant bit is the current state which is sent out from the node and to the
-Instruction Decoder unit within the \ac{SIMD} node.
+state. To add state, we introduce a new register called the State Register. The
+state register is, as all the other registers, 8-bit. The least significant bit
+is the current state which is sent out from the node and to the instruction
+decoder unit within the \ac{SIMD} node.
 
-The State Register can be written and read as any other register in the Register
-Bank and the state can hence be shifted left or right in order to achieve nested
+The state register can be written and read as any other register in the register
+bank and the state can hence be shifted left or right in order to achieve nested
 branches.
 
-\subsection{DRAM and SRAM}
-
-\TODO{Where to put this?}
-
-\ac{DRAM} or \ac{SRAM} is not available from the \ac{SIMD} nodes.
-
-\subsection{Instruction Set}
-
 \input{fig/fpga/fpga-simd-datacom}
+{\sc \color{red} Figur \ref{fig:fpga-simd-datacom} flyter i løse lufta. Plasser
+  den et eller annet sted.}
 
 \subsection{Branching}
-\CHECK{Should this be added to the appendix or something?}
-
 Since all nodes run the same instructions, both parts of a branch must be
 executed. Nodes are setting the {\tt state} to 1 in order to indicate that they
-are executing within that part of the branch.
+are executing within that part of the branch. An example of single branching is
+shown in Listing \ref{lst:single-branch}.
 
-\input{fig/fpga/single-level-branching}
+{\sc \color{red} LENA-assembly here}
+%\input{fig/fpga/single-level-branching}
 
-\subsubsection{Multilevel branching}
-Since state register is 8 it is possible to have up-to 8 nested branches by
-shifting the current state to the left and adding the new state to the
-end. Below \TODO{Refer to table, not relative to where it is placed} are the
-instructions for performing a multilevel-branch.
+Since the state register is 8 bits, it is possible to have up to 8 nested
+branches by shifting the current state left and adding the new state to the
+end. Listing \ref{lst:multibranch} contains code which performs such a
+multilevel branch.
 
-\input{fig/fpga/multilevel-branching}
-\CHECK{Could any of these tables be figures instead?}
+{\sc \color{red} LENA-assembly here}
+%\input{fig/fpga/multilevel-branching}

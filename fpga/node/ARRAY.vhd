@@ -149,7 +149,7 @@ begin
 		end generate COL;
 	end generate ROW;
 	
-	process (clk, reset, STATE, data_write, data_in) begin
+	process (reset, STATE, S_DATA, row_sel) begin
 		if (reset = '1') then
 			state_out				<= '0';
 			data_out					<= (others => '0');
@@ -160,7 +160,19 @@ begin
 			else
 				state_out			<= '1';
 			end if;
-			
+
+			CASE row_sel IS
+				WHEN "01" => data_out <= S_DATA(1)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+				WHEN "10" => data_out <= S_DATA(2)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+				WHEN "11" => data_out <= S_DATA(3)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+				WHEN OTHERS => data_out <= S_DATA(0)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+			END CASE;
+		end if;
+	end process;
+	
+	process (clk, data_write, row_sel, data_in)
+	begin
+		if rising_edge(clk) then
 			-- Node data in/out
 			if (data_write = '1') then
 				CASE row_sel IS
@@ -169,15 +181,8 @@ begin
 					WHEN "11" => S_DATA(3)(7 downto 0) <= data_in;
 					WHEN OTHERS => S_DATA(0)(7 downto 0) <= data_in;
 				END CASE;
-				end if;
 			end if;
-
-			CASE row_sel IS
-				WHEN "01" => data_out <= S_DATA(1)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
-				WHEN "10" => data_out <= S_DATA(2)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
-				WHEN "11" => data_out <= S_DATA(3)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
-				WHEN OTHERS => data_out <= S_DATA(0)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
-			END CASE;
+		end if;
 	end process;
 	
 end Behavioral;
