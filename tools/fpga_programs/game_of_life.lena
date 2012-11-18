@@ -10,26 +10,37 @@ ctrl sll R1 R1
 ctrl sll R1 R1
 ctrl sll R1 R1
 
-ctrl addi R2 ZERO 255
-ctrl sll R2 R2
-ctrl sll R2 R2
-ctrl sll R2 R2
-ctrl sll R2 R2
-ctrl sll R2 R2
-ctrl sll R2 R2
-ctrl sll R2 R2
-ctrl sll R2 R2
-ctrl sll R2 R2
+ctrl add R2 ZERO ZERO
+ctrl add R3 R1 ZERO
 
-ctrl add R10 ZERO ZERO
-ctrl add R11 R1 ZERO
+vgacopy:
+    ctrl add R10 R2 ZERO
+    ctrl add VADDR ZERO ZERO
 
-ctrl jump start
+pixel_loop:
+    ctrl lw R12 R10
+    ctrl nop
+
+    ctrl beq after_add_vdata
+    ctrl eqi ZERO R12 0
+    ctrl nop
+    ctrl addi R12 ZERO 255
+
+after_add_vdata:
+    ctrl add VDATA R12 ZERO
+    ctrl addi VADDR VADDR 1
+    ctrl addi R10 R10 1
+
+    ctrl beq dma_start
+    ctrl slt ZERO R1 VADDR
+    ctrl nop
+
+    ctrl jump pixel_loop
 
 dma_start:
+    ctrl add R10 R2 ZERO
+    ctrl add R2 R3 ZERO
     ctrl add R3 R10 ZERO
-    ctrl add R10 R11 ZERO
-    ctrl add R11 R3 ZERO
 
     ctrl nop
 
@@ -69,37 +80,24 @@ dma_loop:
     ctrl addi DMA R7 0
 
 dma_row_loop:
-    ctrl add DMA DMA R11
+    ctrl add DMA DMA R3
     ctrl dma set_read_base_addr    # write base addr = 19328
-    ctrl sub DMA DMA R11
-    ctrl add DMA DMA R10
+    ctrl sub DMA DMA R3
+    ctrl add DMA DMA R2
     ctrl subi DMA DMA 4
     ctrl dma set_write_base_addr    # write base addr = 19328
     ctrl addi DMA DMA 4
-    ctrl sub DMA DMA R10
+    ctrl sub DMA DMA R2
     ctrl addi DMA DMA 2
     ctrl nop
 
-    node swap R1 R14
+    node swap R1 R1
 
     ctrl dma start
 
-    #node subi R1 R1 128
-
-    #node eqi STATE R1 0
-    #node mask addi R1 ZERO 1
-    #node eq STATE STATE ZERO
-    #node mask addi R1 ZERO 0
-    #node add STATE ZERO ZERO
-
-    #node addi R14 R1 1
-
-
-
-
     node send R1 R1 R1 R1
-    node fwrd R3 R8 R6 R5
-    node store R4 R9 R7 R2
+    node fwrd R2 R3 R4 R5 # N S E W
+    node store R6 R7 R8 R9
 
     node add R10 R2 R3
     node add R10 R10 R4
@@ -109,15 +107,13 @@ dma_row_loop:
     node add R10 R10 R8
     node add R10 R10 R9
 
-    node add R14 ZERO ZERO
+    node add R1 ZERO ZERO
     node eqi R11 R10 3
     node add R10 R10 R1
     node eqi R12 R10 3
     node or STATE R11 R12
-    node mask addi R14 ZERO 1 # branch taken
+    node mask addi R1 ZERO 1 # branch taken
     node add STATE ZERO ZERO
-
-
 
     ctrl nop
     ctrl nop
@@ -189,52 +185,4 @@ dma_row_loop:
     ctrl slt ZERO ZERO R8
     ctrl nop
 
-start:
-
-    ctrl add R3 R10 ZERO
-    ctrl add VADDR ZERO ZERO
-
-pixel_loop:
-    ctrl lw R12 R3
-    ctrl lw R12 R3
-    ctrl nop
-
-    ctrl beq after_add_vdata
-    ctrl eqi ZERO R12 0
-    ctrl nop
-    ctrl addi R12 ZERO 255
-
-after_add_vdata:
-    #ctrl addi VDATA ZERO 255
-    ctrl add VDATA R12 ZERO
-    ctrl addi VADDR VADDR 1
-    ctrl addi R3 R3 1
-
-    ctrl beq dma_start
-    ctrl slt ZERO R1 VADDR
-    ctrl nop
-
-    ctrl jump pixel_loop
-
-
-infinite_loop:
-
-    ctrl nop
-    ctrl jump infinite_loop
-
-
-#if R10 == 3 or R10 == 2 and R1 == 1:
-#    next = 1
-#else
-#    next = 0
-#
-#
-#if R10 == 3
-#    R11 = 1
-#    live
-#else
-#    R10 = R10 + R1
-#    if R10 == 3
-#        R12 = 1
-#    endif
-#endif
+    ctrl jump vgacopy
