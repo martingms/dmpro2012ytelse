@@ -1,12 +1,12 @@
 \section {Memory architecture}
 \TODO{Graph of memory-architecture} In the early phases of the project,
 multiple solutions as to how the data memory should work were suggested. We
-decided to let the AVR send all the data to the \ac{FPGA}, and then let it store
+decided to let the \ac{SCU} send all the data to the \ac{LENA}, and then let it store
 them to its own local memory. The reason we chose this over shared memory was
 all the potential issues one may get with the shared memory solution. A shared memory
 would be prone to errors from synchronization problems such as knowing when,
 and to which addresses, a read/write operation should read/write. We figured
-that we would rather send all data from the AVR to the \ac{FPGA}, and let it
+that we would rather send all data from the \ac{SCU} to the \ac{LENA}, and let it
 store them into its own memory as it saw fit.
 
 To allow overlap between loading instructions and data in the LENA
@@ -19,15 +19,15 @@ we went for the cheaper option.
 
 \TODO {find out exactly what was the issue here, with the SD card, frame size,
   and on-chip AVR memory} In addition, we figured a shared \ac{VGA} and data memory would obstruct the flow
-of data from the AVR. Since data for the \ac{VGA} would be both read and written
+of data from the \ac{SCU}. Since data for the \ac{VGA} would be both read and written
 frequently, the \ac{VGA} needed its own memory, rather than sharing memory with
-the AVR itself. As we were supposed to optimize for performance, we had to take
+the SCU itself. As we were supposed to optimize for performance, we had to take
 possible bottlenecks into consideration. We therefore invested in an extra
 memory chip. For the VGA we chose an 8-bit word memory that was big enough to
 hold atleast a full screen-frame, at 8-bit per pixel (since each pixel is an 8-bit greyscale pixel).
 
-Lastly, to reduce the possibility of having too slow data-access from the AVR, an extra memory was added to work as
-a buffer for the AVR as well. This design choice was made {\em after} ordering, which meant that we had to choose from
+Lastly, to reduce the possibility of having too slow data-access from the SCU, an extra memory was added to work as
+a buffer for the SCU as well. This design choice was made {\em after} ordering, which meant that we had to choose from
 the chips we had already ordered to fit this purpose. Since this was intended to carry data intended for the rest
 of the system, and as the rest of the system is working with data in 8-bit bytes, we ended up using one of the
 extra chips ordered as \ac{VGA} memory for this purpose.
