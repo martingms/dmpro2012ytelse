@@ -128,6 +128,7 @@ dma_row_loop:
 pixel_loop:
 
     ctrl lw VDATA R3
+    ctrl lw VDATA R3
     ctrl nop
     ctrl addi VADDR VADDR 1
     ctrl addi R3 R3 1
