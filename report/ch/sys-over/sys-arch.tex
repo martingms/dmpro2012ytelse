@@ -10,7 +10,6 @@ problem, it is unacceptable in systems where one or multiple of the system
 requirements are a performance increase in one or both of these domains. As one
 of our main requirements is focus on performance, we have to accept a certain
 level of inherent complexity.
-\TODO{Include AVR-memory in figure}
 \input{fig/sys-over/arch-fig}
 
 To remedy the complexity which comes from our requirements, we focused on making
@@ -30,9 +29,9 @@ programs. A \ac{VGA} connector made it possible to quickly test and debug the
 should fail to implement its \ac{VGA} module.
 
 To be able to process data, we need an \ac{I/O} device which serves the machine
-with data it should process. As we were unsure of what would be the easiest to \TODO{This is not true. Redundancy was the main reason for having multiple IO. Using the serial port for data transfer would be a last resort}
-implement, we included both a serial port, a \ac{USB} port and a \ac{SD} card
-reader on the \ac{PCB}.
+with data it should process. To ensure that we would have at least one
+functional \ac{I/O} component,\CHECK{Sounds okay now?} we included both a serial
+port, a \ac{USB} port and a \ac{SD} card reader on the \ac{PCB}.
 
 The \ac{LENA} architecture has three different memory components: One for the
 \ac{VGA} component, one for instructions and one for data. The main reason for
