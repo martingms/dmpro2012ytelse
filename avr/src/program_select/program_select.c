@@ -210,13 +210,44 @@ void set_file_type(enum data_type type) {
 /*
  * Final stage: Run FPGA program with data from outside FAT
  */
-void run_fpga_program_from_sd(data_blk_src_t *data_info) {
-	// stop listening on buttons
-	busy = TRUE;
-
+const char *osd(int i, int num_frames) {
 	// used for FPS counter
 	static double last_time = 0;
 	static double total_time = 0;
+
+	static char txt[80];
+
+	str2img_osd_reset();
+	str2img_osd_set_cursor(0, 17);
+	double time = timer_get_ms();
+	sprintf(txt, "FPS %2.2f [ETA %ds]\n", 1000.0 / (time - last_time),
+			(int)((total_time / i) * (num_frames - i) / 1000));
+
+	str2img_osd_write(txt);
+	str2img_osd_putc('[');
+
+	int foo = 38 * i / num_frames;
+	int ctr;
+	for (ctr = 0; ctr < 38; ctr++) {
+		str2img_osd_putc(ctr < foo ? '|' : '-');
+	}
+	str2img_osd_putc(']');
+
+	total_time += time - last_time;
+	last_time = time;
+
+	return txt;
+}
+void fps_limit(double target_ms) {
+	static double fps_limit = 0;
+
+	double t = timer_get_ms();
+	timer_sleep(target_ms - (t - fps_limit));
+	fps_limit = timer_get_ms();
+}
+void run_fpga_program_from_sd(data_blk_src_t *data_info) {
+	// stop listening on buttons
+	busy = TRUE;
 
 	// where to put OSD
 	str2img_osd_init(FRAME_BUFFER);
@@ -227,40 +258,20 @@ void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 	unsigned int blocks_per_frame = 150; // 320*240/512
 	unsigned int first_block = data_info->block_addr; // start reads here
 	unsigned int num_frames = data_info->frame_count; // read this many frames
+	double target_fps = data_info->target_fps; // the FPS to aim for
 
 	int i;
-	char *txt = FRAME_OSD;
 	for (i=0; i < num_frames; i++) {
 
 		// run if the FPGA has data to run on
-		if (i > 0) {
-			fpga_set_state(FPGA_STATE_RUN);
-			timer_sleep(selected_script.transfer_delay * 1000); //TODO passende sted med sleep?
-		}
+		fpga_set_state(i > 0 ? FPGA_STATE_RUN : FPGA_STATE_STOP);
 
 		// read a single frame
 		sd_mmc_spi_read_open(first_block + blocks_per_frame * i);
 		sd_mmc_spi_read_multiple_sectors_to_ram(FRAME_BUFFER, blocks_per_frame);
 
-		// OSD
-		str2img_osd_reset();
-		str2img_osd_set_cursor(0, 17);
-		double time = timer_get_ms();
-		sprintf(txt, "FPS %2.2f [ETA %ds]\n", 1000.0 / (time - last_time),
-				(int)((total_time / i) * (num_frames - i) / 1000));
-
-		str2img_osd_write(txt);
-		str2img_osd_putc('[');
-
-		int foo = 38 * i / num_frames;
-		int ctr;
-		for (ctr = 0; ctr < 38; ctr++) {
-			str2img_osd_putc(ctr < foo ? '|' : '-');
-		}
-		str2img_osd_putc(']');
-		total_time += time - last_time;
-		last_time = time;
-		// END OSD
+		fps_limit(1000 / target_fps);
+		osd(i, num_frames);
 
 		// set state to "load data" and send to fpga
 		fpga_set_state(FPGA_STATE_LOAD_DATA);

@@ -143,6 +143,14 @@ def __assembleNodeInstr__(instr):
 	instr 		= instr.partition(" ");
 	fn 			= instr[0]
 	params 	= instr[2]
+	mask		= '0'
+	
+	# Detect masked instructions
+	if fn == "mask":
+		mask 	= '1'
+		instr	= params.partition(" ");
+		fn 		= instr[0]
+		params = instr[2]
 	
 	# ctrl op fn params #params 
 	if fn in instrs['r']	: output = __assembleNodeInstrN__('0', '0000', instrs['r'][fn], params, 3)
