@@ -162,7 +162,7 @@ architecture behavioral of toplevel is
 			mem_addr_width : natural := 21;
 			simd_rows : natural := 5;
 			simd_cols : natural := 5;
-			simd_addr_width : natural := 5);
+			simd_addr_width : natural := NODE_ARRAY_ROW_ADDR);
 			
 		port (
 			clk : in std_logic;
@@ -193,7 +193,7 @@ architecture behavioral of toplevel is
 			node_step 					: in  STD_LOGIC;
 			
 			data_write					: in  STD_LOGIC;
-			row_sel 						: in  STD_LOGIC_VECTOR (1 downto 0);
+			row_sel 						: in  STD_LOGIC_VECTOR (NODE_ARRAY_ROW_ADDR-1 downto 0);
 			data_in 						: in  STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0);
 			data_out 					: out STD_LOGIC_VECTOR (NODE_DDATA_BUS-1 downto 0) := (others => '0');
 			state_out					: out STD_LOGIC
@@ -293,7 +293,7 @@ architecture behavioral of toplevel is
 	signal dma_mem_data : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
 	
 	signal dma_step_s : std_logic;
-	signal dma_simd_addr : std_logic_vector(1 downto 0);
+	signal dma_simd_addr : std_logic_vector(NODE_ARRAY_ROW_ADDR-1 downto 0);
 	signal dma_simd_write : std_logic;
 	signal dma_simd_data_in : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
 	signal dma_simd_data_out : std_logic_vector(RAM_DATA_WORD_WIDTH - 1 downto 0);
@@ -340,7 +340,7 @@ begin
 		);
 	
 	vga_value(9 downto 5) <= vga_pixel_out(7 downto 3);
-	vga_value(4 downto 3) <= dma_simd_addr;
+	vga_value(4 downto 3) <= dma_simd_addr(1 downto 0);
 	vga_value(2) <= dma_step_s;
 --	vga_value(9 downto 3) <= control_core_mem_addr(6 downto 0);
 --	vga_value(2) <= control_core_mem_write;
@@ -456,9 +456,9 @@ begin
 		generic map (
 			word_width => RAM_DATA_WORD_WIDTH,
 			mem_addr_width => RAM_DATA_ADDRESS_WIDTH,
-			simd_rows => 4,
-			simd_cols => 4,
-			simd_addr_width => 2)
+			simd_rows => NODE_ARRAY_ROWS + 2,
+			simd_cols => NODE_ARRAY_COLS + 2,
+			simd_addr_width => NODE_ARRAY_ROW_ADDR)
 		port map (
 			clk => clk_cpu,
 			enable => execute,

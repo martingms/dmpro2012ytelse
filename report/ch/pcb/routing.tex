@@ -6,7 +6,7 @@ One of the reasons were simply that we were the first group to start routing. We
 
 An example of such a trap was that we didn't set the correct Design Rules before auto-routing, until a few days into the week. This naturally didn't give us the routing that we wanted, and gave us a few headaches.
 
-Related to this is the fact that we didn't experiment enough with different routing strategies. We wanted to reduce the number of vias, but went with the default routing in Altium. We then did quite an amount of manual routing to reduce the number of vias. The amount of manual work could perhaps have been reduced by selecting the "Via Mixer" strategy instead.
+Related to this is the fact that we didn't experiment enough with different routing strategies. We wanted to reduce the number of vias, but went with the default routing in Altium. We then did quite an amount of manual routing to reduce the number of vias. Figure \ref{fig:removingvias-pcb} shows an example where we coupled together several pins to the same via going to the GND-layer. The amount of manual work could perhaps have been reduced by selecting the "Via Mixer" strategy instead.
 
 \input{fig/pcb/pcb_removing_vias} \TODO{Write about this figure}
 
@@ -27,9 +27,7 @@ Initially we attempted auto routing. This took just around 12 minutes before con
 \TODO{Silk-over-silk in USB/Lenna, errors we could ignore.}
 \TODO{Scaling of board. (Should go elsewhere or not at all?)}
 
-Initially we started with a board size chosen more or less at random, and picked something that seemed to fit the components comfortably with room to spare.
+Initially we started with a board size more than big enough to fit the components comfortably. After laying out the components on the board, we noticed that the board had quite a bit of room left over. As this would be a waste of resources, we scaled the board down in size. We did this by moving the keep-out-borders inwards until the wasted space was removed, and then used the ``scale-to-fit-components''-tool in Altium, with the Keepout-border selected.
 
-After laying out the components on the board, we noticed that the board had quite a bit of room left over. As this would be a waste of resources, we scaled the board down in size. We did this by moving the keep-out-borders inwards until the wasted space was removed, and then used the ``scale-to-fit-components''-tool in Altium, with the Keepout-border selected.
-
-In the end we remapped some pins to increase physical proximity, and to untangle the amount of crossing wires. Although care was taken during this process, we accidentally happened to disconnect one pin in the schematic while reordering. We did notice this before production, and were able to correct the mistake by manually routing the connection. Finally, we did some manual routing to reduce the amount of unnecessary vias.
+In the end we remapped some pins to increase physical proximity, and to untangle the amount of crossing wires. Although care was taken during this process, we accidentally managed to disconnect one pin in the schematic while reordering. We did notice this before production, and were able to correct the mistake by manually routing the connection. Finally, we did some manual routing to reduce the amount of unnecessary vias. \TODO{Restructure process/discussion} 
 

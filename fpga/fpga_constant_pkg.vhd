@@ -9,8 +9,8 @@ use IEEE.STD_LOGIC_1164.all;
 package FPGA_CONSTANT_PKG is
 	
 	-- NODE ARRAY
-	constant NODE_ARRAY_ROW_ADDR	: integer	:= 2;
-	constant NODE_ARRAY_ROWS		: integer	:= 2;
+	constant NODE_ARRAY_ROW_ADDR	: integer	:= 3;
+	constant NODE_ARRAY_ROWS		: integer	:= 3;
 	constant NODE_ARRAY_COLS		: integer	:= 2;
 	
 	-- NODE INSTRUCTION SET

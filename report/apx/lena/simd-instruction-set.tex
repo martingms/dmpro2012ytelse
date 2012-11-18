@@ -5,7 +5,7 @@ formats. Arithmetic instructions (R, I and S) and message passing instructions
 (M-send, M-store and M-forward). \TODO{Split this up into instruction set and
   assembler section?}
 
-\subsection[R-Format]{R-Format (OP = 000)}
+\subsection[R Format]{R Format (OP = 000)}
 Arithmetic register functions instructions
 
 \input{fig/fpga/ar-re-fu-in}
@@ -18,13 +18,13 @@ Arithmetic register functions instructions
 \item {\tt rs} write data register address.
 \item {\tt rt} read data 1 register address.
 \item {\tt rd} read data 2 register address.
-\item {\tt n/a} not assigned for R-instructions.
+\item {\tt n/a} not assigned for R instructions.
 \item {\tt fn} the artimetic operation to perform.
 \end{itemize}
 
 \input{fig/fpga/r-instructions}
 
-\subsection[I-Format]{I-Format (OP = 001)}
+\subsection[I Format]{I Format (OP = 001)}
 Immediate functions using constants.
 
 \input{fig/fpga/immediate-fn-const}
@@ -42,7 +42,7 @@ Immediate functions using constants.
 
 \input{fig/fpga/i-instructions}
 
-\subsection[S-Format]{S-Format (OP = 010)}
+\subsection[S Format]{S Format (OP = 010)}
 Swap source data register with processed data and store new source data in
 register.
 
@@ -56,14 +56,15 @@ register.
 \item {\tt rs} new source data register address.
 \item {\tt rt} old source data register adddress.
 \item {\tt rd} must be 000000.
-\item {\tt n/a} not assigned for S-instructions.
+\item {\tt n/a} not assigned for S instructions.
 \item {\tt fn} must be 000.
 \end{itemize}
 
 \input{fig/fpga/s-instructions}
 
-\subsection[M-Format]{M-Format (OP = 100, 101, 110)}
-Send, recieve and forward data from and to neighbour nodes in all directions (north, south, east and west).
+\subsection[M Format]{M Format (OP = 100, 101, 110)}
+Send, recieve and forward data from and to neighbour nodes in all directions
+(north, south, east and west).
 
 \input{fig/fpga/m-fmt-instr}
 
