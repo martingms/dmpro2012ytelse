@@ -31,16 +31,7 @@ should fail to implement its \ac{VGA} module.
 To be able to process data, we need an \ac{I/O} device which serves the machine
 with data it should process. To ensure that we would have at least one
 functional \ac{I/O} component,\CHECK{Sounds okay now?} we included both a serial
-port, a \ac{USB} port and a \ac{SD} card reader on the \ac{PCB}.
-
-The \ac{LENA} architecture has three different memory components: One for the
-\ac{VGA} component, one for instructions and one for data. The main reason for
-this is that image processing systems in general need a lot of memory. The
-\ac{VGA} module needs to constantly send out an image to the \ac{VGA} port, so
-it needs to keep the old image in memory. The \ac{LENA} architecture should have
-one image in memory which it can send to the \ac{SIMD} nodes, and one image
-which is currently read from the \ac{SCU} to memory. In addition, one would have
-to read data instructions as well. All these different parts require large amounts
-of memory, and they are all frequently accessed. Therefore, it would be
-favorable to have them as separate components so that memory access can be
-parallelised.
+port, a \ac{USB} port and a \ac{SD} card reader on the \ac{PCB}. In addition,
+to be able to keep enough data in memory and allow full overlap of different memory
+transactions to make processing fast, the \ac{LENA} architecture has three separate
+memory components. One for \ac{VGA}, one for instructions and one for data.
