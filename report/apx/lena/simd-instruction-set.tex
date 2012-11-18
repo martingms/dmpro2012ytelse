@@ -31,7 +31,7 @@ Immediate functions using constants.
 
 \begin{itemize}
 \item {\tt ctrl} must be set to 0 in order to be executed on the SIMD node.
-\item {\tt mask} is set to 1 for selectivly enabling the node when executing
+\item {\tt mask} is set to 1 for selectively enabling the node when executing
   conditional branches.
 \item {\tt op} the instruction opcode.
 \item {\tt rs} write data register address.
@@ -50,11 +50,11 @@ register.
 
 \begin{itemize}
 \item {\tt ctrl} must be set to 0 in order to be executed on the SIMD node.
-\item {\tt mask} set to 1 for selectivly enabling the node when executing
+\item {\tt mask} set to 1 for selectively enabling the node when executing
   conditional branches.
 \item {\tt op} the instruction opcode.
 \item {\tt rs} new source data register address.
-\item {\tt rt} old source data register adddress.
+\item {\tt rt} old source data register address.
 \item {\tt rd} must be 000000.
 \item {\tt n/a} not assigned for S instructions.
 \item {\tt fn} must be 000.
@@ -63,14 +63,14 @@ register.
 \input{fig/fpga/s-instructions}
 
 \subsection[M Format]{M Format (OP = 100, 101, 110)}
-Send, recieve and forward data from and to neighbour nodes in all directions
+Send, receive and forward data from and to neighbor nodes in all directions
 (north, south, east and west).
 
 \input{fig/fpga/m-fmt-instr}
 
 \begin{itemize}
 \item {\tt ctrl} must be set to 0 in order to be executed on the SIMD node.
-\item {\tt mask} set to 1 for selectivly enabling the node when executing
+\item {\tt mask} set to 1 for selectively enabling the node when executing
   conditional branches.
 \item {\tt op} the instruction opcode.
 \item {\tt n} north data write or read register address.
