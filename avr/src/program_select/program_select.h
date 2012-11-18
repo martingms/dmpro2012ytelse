@@ -20,6 +20,7 @@
 typedef struct data_blk_src_t {
 	unsigned int block_addr;
 	unsigned int frame_count;
+	double target_fps;
 } data_blk_src_t;
 
 
