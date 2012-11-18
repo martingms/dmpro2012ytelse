@@ -27,9 +27,7 @@ Initially we attempted auto routing. This took just around 12 minutes before con
 \TODO{Silk-over-silk in USB/Lenna, errors we could ignore.}
 \TODO{Scaling of board. (Should go elsewhere or not at all?)}
 
-Initially we started with a board size chosen more or less at random, and picked something that seemed to fit the components comfortably with room to spare.
+Initially we started with a board size more than big enough to fit the components comfortably. After laying out the components on the board, we noticed that the board had quite a bit of room left over. As this would be a waste of resources, we scaled the board down in size. We did this by moving the keep-out-borders inwards until the wasted space was removed, and then used the ``scale-to-fit-components''-tool in Altium, with the Keepout-border selected.
 
-After laying out the components on the board, we noticed that the board had quite a bit of room left over. As this would be a waste of resources, we scaled the board down in size. We did this by moving the keep-out-borders inwards until the wasted space was removed, and then used the ``scale-to-fit-components''-tool in Altium, with the Keepout-border selected.
-
-In the end we remapped some pins to increase physical proximity, and to untangle the amount of crossing wires. Although care was taken during this process, we accidentally happened to disconnect one pin in the schematic while reordering. We did notice this before production, and were able to correct the mistake by manually routing the connection. Finally, we did some manual routing to reduce the amount of unnecessary vias.
+In the end we remapped some pins to increase physical proximity, and to untangle the amount of crossing wires. Although care was taken during this process, we accidentally managed to disconnect one pin in the schematic while reordering. We did notice this before production, and were able to correct the mistake by manually routing the connection. Finally, we did some manual routing to reduce the amount of unnecessary vias. \TODO{Restructure process/discussion} 
 
