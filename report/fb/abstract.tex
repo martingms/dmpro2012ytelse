@@ -5,6 +5,7 @@
 \let\cleardoublepage\relax
 
 \chapter*{Abstract}
+\begin{comment}
 \TODO{This is a very rough draft written after 24 hours of sleeplessness. Be
 ruthless in your editing/rewriting/deleting/whatever.} As heat generation and
 power consumption has put up a ceiling for how large and fast processors can be
@@ -34,6 +35,38 @@ as many cores as possible within limited resources.
 In the end the design has gone through fairly rigorous testing, and has met both
 the functional and non-functional requirements we set out to meet. The
 architecture has shown itself a good fit for multiple common image processing
-tasks. The architecture has shown itself a good fit for multiple common image
-processing tasks.
+tasks.
+\end{comment}
+As heat generation and power consumptions put up a limit of how large and fast
+a single processor can be designed, parallelism is becoming more and more important
+within all performance demanding computing. Everything from cellphones to desktop
+computers now carry multiple processing cores to perform their functions. But
+parallelism is of course not a new concept; for many decades exploiting the
+parallel nature of certain data to effectivize computation has been a known tactic.
+Especially within the field of image processing parallelism has proved itself an
+extremely effective solution.
+
+While MIMD-Systems are dominant within general computing, we want to explore
+alternatives which may work better for certain applications. The result of
+this project is the computer we have named ``256 Shades of Gray`` (Also referred
+to as ``TSOG``), which is an array based SIMD-architecture optimized for massively
+parallelizable tasks such as image processing.
+
+256 Shades of Gray consists of a custom PCB-design, a microprocessor operating as a
+System Control Unit and an FPGA which implements our SIMD-architecture. It takes its
+inputs through an SD-card reader (with RS-232 and USB as backup), and shows its
+output through a custom VGA controller.
+
+We have been inspired by the Goodyear MPP architecture, which clearly shows in our
+design. We designed for simplicity as much as possible, in order to be able to fit
+as many cores as possible within our limited resources. As such the SIMD nodes have
+been stripped of all complex instruction, all floating point capabilities, integer
+multiplication and integer division. The SIMD nodes are all controlled by a control
+core that handles all memory accesses through a DMA unit.
+
+The SD card and the custom VGA controlled both worked flawlessly in the end, and while
+the RS-232 port didn't work at all the VGA could replace it for debugging purposes.
+In the end our design has gone through thorough testing, and has met all functional
+and non-functional requirements that were set. The architecture has shown itself to
+be effective and well suited for common image processing tasks.
 \endgroup
