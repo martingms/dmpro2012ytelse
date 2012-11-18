@@ -26,7 +26,7 @@ class SoderbergStyle(Style):
 
     styles = {
         Whitespace:             '#bbbbbb',
-        Comment:                '#228B22',
+        Comment:                '#228B22 italic',
         Comment.Preproc:        '#1e889b',
         Comment.Special:        '#8B008B bold',
 
