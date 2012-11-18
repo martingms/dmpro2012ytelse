@@ -4,10 +4,10 @@ add wave -noupdate -label clk /tb_simd_architecture/uut/clk
 add wave -noupdate -label reset /tb_simd_architecture/uut/reset
 add wave -noupdate -expand -group IRAM -label data -radix hexadecimal /tb_simd_architecture/uut/idata
 add wave -noupdate -expand -group IRAM -label addr /tb_simd_architecture/uut/iaddr
-add wave -noupdate -group DRAM -label in /tb_simd_architecture/uut/ddata_in
-add wave -noupdate -group DRAM -label out -expand /tb_simd_architecture/uut/ddata_out
-add wave -noupdate -group DRAM -label addr -expand /tb_simd_architecture/uut/daddr
-add wave -noupdate -group DRAM -label write /tb_simd_architecture/uut/dwrite
+add wave -noupdate -expand -group DRAM -label in /tb_simd_architecture/uut/ddata_in
+add wave -noupdate -expand -group DRAM -label out /tb_simd_architecture/uut/ddata_out
+add wave -noupdate -expand -group DRAM -label addr /tb_simd_architecture/uut/daddr
+add wave -noupdate -expand -group DRAM -label write /tb_simd_architecture/uut/dwrite
 add wave -noupdate -expand -group VRAM -label data /tb_simd_architecture/uut/vdata
 add wave -noupdate -expand -group VRAM -label addr /tb_simd_architecture/uut/vaddr
 add wave -noupdate -expand -group SIMD -label step /tb_simd_architecture/uut/simd_arr/node_step
@@ -45,7 +45,7 @@ add wave -noupdate -expand -group DMA -expand -group DRAM -label addr /tb_simd_a
 add wave -noupdate -expand -group DMA -expand -group DRAM -label data -expand /tb_simd_architecture/uut/simd_dma/mem_data
 add wave -noupdate -expand -group DMA -expand -group DRAM -label read /tb_simd_architecture/uut/simd_dma/mem_write
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {864949 ps} 0}
+WaveRestoreCursors {{Cursor 1} {1002125045 ps} 0}
 configure wave -namecolwidth 143
 configure wave -valuecolwidth 40
 configure wave -justifyvalue left
@@ -60,4 +60,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {743131 ps} {922206 ps}
+WaveRestoreZoom {1002029879 ps} {1002208954 ps}

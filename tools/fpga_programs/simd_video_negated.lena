@@ -45,7 +45,7 @@ dma_loop:
     ctrl addi R7 R7 160
     ctrl addi R7 R7 160
     ctrl addi DMA R7 0
-    node addi R14 ZERO 255
+    node addi R4 ZERO 255
 
 dma_row_loop:
     ctrl dma set_read_base_addr     # write base addr = 19328
@@ -55,41 +55,43 @@ dma_row_loop:
     ctrl addi DMA DMA 2
     ctrl nop
 
-    node swap R1 R1
+    node swap R3 R3
+    #node sll R3 R3
+    node sub R3 R4 R3
+    node swap R3 R3
 
     ctrl dma start
     ctrl nop
 
-    node send R1 R1 R1 R1
-    node fwrd R2 R3 R4 R5 # N S E W
-    node store R6 R7 R8 R9
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
 
-    node add R10 ZERO R1
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
 
-    node srl R2 R2
-    node srl R2 R2
-    node srl R2 R2
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
 
-    node srl R3 R3
-    node srl R3 R3
-    node srl R3 R3
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
 
-    node srl R4 R4
-    node srl R4 R4
-    node srl R4 R4
-
-    node srl R5 R5
-    node srl R5 R5
-    node srl R5 R5
-
-    node addi R1 ZERO 127
-
-    node sub R1 R1 R2 # North
-    node add R1 R1 R3 # South
-    node add R1 R1 R4 # East
-    node sub R1 R1 R5 # West
-
-    node subi R1 R1 255
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
 
     ctrl nop
     ctrl nop

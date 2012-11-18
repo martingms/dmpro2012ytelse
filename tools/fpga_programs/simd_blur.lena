@@ -61,10 +61,11 @@ dma_row_loop:
     ctrl nop
 
     node send R1 R1 R1 R1
-    node fwrd R2 R3 R4 R5 # N S E W
+    node fwrd R2 R3 R4 R5
     node store R6 R7 R8 R9
 
-    node add R10 ZERO R1
+    node srl R1 R1
+    node srl R1 R1
 
     node srl R2 R2
     node srl R2 R2
@@ -82,26 +83,34 @@ dma_row_loop:
     node srl R5 R5
     node srl R5 R5
 
-    node addi R1 ZERO 127
+    node srl R6 R6
+    node srl R6 R6
+    node srl R6 R6
+    node srl R6 R6
 
-    node sub R1 R1 R2 # North
-    node add R1 R1 R3 # South
-    node add R1 R1 R4 # East
-    node sub R1 R1 R5 # West
+    node srl R7 R7
+    node srl R7 R7
+    node srl R7 R7
+    node srl R7 R7
 
-    node subi R1 R1 255
+    node srl R8 R8
+    node srl R8 R8
+    node srl R8 R8
+    node srl R8 R8
 
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
+    node srl R9 R9
+    node srl R9 R9
+    node srl R9 R9
+    node srl R9 R9
 
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
+    node add R1 R1 R2
+    node add R1 R1 R3
+    node add R1 R1 R4
+    node add R1 R1 R5
+    node add R1 R1 R6
+    node add R1 R1 R7
+    node add R1 R1 R8
+    node add R1 R1 R9
 
     ctrl subi R6 R6 1
     ctrl beq dma_row_loop

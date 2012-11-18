@@ -115,7 +115,7 @@ def __assembleNodeInstrN__(ctrl, op, fn, params, n):
 	if params == ['']: params = '' # hack for 0 regs
 	if len(params) != n: sys.exit("error: Instruction expects " + str(n) + " input params.")
 	
-	if op == '0001': n = n-1
+	if op == '0001' or op =='1001': n = n-1
 	
 	# Assemble registers
 	for i in range(n):
@@ -125,7 +125,7 @@ def __assembleNodeInstrN__(ctrl, op, fn, params, n):
 		else: sys.exit("error: Register '" + reg + "' does not exist.")
 	
 	# Remaining 4-n words
-	if op == '0001':
+	if op == '0001' or op == '1001':
 		const = params[2]
 		if const.isdigit():
 			bin += dec2bin(const, 8)
@@ -143,14 +143,22 @@ def __assembleNodeInstr__(instr):
 	instr 		= instr.partition(" ");
 	fn 			= instr[0]
 	params 	= instr[2]
+	mask		= '0'
+	
+	# Detect masked instructions
+	if fn == "mask":
+		mask 	= '1'
+		instr	= params.partition(" ");
+		fn 		= instr[0]
+		params = instr[2]
 	
 	# ctrl op fn params #params 
-	if fn in instrs['r']	: output = __assembleNodeInstrN__('0', '0000', instrs['r'][fn], params, 3)
-	elif fn in instrs['i']	: output = __assembleNodeInstrN__('0', '0001', instrs['i'][fn], params, 3)
-	elif fn in instrs['s']	: output = __assembleNodeInstrN__('0', '0000', instrs['s'][fn], params, 2)
-	elif fn in instrs['m']	: output = __assembleNodeInstrN__('0', '0' + instrs['m'][fn], '000', params, 4)
-	elif fn == "swap"		: output = __assembleNodeInstrN__('0', '0010', '000', params, 2)
-	elif fn == "nop"		: output = __assembleNodeInstrN__('0', '0000', '000', "", 0)
+	if fn in instrs['r']	: output = __assembleNodeInstrN__('0', mask + '000', instrs['r'][fn], params, 3)
+	elif fn in instrs['i']	: output = __assembleNodeInstrN__('0', mask + '001', instrs['i'][fn], params, 3)
+	elif fn in instrs['s']	: output = __assembleNodeInstrN__('0', mask + '000', instrs['s'][fn], params, 2)
+	elif fn in instrs['m']	: output = __assembleNodeInstrN__('0', mask +  instrs['m'][fn], '000', params, 4)
+	elif fn == "swap"		: output = __assembleNodeInstrN__('0', mask + '010', '000', params, 2)
+	elif fn == "nop"		: output = __assembleNodeInstrN__('0', mask + '000', '000', "", 0)
 	else					: sys.exit("error: Unrecognized NODE instruction: '" + fn + " " + params + "'")
 	
 	return output

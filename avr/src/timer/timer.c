@@ -41,6 +41,9 @@ void timer_reset() {
 }
 
 void timer_sleep(int ms) {
+	if (ms <= 0)
+		return;
+
 	int tick_diff = ms * TICKS_PER_SEC / 1000;
 	int start = rtc_get_value(&AVR32_RTC);
 	while (rtc_get_value(&AVR32_RTC) - start < tick_diff);
