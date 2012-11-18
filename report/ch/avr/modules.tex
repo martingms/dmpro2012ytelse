@@ -1,5 +1,6 @@
-\section{AVR Modules}
-\input{fig/avr/modules}
+\section{SCU Modules}
+\input{fig/avr/modules} 
+\TODO{FPGA må endres til LENA i figuren}
 
 The AVR is responsible for controlling the entire system, and has several
 important tasks and functionalities related to this. These have been split
@@ -16,7 +17,7 @@ into several modules that behave largely independently of each other.
 
 \item[SD over SPI] A simple to use source of data/data storage, with easy to use
   framework code available. It's rather slow, however, as the AT32UC3A0 only has
-  support for \ac{SPI}. [\ref{sec:avr-spi-issues}].
+  support for SPI. [\ref{sec:avr-spi-issues}].
 
 % \item[FAT] Managing storage of multiple data sources ourselves on top of a
 % block device such as \ac{SD} is difficult. A file system makes it a lot easier
@@ -24,20 +25,19 @@ into several modules that behave largely independently of each other.
 % performance penalty. Therefore we've chosen to implement what is not
 % performance critical with \ac{FAT}.
 
-\item[FAT] \ac{FAT} is a file system implementation with easy to use framework
+\item[FAT] FAT is a file system implementation with easy to use framework
   code available. However, using it also incurs a performance penalty and is not
   used in performance critical sections.
 
-% \item[FPGA/GPIO] As explained further in section
-% \ref{sec:avr-fpga-communication}, we will communicate with the \ac{FPGA} over
+% \item[LENA/GPIO] As explained further in section
+% \ref{sec:avr-LENA-communication}, we will communicate with the \ac{LENA} over
 % a 8/24-bit interface. On the AVR, \ac{GPIO} is the subsystem responsible for
 % reading and writing the pins on this bus.  On top of \ac{GPIO}, we wrote our
 % code to abstract some of the details of \ac{GPIO}, and provide a more natural
 % interface for us to use.
 
-\item[FPGA/GPIO] Interface for communicating with the \ac{FPGA}. It is built on
-  top of \ac{GPIO} and provides a natural interface without low level details of
-  \ac{GPIO}.
+\item[LENA/GPIO] Interface for communicating with \ac{LENA}. It is built on
+  top of GPIO and provides a natural interface without low level details of GPIO.
 
 % \item[RS232] RS232 is our protocol of choice for serial communication with a
 % PC. It was chosen for its simplicity, on both the AVR and PC side. It was
@@ -48,37 +48,38 @@ into several modules that behave largely independently of each other.
   simple to use and is very useful for debugging. There was an issue with it,
   however [\ref{sec:avr-serial-issues}] and it is not used past the EVK1100 test
   board.\TODO{Fix the reference. It currently floats in the air}
-  
-\item[SMC/EBI] The AVR uses an External Bus Interface to connect to external
-  memories, both \ac{SRAM} and \ac{SDRAM}. As our AVR has 512K of \ac{SRAM}
-  attached, the \ac{EBI} is our way of communicating with it. The \ac{SMC} is a
-  part of the \ac{EBI} that provides us with a nice, memory-mapped interface to
-  our external \ac{SRAM}.
+ 
+\TODO{her stod SMC/EBI før, er det egentlig en modul?} 
+%\item[SMC/EBI] The AVR uses an External Bus Interface to connect to external
+%  memories, both SRAM and \ac{SDRAM}. As our AVR has 512K of SRAM
+%  attached, the EBI is our way of communicating with it. The \ac{SMC} is a
+%  part of the EBI that provides us with a nice, memory-mapped interface to
+%  our external SRAM.
 
 % \item[BMP] In case we want to read standard bitmap files from \ac{SD}, we need
 % a way to extract the raw pixel values from these files and send them in the
-% correct order to the \ac{FPGA} (\ac{BMP} files store images bottom-up, not
+% correct order to the \ac{LENA} (\ac{BMP} files store images bottom-up, not
 % top-down). This library takes care of this task. Deprecated since we decided
 % to implement the actual image reading as reading raw data without even a file
 % system.
 
 \item[Str2Img] Str2Img is a small text-to-image library that we use to render
   text on the monitor. Primary use is debugging and creating the menu the users
-  are presented with when the AVR resets.
+  are presented with when the SCU resets.
   
 \item[Program] This is responsible for presenting the user with an interface to
   select the program to run. It is built on top of other utility libraries such
-  as Str2Img and our \ac{FPGA} abstraction layer.
+  as Str2Img and our \ac{LENA} abstraction layer.
 
 % Button & The user navigates the menu and controls the AVR using buttons. This
 % is a thin simplification layer built on top of \ac{GPIO} that handles the
 % interrupts and button click callbacks. \CHECK{this does not exists as of right
 % now, but it might in the future :)}
 
-\item[LEDs] Functions for turning the \acp{LED} on and off. Useful for blinking
-  lights to show information about internal state of the AVR/debugging.
+\item[LEDs] Functions for turning the LED on and off. Useful for blinking
+  lights to show information about internal states of the SCU and debugging.
   
-\item[JTAG] \ac{JTAG} is an interface used to connect the AVR to a
+\item[JTAG] JTAG is an interface used to connect the SCU to a
   computer. This allows us to flash the AVR, debug and profile our programs
   using familiar-looking tools: avr32program, avr32-gdb and avr32-gprof, for
   flashing, debugging and profiling, respectively.
@@ -90,17 +91,4 @@ FAT: reference to comparison benchmarks in appendix?
 
 FGPA/GPIO: more?
 
-Button: predictive writing is never a good idea, that's a surefire way of ending
-up with outright wrong/contradictory things in our report.
-
-Program: This isn't really a library then, is it?
-
-BMP: Should we remove it? It was like a 10 minute job to make and is utterly
-useless now...
-
-SMC/EBI: What? The INTERNAL SRAM is on the EXTERNAL bus interface? That makes no
-sense!
-
-JTAG: what use have we had of avr32-gdb and avr32-gprof? Is use of these
-described in the report? if not why are we mentioning them?
 }

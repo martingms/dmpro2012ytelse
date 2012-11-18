@@ -10,7 +10,10 @@ communication lines is shown in figure \ref{fig:fpga-architecture}. The data
 flows mostly through it in one direction. Data is received from the AVR and
 stored to the data memory. The data is then read in parts from the data memory
 and sent through the \ac{SIMD} array for processing. The result from the
-\ac{SIMD} array is stored to the data memory again. At last, the data is copied
+\ac{SIMD} array is stored to the data memory again. \TODO {Say why the DMA 
+doesen't send data to both data and VGA ram, yet have to use control core 
+instead. (Supposedly because  the output image it's more stable this way?
+ )} At last, the data is copied
 from the data memory to the \ac{VGA} memory and shown on screen.
 
 The processing part of \ac{LENA} is the \ac{SIMD} array. It is organized in a
@@ -50,7 +53,7 @@ fast enough by only sending one word at a time. This was easier to
 implement and was therefore the chosen implementation.
 
 The \ac{SIMD} array is created dynamically in \ac{VHDL}, hence the number of
-cores is easily interchangeable. The final number of cores in our implementation
+cores is easily changeable. The final number of cores in our implementation
 is only limited by the available space on the \ac{FPGA}. We tried to fit as many
 nodes as possible, and the \ac{FPGA} we used had enough space for 6 nodes.
 \TODO{Jahre vil at det skal komme bedre fram at dette ikke er noe vi kan gjøre noe med, med strek under "the FPGA we used".

@@ -1,7 +1,6 @@
 \section{Issues}
 
 Working with the AVR in our project was hardly problem free. This section is intended to shed some light on the issues we faced and how we were able to fix them or get around them. It mainly goes to document the non obvious workarounds we had to do in order to complete this project.
-\TODO{write!}
 
 \subsection{SPI}
 \label{sec:avr-spi-issues}
@@ -12,42 +11,17 @@ but also the poorly optimized \ac{SPI} driver from the Atmel Software Framework.
 The limitations of \ac{SPI} is not something we could change. Our
 microcontroller does not have hardware support for using the 4-bit \ac{SD}
 protocol, which left us with \ac{SPI} as our only choice. We ended up running
-the \ac{SD} card on a frequency of 39 MHz, which gives us a theoretical upper
+the \ac{SD} card at a frequency of 39 MHz, which gives us a theoretical upper
 speed bound of 4.88 MB/s. In practice, we managed to reach around 1.1 MB/s.
 
-While we ended up at around 1.1 MB/s, the speed was only approximately 300 kB/s
-before we started optimizing the software framework. Some of the biggest changes
-we made were
-\begin{description}
-\item[Compiler optimizations] Turning on -O3 roughly doubled
-  the performance.
-\item[Function inlining] We inlined the functions {\tt spiRead} and
-  {\tt spiWrite}, which were called from a tight loop. This gave a minor speed
-  improvement.
-\item[Less status checking in between reads] The original code busy-waited on
-  several \ac{SPI} status registers in between each call to {\tt spiRead}, some
-  of which we knew to be unnecessary in this specific context.
-\item[Multiple block reads] Patching the software framework with support for the
-  Multiple Block Read-command allowed us to transfer an arbitrarily large number
-  of sectors without addressing each individually.
-\item[SDHC support] This helped us mostly because \ac{SDHC} cards support
-  frequencies up to 50MHz, as opposed to the 25MHz of standard \ac{SD}. Higher
-  frequencies gave us an almost linear speedup.
-\item[Bypass file system] We bypassed the file system entirely when reading data
-  input to the \ac{FPGA}. We discovered that the file system adds a fairly
-  significant overhead (10-20\%), even with large logical sector sizes in
-  \ac{FAT}, as well as large read buffers. We decided to simply bypass the
-  problem by limiting the file system to the first half of the \ac{SD} card, and
-  read blocks from the latter half of the card directly. The block offsets and
-  block count of each data source is specified in the script file.
-\end{description}
+Some of the changes we made to make this happen, was: \vspace{-1.0em}
+\begin{itemize}
+  \item Turn on compiler optimizations \vspace{-1.0em}
+  \item add SDHC support and increase clock rates\vspace{-1.0em}
+  \item use multiple block reads and bypass the file system
+\end{itemize}
 
-After implementing these optimizations, the AVR was capable of pushing out around
-12 FPS to the \ac{FPGA}, around 920 kB/s. As we managed to reach our goal of 10
-FPS, we didn't optimize it any further. However, using the \ac{PDCA}, we could
-have effectively eliminated the 25\% time spent sending to the \ac{FPGA} while
-the \ac{SD} card waited. Thus, giving as a frame rate of around 16
-FPS. \TODO{This must be rewritten}
+This is explained in more detail in section \ref{sec:performance-sd-card}.
 
 \subsection{Serial}
 \label{sec:avr-serial-issues}

@@ -1,0 +1,37 @@
+\begin{table}[h!]
+\centering
+\begin{tabular}{c|c|c}
+	\textbf{Milestone} & \textbf{Description} & \textbf{Performance} \\
+	\hline
+	1 & Baseline before optimization & 74.87 kB/s \\
+	\hline
+	2 & Less status checking in spi\_send + inlining & 137 kB/s \\
+	\hline
+	3 & Less SPI status register polling & 156.59 kB/s \\
+	\hline
+	4 & Clock rate of 20MHz, 10MHz SPI & 214.4 kB/s \\
+	\hline
+	5 & Clock rate of 20MHz, 20MHz SPI & 243.0 kB/s \\
+	\hline
+	6 & Clock rate of 40MHz, 20MHz SPI & 327.8 kB/s \\
+	\hline
+	7 & Clock rate of 48MHz, 24MHz SPI & 369.5 kB/s \\
+	\hline
+	8 & Clock rate of 60MHz, 30MHz SPI & 423.4 kB/s \\
+	\hline
+	9 & Clock rate of 72MHz, 36MHz SPI & 432.7 kB/s \\
+	\hline
+	10 & Clock rate of 78MHz, 39MHz SPI & 455.8 kB/s \\
+	\hline
+	11 & Turn on -O1 & 521.7 kB/s \\
+	\hline
+	12 & Turn on -O2 & 523.4 kB/s \\
+	\hline
+	13 & Turn on -O3 & 515.3 kB/s \\
+	\hline
+	14 & Bypass FAT and use multiple block reads & 1171.9 kB/s \\
+\end{tabular}
+\caption[SPI Read Performance]{The read performance over SPI at various
+milestones.}
+\label{tab:spi-optimizations-table}
+\end{table}

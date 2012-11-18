@@ -1,0 +1,136 @@
+    ctrl nop
+
+    ctrl addi R1 ZERO 150           # R1 = 320*240
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+
+    ctrl addi DMA ZERO 1
+    ctrl dma set_read_active
+    ctrl nop
+
+    ctrl addi DMA ZERO 1
+    ctrl dma set_write_active
+    ctrl nop
+
+    ctrl addi DMA ZERO 160
+    ctrl sll DMA DMA
+    ctrl dma set_write_vertical_incr
+    ctrl dma set_read_vertical_incr
+    ctrl nop
+
+    ctrl addi R4 ZERO 160           # R4 = 320
+    ctrl sll R4 R4
+    ctrl add DMA ZERO R4            # DMA = R4 * 3 + 1 = 640 + 320 + 1
+    ctrl add DMA DMA R4
+    ctrl add DMA DMA R4
+    ctrl addi DMA DMA 1
+    ctrl dma set_write_horizontal_incr
+    ctrl dma set_read_horizontal_incr
+    ctrl nop
+
+    ctrl addi R7 ZERO 3             # R7: Row start address accumulator
+    ctrl addi R8 ZERO 118           # R8: Row counter
+
+dma_loop:
+    ctrl addi R6 ZERO 159           # R6: Column counter
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi DMA R7 0
+    node addi R14 ZERO 255
+
+dma_row_loop:
+    ctrl dma set_read_base_addr     # write base addr = 19328
+    ctrl add DMA DMA R1
+    ctrl dma set_write_base_addr    # write base addr = 19328
+    ctrl sub DMA DMA R1
+    ctrl addi DMA DMA 2
+    ctrl nop
+
+    node swap R1 R1
+
+    ctrl dma start
+    ctrl nop
+
+    node send R1 R1 R1 R1
+    node fwrd R2 R3 R4 R5 # N S E W
+    node store R6 R7 R8 R9
+
+    node add R10 ZERO R1
+
+    node srl R2 R2
+    node srl R2 R2
+    node srl R2 R2
+
+    node srl R3 R3
+    node srl R3 R3
+    node srl R3 R3
+
+    node srl R4 R4
+    node srl R4 R4
+    node srl R4 R4
+
+    node srl R5 R5
+    node srl R5 R5
+    node srl R5 R5
+
+    node addi R1 ZERO 127
+
+    node sub R1 R1 R2 # North
+    node add R1 R1 R3 # South
+    node add R1 R1 R4 # East
+    node sub R1 R1 R5 # West
+
+    node subi R1 R1 255
+
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+
+    ctrl subi R6 R6 1
+    ctrl beq dma_row_loop
+    ctrl slt ZERO ZERO R6
+    ctrl nop
+
+    ctrl subi R8 R8 1
+    ctrl beq dma_loop
+    ctrl slt ZERO ZERO R8
+    ctrl nop
+
+    ctrl addi R3 R1 0             # R3 = 320*240
+    ctrl addi VADDR ZERO 0        # VADDR = 0
+
+pixel_loop:
+
+    ctrl lw VDATA R3
+    ctrl lw VDATA R3
+    ctrl nop
+    ctrl addi VADDR VADDR 1
+    ctrl addi R3 R3 1
+
+    ctrl beq infinite_loop
+    ctrl slt ZERO R1 VADDR
+    ctrl nop
+
+    ctrl jump pixel_loop
+
+infinite_loop:
+
+    ctrl nop
+    ctrl jump infinite_loop

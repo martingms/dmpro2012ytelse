@@ -1,18 +1,16 @@
 \section{Requirements Specification}
 
-\input{fig/intro/func} Several functional\TODO{We made the functional
-  requirements ourselves, except for ``maybe'' the generally programmable one}
-and non-functional requirements were given to us by our instructor, Magnus
-Jahre, some were decided by the group as goals we thought were realizable, and
-some may help us see how far we are away from our goals. Table
+\input{fig/intro/func} A few functional
+and most non-functional requirements were given to us by our instructor, Magnus
+Jahre. The rest were decided by the group as goals we thought were realizable, and
+some to help us see how far we are away from our goals. Table
 \ref{fig:func-req}, which shows the functional requirements, includes a relative
 priority between the different requirements.  This priority tells us what we
 have focused on, as well as what is important in terms of success of the
 computer. Clearly, focusing on performance, as specified in {\sc FR1}, is more
 important than having developer tools for the machine ({\sc FR6}).
-\CHECK{Ensure FR numbers are correct.}
 
-{\sc FR1} ensure the focus on performance. {\sc FR2} ensures that we do not end
+{\sc FR1} ensures a focus on performance. {\sc FR2} ensures that we do not end
 up with a system which is not generally programmable. This is important, as a
 computer specialized for image processing has less usability than a generally
 programmable computer. {\sc FR3} and {\sc FR7} makes it easier to show that the
@@ -25,15 +23,11 @@ Table \ref{fig:nonfunc-req} shows the non-functional requirements. These were
 all determined by the assignment. They are all treated as absolute requirements,
 and our design has been centered around those. {\sc NFR1} and {\sc NFR2} gave us
 little choice in what hardware to use, and naturally these have been used. {\sc
-  NFR3} limits what peripherals we can use to relatively cheap
-things.\TODO{``Things'' is not specific enough} {\sc NFR4} constraints our
-design choices when designing the image processor. We could not make any set of
-SIMD cores\TODO{There's no mentioning of SIMD in the exercise, we could have
-  gone MIMD.}, we have to make this specific type. {\sc NFR5} leads to some
+  NFR3} limits what components we can use to cheaper ones. {\sc NFR4} Constraints our
+design choices when designing the image processor. We could not make any type of core
+organization, we have to make this specific type. {\sc NFR5} leads to some
 design choices for the entire system. Our goal is performance, and we do not
 have to care about other concerns such as energy consumption, just to
-get\TODO{This has nothing to do with our non-functional requirements. This one
-  should be skipped.} performance as good as possible without the system
+get performance as good as possible without the system
 burning up. However, we may have to sacrifice some simplicity in our design for
-the sake of performance.  \ref{fig:nonfunc-req} \TODO{Reference just floating in
-  the air?  What is its purpose?}
+the sake of performance.

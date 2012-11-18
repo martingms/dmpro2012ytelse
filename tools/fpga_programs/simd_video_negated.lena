@@ -56,18 +56,10 @@ dma_row_loop:
     ctrl nop
 
     node swap R3 R3
-    #node sll R3 R3
-    node sub R3 R4 R3
-    node swap R3 R3
 
     ctrl dma start
-    ctrl nop
 
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
+    node sub R3 R4 R3
 
     ctrl nop
     ctrl nop
@@ -120,6 +112,7 @@ dma_row_loop:
 
 pixel_loop:
 
+    ctrl lw VDATA R3
     ctrl lw VDATA R3
     ctrl nop
     ctrl addi VADDR VADDR 1
