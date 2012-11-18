@@ -29,10 +29,18 @@ regs 		= {
 	'R13' 		: '1101', 
 	'R14' 		: '1110',
 	'R15'		: '1111',
+<<<<<<< HEAD
+	'VADDR'	: '1101',
+	'VDATA'	: '1110',
+	'DMAP'		: '1111',
+	'ZERO'		: '0000', 
+	'STATE' 	: '1111'
+=======
 	'VADDR'		: '1101',  # VGA Address (ctrl)
 	'VDATA'		: '1110',  # VGA Data (ctrl)
 	'DMA'		: '1111',  # DMA parameters (ctrl)
 	'STATE' 	: '1111'   # Node State (simd)
+>>>>>>> 0c06fd30f5ddd8bbda88b728f7582c5bb208a27b
 }
 
 # DMA Commands
@@ -90,7 +98,7 @@ instrs 	= {
 }
 
 # Assemble ctrl jump / branch
-def __assembleCtrlJump__(op, label):
+def __assembleCtrlJump(op, label):
 	bin = '1' + op
 	if not label: sys.exit("error: Instruction expects jump label.")
 	if label not in labels: sys.exit("error: Jump label does not exist.")
@@ -108,14 +116,14 @@ def __assembleCtrlDma__(op, cmd):
 	return bin + '000000000000' + dcmds[cmd] + '000'	
 	
 # Assemble node instruction
-def __assembleNodeInstrN__(ctrl, op, fn, params, n):
+def __assembleNodeInstrN(ctrl, op, fn, params, n):
 	bin  = ctrl + op 
 	params = params.rsplit(" "); 
 	
 	if params == ['']: params = '' # hack for 0 regs
 	if len(params) != n: sys.exit("error: Instruction expects " + str(n) + " input params.")
 	
-	if op == '0001': n = n-1
+	if op == '0001' or op =='1001': n = n-1
 	
 	# Assemble registers
 	for i in range(n):
@@ -125,7 +133,7 @@ def __assembleNodeInstrN__(ctrl, op, fn, params, n):
 		else: sys.exit("error: Register '" + reg + "' does not exist.")
 	
 	# Remaining 4-n words
-	if op == '0001':
+	if op == '0001' or op == '1001':
 		const = params[2]
 		if const.isdigit():
 			bin += dec2bin(const, 8)
@@ -137,26 +145,36 @@ def __assembleNodeInstrN__(ctrl, op, fn, params, n):
 	return (bin + fn)
 
 # Assemble a NODE instruction into binary code 
-def __assembleNodeInstr__(instr):
+def __assembleNodeInstr(instr):
 	debug("Node instruction '" + instr + "'...")
 	
 	instr 		= instr.partition(" ");
 	fn 			= instr[0]
 	params 	= instr[2]
+	mask		= '0'
+	
+	# node mask addi R1 R2 R3 R4
+	if fn == "mask":
+		mask 	= '1'
+		instr	= params.partition(" ");
+		fn 		= instr[0]
+		params = instr[2]
+
+	print(fn + ' ' + params)
 	
 	# ctrl op fn params #params 
-	if fn in instrs['r']	: output = __assembleNodeInstrN__('0', '0000', instrs['r'][fn], params, 3)
-	elif fn in instrs['i']	: output = __assembleNodeInstrN__('0', '0001', instrs['i'][fn], params, 3)
-	elif fn in instrs['s']	: output = __assembleNodeInstrN__('0', '0000', instrs['s'][fn], params, 2)
-	elif fn in instrs['m']	: output = __assembleNodeInstrN__('0', '0' + instrs['m'][fn], '000', params, 4)
-	elif fn == "swap"		: output = __assembleNodeInstrN__('0', '0010', '000', params, 2)
-	elif fn == "nop"		: output = __assembleNodeInstrN__('0', '0000', '000', "", 0)
+	if fn in instrs['r']	: output = __assembleNodeInstrN('0', mask + '000', instrs['r'][fn], params, 3)
+	elif fn in instrs['i']	: output = __assembleNodeInstrN('0', mask + '001', instrs['i'][fn], params, 3)
+	elif fn in instrs['s']	: output = __assembleNodeInstrN('0', mask + '000', instrs['s'][fn], params, 2)
+	elif fn in instrs['m']	: output = __assembleNodeInstrN('0', mask +  instrs['m'][fn], '000', params, 4)
+	elif fn == "swap"		: output = __assembleNodeInstrN('0', mask + '010', '000', params, 2)
+	elif fn == "nop"		: output = __assembleNodeInstrN('0', mask + '000', '000', "", 0)
 	else					: sys.exit("error: Unrecognized NODE instruction: '" + fn + " " + params + "'")
 	
 	return output
 
 # Assemble a Control Core instruction into binary code 
-def __assembleCtrlInstr__(instr):
+def __assembleCtrlInstr(instr):
 	debug("Ctrl instruction '" + instr + "'...")
 
 	instr 		= instr.partition(" ");
@@ -164,6 +182,14 @@ def __assembleCtrlInstr__(instr):
 	params 		= instr[2]
 	
 	# ctrl op fn params #params 
+<<<<<<< HEAD
+	if fn in instrs['r']	: output = __assembleNodeInstrN('1', '0000', instrs['r'][fn], params, 3)
+	elif fn in instrs['i']	: output = __assembleNodeInstrN('1', '0001', instrs['i'][fn], params, 3)
+	elif fn in instrs['s']	: output = __assembleNodeInstrN('1', '0000', instrs['s'][fn], params, 2)
+	elif fn in instrs['j']	: output = __assembleCtrlJump(instrs['j'][fn], params)
+	elif fn == "lw"			: output = __assembleNodeInstrN('1', '0010', '000', params, 2)
+	elif fn == "nop"		: output = __assembleNodeInstrN('1', '0000', '000', "", 0)
+=======
 	if fn in instrs['r']	: output = __assembleNodeInstrN__('1', '0000', instrs['r'][fn], params, 3)
 	elif fn in instrs['i']	: output = __assembleNodeInstrN__('1', '0001', instrs['i'][fn], params, 3)
 	elif fn in instrs['s']	: output = __assembleNodeInstrN__('1', '0000', instrs['s'][fn], params, 2)
@@ -171,12 +197,13 @@ def __assembleCtrlInstr__(instr):
 	elif fn == "lw"			: output = __assembleNodeInstrN__('1', '0010', '000', params, 2)
 	elif fn == "nop"		: output = __assembleNodeInstrN__('1', '0000', '000', "", 0)
 	elif fn == "dma"		: output =  __assembleCtrlDma__('1000', params)
+>>>>>>> 0c06fd30f5ddd8bbda88b728f7582c5bb208a27b
 	else					: sys.exit("error: Unrecognized CTRL instruction: '" + fn + " " + params + "'")
 	
 	return output
 
 # Assemble program file
-def __assembleInstrFile__(input, output):
+def __assembleInstrFile(input, output):
 	global labels
 	
 	debug("Reading instructions from '" + input + "'...")
@@ -210,9 +237,9 @@ def __assembleInstrFile__(input, output):
 
 			# Assemble instruction
 			if instr[0] == "node":
-				instr = __assembleNodeInstr__(instr[2])
+				instr = __assembleNodeInstr(instr[2])
 			elif instr[0] == "ctrl":
-				instr = __assembleCtrlInstr__(instr[2])
+				instr = __assembleCtrlInstr(instr[2])
 			else: sys.exit("error: Invalid instruction {instr[1] = " + instr[0] + "}")
 
 			# Print Debug
@@ -275,10 +302,17 @@ def main():
 	if options.modelsim: modelsim = True
 	if options.input and not options.output: options.output = re.sub("(\\.\\w+)$", ".bin", options.input)
 	
+<<<<<<< HEAD
+	if options.input				: sys.stderr.write(__assembleInstrFile(options.input, options.output)+'\n')
+	elif options.node				: sys.stderr.write('> ' + __assembleNodeInstr(options.node)+'\n')
+	elif options.ctrl				: sys.stderr.write('> ' + __assembleCtrlInstr(options.ctrl)+'\n')
+	else							: sys.exit("Unknown command line tool command")
+=======
 	if options.input				: sys.stderr.write(__assembleInstrFile__(options.input, options.output)+'\n')
 	elif options.node				: sys.stderr.write('> ' + __assembleNodeInstr__(options.node)+'\n')
 	elif options.ctrl				: sys.stderr.write('> ' + __assembleCtrlInstr__(options.ctrl)+'\n')
 	else							: sys.exit("error: Unknown command line tool command")
+>>>>>>> 0c06fd30f5ddd8bbda88b728f7582c5bb208a27b
 
 if __name__ == '__main__':
 	main()
