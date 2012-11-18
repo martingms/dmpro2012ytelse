@@ -1,4 +1,4 @@
-\section{AVR Modules}
+\section{SCU Modules}
 \input{fig/avr/modules} 
 \TODO{FPGA må endres til LENA i figuren}
 
@@ -65,7 +65,7 @@ into several modules that behave largely independently of each other.
 
 \item[Str2Img] Str2Img is a small text-to-image library that we use to render
   text on the monitor. Primary use is debugging and creating the menu the users
-  are presented with when the AVR resets.
+  are presented with when the SCU resets.
   
 \item[Program] This is responsible for presenting the user with an interface to
   select the program to run. It is built on top of other utility libraries such
@@ -77,9 +77,9 @@ into several modules that behave largely independently of each other.
 % now, but it might in the future :)}
 
 \item[LEDs] Functions for turning the LED on and off. Useful for blinking
-  lights to show information about internal state of the AVR/debugging.
+  lights to show information about internal states of the SCU and debugging.
   
-\item[JTAG] JTAG is an interface used to connect the AVR to a
+\item[JTAG] JTAG is an interface used to connect the SCU to a
   computer. This allows us to flash the AVR, debug and profile our programs
   using familiar-looking tools: avr32program, avr32-gdb and avr32-gprof, for
   flashing, debugging and profiling, respectively.
@@ -91,17 +91,4 @@ FAT: reference to comparison benchmarks in appendix?
 
 FGPA/GPIO: more?
 
-Button: predictive writing is never a good idea, that's a surefire way of ending
-up with outright wrong/contradictory things in our report.
-
-Program: This isn't really a library then, is it?
-
-BMP: Should we remove it? It was like a 10 minute job to make and is utterly
-useless now...
-
-SMC/EBI: What? The INTERNAL SRAM is on the EXTERNAL bus interface? That makes no
-sense!
-
-JTAG: what use have we had of avr32-gdb and avr32-gprof? Is use of these
-described in the report? if not why are we mentioning them?
 }
