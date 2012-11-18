@@ -56,10 +56,16 @@ dma_row_loop:
     ctrl nop
 
     node swap R3 R3
+    ctrl nop
+    node swap R3 R3
 
     ctrl dma start
 
-    node sub R3 R4 R3
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
 
     ctrl nop
     ctrl nop
