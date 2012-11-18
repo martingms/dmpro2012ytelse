@@ -1,7 +1,75 @@
 \section{Performance}
 
+\subsection{SD Card Performance}
+\label{sec:performance-sd-card}
 
-In this section, there will be data as specified in the disposition. We will run
+As mentioned in section \ref{sec:avr-spi-issues}, reading data from an
+SD card over SPI turned out to be the biggest bottleneck for throughput
+in our system. In this section, we will document the optimizations we
+made to improve the SD card's read performance.
+
+Table \ref{tab:spi-optimizations-table} shows the gradually improving
+performance as we optimized the code. This is also shown in figure
+\ref{fig:spi-optimizations-plot}. Each of the optimizations are
+explained in greater detail below.
+
+\TODO{trenger vel kanskje ikke både figur og tabell?}
+\TODO{lage et finere plot?}
+
+\begin{description}
+	\item[Removed status checking + function inlining] \hfill \\
+		The spi\_send function busy-waited on the TXEMPTY flag for each
+		byte it transmitted. In our case of alternating sends and reads,
+		we do not have to check whether the SPI send register is empty
+		every time. Inlining spi\_read and spi\_write also helped,
+		although -O1, -O2 or -O3 would have done this for us.
+	\item[Less SPI status register polling] \hfill \\
+		In spi\_read, two conditions are busy-waited on before
+		returning: whether the send register is empty, and whether the
+		receive buffer is full yet. We only have to check the latter of
+		these conditions.
+	\item[Increased clock rate] \hfill \\
+		Our CPU and main bus is driven by an external 12MHz crystal
+		oscillator and the SPI clock frequency is calculated by dividing
+		this by an integer number. We kept this divisor to be either 1
+		or 2 (so SPI ran at either the same or half the speed of the
+		CPU). Increasing to clock rate from 12MHz to 78 MHz boosted the
+		speed from 157kB/s to 456 kB/s.
+	\item[Compiler optimizations] \hfill \\
+		Turning on compiler optimizations improved increase performance
+		by another 14\%. There was no noticable difference in
+		performance from -O1, -O2 or -O3. However, compiler
+		optimizations had a more profound effect on the overall system
+		performance. We did not benchmark this extensively, but it was
+		probably caused by optimizations the compiler made to the FPGA
+		communication code.
+	\item[Bypass FAT and use multiple block reads] \hfill \\
+		We patched the framework code to support multiple block reads.
+		Apparently, this was not something the FAT driver was able to
+		take full advantage of out of the box. It was easier to simply
+		bypass the file system than to try to fix it, so that is what we
+		did.
+		
+		By reading the blocks directly from the SD card, we could read
+		all 150 blocks of a picture in one function call. Limiting the
+		file system to the first half of the SD card and add metadata
+		files containing the block offsets into the second half of the
+		card was easy. This more than doubled our performance, from 515
+		kB/s to 1172 kB/s.
+\end{description}
+
+\TODO{This must be rewritten}
+After implementing these optimizations, the AVR was capable of pushing out around
+12 FPS to the \ac{FPGA}, around 920 kB/s. As we managed to reach our goal of 10
+FPS, we didn't optimize it any further. However, using the \ac{PDCA}, we could
+have effectively eliminated the 25\% time spent sending to the \ac{FPGA} while
+the \ac{SD} card waited. Thus, giving as a frame rate of around 16
+FPS. 
+\input{fig/avr/spi-optimizations-table.tex}
+\input{fig/avr/spi-optimizations-plot.tex}
+
+\begin{comment}
+		In this section, there will be data as specified in the disposition. We will run
 a program which requires data from neighbors, and see how long time the
 different programs take based on the amount of cores. We will then explain
 eventual results | for instance would the results most likely point out that we
@@ -10,3 +78,4 @@ from neighbors.
 
 There will also be some fancy plots and tables here to show the decrease in time
 and/or the increase in speedup.
+\end{comment}

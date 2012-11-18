@@ -1,5 +1,5 @@
 \section{User interface}
-The \ac{UI} is a simple program running on the \ac{SCU} letting the user control the {\sc 256 Shades of Gray}. The \ac{UI} has three states in which the user goes through: Select program, select data and run program. The \ac{UI} is implemented by converting text into bitmap files and sending these files to \ac{LENA} for output to VGA. The user can use the buttons to scroll through a menu of, and choose, a program and a data file respectively. When a data file is chosen, the \ac{SCU} will run the selected program with the selected data on \ac{LENA}, and then reset after the program has terminated.
+The \ac{UI} is a simple program running on the \ac{SCU} letting the user control the {\sc 256 Shades of Gray}. The \ac{UI} has three states which the user goes through: Select program, select data and run program. The \ac{UI} is implemented by converting text into bitmap files and sending these files to \ac{LENA} for output to VGA. The user can use the buttons to scroll through a menu of, and choose, a program and a data file respectively. When a data file is chosen, the \ac{SCU} will run the selected program with the selected data on \ac{LENA}, and then reset after the program has terminated.
 
 
 \subsection{Script format}
@@ -15,15 +15,18 @@ contain the following information:
 
 \subsection{File system utilization}
 To ease the handling of data on the SD card, we chose to use the FAT
-file system. The file system contains files such as scripts, \ac{LENA} programs
-and data pointers. Because of the performance limitations of the \ac{ASF} FAT driver, the data is actually
-placed outside of the file system. The transfer speed of data is crucial to our
-system's performance, and this increased the frame rate substantially. We were
-still able to use the file system to create an abstraction for this. The file
-system contains data files containing "pointers" to the memory location of the
-actual data. The data pointer files on the file system is a text file containing
-two numbers: The location of the first block of data on the SD card,
-and the number of frames to read from that location.
+file system. The file system contains files such as scripts, \ac{LENA}
+programs and data pointers. Because of the performance limitations of
+the \ac{ASF} FAT driver in conjunction with multiple block
+reads\footnote{See section \ref{sec:performance-sd-card} for details}, the
+data is actually placed outside of the file system. The transfer speed
+of data is crucial to our system's performance, and this increased the
+frame rate substantially. We were still able to use the file system to
+create an abstraction for this. The file system contains data files
+containing "pointers" to the memory location of the actual data. The
+data pointer files on the file system is a text file containing two
+numbers: The location of the first block of data on the SD card, and the
+number of frames to read from that location.
 
 %The different levels of the directory structure has its own use. The user will first choose a script from the first directory, and then a data unit from the second directory. The data at the root directory, the first level, is data associated with the script files. This level contains data types, fpga executables and the script files themselves. The data types are directories and the content of these directories represent the second level, the data units. A data unit is a collection of files viewed as a unit in the sense that a program can only be loaded with one unit at a time. A data unit can for instance be a still picture or an animation. Each data unit is also a directory, and their content represent the third level, the individual data unit files. When the selected data type is still pictures, the available data units will only contain one bitmap file. When, however, the data type is video, the data units will contain a set of bitmap files numbered after the order in which they should be loaded into the FPGA. 
 
