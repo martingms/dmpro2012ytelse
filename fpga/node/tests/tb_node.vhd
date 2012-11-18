@@ -141,25 +141,31 @@ BEGIN
 		instr <= "000010100000000000100000";  -- R4 <= $ZERO + 4
 		wait for clk_period;
 
-		instr <= "001000001001000110100000";  -- SEND R1 R2 R3 R4
-		wait for clk_period;
-
 		instr <= "000000110000100010000101";  -- EQ R6 R1 R1
 		wait for clk_period;
 
 		instr <= "000011111011000000000000";  -- $STATE <= R6 + $ZERO
 		wait for clk_period;
-		
-		instr <= "001101000100110101011100";  -- STORE & FORWARD R8 R9 R10 R11
 
-		n_in <= n_out;
-		s_in <= s_out;
-		e_in <= e_out;
-		w_in <= w_out;
+		instr <= "001000001000100010001000";  -- SEND R1
+		wait for clk_period;
+
+		n_in <= "00000001";
+		s_in <= "00000010";
+		e_in <= "00000011";
+		w_in <= "00000100";
+		instr <= "001100010001101000101000";  -- FORWARD R2 R3 R4 R5
+		wait for clk_period;
+
+		n_in <= "00001001";
+		s_in <= "00001010";
+		e_in <= "00001011";
+		w_in <= "00001100";
+		instr <= "001010110011110001001000";   -- STORE R6 R7 R8 R9
+		wait for clk_period;
 		
-		sr_in <= "10000001";
-		step <= '1';
-		
+		sr_in <= "10000001";						  -- STEP
+		step <= '1';		
 		wait for clk_period;
 		
 		instr <= "000101110010000000000100";  -- SWAP R15 R4
