@@ -155,16 +155,17 @@ begin
 			data_out					<= (others => '0');
 		else
 			-- Send node state
-			if (STATE(0) = "00" and STATE(1) = "00") then 
+			if (STATE(0) = "000" and STATE(1) = "000" and STATE(2) = "000") then 
 				state_out			<= '0';
 			else
 				state_out			<= '1';
 			end if;
 
 			CASE row_sel IS
-				WHEN "01" => data_out <= S_DATA(1)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
-				WHEN "10" => data_out <= S_DATA(2)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
-				WHEN "11" => data_out <= S_DATA(3)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+				WHEN "001" => data_out <= S_DATA(1)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+				WHEN "010" => data_out <= S_DATA(2)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+				WHEN "011" => data_out <= S_DATA(3)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
+				WHEN "100" => data_out <= S_DATA(4)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
 				WHEN OTHERS => data_out <= S_DATA(0)(((NODE_ARRAY_COLS+2)*8)+7 downto (NODE_ARRAY_COLS+2)*8);
 			END CASE;
 		end if;
@@ -176,9 +177,10 @@ begin
 			-- Node data in/out
 			if (data_write = '1') then
 				CASE row_sel IS
-					WHEN "01" => S_DATA(1)(7 downto 0) <= data_in;
-					WHEN "10" => S_DATA(2)(7 downto 0) <= data_in;
-					WHEN "11" => S_DATA(3)(7 downto 0) <= data_in;
+					WHEN "001" => S_DATA(1)(7 downto 0) <= data_in;
+					WHEN "010" => S_DATA(2)(7 downto 0) <= data_in;
+					WHEN "011" => S_DATA(3)(7 downto 0) <= data_in;
+					WHEN "100" => S_DATA(4)(7 downto 0) <= data_in;
 					WHEN OTHERS => S_DATA(0)(7 downto 0) <= data_in;
 				END CASE;
 			end if;
