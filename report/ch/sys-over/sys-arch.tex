@@ -40,7 +40,7 @@ this is that image processing systems in general need a lot of memory. The
 it needs to keep the old image in memory. The \ac{LENA} architecture should have
 one image in memory which it can send to the \ac{SIMD} nodes, and one image
 which is currently read from the \ac{SCU} to memory. In addition, one would have
-to read data instructions as well. All these different parts require relatively
-much memory, and they are all frequently accessed. Therefore, it would be
+to read data instructions as well. All these different parts require large amounts
+of memory, and they are all frequently accessed. Therefore, it would be
 favorable to have them as separate components so that memory access can be
 parallelised.
