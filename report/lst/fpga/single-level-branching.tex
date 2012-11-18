@@ -1,0 +1,18 @@
+\begin{listing}[h]
+  \usemintedstyle{soderberg}
+  \centering
+  \begin{lenacode}
+    node eq STATE R1 R2      # set state 
+      # Instructions for when the
+      # condition is satisfied
+    node eq STATE STATE ZERO # negate state
+      # Instructions for when the
+      # condition is not satisfied
+    node move STATE ZERO     # Set state to zero
+    # node addi STATE ZERO 1 # Or one, if you want
+
+    # (code after branching would follow here)
+  \end{lenacode}
+  \caption[Single level branching]{Single level branching in SIMD nodes}
+  \label{lst:single-level-branching}
+\end{listing}
