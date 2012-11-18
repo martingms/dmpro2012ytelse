@@ -10,3 +10,4 @@ report.pdf
 *.tpbuild
 *.dvi
 *.ps
+*.gz
