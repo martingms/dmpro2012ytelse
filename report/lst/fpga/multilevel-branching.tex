@@ -1,0 +1,27 @@
+\begin{listing}[h]
+  \usemintedstyle{soderberg}
+  \centering
+  \begin{lenacode}
+    # Initial state.
+    node sll R3 STATE      # Save current register
+                           # by shifting left
+    node eq R4 R1 R2       # Calculate if branch is taken
+                           # by the node
+    node add STATE R4 R3   # Set the new state
+      # Instruction for when the 
+      # condition is satisfied
+    node andi R3 STATE 254 # Save old state
+                           # (254 = 1111 1110)
+    node andi R4 STATE 1   # Save new state
+                           # (001 = 0000 0001)
+    node eq R4 R4 ZERO     # Negate current state
+    node add STATE R4 R3   # Set new state
+      # Instruction for when the 
+      # condition is not satisfied
+    node srl STATE STATE   # Revert to old state
+
+    # (code after branching would follow here)
+  \end{lenacode}
+  \caption[Multilevel branching]{Multilevel branching in SIMD nodes}
+  \label{lst:multilevel-branching}
+\end{listing}
