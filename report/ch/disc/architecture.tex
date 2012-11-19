@@ -1,14 +1,16 @@
 \section {Memory architecture}
 \input{fig/disc/memarch}
 In the early phases of the project,
-multiple solutions as to how the data memory should work were suggested. We
+multiple solutions as to how the data memory should work were suggested. Examples of these are shown in Figure \ref{fig:disc-memarch}.
+
+The top left example shows a shared memory architecture with separate data and instruction memories. The top right example shows one single memory connected to both the SCU and LENA by a common bus. In the bottom left example, the memory is only connected to the LENA, and the SCU communicates with it through LENA. The bottom right example shows a switched memory architecture. We have two memories that can both be connected to the SCU and to the LENA, but not at the same time.
+
+We
 decided to let the \ac{SCU} send all the data to the \ac{LENA}, and then let it store
 them to its own local memory. The reason we chose this over shared memory was
 all the potential issues one may get with the shared memory solution. A shared memory
 would be prone to errors from synchronization problems such as knowing when,
-and to which addresses, a read/write operation should read/write. We figured
-that we would rather send all data from the \ac{SCU} to the \ac{LENA}, and let it
-store them into its own memory as it saw fit.
+and to which addresses, a read/write operation should read/write.
 
 To allow overlap between loading instructions and data in the LENA
 architecture, we chose the Harvard Architecture and used a separate memory for
