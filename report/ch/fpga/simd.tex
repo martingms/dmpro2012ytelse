@@ -35,7 +35,8 @@ For a list of all \ac{SIMD} instructions, see Appendix \ref{apx:simd-instruction
 \subsubsection{Communication}
 The communication component controls outbound data to adjacent \ac{SIMD} nodes in 
 the grid array; north, south, east and west. The communication component is fairly 
-simple and can either send register data or forward inbound data according to the counterclockwise forwarding scheme described in \ref{sec:simd-com}.
+simple and can either send register data or forward inbound data according to the 
+counterclockwise forwarding scheme described in \ref{sec:simd-com}.
 
 \subsubsection{Register Bank}
 Each \ac{SIMD} node is equipped with $2^4 = 16$ 8-bit general purpose registers, 14 of
@@ -106,15 +107,16 @@ and store.
 
 \input{fig/fpga/fpga-simd-fwrd}
 
-\TODO{We made this one ourselves! Should we brag some more?}
+\TODO{We invented this one by ourselves! Should we brag some more?}
 
-\subsection{Instructions}
+\subsection{Instruction Set}
+The \ac{SIMD} node instruction set, detailed in Appendix \ref{apx:simd-instruction-set}, 
+controls all aspects of the \ac{SIMD} node. It has been designed with regularity in mind 
+in order to keep the number of special cases in the hardware to a minimum with as few 
+formats as possible.
 
-\ref{apx:simd-instruction-set}
-
-Something about ideology...++
-
-
+Much of the design behind the instruction set is borrowed from \ac{MIPS} which also 
+favors regularity in order to simplify the hardware, thus enhancing the performance.
 
 \subsubsection{Branching}
 Since all nodes run the same instructions, both parts of a branch must be
