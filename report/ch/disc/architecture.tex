@@ -1,9 +1,29 @@
+\section{Instruction size}
+We ended up with a 24-bit instruction set for both \ac{SIMD} nodes and the
+control core. As we ended up with a 16-bit program counter, the maximal
+instruction count would be 64k and the memory chip size is chosen on that
+basis. While it may sound little, it is still more than enough. To see why, note
+that the control core can start the image processing algorithm from the
+beginning when the \ac{SIMD} nodes have finished processing the current data.
+Also, we usually define algorithms for a single frame, without any concern for
+the one coming after it. The program is simply restarted for every new frame,
+reducing the amount of code needed and the complexity of the programs.
+
 \section {Memory architecture}
 \input{fig/disc/memarch} 
 
 In the early phases of the project, multiple solutions as to how the data memory
-should work were suggested. We decided to let the \ac{SCU} send all the data to
-the \ac{LENA}, and then let it store them to its own local memory. The reason we
+should work were suggested. 
+
+The top left example of Figure \ref{fig:disc-memarch} shows a shared memory architecture with separate data and
+instruction memories. The top right example shows one single memory connected to
+both the SCU and LENA by a common bus. In the bottom left example, the memory is
+only connected to the LENA, and the SCU communicates with it through LENA. 
+The bottom right example shows a switched memory architecture. There are two memories
+that can both be connected to the SCU and to the LENA, but not at the same time.
+
+We decided to let the \ac{SCU} send all the data to
+the \ac{LENA}, and then let it store them to its own local memory, like in the bottom left example. The reason we
 chose this over shared memory was all the potential issues one may get with the
 shared memory solution. A shared memory would be prone to errors from
 synchronization problems such as knowing when, and to which addresses, a
@@ -14,10 +34,10 @@ memory as it saw fit.
 To allow overlap between loading instructions and data in the LENA architecture,
 we chose the Harvard Architecture and used a separate memory for
 instructions. The program memory is separated into two chips. The reason for
-this is mainly that we found no good 24 bit word memory. One solution would be
-to just buy a 32-bit memory. However, a single 32 bit memory was more expensive
-than two 16 bit memories. As both gave us the needed memory, we selected the
-cheaper alternative.
+this is mainly that we found no good 24 bit word memory (24 bit to match instruction
+size). One solution would be to just buy a 32-bit memory. However, a single 32 bit
+memory was more expensive than two 16 bit memories. As both gave us the needed
+memory, we chose the cheaper alternative.
 
 In addition, we figured a shared \ac{VGA} and data memory would obstruct the
 flow of data from the \ac{SCU}. Since data for the \ac{VGA} would be both read
@@ -29,7 +49,7 @@ memory that was big enough to hold at least a full screen-frame, at 8 bits per
 pixel (since each pixel is an 8-bit greyscale pixel).
 
 Finally, to reduce the possibility of having too slow data-access from the SCU,
-(it had only 64kb on-chip memory) an extra memory was added to work as a buffer
+(it had only 64kB on-chip memory) an extra memory was added to work as a buffer
 for the SCU as well. This design choice was made {\em after} ordering, which
 meant that we had to choose from the chips we had already ordered to fit this
 purpose. Since this was intended to carry data to all other parts of the system,
@@ -40,35 +60,6 @@ A result of this is that we now had 4 separate memories to allow overlap of
 memory accesses. Since the requirements for the data/instruction memories
 differed in both size and word-width we wound up with not only separate, but
 also different chips for this purpose.
-
-\TODO{Kill the subsections from here?}
-\subsubsection{Memory}
-The memory is split over three different chips: The data memory, the instruction
-memory and the \ac{VGA} memory. All of the \ac{RAM} is asynchronous \ac{SRAM},
-based on previous projects success with it\cite{berg2011festinalente} along with
-the speed. The main reason for this choice was mostly due to frequent reading
-and writing, but also because a larger \ac{SRAM} module was more costly than
-multiple smaller \ac{SRAM} modules per \ac{MB}. An additional benefit from this
-is that the complexity is lowered: Fewer potential collisions on \ac{RAM}
-reading and writing occurs since fewer parts read and write to the different
-\ac{RAM} chips.
-
-\subsubsection*{Instruction Memory}
-We ended up with a 24-bit instruction set for both \ac{SIMD} nodes and the
-control core. As we ended up with a 16-bit program counter, the maximal
-instruction count would be 64,000 and the memory chip size is chosen on that
-basis. While it may sound little, it is still more than enough. To see why, note
-that the control core can start the image processing algorithm from the
-beginning when the \ac{SIMD} nodes have finished processing the current data.
-Also, we usually define algorithms for a single frame, without any concern for
-the one coming after it. The program is simply restarted for every new frame,
-reducing the amount of code needed and the complexity of the programs.
-
-\subsubsection*{Data Memory}
-
-\subsubsection*{VGA Memory}
-
-\subsection{I/O}
 
 \section{Redundancies}
 We had multiple redundancies to avoid potential errors which would have rendered
