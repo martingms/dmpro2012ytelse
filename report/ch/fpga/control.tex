@@ -42,7 +42,6 @@ This allows the control core to do pointer arithmetic referring to
 arbitrary words in the data \ac{RAM}.
 
 \input{fig/fpga/fpga_ctrl_core}
-\TODO{Jahre syntes Figur \ref{fig:fpga-ctrl-core} ble for liten}
 To send pixels to the \ac{VGA} controller, two of the registers are dedicated to
 contain an address and a pixel value, respectively. The contents of these
 registers are constantly sent to the \ac{VGA} controller. By incrementing and
@@ -91,9 +90,7 @@ During \ac{DMA} transfer, the data \ac{RAM} is reserved for the \ac{DMA} module
 and is not available for the control core. To initiate a \ac{DMA} transfer, the
 control core sets \emph{base addresses} for the reading of new data and for the
 writing of old data, in addition to address increments to be used for moving
-along the columns and rows of the current slice\TODO{Why not use the commonly
-  used stride? It is already defined, and is probably known to the reader} of
-the data. These parameters allow flexibility in how the data slices are laid out
-in memory.
+along the columns and rows of the current slice of the data. These parameters
+allow flexibility in how the data slices are laid out in memory.
 % to be loaded into and stored out of the \ac{SIMD} array, 
 % ^ dragged out, as it is implicit.

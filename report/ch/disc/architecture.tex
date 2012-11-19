@@ -1,5 +1,6 @@
 \section {Memory architecture}
-\TODO{Graph of memory-architecture} In the early phases of the project,
+\input{fig/disc/memarch}
+In the early phases of the project,
 multiple solutions as to how the data memory should work were suggested. We
 decided to let the \ac{SCU} send all the data to the \ac{LENA}, and then let it store
 them to its own local memory. The reason we chose this over shared memory was
@@ -14,8 +15,8 @@ architecture, we chose the Harvard Architecture and used a separate memory for
 instructions. The program memory is
 separated into two chips. The reason for this is mainly that we found no good 24
 bit word memory. One solution would be to just buy a 32-bit memory. However, a single 32
-bit memory was more expensive than two 16 bit. As both gave us the needed memory,
-we went for the cheaper option.
+bit memory was more expensive than two 16 bit memories. As both gave us the needed memory,
+we selected the cheaper alternative.
 
 In addition, we figured a shared \ac{VGA} and data memory would obstruct the flow
 of data from the \ac{SCU}. Since data for the \ac{VGA} would be both read and written
@@ -23,9 +24,9 @@ frequently, the \ac{VGA} needed its own memory, rather than sharing memory with
 the SCU itself. As we were supposed to optimize for performance, we had to take
 possible bottlenecks into consideration. We therefore invested in an extra
 memory chip. For the VGA we chose an 8-bit word memory that was big enough to
-hold at least a full screen-frame, at 8-bit per pixel (since each pixel is an 8-bit greyscale pixel).
+hold at least a full screen-frame, at 8 bits per pixel (since each pixel is an 8-bit greyscale pixel).
 
-Lastly, to reduce the possibility of having too slow data-access from the SCU, (it had only 64kb on-chip memory) 
+Finally, to reduce the possibility of having too slow data-access from the SCU, (it had only 64kb on-chip memory) 
 an extra memory was added to work as a buffer for the SCU as well. This design choice was made {\em after} ordering, 
 which meant that we had to choose from the chips we had already ordered to fit this purpose. Since this was intended 
 to carry data to all other parts of the system, and as the rest of the system is working with data in 8-bit bytes, 
@@ -42,7 +43,7 @@ We had multiple redundancies to avoid potential
 errors which would have rendered our whole system unusable. This was recommended
 by Jahre, and previous groups had done so as well. In order to send data into
 the system, our two main options would be to use the \ac{SD} card or the mini
-\ac{USB} plug. We had serial and \ac{JTAG} for debugging purposes. For the
+\ac{USB} plug. We had serial and \ac{JTAG} for debugging purposes. For the graphical
 output we had the two \ac{VGA} options. Luckily, both \ac{SD} card and and our
-own \ac{VGA} worked, and we therefore had no need of the
-redundancies.
+own \ac{VGA} worked, and we therefore never needed to use any of our
+redundant solutions.

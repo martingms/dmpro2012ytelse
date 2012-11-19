@@ -1,4 +1,17 @@
 \section {Problems and Workarounds}
+\subsection{Serial port}
+We found many pin mappings for the serial port on the web, which turned out to
+be different from Festina Lente's serial system. After some discussion, we chose
+the one on the web, and figured that if anything did not work, we could just
+use our header to change the mapping.  Yet as we had not thought of the fact
+that the footprint for male and female serial ports have mirrored numbering,
+we ended up with a male pin mapping and a female footprint.  Obviously,
+this did not work very well. Yet as the TXD pin is the only one we actually
+need, we used a female plug, and dragged a wire over the header pins so that
+the TXD data from SCU were mapped to the original RXD. This workaround made it
+possible to send data from the system and out to a computer, yet as we had no
+need for this option, our final card does not have the serial system soldered on.
+
 \subsection{Routing}
 Routing was the first problem we confronted during the designing the \ac{PCB}
 board, we had to manually route the design, because we got some warnings due to
@@ -10,15 +23,22 @@ not have vias as close to the pins as Altium placed them. Also, as to cut down
 the budget, we removed some unnecessary vias by wiring multiple grounds and
 powers together, where the design allowed us to. In this way, we got quite a few
 less vias.
+
+We spent the entire final week before production working on the routing. In comparison, the energy group used only 2 days. There are quite a few possible reasons why we ended up using so much more time than them for this:
+
+One of the reasons were simply that we were the first group to start routing. We thus had no one to warn us about mistakes. An example of such a mistake was that we did not set the correct Design Rules before auto-routing, until a few days into the week. This naturally did not give us the routing that we wanted, and gave us a few headaches.
+
+Related to this is the fact that we did not experiment enough with different routing strategies.
+
+Another reason relates to the difference between our designs. Where the other group had to route only 1 memory chip, we had 5. This naturally made the routing much more complex.
+
 \subsection{Soldering}
-Soldering was the biggest problem that we faced, none of the \ac{PCB} group
-member had any experiences with it beforehand. We managed to destroy our first
-board, as we used too much tin on one of the AVR pins, and ruined them by using
-the tin removal unit wrongly.
+Soldering was the biggest problem that we faced, as none of the members of the
+\ac{PCB} group member had any experience with it beforehand. We managed to
+destroy our first board, as we used too much tin on one of the AVR pins, and
+ruined them by using the tin removal unit wrongly.
 
 The next try, however, proved to be successful, but there still remained some
 minor problems. Problems we found were lack of tin on the oscillator, as well as
 a few of the \ac{FPGA} pins. They were, as opposed to our problem with the first
 board, easily fixed, once discovered.
-
-

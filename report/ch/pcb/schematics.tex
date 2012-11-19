@@ -1,4 +1,8 @@
 \subsection {Schematics}
+The workflow of creating the schematic consisted of reading data sheets,
+and looking at the reports from earlier computer design projects, and then
+applying the knowledge we found from those to properly place the necessary
+components in our schematic.
 
 We decided to design the entire \ac{PCB} in one schematic, as the Festina Lente
 report mentioned that Festina Lente-report does mention that 
@@ -7,22 +11,21 @@ sheets made Altium issue a lot of warnings and errors during the design rule
 check''\cite[p.~49]{berg2011festinalente}. Something we avoided from day one, 
 as we never attempted to use multiple schematics-documents.
 
-A major downside of this approach was the fact that this completely serialized
+A downside of this approach was the fact that this partially serialized
 our work on the Schematic, since we could not make concurrent changes to our
-single document. This limited the parallelism of our work flow to one person at a
-time working on the schematic.  In the meantime, the other people in the
+single document. When not working on the schematic, the other people in the
 \ac{PCB} group did whatever could be done without touching the
 schematic. (Making footprints, verifying design, looking up parts and data
 sheets) Since the schematic was the biggest amount of work, this produced
-something of a bottleneck for the schematic work.
+something of a bottleneck for the PCB work.
 
-However, having the overall control of the entire thing in one document
-did help to smooth out some issues we met along the road. For instance,
+However, having overall control of the entire thing in one document
+did help to smooth out some issues we met while working. For instance,
 we were having quite a few issues with net labels. This was quite easy to
-untangle when everything was in one document with no ports, as getting the
-complete overview was very readable with this approach. We also avoided the need
-to use any buses, although we did end up with one or two for the sake
-of readability.
+solve when everything was in one document with no ports, as getting
+complete overview was doable, without having to cross-reference schematics.
+We also avoided the need to use any buses, although we did end up adding
+some for the sake of readability.
 
 The overall layout of the Schematic \ref{app:schematics} is logically grouped ``geographically'', to
 allow for easy reading of the schematic.
@@ -42,5 +45,3 @@ without the buses drawn in. We are quite sure that given a logical overview of
 which components are directly connected to each other, finding the various pins
 that perform this connection should be trivial even without the buses/wires
 drawn in.
-
-\TODO{Overordnet forklaring av hvordan (JN: ???)}
