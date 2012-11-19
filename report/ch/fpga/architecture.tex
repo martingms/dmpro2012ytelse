@@ -2,12 +2,9 @@
 
 \input{fig/fpga/architecture}
 
-{\sc TODO: \color{red} Mention clock rate and possibly the reason for choosing
-  it somewhere}
-
 An overview of the architecture of \ac{LENA} as well as its memory and
-communication lines is shown in figure \ref{fig:fpga-architecture}. The data
-flows mostly through it in one direction. Data is received from the AVR and
+communication lines is shown in Figure \ref{fig:fpga-architecture}. The data
+flows mostly through it in one direction. Data is received from the SCU and
 stored to the data memory. The data is then read in parts from the data memory
 and sent through the \ac{SIMD} array for processing. The result from the
 \ac{SIMD} array is stored to the data memory again. \TODO {Say why the DMA 
@@ -16,26 +13,32 @@ instead. (Supposedly because  the output image is more stable this way?
  )} At last, the data is copied
 from the data memory to the \ac{VGA} memory and shown on screen.
 
-The processing part of \ac{LENA} is the \ac{SIMD} array. It is organized in a
-matrix as specified by the assignment, and is designed to process images. Each
-node processes one word at a time and can communicate with its four direct
-neighbors. This makes the architecture well suited for applying 3x3 image
-filters, such as the Laplace filter. See Appendix \ref{apx:laplace} for an
-implementation. \TODO{JN: Fix reference AFTER Minted-merge}
+The processing part of \ac{LENA} is the \ac{SIMD} array. It is organized
+in a two-dimensional matrix, as specified by the assignment. Each node
+processes one word at a time and can communicate with its four direct
+neighbors. In order for the nodes to receive valid data from the edges
+where they have no neighbors, special \emph{edge nodes}, that only hold
+data values, are inserted along the edges.
+
+These features make the architecture especially well suited for applying
+3x3 image filters, such as noise reduction or edge detection filters.
+See Appendix \ref{apx:laplace} for an example implementation of an edge
+detection filter. \TODO{JN: Fix reference AFTER Minted-merge}
 
 To first load the data into the \ac{SIMD} array, it is sent to the first column
 of the nodes and copied to the right, passing through all the nodes until the
-last column.  This is done by using a special register for sending data, called
-the S register\TODO{First time S register is introduced.}. Data is continuously
-received by the first column, so the whole array is filled. At that time, data
-processing can start. The data is swapped onto another register of the node, and
-new data can be loaded through the S register.  When both data processing and
-transmission of new data is done, the registers are swapped again. At this
-point, we have results in the S registers and can send this out to the right
-while loading new data from the left. The results are copied out of the array
-from the last column.
+last column. This is done by using a special register for sending data, called
+\NOTE{If this could be shortened somehow and fixed in the simd.tex-file, that
+  would be great. However, it has low impact and requires MUCH work}
+the S register. Data is continuously received by the first column, so the whole
+array is filled. At that time, data processing can start. The data is swapped
+onto another register of the node, and new data can be loaded through the S
+register. When both data processing and transmission of new data is done, the
+registers are swapped again. At this point, we have results in the S registers
+and can send this out to the right while loading new data from the left. The
+results are copied out of the array from the last column.
 
-Data communication between AVR, the \ac{SIMD} nodes and the \ac{VGA}
+Data communication between \ac{SCU}, the \ac{SIMD} nodes and the \ac{VGA}
 controller is handled by the control module which communicates with the data-
 and program memory, and keeps track of the data location on these. The control
 module sends instructions to all of the \ac{SIMD} nodes and is responsible for
@@ -43,7 +46,7 @@ splitting the data and loading it into the \ac{SIMD} array in correct order by
 setting the S registers of the first column. It also retrieves the results from
 the last column of the array and stores it to the data memory.
 
-The \ac{FPGA} receives data from the AVR on 24 input lines. This is enough to
+The \ac{FPGA} receives data from the SCU on 24 input lines. This is enough to
 transmit one instruction per transmission. All of the instructions are copied
 into the instruction memory before any other data is sent. The image data is
 sent one word (8 bits) at a time. We considered using all 24 lines for data
@@ -51,9 +54,9 @@ transmission, but as we tested the transmission rate, we realized that it was
 fast enough by only sending one word at a time. This was easier to
 implement and was therefore the chosen implementation.
 
-The \ac{SIMD} array is created dynamically in \ac{VHDL}, hence the number of
-cores is easily changeable. The final number of cores in our implementation
-is only limited by the available space on the \ac{FPGA}. We tried to fit as many
-nodes as possible, and the \ac{FPGA} we used had enough space for 6 nodes.
-\TODO{Jahre vil at det skal komme bedre fram at dette ikke er noe vi kan gjøre noe med, med strek under "the FPGA we used".
-Nevnte i diskusjon om non-functional requirements at dette ikke er noe vi kan gjøre noe med, er det nok?}
+The \ac{SIMD} array is created dynamically in \ac{VHDL}, hence the
+number of cores is easily changeable. The final number of cores in our
+implementation is only limited by the available space on the \ac{FPGA},
+and we have tried to fit as many nodes as possible. On the Spartan-3E
+XC3S500E \ac{FPGA} we had enough space for 6 nodes, in addition to the
+14 corresponding edge nodes, with a total slice utilization of 93 \%.

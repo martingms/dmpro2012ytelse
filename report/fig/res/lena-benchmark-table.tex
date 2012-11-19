@@ -1,20 +1,22 @@
 \begin{table}[h!]
 \centering
-\begin{tabular}{c|c|ccc|c}
-	\textbf{Program} &
-        \textbf{FPS} &
+\begin{tabular}{c|r|rrr|r} \toprule
+	\multirow{2}{*}{\textbf{Program}} &
+        \multirow{2}{*}{\textbf{Frame rate}} &
+        \multicolumn{3}{c|}{\textbf{Current through power planes}} &
+        \multirow{2}{*}{\textbf{Power}} \\
+        & &
         \textbf{3.3 V} &
         \textbf{2.5 V} &
-        \textbf{1.2 V} &
-        \textbf{Power} \\
-	\hline
-	Idle & - & 347 mA & 44 mA & 77 mA & 5.6 W \\
+        \textbf{1.2 V} & \\
+	\midrule
+	\emph{Idle} & - & 347 mA & 44 mA & 77 mA & 5.6 W \\
 	1 & 21 fps & 375 mA & 37 mA & 69 mA & 5.8 W \\
         2 & 18 fps & 375 mA & 37 mA & 71 mA & 5.8 W \\
         3 & 13 fps & 370 mA & 37 mA & 65 mA & 5.7 W \\
         4 & 13 fps & 375 mA & 37 mA & 67 mA & 5.7 W \\
-        5 & 13 fps & 363 mA & 37 mA & 75 mA & 5.7 W \\
+        5 & 13 fps & 363 mA & 37 mA & 75 mA & 5.7 W \\ \bottomrule
 \end{tabular}
-\caption[]{}
+\caption[LENA results]{LENA performance and power results.}
 \label{tab:lena-benchmark-table}
 \end{table}
