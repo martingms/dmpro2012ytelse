@@ -45,12 +45,11 @@ to desktop computers now carry multiple processing cores to perform their
 functions. Parallelism is of course not a new concept; for many decades
 exploiting the parallel nature of certain data to effectivize computation has
 been a known tactic. Especially within the field of image processing parallelism
-has proved itself an extremely effective solution.
+has proved itself an extremely effective tool.
 
 While MIMD systems are dominant within general computing, we want to explore
 alternatives which may work better for certain applications. The result of this
-project is the computer ``256 Shades of Gray'' (Also referred to as
-``TSOG''\TODO{Not AFAIK. We use ``256 Shades of Gray'' consistently}), which is
+project is the computer ``256 Shades of Gray'', which is
 an array based SIMD architecture optimized for massively parallelizable tasks
 such as image processing.
 
@@ -60,20 +59,32 @@ takes input through an SD card reader (with RS-232 and USB as
 backup\TODO{Nødvendig å kommentere hva som er backup?}), and shows output
 through a custom VGA controller.
 
-We have been inspired by the Goodyear MPP architecture, which clearly shows in
-our design. We designed for simplicity as much as possible\TODO{Har vi designet
-mtp. simplicity? Vi har designed mtp. performance. Vi kunne lett unngått {\sc
-Store \& Forward}-greiene i SIMD nodene og fått en mye mindre kompleks sak.}, in
-order to be able to fit as many cores as possible within our limited
-resources. As such, the SIMD nodes have been stripped of all complex
-instruction, all floating point capabilities, integer multiplication and integer
-division. The SIMD nodes are all controlled by a control core that handles all
-memory accesses through a DMA unit.
+%We have been inspired by the Goodyear MPP architecture, which clearly shows in
+%our design. We designed for simplicity as much as possible\TODO{Har vi designet
+%mtp. simplicity? Vi har designed mtp. performance. Vi kunne lett unngått {\sc
+%Store \& Forward}-greiene i SIMD nodene og fått en mye mindre kompleks sak.}, in
+%order to be able to fit as many cores as possible within our limited
+%resources. As such, the SIMD nodes have been stripped of all complex
+%instruction, all floating point capabilities, integer multiplication and integer
+%division. The SIMD nodes are all controlled by a control core that handles all
+%memory accesses through a DMA unit.
 
-The SD card and the custom VGA controller both worked flawlessly in the
-end\TODO{``in the end'' skurrer litt}, and while the RS-232 port did not work at
-all the VGA could replace it for debugging purposes. In the end our design has
-gone through testing, and has met all functional and non-functional requirements
-that were set. The architecture has shown itself to be effective and well suited
-for common image processing tasks.
+%The SD card and the custom VGA controller both worked flawlessly in the
+%end\TODO{``in the end'' skurrer litt}, and while the RS-232 port did not work at
+%all the VGA could replace it for debugging purposes. In the end our design has
+%gone through testing, and has met all functional and non-functional requirements
+%that were set. The architecture has shown itself to be effective and well suited
+%for common image processing tasks.
+
+We have been inspired by the Goodyear MPP architecture, which clearly shows in
+our design. Our main focus was performance, and because of that simplicity in
+design has been strived for in order to fit as many parallel cores on our FPGA
+as possible. As such, the SIMD nodes have been stripped of many of the more
+complex instructions, such as integer multiplication and division, as well as
+all floating point capabilities. The SIMD array is controlled by a control core
+that handles I/O and memory access through a DMA unit.
+
+Our design has gone through extensive testing, and has met all functional and
+non-functional requirements that were set. The architecture has shown itself
+effective and well suited for common image processing tasks.
 \endgroup
