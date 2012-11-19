@@ -27,14 +27,11 @@ This is explained in more detail in section \ref{sec:performance-sd-card}.
 \subsection{Serial}
 \label{sec:avr-serial-issues}
 Communicating with the AVR over the serial port worked perfectly fine on the
-EVK1100. However, on 256 Shades of Gray it did not work. The reason it did not
-work was never discovered, despite hours of debugging and looking over the
-schematics. Initially, serial communication would give no output whatsoever. The
+EVK1100. However, on 256 Shades of Gray it did not work at once. The
 only obvious error with the serial device was that the TXD/CTS (T for Transmit)
-pins were wired into RXD/RTS (R for Receive), and vice versa. Swapping these by
-re-routing headers resulted in garbage output instead of nothing (but only
-whenever the AVR actually wrote to the serial), so we were close to solving the
-issue. However, Str2img was completed, and so debugging which was the main
-purpose of the serial communication, could be done by writing text to
-screen. Further work on the Serial port was therefore dropped since it was now a
-fruitless endeavor.
+pins were wired into RXD/RTS (R for Receive), and vice versa. This is covered 
+in more detail later on, in the PCB workaround chapter. However, 
+as the Str2img was completed, debugging could be done by writing text to screen.
+As debugging was the main purpose of the serial communication, we did not prioritize
+fixing the serial. In the end, we only made it work to convince ourself 
+that our hypothesis was correct.

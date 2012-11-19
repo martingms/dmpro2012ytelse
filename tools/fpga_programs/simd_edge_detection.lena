@@ -33,8 +33,7 @@
     ctrl sll R4 R4
     ctrl sll R4 R4
     ctrl sll R4 R4
-    ctrl add DMA ZERO R4            # DMA = R4 + 1 = 1280 + 1 = 1281
-    ctrl addi DMA DMA 1
+    ctrl addi DMA R4 1              # DMA = R4 + 1 = 1280 + 1 = 1281
     ctrl dma set_write_horizontal_incr
     ctrl dma set_read_horizontal_incr
     ctrl nop
@@ -101,12 +100,6 @@ dma_row_loop:
     node sll R1 R1
     node sll R1 R1
 
-    ctrl nop
-    ctrl nop
-    ctrl nop
-
-    ctrl nop
-    ctrl nop
     ctrl nop
     ctrl nop
     ctrl nop
