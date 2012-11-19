@@ -96,6 +96,7 @@ int fb_iterator_seek(int i){
 		nav_filelist_goto(j++);
 		if(nav_file_checkext(ext))i--;
 	}
+	j--;
 
 	//Seeker reached end of directory without successfully seeking i files
 	//with file extension ext.
