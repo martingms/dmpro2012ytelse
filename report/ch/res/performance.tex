@@ -13,9 +13,6 @@ performance as we optimized the code. This is also shown in figure
 \ref{fig:spi-optimizations-plot}. Each of the optimizations are
 explained in greater detail below.
 
-\TODO{trenger vel kanskje ikke både figur og tabell?}
-\TODO{lage et finere plot?}
-
 \begin{description}
 	\item[Removed status checking + function inlining] \hfill \\
 		The spi\_send function busy-waited on the TXEMPTY flag for each
@@ -67,15 +64,3 @@ the \ac{SD} card waited. Thus, giving as a frame rate of around 16
 FPS. 
 \input{fig/avr/spi-optimizations-table.tex}
 \input{fig/avr/spi-optimizations-plot.tex}
-
-\begin{comment}
-		In this section, there will be data as specified in the disposition. We will run
-a program which requires data from neighbors, and see how long time the
-different programs take based on the amount of cores. We will then explain
-eventual results | for instance would the results most likely point out that we
-have low latency, and that it will take a very short amount of time to get data
-from neighbors.
-
-There will also be some fancy plots and tables here to show the decrease in time
-and/or the increase in speedup.
-\end{comment}
