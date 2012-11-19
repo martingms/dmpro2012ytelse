@@ -88,20 +88,9 @@ void fpga_send_data_from_file(const char *file) {
  * Sends 8 bit data to the FPGA from given memory address
  */
 void fpga_send_data_from_memory(U8 *data, size_t size) {
-	// S.1 - S.6 refers to the stages in 'AVR sends program to the FPGA'
-	// https://github.com/martingamm/dmpro2012ytelse/wiki/Avr-fpga-bus
-
-	fpga_set_state(FPGA_STATE_LOAD_DATA);											// S.1
-	bus_send_data_words((U32*)data, size);
-	//fpga_set_listener(&receive_ack);
-//	int i;
-//	for (i = 0; i < size; ++i) {
-//		//acked = FALSE;
-//		bus_send_data_byte(data[i]);
-//		//while (acked == FALSE);												// S.4
-//	}																		// S.5
-	//fpga_set_listener(DEFAULT_FPGA_LISTENER); //Denne linjen ødelegger for knappene
-	fpga_set_state(FPGA_STATE_RUN);										// S.6
+	fpga_set_state(FPGA_STATE_LOAD_DATA);
+	bus_send_data_bytes(data, size);
+	fpga_set_state(FPGA_STATE_RUN);
 }
 
 
@@ -164,7 +153,6 @@ int program_from_memory(U32 *buffer) {
 }*/
 
 
-
 // ------[GENERIC SEND FUNCTION]-------//
 int fpga_send_program(const char *program_path) {
 
@@ -193,8 +181,9 @@ int fpga_send_program(const char *program_path) {
 		bus_send_program(FRAME_BUFFER, rd);
 	}
 
-	fpga_set_state(FPGA_STATE_STOP);
+	//fpga_set_state(FPGA_STATE_STOP);
 	close(fd);
+	return 0;
 }
 
 

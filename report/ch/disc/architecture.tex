@@ -1,49 +1,62 @@
+\section{Instruction size}
+We ended up with a 24-bit instruction set for both \ac{SIMD} nodes and the
+control core. As we ended up with a 16-bit program counter, the maximal
+instruction count would be 64,000 and the memory chip size is chosen on that
+basis. While it may sound little, it is still more than enough. To see why, note
+that the control core can start the image processing algorithm from the
+beginning when the \ac{SIMD} nodes have finished processing the current data.
+Also, we usually define algorithms for a single frame, without any concern for
+the one coming after it. The program is simply restarted for every new frame,
+reducing the amount of code needed and the complexity of the programs.
+
 \section {Memory architecture}
-\input{fig/disc/memarch}
-In the early phases of the project,
-multiple solutions as to how the data memory should work were suggested. We
-decided to let the \ac{SCU} send all the data to the \ac{LENA}, and then let it store
-them to its own local memory. The reason we chose this over shared memory was
-all the potential issues one may get with the shared memory solution. A shared memory
-would be prone to errors from synchronization problems such as knowing when,
-and to which addresses, a read/write operation should read/write. We figured
-that we would rather send all data from the \ac{SCU} to the \ac{LENA}, and let it
-store them into its own memory as it saw fit.
+\input{fig/disc/memarch} 
 
-To allow overlap between loading instructions and data in the LENA
-architecture, we chose the Harvard Architecture and used a separate memory for
-instructions. The program memory is
-separated into two chips. The reason for this is mainly that we found no good 24
-bit word memory. One solution would be to just buy a 32-bit memory. However, a single 32
-bit memory was more expensive than two 16 bit memories. As both gave us the needed memory,
-we selected the cheaper alternative.
+In the early phases of the project, multiple solutions as to how the data memory
+should work were suggested. We decided to let the \ac{SCU} send all the data to
+the \ac{LENA}, and then let it store them to its own local memory. The reason we
+chose this over shared memory was all the potential issues one may get with the
+shared memory solution. A shared memory would be prone to errors from
+synchronization problems such as knowing when, and to which addresses, a
+read/write operation should read/write. We figured that we would rather send all
+data from the \ac{SCU} to the \ac{LENA}, and let it store them into its own
+memory as it saw fit.
 
-In addition, we figured a shared \ac{VGA} and data memory would obstruct the flow
-of data from the \ac{SCU}. Since data for the \ac{VGA} would be both read and written
-frequently, the \ac{VGA} needed its own memory, rather than sharing memory with
-the SCU itself. As we were supposed to optimize for performance, we had to take
-possible bottlenecks into consideration. We therefore invested in an extra
-memory chip. For the VGA we chose an 8-bit word memory that was big enough to
-hold at least a full screen-frame, at 8 bits per pixel (since each pixel is an 8-bit greyscale pixel).
+To allow overlap between loading instructions and data in the LENA architecture,
+we chose the Harvard Architecture and used a separate memory for
+instructions. The program memory is separated into two chips. The reason for
+this is mainly that we found no good 24 bit word memory (24 bit to match instruction
+size). One solution would be to just buy a 32-bit memory. However, a single 32 bit
+memory was more expensive than two 16 bit memories. As both gave us the needed
+memory, we chose the cheaper alternative.
 
-Finally, to reduce the possibility of having too slow data-access from the SCU, (it had only 64kb on-chip memory) 
-an extra memory was added to work as a buffer for the SCU as well. This design choice was made {\em after} ordering, 
-which meant that we had to choose from the chips we had already ordered to fit this purpose. Since this was intended 
-to carry data to all other parts of the system, and as the rest of the system is working with data in 8-bit bytes, 
-we ended up using one of the extra chips ordered as \ac{VGA} memory for this purpose.
+In addition, we figured a shared \ac{VGA} and data memory would obstruct the
+flow of data from the \ac{SCU}. Since data for the \ac{VGA} would be both read
+and written frequently, the \ac{VGA} needed its own memory, rather than sharing
+memory with the rest of the LENA architecture. As we were supposed to optimize
+for performance, we had to take possible bottlenecks into consideration. We
+therefore invested in an extra memory chip. For the VGA we chose an 8-bit word
+memory that was big enough to hold at least a full screen-frame, at 8 bits per
+pixel (since each pixel is an 8-bit greyscale pixel).
+
+Finally, to reduce the possibility of having too slow data-access from the SCU,
+(it had only 64kb on-chip memory) an extra memory was added to work as a buffer
+for the SCU as well. This design choice was made {\em after} ordering, which
+meant that we had to choose from the chips we had already ordered to fit this
+purpose. Since this was intended to carry data to all other parts of the system,
+and as the rest of the system is working with data in 8-bit bytes, we ended up
+using one of the extra chips ordered as \ac{VGA} memory for this purpose.
 
 A result of this is that we now had 4 separate memories to allow overlap of
-memory accesses. Since the requirements for the data/instruction memories differed in both size and word-width 
-we wound up with not only separate, but also different chips for this purpose.
-
-
+memory accesses. Since the requirements for the data/instruction memories
+differed in both size and word-width we wound up with not only separate, but
+also different chips for this purpose.
 
 \section{Redundancies}
-We had multiple redundancies to avoid potential
-errors which would have rendered our whole system unusable. This was recommended
-by Jahre, and previous groups had done so as well. In order to send data into
-the system, our two main options would be to use the \ac{SD} card or the mini
-\ac{USB} plug. We had serial and \ac{JTAG} for debugging purposes. For the graphical
-output we had the two \ac{VGA} options. Luckily, both \ac{SD} card and and our
-own \ac{VGA} worked, and we therefore never needed to use any of our
-redundant solutions.
+We had multiple redundancies to avoid potential errors which would have rendered
+our whole system unusable. This was recommended by Jahre, and previous groups
+had done so as well. In order to send data into the system, our two main options
+would be to use the \ac{SD} card or the mini \ac{USB} plug. We had serial and
+\ac{JTAG} for debugging purposes. For the graphical output we had the two
+\ac{VGA} options. Luckily, both \ac{SD} card and and our own \ac{VGA} worked,
+and we therefore never needed to use any of our redundant solutions.

@@ -130,7 +130,7 @@ void bus_flush_data_bus() {
 
 // sends a program (using 24-bit bus width) to the FPGA
 void bus_send_program(U8 *program, size_t bytes) {
-	U8 *ptr = program, stop = program + bytes;
+	U8 *ptr = program, *stop = program + bytes;
 	while (ptr < stop) {
 		bus_send_data(ptr[3], FPGA_DATA_IN_BUS_OFFSET, 8);
 		bus_send_data(ptr[2], FPGA_DATA_IN_BUS_OFFSET + 8, 8);

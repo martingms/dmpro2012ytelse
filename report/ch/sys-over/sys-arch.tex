@@ -12,26 +12,23 @@ of our main requirements is focus on performance, we have to accept a certain
 level of inherent complexity.
 \input{fig/sys-over/arch-fig}
 
-To remedy the complexity which comes from our requirements, we focused on making
-it possible to isolate errors and make it possible to test the individual
-components as fast as possible: The \ac{LENA} architecture was tested through
-\ac{VHDL} test benches, the \ac{VGA} component in the \ac{LENA} architecture was
-tested with \acp{LED} and buttons on the board, and the AVR part of the
-\ac{LENA} system was tested through the \ac{VGA} port on the board. By doing
-this, we can assume that errors occurring when connecting different components is
-due to errors in the protocol implementation(s).
+To remedy the complexity which inevitably follows from our requirements, we
+focused on making it possible to isolate errors and make it possible to test
+the individual components as early as possible: The \ac{LENA} architecture was
+tested through \ac{VHDL} test benches, the \ac{VGA} component was tested with
+prototypes on a breadboard, and the \ac{SCU} was tested with an EVK1100 development
+board as well as with the buttons and \ac{LED}s on the PCB once it arrived.
+By doing this, we could assume that errors occurring when connecting different
+components are mostly due to errors in the protocol implementation(s).
 
-Figure \ref{fig:sys-over-arch-fig} shows our resulting architecture. Buttons and
-\acp{LED} made it easy to confirm that the \ac{VGA} operates properly for simple
-programs. A \ac{VGA} connector made it possible to quickly test and debug the
-\ac{VGA} implementation on the \ac{LENA} architecture. We also included a
+Figure \ref{fig:sys-over-arch-fig} shows our resulting architecture. We also included a
 \ac{VGA} connector connected to the AVR, in case the \ac{LENA} architecture
 should fail to implement its \ac{VGA} module.
 
-To be able to process data, we need an \ac{I/O} device which serves the machine
+To be able to process data, we needed an \ac{I/O} device which could serve the machine
 with data it should process. To ensure that we would have at least one
 functional \ac{I/O} component,\CHECK{Sounds okay now?} we included both a serial
-port, a \ac{USB} port and a \ac{SD} card reader on the \ac{PCB}. In addition,
+port, a \ac{USB} port and an \ac{SD} card reader on the \ac{PCB}. In addition,
 to be able to keep enough data in memory and allow full overlap of different memory
 transactions to make processing fast, the \ac{LENA} architecture has three separate
 memory components. One for \ac{VGA}, one for instructions and one for data.
