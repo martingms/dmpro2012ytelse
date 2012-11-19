@@ -12,18 +12,16 @@
 
 
 // SCREEN STRINGS
-#define SCREEN_LINE_SELECT_PROGRAM 		"|----------[ SELECT PROGRAM ]----------|"
-#define SCREEN_LINE_SELECT_DATA			"|-----------[ SELECT DATA ]------------|"
-#define SCREEN_LINE_ERROR				"|--------------[ ERROR! ]--------------|"
-#define SCREEN_LINE_BOTTOM				"|--------------------------------------|"
+#define SCREEN_LINE_SELECT_PROGRAM 		"|~~~~~~~~~~[ SELECT PROGRAM ]~~~~~~~~~~|"
+#define SCREEN_LINE_SELECT_DATA			"|~~~~~~~~~~~[ SELECT DATA ]~~~~~~~~~~~~|"
+#define SCREEN_LINE_ERROR				"|~~~~~~~~~~~~~~[ ERROR! ]~~~~~~~~~~~~~~|"
+#define SCREEN_LINE_BOTTOM				"|~~~~~~~~~~256 SHADES OF GRAY~~~~~~~~~~|"
 #define SCREEN_LINE_MORE_DATA			"                               more...  "
 #define SCREEN_LINE_EMPTY				"                                        "
 #define SCREEN_PREFIX_ITEM				' '
 #define SCREEN_PREFIX_SELECTED_ITEM 	'*'
 
-#define FPGA_PROGRAM_SHOW_PICTURE		"A:/show_picture.fpga" //TODO ugyldig definisjon
-
-char *screen = SCREEN_INFO;
+#define FPGA_PROGRAM_SHOW_PICTURE		"A:/show_video.bin" //TODO show_video.bin
 
 struct set {
 	int first;
@@ -64,10 +62,10 @@ void screen_display_error_message(char *message) {
 	screen_draw_bitmap_on_screen();
 }
 
-#define BUFFER_ADRESS (SRAM + STR2IMG_BUFFER_SIZE)
+//#define BUFFER_ADRESS (SRAM + STR2IMG_BUFFER_SIZE)
 void screen_draw_bitmap_on_screen(void) {
-	//fpga_send_program(FPGA_PROGRAM_SHOW_PICTURE); 		TODO fjern kommentar når FPGA_PROGRAM_SHOW_PICTURE er gyldig
-	U8 *buffer = BUFFER_ADRESS;
+	fpga_send_program(FPGA_PROGRAM_SHOW_PICTURE);
+	U8 *buffer = SCREEN_BITMAP;
 	str2img_read_block(buffer);
 	fpga_send_data_from_memory(buffer, PICTURE_SIZE);
 }
@@ -122,18 +120,17 @@ void screen_load_data_to_bitmap(enum data_type type) {
 
 	} else {
 		visible_items.first = 0;
-		visible_items.last = menu_size-1;
+		visible_items.last = menu_size -1;
 		str2img_write(SCREEN_LINE_EMPTY);
 	}
-
 
 	// Seek to the first file
 	if (menu_size > 0) {
 		rc = fb_iterator_seek(visible_items.first);
 		if (rc) {
-			screen_display_error_messagef("Error, could not seek to file, return code is %d\n", rc);
+			screen_display_error_messagef(" Error, could not seek to file %d\n Return code is %d\n",visible_items.first, rc);
 		}
-		// Gets file names and write them to bmp
+		// Gets file names and write them to bitmap
 		for (i=0, j=visible_items.first; i < SCREEN_MAX_ITEMS; ++i, ++j) {
 			if (fb_iterator_has_next()) {
 				if (j == menu_item_selected) {				// Adds prefix
@@ -142,7 +139,8 @@ void screen_load_data_to_bitmap(enum data_type type) {
 					str2img_putc(SCREEN_PREFIX_ITEM);
 				}
 				str2img_putc(' ');
-				str2img_writeline(fb_iterator_next());
+				char *line_name = fb_iterator_next();
+				str2img_writeline(line_name);
 
 			} else {		// No more files
 				str2img_write(SCREEN_LINE_EMPTY);

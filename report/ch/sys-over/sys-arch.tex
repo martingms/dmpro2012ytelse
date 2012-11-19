@@ -12,14 +12,14 @@ of our main requirements is focus on performance, we have to accept a certain
 level of inherent complexity.
 \input{fig/sys-over/arch-fig}
 
-To remedy the complexity which comes from our requirements, we focused on making
-it possible to isolate errors and make it possible to test the individual
-components as fast as possible: The \ac{LENA} architecture was tested through
-\ac{VHDL} test benches, the \ac{VGA} component in the \ac{LENA} architecture was
-tested with \acp{LED} and buttons on the board, and the AVR part of the
-\ac{LENA} system was tested through the \ac{VGA} port on the board. By doing
-this, we can assume that errors occurring when connecting different components is
-due to errors in the protocol implementation(s).
+To remedy the complexity which inevitably follows from our requirements, we
+focused on making it possible to isolate errors and make it possible to test
+the individual components as early as possible: The \ac{LENA} architecture was
+tested through \ac{VHDL} test benches, the \ac{VGA} component was tested with
+prototypes on a breadboard, and the \ac{SCU} was tested with a development
+board as well as with the buttons and \ac{LED}s on the board once it arrived.
+By doing this, we could assume that errors occurring when connecting different
+components are mostly due to errors in the protocol implementation(s).
 
 Figure \ref{fig:sys-over-arch-fig} shows our resulting architecture. Buttons and
 \acp{LED} made it easy to confirm that the \ac{VGA} operates properly for simple

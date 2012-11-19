@@ -29,7 +29,7 @@
 #define DOWN_BUTTON 	2
 #define ENTER_BUTTON 	4
 
-#define ROOT_DIRECTORY "A/:"
+#define ROOT_DIRECTORY "A:/"
 
 //char selected_data_unit_path[DEFAULT_STRING_MAX_LENGTH] = "A:/";
 
@@ -37,6 +37,7 @@ enum data_type current_type;
 int current_state;
 int menu_item_selected;
 int menu_size;
+char selected_program[DEFAULT_STRING_MAX_LENGTH] = "A:/";
 
 volatile bool busy = TRUE;
 volatile bool reset;
@@ -68,7 +69,7 @@ void program_select_start(void) {
 			v_button = 0;
 
 		}
-		screen_display_error_message("end of program_select_start\n resets...");
+		screen_display_error_message(" resets...");
 	}
 }
 
@@ -77,6 +78,7 @@ void program_select_start(void) {
  */
 void button_push(U8 button) {
 	v_button = button;
+	LED_Toggle(LED1);
 	return;
 }
 
@@ -135,18 +137,19 @@ void next_state(void) {
 		fb_iterator_seek(menu_item_selected);	// Seeks to selected item
 		file = fb_iterator_next();
 		fb_iterator_terminate();
-		char file_full[strlen(file)+4];
+		strcat(selected_program, file);
+		/*char file_full[strlen(file)+4];
 		file_full[0] = 'A';
 		file_full[1] = ':';
 		file_full[2] = '/';
 		file_full[3] = '\0';
 		rc = load_script(strcpy(file_full, file)); // Tries to load the program script
 		if (!rc) {
-			screen_display_error_messagef("Lines in selected script\n1. %s\n2. %s\n3. %d\n", selected_script.description, selected_script.fpga_bin_path, selected_script.transfer_delay);
-			load_menu(STATE_SELECT_DATA);
+			//screen_display_error_messagef("Lines in selected script\n1. %s\n2. %s\n3. %d\n", selected_script.description, selected_script.fpga_bin_path, selected_script.transfer_delay);
+			*/load_menu(STATE_SELECT_DATA);/*
 		} else {
 			screen_display_error_messagef("Could not load script\n%s\n", file_full);
-		}
+		}*/
 	}
 
 	// Load data, run FPGA and reset
@@ -165,8 +168,6 @@ void next_state(void) {
 
 		data_blk_src_t data_info;
 		if (data_file_parse(file_full, &data_info) == 0) {
-			//TODO fjern linje under når data_file_parse er testet
-			screen_display_error_messagef("Block addr %d\n Frame count %d\n", data_info.block_addr, data_info.frame_count);
 			run_fpga_program_from_sd(&data_info);
 		} else {
 			screen_display_error_messagef("Could not parse data file %s", file_full);
@@ -190,12 +191,16 @@ void set_file_type(enum data_type type) {
 
 	// Initialize and set extension
 	if (type == DATA) {
-		fb_iterator_init(FS_FILE);					// Init for directories
+		rc=fb_iterator_init(FS_FILE);					// Init for files
+		if (rc) LED_On(LED0|LED1|LED2|LED3);
 		fb_iterator_set_ext(DATA_FILE_SUFFIX);		// Set extension
+		if (rc) LED_On(LED0|LED1|LED2|LED3);
 
 	} else if (type == PROGRAM) {
-		fb_iterator_init(FS_FILE);					// Init for files
-		fb_iterator_set_ext(SCRIPT_FILE_SUFFIX); 	// Set extension
+		rc=fb_iterator_init(FS_FILE);					// Init for files
+		if (rc) LED_On(LED0|LED1|LED2|LED3);
+		rc=fb_iterator_set_ext(LENA_EXECUTABLE_SUFFIX); 	// Set extension
+		if (rc) LED_On(LED0|LED1|LED2|LED3);
 	}
 
 	// Count files
@@ -248,6 +253,9 @@ void fps_limit(double target_ms) {
 	timer_sleep(target_ms - (t - fps_limit));
 	fps_limit = timer_get_ms();
 }
+/*
+ * Run FPGA program with data from SD
+ */
 void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 	// stop listening on buttons
 	busy = TRUE;
@@ -256,7 +264,7 @@ void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 	str2img_osd_init(FRAME_BUFFER);
 
 	// send the program
-	fpga_send_program(selected_script.fpga_bin_path);
+	fpga_send_program(selected_program);//selected_script.fpga_bin_path);
 
 	unsigned int blocks_per_frame = 150; // 320*240/512
 	unsigned int first_block = data_info->block_addr; // start reads here
@@ -283,6 +291,7 @@ void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 		LED_Toggle(LED2);
 	}
 	fpga_set_state(FPGA_STATE_STOP);
+	LED_On(LED0|LED1|LED2|LED3|LED4|LED5|LED6|LED7);
 }
 
 
