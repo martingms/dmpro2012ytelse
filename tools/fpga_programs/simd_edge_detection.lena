@@ -1,8 +1,9 @@
     ctrl nop
 
-    # Set R1 to the size of a screen buffer (320*240). Intermediate
-    # values only fit 8 bits, so we store 150 first, and then shift 9
-    # times to the left. 150 << 9 = 320*240.
+    # Set R1 to the size of a screen buffer (320*240).
+    # Intermediate values only fit 8 bits, so we store
+    # 150 first, and then shift 9 times to the left.
+    # 150 << 9 = 320*240.
     ctrl addi R1 ZERO 150
     ctrl sll R1 R1
     ctrl sll R1 R1
@@ -24,15 +25,17 @@
     ctrl dma set_write_active
     ctrl nop
 
-    # Set DMA read and write vertical increments to 320 = 160 << 1.
+    # Set DMA read and write vertical increments to 
+    # 320 = 160 << 1.
     ctrl addi DMA ZERO 160
     ctrl sll DMA DMA
     ctrl dma set_write_vertical_incr
     ctrl dma set_read_vertical_incr
     ctrl nop
 
-    # Set DMA read and write horizontal decrements to 1281, which is the
-    # memory length needed to backtrack four rows and one column.
+    # Set DMA read and write horizontal decrements to 
+    # 1281, which is the memory length needed to backtrack
+    # four rows and one column.
     ctrl addi R4 ZERO 160
     ctrl sll R4 R4
     ctrl sll R4 R4
@@ -42,11 +45,11 @@
     ctrl dma set_read_horizontal_incr
     ctrl nop
 
-    # Set R7 to 0. We will use R7 to keep track of the memory address at
-    # the beginning of the current row.
+    # Set R7 to 0. We will use R7 to keep track of the memory
+    # address at the beginning of the current row.
     ctrl addi R7 ZERO 0
-    # Set R8 to 80. R8 will keep track of how many rows we have left to
-    # process.
+    # Set R8 to 80. R8 will keep track of how many rows we
+    # have left to process.
     ctrl addi R8 ZERO 80
 
     ################################################
@@ -54,8 +57,8 @@
     ################################################
 dma_loop:
     
-    # Set R6 to 160. R6 will contain the number of columns yet to
-    # process in the current row.
+    # Set R6 to 160. R6 will contain the number of columns yet
+    # to process in the current row.
     ctrl addi R6 ZERO 160
     ctrl addi DMA R7 0
 
@@ -67,13 +70,14 @@ dma_row_loop:
     # Set the column counter as the DMA read base address.
     ctrl dma set_read_base_addr
 
-    # Increment the read base address by (320*240 - 2) and use this as
-    # the write base address.
+    # Increment the read base address by (320*240 - 2) and use
+    # this as the write base address.
     ctrl subi DMA DMA 2
     ctrl add DMA DMA R1
     ctrl dma set_write_base_addr
 
-    # Revert the counter in the DMA register and increment it by 2.
+    # Revert the counter in the DMA register and increment
+    # it by 2.
     ctrl sub DMA DMA R1
     ctrl addi DMA DMA 4
     ctrl nop
@@ -87,7 +91,8 @@ dma_row_loop:
     # Send R1 contents to all four neigbours.
     node send R1 R1 R1 R1
 
-    # Receive neighbour data into R2 (N), R3 (S), R4 (E), R5 (W).
+    # Receive neighbour data into
+    # R2 (N), R3 (S), R4 (E), R5 (W).
     node store R2 R3 R4 R5
 
     # Divide all the received neighbour values by 8.
@@ -107,7 +112,8 @@ dma_row_loop:
     node srl R5 R5
     node srl R5 R5
 
-    # Set R1 to 127. This is the value representing no change/no edge.
+    # Set R1 to 127. This is the value representing
+    # no change/no edge.
     node addi R1 ZERO 127
 
     # Subtract north_value / 8
@@ -121,11 +127,11 @@ dma_row_loop:
 
     # Set R10 to 254.
     node addi R10 ZERO 254
-    # Perform the next instruction only in the SIMD nodes where R1 is
-    # less than 127.
+    # Perform the next instruction only in the SIMD nodes
+    # where R1 is less than 127.
     node slti STATE R1 127
-    # Subtract R1 from R10 ( = 254). In essence, this takes the absolute
-    # value of "about" 127 as the zero line.
+    # Subtract R1 from R10 ( = 254). In essence, this takes
+    # the absolute value of "about" 127 as the zero line.
     node mask sub R1 R10 R1
 
     # Subtract 127 to shift the values down to the zero line.
@@ -133,12 +139,14 @@ dma_row_loop:
 
     # Set R10 to 31.
     node addi R10 ZERO 31
-    # Perform the next instruction only in the SIMD nodes where R1 >= 31.
+    # Perform the next instruction only in the SIMD nodes
+    # where R1 >= 31.
     node slt STATE R10 R1
     # Set R1 to 31. This has the effect of R1 = MIN(R1, 31).
     node mask addi R1 ZERO 31
 
-    # Multiply R1 by 8, to scale the values up towards maximum intensity.
+    # Multiply R1 by 8, to scale the values up towards
+    # maximum intensity.
     node sll R1 R1
     node sll R1 R1
     node sll R1 R1
@@ -167,8 +175,9 @@ dma_row_loop:
     ctrl slt ZERO ZERO R6
     ctrl nop
 
-    # Column counter == 0, so prepare for the next row. Increment R7,
-    # the row start address, by three rows (3 * 320).
+    # Column counter == 0, so prepare for the next row. 
+    # Increment R7, the row start address, by three rows
+    # (3 * 320).
     ctrl addi R7 R7 160
     ctrl addi R7 R7 160
     ctrl addi R7 R7 160
@@ -184,10 +193,11 @@ dma_row_loop:
     ctrl slt ZERO ZERO R8
     ctrl nop
 
-    # We're done processing the image, so copy the result into the VGA
-    # buffer.
+    # We're done processing the image, so copy the result
+    # into the VGA buffer.
 
-    # Set R3 to R1 = 320 * 240. R3 is the source pixel address counter.
+    # Set R3 to R1 = 320 * 240. R3 is the source pixel
+    # address counter.
     ctrl addi R3 R1 0
     # Set VADDR (VGA write address) to 0.
     ctrl addi VADDR ZERO 0
