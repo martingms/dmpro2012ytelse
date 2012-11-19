@@ -1,4 +1,17 @@
 \subsection{Soldering}
+\input{fig/pcb/pcbwithoutcomp}
+
+When the \ac{PCB} arrived from production, the soldering proved
+to be a bit more difficult than originally anticipated.
+First, we tested whether
+there were any short circuits in the board itself. We used the multimeter to test that
+there was no current passing from one layer to another. Then, we started to solder the power supply, one power plane at time, testing the board for short
+circuit after each iteration. The table \ref{fig:pcb} shows the observed voltage from each plane.
+
+\input{fig/pcb/voltageresult.tex}
+
+\input{fig/pcb/pcbwithcomp}
+
 After about a days work we managed to completely destroy a pin on the AVR,
 therefore we had to start soldering a new board. On this new board we
 started soldering the AVR and \ac{FPGA}, as they were the hardest components to
