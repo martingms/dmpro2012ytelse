@@ -40,7 +40,7 @@ the current state of the \ac{SIMD} node and instruction opcode. For a list all
 The communication component controls outbound data from the \ac{SIMD} node to
 adjacent \ac{SIMD} nodes in the grid array. It can either send data from 4
 registers out on north-, south-, east- and westbound links, forward incoming
-links in an clockwise spiral as in Figure \ref{fig:fpga-simd-datacom}, or keep
+links in a clockwise spiral as in Figure \ref{fig:fpga-simd-datacom}, or keep
 the previously outgoing data. The latter is critical to ensure correctness when
 branching. \ac{SIMD} nodes may store incoming data, depending on their
 state. For instance, one group of \ac{SIMD} nodes may store incoming data in one
@@ -71,7 +71,7 @@ instructions: addition ({\sc add}), subtraction ({\sc sub}), set less than ({\sc
   slt}), {\sc and}, {\sc or}, equality check ({\sc eq}), shift logical left
 ({\sc sll}) and shift logical right ({\sc slr}). The main reason for only
 implementing the most basic arithmetic instruction was to save space in the
-instruction set. All \ac{SIMD} node instructions carries the 3-bit \ac{ALU}
+instruction set. All \ac{SIMD} node instructions carry the 3-bit \ac{ALU}
 function at the end, which reduces the physical size of the node.
 
 \TODO{Add some supporting references!!!}
