@@ -123,11 +123,11 @@ executed. Nodes are setting the {\tt state} to 1 in order to indicate that they
 are executing within that part of the branch. An example of single branching is
 shown in Listing \ref{lst:single-level-branching}.
 
-{\sc \color{green} LENA-assembly here (fixed)}
+\input{lst/fpga/single-level-branching}
 
 Since the state register is 8 bits, it is possible to have up to 8 nested
 branches by shifting the current state left and adding the new state to the
 end. Listing \ref{lst:multilevel-branching} contains code which performs such a
 multilevel branch.
 
-{\sc \color{green} LENA-assembly here (fixed)}
+\input{lst/fpga/multilevel-branching}
