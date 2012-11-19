@@ -73,11 +73,9 @@ computation and communication.
 
 The \ac{DMA} module performs loading of new \ac{SIMD} data planes and storing of
 processed \ac{SIMD} data planes \emph{in parallel} with the normal execution of
-program instructions. The nodes of the \ac{SIMD} array have a separate register
-| the S register\TODO{Second time S register is introduced.} | that is reserved
-for the \ac{DMA} module. The S registers are connected in a left-to-right
-direction throughout the array. The \ac{DMA} module can send the contents of the
-S registers one step to the right by setting a \emph{step S} signal.
+program instructions. The S registers in the \ac{SIMD} nodes are reserved for
+the \ac{DMA} module, and the module can send the contents of the S registers one
+step to the right by setting a \emph{step S} signal.
 
 With these accommodations of the \ac{SIMD} array, the \ac{DMA} module can load
 new data values to the S registers at the left edge of the \ac{SIMD} array, send

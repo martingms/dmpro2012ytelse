@@ -17,12 +17,6 @@ section we will refer to this image when explaining the different components.
 
 \subsection{Components}
 
-{\em \color{red} This paragraph is kind of VHDL implementation specific. Should
-  we keep it?
-
-  JN: Good question. I think so, but that's my gut feeling. However, it needs to
-  be split up. It is currently one sentence.}
-
 We wanted to keep the amount of intermediate signals to a minimum, as well as
 give better reusability across other parts of the processor. Therefore the SIMD
 nodes have been nicely divided into separate, stand-alone components which make
@@ -87,9 +81,7 @@ through a series of additions, subtractions and shifts. \TODO{Jahre skriver: "2
 The source data register (S REG), is a special purpose register within the
 \ac{SIMD} node which holds the next source data for the \ac{SIMD} node. It is
 partly controlled by the \ac{SIMD} node instruction set and partly by a special
-{\tt step} signal sent from the \ac{DMA}. \TODO{Og her er det tredje gangen vi
-  introduserer dette S registeret vårt. Vi må plassere det et sted, og kun nevne
-  det andre steder.}
+{\tt step} signal sent from the \ac{DMA}.
 
 An important attribute of the S REG is its capability to receive data from the
 left node and passing it along to node on the right when instructed by the {\tt
