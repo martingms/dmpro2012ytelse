@@ -13,24 +13,11 @@ possible to send data from the system and out to a computer, yet as we had no
 need for this option, our final card does not have the serial system soldered on.
 
 \subsection{Routing}
-\TODO{This needs lots of work. chribru is on it} Routing was the first problem we confronted during the designing the \ac{PCB}
-board, we had to manually route the design, because we got some warnings due to
-the clearance of the board. We used the auto-routing function provided by
-Altium, yet as it did not provide satisfying results, we tried to change some
-parameters to make them better, without success. Finally, we realized that we
-had to route a few wires manually. This was mostly motivated by our desire to
-not have vias as close to the pins as Altium placed them. Also, as to cut down
-the budget, we removed some unnecessary vias by wiring multiple grounds and
-powers together, where the design allowed us to. In this way, we got quite a few
-less vias.
-
 We spent the entire final week before production working on the routing. In comparison, the energy group used only 2 days. There are quite a few possible reasons why we ended up using so much more time than them for this:
 
-One of the reasons were simply that we were the first group to start routing. We thus had no one to warn us about mistakes. An example of such a mistake was that we did not set the correct Design Rules before auto-routing, until a few days into the week. This naturally did not give us the routing that we wanted, and gave us a few headaches.
+One of the reasons were simply that we were the first group to start routing. We thus had no one to warn us about possible mistakes. An example of such a mistake was that we did not set the correct Design Rules before auto-routing, until a few days into the week. This naturally did not give us the routing that we wanted, and gave us a few headaches.
 
-Related to this is the fact that we did not experiment enough with different routing strategies.
-
-Another reason relates to the difference between our designs. Where the other group had to route only 1 memory chip, we had 5. This naturally made the routing much more complex.
+Other reasons might be the fact that we did not experiment enough with different routing strategies, and the fact the other group had to route only 1 memory chip, where we had 5. This naturally made the routing much more complex.
 
 \subsection{Soldering}
 Soldering was the biggest problem that we faced, as none of the members of the
