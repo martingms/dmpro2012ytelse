@@ -66,28 +66,25 @@ level arithmetic, such as multiply and divide by constants, can be implemented
 through a series of additions, subtractions and shifts.
 
 \CHECK{Proof-read this section!}
-\CHECK{Add reffernces?}
+\CHECK{Add some reffernces?}
 \CHECK{Talk about general programability?}
 
 \subsubsection{Source Data Register}
-The source data register, or just \ac{S REG} for short, is a special purpose
-register within the \ac{SIMD} node. It is a communication unit, separate form
-the node itself, and is used to push new and processed image data through the
-array while the \ac{SIMD} node is otherwise busy  which holds the next source data for the \ac{SIMD} node. It is
-partly controlled by the \ac{SIMD} node instruction set and partly by a special
-{\tt step} signal sent from the \ac{DMA}.
+The source data register, or just \ac{S-REG} for short, is a special purpose
+register within the \ac{SIMD} node. It is a communication unit, separated form
+the rest of the node so it can transfer new and processed image data through the
+array while the \ac{SIMD} node is otherwise busy executing instructions.
 
-An important attribute of the S REG is its capability to receive data from the
-left node and passing it along to node on the right when instructed by the {\tt
-  step} signal. This allows for a simultaneous data transfer while the node is
-otherwise busy processing.
+\input{fig/fpga/fpga-simd-s-reg} 
+
+The \ac{S-REG} is partly controlled by the \ac{SIMD} node instruction set where it
+can swap data in and out from the \ac{S-REG} and partly by a special {\tt step} signal
+sent from the \ac{DMA}.
 
 \subsubsection{State Register}
-In order to handle branches, the \ac{SIMD} node must have some internal
-state. To add state, we introduce a new register called the State Register. The
-state register is, as all the other registers, 8-bit. The least significant bit
-is the current state which is sent out from the node and to the instruction
-decoder unit within the \ac{SIMD} node.
+In order to handle branches, thrugh masked instructions, each \ac{SIMD} must have an
+internal state register. Even though the register is 8-bit wide only the least 
+significant bit is the current state for the node.
 
 The state register can be written and read as any other register in the register
 bank and the state can hence be shifted left or right in order to achieve nested
