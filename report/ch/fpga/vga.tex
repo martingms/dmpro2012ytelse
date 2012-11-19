@@ -2,10 +2,9 @@
 
 We learned early on that last year's group had problems with their off-the-shelf
 \ac{VGA} controller being a major bottleneck, and were only able to squeeze out
-less than one frame per second. Since one of our goals (FR1, Table
-\ref{fig:func-req}) with this project was to hit a minimum frame rate of ten
-frames per second, using a similar approach would most likely leave us with a
-machine unable to fulfill FR1.
+less than one frame per second. Using a similar approach would most likely leave
+us with a machine unable to hit one our main goals (FR1, Table \ref{fig:func-req})
+of a minimum of ten frames per second.
 
 After having scoured the Internet for higher performing \ac{VGA} controllers in our
 price range without any luck, and after consulting with Jahre, we decided to
@@ -17,7 +16,7 @@ implement our own \ac{VGA} controller on the \ac{FPGA}.
 We recognized the importance of allowing the control core to dump pixels to the
 \ac{VGA} controller at its own pace without having to meet certain timing criteria,
 so a physical memory and hence a memory controller was needed. Since the \ac{FPGA}
-is running on 50MHz \TODO {This is wrong, system runs on 25MHz} and the pixel clock should be running on approximately
+has a 50MHz clock available and the pixel clock should be running on approximately
 25MHz, a fairly simple solution for dividing the memory between the control
 core and the actual signal generator was found: The signal generator must be
 able to read from memory at most every other cycle, so the remaining cycles are
