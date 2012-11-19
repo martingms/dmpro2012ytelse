@@ -1,5 +1,23 @@
 \section{Future Work}
+The limited number of cores we were able to fit on the FPGA is a major limitation
+of our system. Future work could be to work on reducing the complexity of the
+SIMD nodes to fit more onto the FPGA, and another option may be to choose a larger
+FPGA.
 
+Once the core design has been improved to fit more cores, or a much larger FPGA is
+used, we might consider adding some instructions we chose to strip out. Multiplication
+and division are two very useful instruction we did not include that, if included, would simplify
+general coding on the LENA architecture.
+
+Another major limitation was the reading speed from the SD card.
+The chosen microcontroller, the AT32UC3A0512, has limited possibilities of input
+from mass storage devices. A possibly faster solution is Ethernet input, but this
+would require another computer to feed information to the system so the group
+as not looked into this possibilitiy.
+
+Another possibility for improving input speed could be to switch to an AT32UC3A3xxx
+microcontroller, as these have support for High Speed USB (USB 2.0), which should be
+able to read much faster than our SD card reader.
 \begin{itemize}
 \item If we removed the special ``Get all 4 neighbor values at
   once''-instructions and other special parts of the system, would we be able to
