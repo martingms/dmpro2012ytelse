@@ -1,7 +1,7 @@
 \section{Issues}
-
-Working with the AVR in our project was hardly problem free. This section is intended to shed some light on the issues we faced and how we were able to fix them or get around them. It mainly goes to document the non obvious workarounds we had to do in order to complete this project.
-\TODO{litt dramatisk, mtp. at ingen av problemene var kritiske?}
+While we did not have any serious problems with the SCU, we did
+encounter a few. This section is intended to shed some light on the
+issued we faced and how we were able to either fix or get around them. 
 
 \subsection{SPI}
 \label{sec:avr-spi-issues}
@@ -35,3 +35,17 @@ as the Str2img was completed, debugging could be done by writing text to screen.
 As debugging was the main purpose of the serial communication, we did not prioritize
 fixing the serial. In the end, we only made it work to convince ourselves 
 that our hypothesis was correct.
+
+\subsection{Dead pin between SCU and LENA}
+One of the unidirectional pins between SCU and LENA turned out to dead.
+This was simple enough to work around by replacing it with one of the
+bidirectional pins.
+
+\subsection{Bug in RTC Driver}
+When initializing the Real Time Clock (RTC) driver, we encountered a
+known
+bug\footnote{\href{http://asf.atmel.com/bugzilla/show_bug.cgi?id=10}{Atmel
+Bug Report}}. This meant that we could not use the internal 32kHz
+crystal oscillator for measuring time, but had to use the 115kHz RC
+oscillator instead. This meant slightly higher inaccuracies, but for our
+purposes, it was not a a serious issue.
