@@ -1,5 +1,6 @@
 *.toc
 report.pdf
+report-twoside.pdf
 *.bbl
 *.blg
 *.lof

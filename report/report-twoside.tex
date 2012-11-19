@@ -1,0 +1,45 @@
+\documentclass[twoside,openright,titlepage,numbers=noenddot,headinclude,
+               footinclude=true,cleardoublepage=empty,
+               BCOR=5mm,paper=b5,fontsize=11pt]{scrreprt}
+
+\input{config}
+\areaset[5mm]{125.2mm}{199.2mm}
+
+\begin{document}
+\frenchspacing
+\raggedbottom
+\pagestyle{empty}
+
+\include{fb/front} \cleardoublepage
+\pagestyle{plain}
+\pagenumbering{alph}
+\include{fb/abstract} \cleardoublepage
+\include{fb/acknowledgements} \cleardoublepage
+
+\input{fb/contents}
+
+\pagenumbering{arabic}
+
+\input{ch/intro}
+%\input{ch/back} % Only if enough time.
+
+\input{ch/sys-over}
+\input{ch/fpga}
+\input{ch/avr}
+\input{ch/pcb}
+
+\input{ch/sys-test}
+\input{ch/res}
+\input{ch/disc}
+\input{ch/conc}
+
+\appendix
+\appendixpage
+\addappheadtotoc
+
+\input{apx/lena}
+\input{apx/pcb}
+
+\include{fb/bibliography}
+
+\end{document}

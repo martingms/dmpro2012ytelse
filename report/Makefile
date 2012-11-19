@@ -2,10 +2,11 @@ LATEX = pdflatex
 LATEXFLAGS = -shell-escape
 BIBTEX = bibtex
 REPORT = report
+TWOSIDE = report-twoside
 TEMPS = toc bbl blg log out lof lot lol aux pyg
 SUBDIRS = fb
 
-.PHONY: clean remake purge
+.PHONY: clean remake purge twoside
 
 all: $(REPORT).pdf
 
@@ -15,12 +16,15 @@ all: $(REPORT).pdf
 	$(LATEX) $(LATEXFLAGS) $*.tex
 	$(LATEX) $(LATEXFLAGS) $*.tex
 
+twoside: report-twoside.pdf
+
 clean:
-	for s in $(TEMPS); do rm -f $(REPORT).$$s; done
+	for s in $(TEMPS); do rm -f $(REPORT).$$s $(TWOSIDE).$$s; done
 	for dir in $(SUBDIRS); do $(MAKE) -C $$dir clean; done
 
 purge: clean
 	-rm -f $(REPORT).pdf
+	-rm -f $(TWOSIDE).pdf
 
 remake:
 	-rm -f $(REPORT).pdf
