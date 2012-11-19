@@ -42,7 +42,7 @@ Forresten, da vart det så kort at jeg bare tødde det in i avsnittet over. Må 
 \end{comment}
 
 \subsection{VGA}
-Our initial plans were to create our own \ac{VGA} controller in the \ac{FPGA}, but since having video output was mission-critical
+Our initial plans were to create our own \ac{VGA} controller in the \ac{FPGA}, but since having video output was mission critical
 for our project, we really wanted to have a fallback solution in case our own
 \ac{VGA} controller solution ended up not working.
 To allow for this fallback, we added the necessary connectors for the external \ac{VGA} module that Festina Lente used last year,
@@ -50,8 +50,6 @@ even though that module was known to be too slow to be able to display images at
 some way of outputting anything at all if our own solution failed.
 
 \subsection {Communication}
-The intention was to use the \ac{SD} card reader as our main source of data/instructions, however, as our system would
+The intention was to use the \ac{SD} card reader as our main source of data and instructions. However, as our system would
 not fulfill our functional requirements unless we were able to get data into it at the speeds specified in requirement
-FR1, we opted to also have a fallback
-solution here, thus we also added \ac{USB} and RS232 as fallback solutions for getting data into/communicating with the
-computer.
+FR1, we opted to also have a fallback solution here. Thus we also added \ac{USB} and RS232 as fallback solutions for getting data into, or communicating with, the computer.
