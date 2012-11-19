@@ -2,30 +2,8 @@
 \input{fig/pcb/routing}
 Our plan was to start with a big PCB document to be able to easily place all the components. We placed the components and started routing. A lot of the routing was done by the auto route feature of Altium. At first, we did not set any Design Rules. We found that the default rules did not comply with capabilities listed on Elprints' webpage.\footnote {\url{http://www.elprint.no/products/pcb/capabilities}}. After fixing this, we shrank the board size. The main reason was to reduce production cost, but Tufte also told us that having the board too big could cause short circuits between the power planes.
 
-We spent the entire final week before production working on the routing. In comparison, the energy group used only 2 days. There are quite a few possible reasons why we ended up using so much more time than them for this:
+We then remapped some pins in the schematic to increase physical proximity, and to untangle the amount of crossing wires. Although care was taken during this process, we accidentally managed to disconnect one pin in the schematic while reordering. We did notice this before production, and were able to correct the mistake by manually routing the connection.
 
-One of the reasons were simply that we were the first group to start routing. We thus got to fall into some gotcha-traps, with no one to warn us about them.
+In the end, we did 2 days of manual routing to reduce the number of vias. Figure \ref{fig:removingvias-pcb} shows an example where we coupled together several pins to the same via going to the ground layer. Even though we wanted to reduce the number of vias, we went with the default routing in Altium. The amount of manual work could perhaps have been reduced by selecting the "Via Mixer" strategy instead. \TODO{Discussion, not process?}
 
-An example of such a trap was that we did not set the correct Design Rules before auto-routing, until a few days into the week. This naturally did not give us the routing that we wanted, and gave us a few headaches.
-
-Related to this is the fact that we did not experiment enough with different routing strategies. We wanted to reduce the number of vias, but went with the default routing in Altium. We then did quite an amount of manual routing to reduce the number of vias. Figure \ref{fig:removingvias-pcb} shows an example where we coupled together several pins to the same via going to the GND-layer. The amount of manual work could perhaps have been reduced by selecting the "Via Mixer" strategy instead.
-
-\input{fig/pcb/pcb_removing_vias} \TODO{Write about this figure}
-
-Another reason relates to the difference between our designs. Where the other group had to route only 1 memory chip, we had 5. This naturally made the routing much more complex.
-
-\TODO{Fill in about the types of errors/warnings we got.}
-\begin{itemize}
-\item Constraints violations set wrong.
-\item Power-plane net-labeled wrong.
-\item Clearance constraints violated by Altium.
-\item Short-circuiting vias.
-\item Overlapping vias.
-\item In general, the auto-routing started to produce violations.
-\item more\ldots
-\end{itemize}
-\TODO{Silk-over-silk in USB/Lenna, errors we could ignore.}
-\TODO{Scaling of board. (Should go elsewhere or not at all?)}
-
-In the end we remapped some pins to increase physical proximity, and to untangle the amount of crossing wires. Although care was taken during this process, we accidentally managed to disconnect one pin in the schematic while reordering. We did notice this before production, and were able to correct the mistake by manually routing the connection. Finally, we did some manual routing to reduce the amount of unnecessary vias. \TODO{Restructure process/discussion} 
-
+\input{fig/pcb/pcb_removing_vias}

@@ -12,17 +12,16 @@ stored to the data memory. The data is then read in parts from the data memory
 and sent through the \ac{SIMD} array for processing. The result from the
 \ac{SIMD} array is stored to the data memory again. \TODO {Say why the DMA 
 doesn't send data to both data and VGA ram, yet have to use control core 
-instead. (Supposedly because  the output image it's more stable this way?
+instead. (Supposedly because  the output image is more stable this way?
  )} At last, the data is copied
 from the data memory to the \ac{VGA} memory and shown on screen.
 
 The processing part of \ac{LENA} is the \ac{SIMD} array. It is organized in a
 matrix as specified by the assignment, and is designed to process images. Each
 node processes one word at a time and can communicate with its four direct
-neighbors. This makes the architecture \TODO{I replaced processor with
-  architecture, but should we say machine instead?} well suited for applying 3x3
-image filters, such as the Laplace filter. See Appendix \ref{apx:laplace} for an
-implementation.
+neighbors. This makes the architecture well suited for applying 3x3 image
+filters, such as the Laplace filter. See Appendix \ref{apx:laplace} for an
+implementation. \TODO{JN: Fix reference AFTER Minted-merge}
 
 To first load the data into the \ac{SIMD} array, it is sent to the first column
 of the nodes and copied to the right, passing through all the nodes until the

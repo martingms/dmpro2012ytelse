@@ -1,7 +1,7 @@
 \section {Design Choices}
 
 \subsection {Memory}
-The overall design for our machine calls for quite a bit of different, separate memories. One for data,
+The overall design for our machine specifies various different, separate memories. One for data,
 one for instructions and one for the VGA. The data, VGA and AVR memories use 8-bit chips to match
 their word size. And the instruction memory uses 2x16-bit chips with address-lines connected
 together and 8 ignored I/O-pins, to match its 24-bit word size.
@@ -45,10 +45,11 @@ Forresten, da vart det så kort at jeg bare tødde det in i avsnittet over. Må 
 Our initial plans were to create our own \ac{VGA} controller in the \ac{FPGA}, but since having video-output was mission-critical
 for our project, we really wanted to have a fallback-solution in case our own
 \ac{VGA} controller solution ended up not working.
-To solve this, we added in the necessary connectors for the external \ac{VGA} module that Festina Lente used last year.
+To allow for this fallback, we added the necessary connectors for the external \ac{VGA} module that Festina Lente used last year.
 
 \subsection {Communication}
 The intention was to use the \ac{SD} card reader as our main source of data/instructions, however, as our system would
-be completely useless unless we were able to get data into it at decent speeds, we opted to also have a fallback
+not fulfill our functional requirements \ref{fig:func-req} \TODO{Reference necessary?} unless we were able to get data into it at the speeds specified in requirement
+FR-1\TODO{Reference back to that table?}, we opted to also have a fallback
 solution here, thus we also added \ac{USB} and RS232 as fallback solutions for getting data/communicating with the
 computer.
