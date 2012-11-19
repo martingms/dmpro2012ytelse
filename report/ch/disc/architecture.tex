@@ -1,6 +1,6 @@
 \section{Instruction size}
 We ended up with a 24-bit instruction set for both \ac{SIMD} nodes and the
-control core. As we ended up with a 16-bit program counter, the maximal
+control core. As we had a 16-bit program counter, the maximal
 instruction count would be 64k and the memory chip size is chosen on that
 basis. While it may sound little, it is still more than enough. To see why, note
 that the control core can start the image processing algorithm from the
@@ -45,10 +45,10 @@ and written frequently, the \ac{VGA} needed its own memory, rather than sharing
 memory with the rest of the LENA architecture. As we were supposed to optimize
 for performance, we had to take possible bottlenecks into consideration. We
 therefore invested in an extra memory chip. For the VGA we chose an 8-bit word
-memory that was big enough to hold at least a full screen-frame, at 8 bits per
+memory that was big enough to hold at least a full frame, at 8 bits per
 pixel (since each pixel is an 8-bit greyscale pixel).
 
-Finally, to reduce the possibility of having too slow data-access from the SCU,
+Finally, to reduce the possibility of having too slow data access from the SCU,
 (it had only 64kB on-chip memory) an extra memory was added to work as a buffer
 for the SCU as well. This design choice was made {\em after} ordering, which
 meant that we had to choose from the chips we had already ordered to fit this
@@ -58,7 +58,7 @@ using one of the extra chips ordered as \ac{VGA} memory for this purpose.
 
 A result of this is that we now had 4 separate memories to allow overlap of
 memory accesses. Since the requirements for the data/instruction memories
-differed in both size and word-width we wound up with not only separate, but
+differed in both size and word-width, we wound up with not only separate, but
 also different chips for this purpose.
 
 \section{Redundancies}
