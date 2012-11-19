@@ -31,9 +31,9 @@ explained in greater detail below.
 		CPU). Increasing to clock rate from 12MHz to 78 MHz boosted the
 		speed from 157kB/s to 456 kB/s.
 	\item[Compiler optimizations] \hfill \\
-		Turning on compiler optimizations improved increase performance
+		Turning on compiler optimizations improved performance
 		by another 14\%. There was no noticeable difference in
-		performance from -O1, -O2 or -O3. However, compiler
+		performance between -O1, -O2 or -O3. However, compiler
 		optimizations had a more profound effect on the overall system
 		performance. We did not benchmark this extensively, but it was
 		probably caused by optimizations the compiler made to the \ac{LENA}
@@ -47,7 +47,7 @@ explained in greater detail below.
 		
 		By reading the blocks directly from the SD card, we could read
 		all 150 blocks of a picture in one function call. Limiting the
-		file system to the first half of the SD card and add metadata
+		file system to the first half of the SD card and adding metadata
 		files containing the block offsets into the second half of the
 		card was easy. This more than doubled our performance, from 515
 		kB/s to 1172 kB/s.
