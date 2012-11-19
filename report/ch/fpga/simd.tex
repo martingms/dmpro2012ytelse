@@ -3,21 +3,15 @@
 \ac{SIMD} nodes are the main processing cores of the image processor and are
 responsible for carrying out data processing instructions in parallel. They
 share the same instruction set and executes the same instruction, hence
-\acf{SIMD}. It operates on an 8-bit word size, as most of the architecture does.
+\acf{SIMD}.
 
-Each \ac{SIMD} node is fully equipped with a register bank, an \ac{ALU}, message
-passing with adjacent nodes and an instruction decoder for the \ac{SIMD} node
-instruction set, explained in detail in subsequent sections.
+Each \ac{SIMD} node is fully equipped with a 8-bit register bank, an \ac{ALU} and data exchange with adjacent nodes. Everything are operated through the SIMD node instruction set explained in detail in subsequent sections.
 
 The schematic of a single \ac{SIMD} node is shown in Figure
 \ref{fig:fpga-simd-arch}, and details the entire data path for the
 node. Different parts of the instruction and other inputs and outputs to and
 from the node are all labeled with \CHECK{Again, color print}red labels. In this
 section we will refer to this image when explaining the different components.
-
-\TODO{Fix signal labels in architecture image to differentiate between input,
-  output and instruction. Jahre nevner at det må tydeligjøres hva
-  som er busser og hva som er signaler}
 
 \input{fig/fpga/fpga-simd-arch}
 
@@ -46,7 +40,7 @@ the current state of the \ac{SIMD} node and instruction opcode. For a list all
 The communication component controls outbound data from the \ac{SIMD} node to
 adjacent \ac{SIMD} nodes in the grid array. It can either send data from 4
 registers out on north-, south-, east- and westbound links, forward incoming
-links in an clockwise spiral as in Figure \ref{fig:fpga-simd-datacom}, or keep
+links in a clockwise spiral as in Figure \ref{fig:fpga-simd-datacom}, or keep
 the previously outgoing data. The latter is critical to ensure correctness when
 branching. \ac{SIMD} nodes may store incoming data, depending on their
 state. For instance, one group of \ac{SIMD} nodes may store incoming data in one
@@ -77,7 +71,7 @@ instructions: addition ({\sc add}), subtraction ({\sc sub}), set less than ({\sc
   slt}), {\sc and}, {\sc or}, equality check ({\sc eq}), shift logical left
 ({\sc sll}) and shift logical right ({\sc slr}). The main reason for only
 implementing the most basic arithmetic instruction was to save space in the
-instruction set. All \ac{SIMD} node instructions carries the 3-bit \ac{ALU}
+instruction set. All \ac{SIMD} node instructions carry the 3-bit \ac{ALU}
 function at the end, which reduces the physical size of the node.
 
 \TODO{Add some supporting references!!!}
