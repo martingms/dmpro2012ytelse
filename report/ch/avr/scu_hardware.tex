@@ -34,7 +34,7 @@ As for the actual pinout of the AVR, see appendix \ref{app:schematics}.
 
 \item[AVR crystal] \hfill
 
-Previous projects have chosen to use multiple crystals on their AVR. Our AVR has support for up to 3 crystals, where 2 are high frequency crystals that can be used as external clocks for the AVR. The last crystal is a low frequency crystal that is needed if one intends to make use of power saving functions in the AVR or are in need of real time measurement on the AVR. \TODO{dette kan også gjøres med interne klokker på hhv. 115kHz og 32kHz. skrive om?}
+Previous projects have chosen to use multiple crystals on their AVR. Our AVR has support for up to 3 crystals, where 2 are high frequency crystals that can be used as external clocks for the AVR. The last crystal is a low frequency crystal that is needed if one intends to make use of power saving functions in the AVR or are in need of real time measurement on the AVR.
 
 As we were to optimize for performance we tried to use the most of the given resources. This included saving pins wherever we could, and as such we have gone with only one crystal. This crystal is connected to port 0 on the AVR and has a socket. We ordered a number of crystals in order to make sure that we could adapt to most any requirements that may or may not have been clear to us at the time of the design.
 
