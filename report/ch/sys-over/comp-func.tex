@@ -2,16 +2,16 @@
 
 This section describes the different components and their functionality. A list
 of ordered parts can be found in \ref{app:ordered-parts}.
-\TODO{Jahre vil ha figur(er)}
 
 \subsection{System Control Unit}
 
-The \acf{SCU} is used to control the \ac{LENA} architecture and as a user interface.
-The SCU sends data and instructions from the \ac{SD} card to \ac{LENA}, which stores
-it in it's data and instruction memory, respectively. The \ac{SCU} also starts and stops \ac{LENA}'s program.
+The \acf{SCU} is used to control the \ac{LENA} architecture and as a user
+interface.  The SCU sends data and instructions from the \ac{SD} card to
+\ac{LENA}, which stores it in it's data and instruction memory,
+respectively. The \ac{SCU} also starts and stops \ac{LENA}'s program.
 
-Selecting programs and data is done by the user interface on the \ac{SCU} using buttons as input
-and \ac{LENA}'s VGA as output. 
+Selecting programs and data is done by the user interface on the \ac{SCU} using
+buttons as input and \ac{LENA}'s VGA as output.
 
 \subsection{LENA}
 
@@ -32,33 +32,3 @@ usually depend heavily on their neighbor's data, we decided to have ``dummy
 nodes'' outside the real \ac{SIMD} nodes. Their only function is to transmit
 data to the edge nodes. As such, we can still utilize the edge nodes for
 computation when neighbor data is needed.
-
-\subsubsection{Memory}
-The memory is split over three different chips: The data memory, the
-instruction memory and the \ac{VGA} memory. All of the \ac{RAM} is asynchronous
-\ac{SRAM}, based on previous projects success with
-it\cite{berg2011festinalente} along with the speed. The main reason for this
-choice was mostly due to frequent reading and writing, but also because a
-larger \ac{SRAM} module was more costly than multiple smaller \ac{SRAM} modules
-per \ac{MB}. An additional benefit from this is that the complexity is lowered:
-Fewer potential collisions on \ac{RAM} reading and writing occurs since fewer
-parts read and write to the different \ac{RAM} chips.
-
-\subsubsection*{Instruction Memory}
-We ended up with a 24-bit instruction set for both \ac{SIMD} nodes and the
-control core. As we ended up with a 16-bit program counter, the maximal
-instruction count would be 64,000 and the memory chip size is chosen on that
-basis. While it may sound little, it is still more than enough. To see why,
-note that the control core can start the image processing algorithm from the
-beginning when the \ac{SIMD} nodes have finished processing the current data.
-Also, we usually define algorithms for a single frame, without any concern
-for the one coming after it. The program is simply restarted for every new frame,
-reducing the amount of code needed and the complexity of the programs.
-
-\TODO{Isn't both data- and vga memory discussed in length later in the report?}
-\subsubsection*{Data Memory}
-
-\subsubsection*{VGA Memory}
-
-\subsection{I/O}
-
