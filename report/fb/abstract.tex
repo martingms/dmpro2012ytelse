@@ -5,76 +5,25 @@
 \let\cleardoublepage\relax
 
 \chapter*{Abstract}
-% \TODO{This is a very rough draft written after 24 hours of sleeplessness. Be
-% ruthless in your editing/rewriting/deleting/whatever.} As heat generation and
-% power consumption has put up a ceiling for how large and fast processors can
-% be built, parallelism has risen to become the de facto standard for computing.
-% Everything from cellphones to desktop computers now carry multiple processing
-% cores to perform their functions. But parallelism is of course not a new
-% concept; for many decades exploiting the parallel nature of certain data to
-% effectivize computation has been a known tactic. Especially within the field
-% of image processing has parallelism proved itself a good fit.
-
-% Although MIMD systems have taken hold as the dominant class of parallel
-% systems for general computing, we wanted to explore alternatives which may
-% work better for certain applications. The result of this project is the
-% computer ``256 Shades of Gray``, an array based SIMD architecture optimized
-% for very parallelizable tasks such as image processing.
-
-% ``256 Shades of Gray''(henceforth refered to as ``TSOG``\TODO{Not AFAIK. We
-% use ``256 Shades of Gray'' consistently}) consists of a custom PCB design, a
-% microprocessor system control unit and a FPGA on which our SIMD architecture
-% is implemented. It accepts input through a SD card reader (with RS-232 and USB
-% as backup), and shows its output through a custom VGA controller.
-
-% We have been greatly inspired by the Goodyear MPP architecture, which clearly
-% shows in our design. Simplicity was strived for at all
-% times\TODO{Well... Simplicity hasn't been our focus, performance has.} to be
-% able to fit as many cores as possible within limited resources.
-
-% In the end the design has gone through fairly rigorous testing, and has met
-% both the functional and non-functional requirements we set out to meet. The
-% architecture has shown itself a good fit for multiple common image processing
-% tasks.
-\TODO{Jeg liker ikke førstesetningen: "put up a limit" høres ikke bra ut. det 
-begrenser heller ikke hvor fort prosessorer kan designes :)}
-As heat generation and power consumption put up a limit of how large and fast a
-single processor can be designed, parallelism is becoming more and more
-important within all performance demanding computing. Everything from cellphones
-to desktop computers now carry multiple processing cores to perform their
+As heat generation and power consumption starts to limit speed and effectiveness
+of single core architectures, parallelism is becoming more and more important
+within all performance demanding computing. Everything from cellphones to
+desktop computers now carry multiple processing cores to perform their
 functions. Parallelism is of course not a new concept; for many decades
 exploiting the parallel nature of certain data to effectivize computation has
-been a known tactic. Especially within the field of image processing parallelism
-has proved itself an extremely effective tool.
+been a known tactic. Especially within the field of image processing has
+parallelism proved itself an extremely effective tool.
 
-While MIMD systems are dominant within general computing, we want to explore
+While MIMD systems are dominant within general computing, we wanted to explore
 alternatives which may work better for certain applications. The result of this
 project is the computer ``256 Shades of Gray'', which is
-an array based SIMD architecture optimized for massively parallelizable tasks
+an array-based SIMD architecture optimized for massively parallelizable tasks
 such as image processing.
 
 256 Shades of Gray consists of a custom PCB design, a microprocessor operating
 as a System Control Unit and an FPGA which implements our SIMD architecture. It
-takes input through an SD card reader (with RS-232 and USB as
-backup\TODO{Nødvendig å kommentere hva som er backup?}), and shows output
-through a custom VGA controller.
-
-%We have been inspired by the Goodyear MPP architecture, which clearly shows in
-%our design. We designed for simplicity as much as possible\TODO{Har vi designet
-%mtp. simplicity? Vi har designed mtp. performance. Vi kunne lett unngått {\sc
-%Store \& Forward}-greiene i SIMD nodene og fått en mye mindre kompleks sak.}, in
-%order to be able to fit as many cores as possible within our limited
-%resources. As such, the SIMD nodes have been stripped of all complex
-%instruction, all floating point capabilities, integer multiplication and integer
-%division. The SIMD nodes are all controlled by a control core that handles all
-%memory accesses through a DMA unit.
-
-%The SD card and the custom VGA controller both worked flawlessly in the
-%end\TODO{``in the end'' skurrer litt}, and while the RS-232 port did not work at
-%all the VGA could replace it for debugging purposes. In the end our design has
-%gone through testing, and has met all functional and non-functional requirements
-%that were set. The architecture has shown itself to be effective and well suited
-%for common image processing tasks.
+takes input through an SD card reader (with RS-232 and USB as backup), and shows
+output through a custom VGA controller.
 
 We have been inspired by the Goodyear MPP architecture, which clearly shows in
 our design. Our main focus was performance, and because of that simplicity in
