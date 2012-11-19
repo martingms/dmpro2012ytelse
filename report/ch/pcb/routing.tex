@@ -1,6 +1,8 @@
 \subsection {Routing}
 \input{fig/pcb/routing}
-Initially we attempted auto routing. At first, we didn't set any Design Rules. With the default settings, auto routing took around 12 minutes. After setting the Design Rules \TODO{Captilization for Design Rules} we though were correct This took just around 12 minutes before constraints were set. And the better part of half an hour, after the constraints were set. This showed us quite a few issues that needed to be handled, and even more so when we finally got the constraints in.
+A lot of the routing was done by the auto route feature of Altium. At first, we did not set any Design Rules. We found that the default rules did not comply with Elprints capabilities\footnote {\url{http://www.elprint.no/products/pcb/capabilities}}. 
+
+and lssues that needed to be handled, and even more so when we finally got the constraints in.
 
 We spent the entire final week before production working on the routing. In comparison, the energy group used only 2 days. There are quite a few possible reasons why we ended up using so much more time than them for this:
 
@@ -12,7 +14,7 @@ Related to this is the fact that we did not experiment enough with different rou
 
 \input{fig/pcb/pcb_removing_vias} \TODO{Write about this figure}
 
-Another reason has to do with the difference between our designs. Where the other group had to route only 1 memory chip, we had 5. This naturally made the routing much more complex.
+Another reason relates to the difference between our designs. Where the other group had to route only 1 memory chip, we had 5. This naturally made the routing much more complex.
 
 \TODO{Fill in about the types of errors/warnings we got.}
 \begin{itemize}
