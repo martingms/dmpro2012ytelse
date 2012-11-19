@@ -1,5 +1,6 @@
     ctrl nop
 
+    # R1: Size of a screen buffer (320*240)
     ctrl addi R1 ZERO 150           # R1 = 320*240
     ctrl sll R1 R1
     ctrl sll R1 R1
@@ -11,14 +12,17 @@
     ctrl sll R1 R1
     ctrl sll R1 R1
 
+    # Set DMA read to active
     ctrl addi DMA ZERO 1
     ctrl dma set_read_active
     ctrl nop
 
+    # Set DMA write to active
     ctrl addi DMA ZERO 1
     ctrl dma set_write_active
     ctrl nop
 
+    # Set DMA read and write increments to 320
     ctrl addi DMA ZERO 160
     ctrl sll DMA DMA
     ctrl dma set_write_vertical_incr
@@ -34,33 +38,29 @@
     ctrl dma set_read_horizontal_incr
     ctrl nop
 
-    ctrl addi R7 ZERO 3             # R7: Row start address accumulator
-    ctrl addi R8 ZERO 79            # R8: Row counter
+    ctrl addi R7 ZERO 0             # R7: Row start address accumulator
+    ctrl addi R8 ZERO 80            # R8: Row counter
 
 dma_loop:
-    ctrl addi R6 ZERO 159           # R6: Column counter
-    ctrl addi R7 R7 160
-    ctrl addi R7 R7 160
-    ctrl addi R7 R7 160
-    ctrl addi R7 R7 160
-    ctrl addi R7 R7 160
-    ctrl addi R7 R7 160
+    ctrl addi R6 ZERO 160           # R6: Column counter
     ctrl addi DMA R7 0
 
 dma_row_loop:
     ctrl dma set_read_base_addr     # write base addr = 19328
+    ctrl subi DMA DMA 2
     ctrl add DMA DMA R1
     ctrl dma set_write_base_addr    # write base addr = 19328
     ctrl sub DMA DMA R1
-    ctrl addi DMA DMA 2
+    ctrl addi DMA DMA 4
     ctrl nop
 
-    #node swap R3 R3
-    #ctrl nop
-    #node swap R3 R3
-    #ctrl nop
+    node swap R3 R3
+    node swap R3 R3
 
     ctrl dma start
+
+    ctrl nop
+    ctrl nop
 
     ctrl nop
     ctrl nop
@@ -114,6 +114,13 @@ dma_row_loop:
     ctrl beq dma_row_loop
     ctrl slt ZERO ZERO R6
     ctrl nop
+
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
 
     ctrl subi R8 R8 1
     ctrl beq dma_loop
