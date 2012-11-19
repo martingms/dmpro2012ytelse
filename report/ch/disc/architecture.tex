@@ -13,7 +13,16 @@ reducing the amount of code needed and the complexity of the programs.
 \input{fig/disc/memarch} 
 
 In the early phases of the project, multiple solutions as to how the data memory
-should work were suggested. We decided to let the \ac{SCU} send all the data to
+should work were suggested. 
+
+The top left example shows a shared memory architecture with separate data and
+instruction memories. The top right example shows one single memory connected to
+both the SCU and LENA by a common bus. In the bottom left example, the memory is
+only connected to the LENA, and the SCU communicates with it through LENA. 
+The bottom right example shows a switched memory architecture, with two memories
+that can both be connected to the SCU and to the LENA, but not at the same time.
+
+We decided to let the \ac{SCU} send all the data to
 the \ac{LENA}, and then let it store them to its own local memory. The reason we
 chose this over shared memory was all the potential issues one may get with the
 shared memory solution. A shared memory would be prone to errors from
