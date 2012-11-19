@@ -1,8 +1,6 @@
 \subsection {Routing}
 \input{fig/pcb/routing}
-A lot of the routing was done by the auto route feature of Altium. At first, we did not set any Design Rules. We found that the default rules did not comply with Elprints capabilities\footnote {\url{http://www.elprint.no/products/pcb/capabilities}}. 
-
-and lssues that needed to be handled, and even more so when we finally got the constraints in.
+Our plan was to start with a big PCB document to be able to easily place all the components. We placed the components and started routing. A lot of the routing was done by the auto route feature of Altium. At first, we did not set any Design Rules. We found that the default rules did not comply with capabilities listed on Elprints' webpage.\footnote {\url{http://www.elprint.no/products/pcb/capabilities}}. After fixing this, we shrank the board size. The main reason was to reduce production cost, but Tufte also told us that having the board too big could cause short circuits between the power planes.
 
 We spent the entire final week before production working on the routing. In comparison, the energy group used only 2 days. There are quite a few possible reasons why we ended up using so much more time than them for this:
 
@@ -28,8 +26,6 @@ Another reason relates to the difference between our designs. Where the other gr
 \end{itemize}
 \TODO{Silk-over-silk in USB/Lenna, errors we could ignore.}
 \TODO{Scaling of board. (Should go elsewhere or not at all?)}
-
-Initially we started with a board size more than big enough to fit the components comfortably. After laying out the components on the board, we noticed that the board had quite a bit of room left over. As this would be a waste of resources, we scaled the board down in size. We did this by moving the keep-out-borders inwards until the wasted space was removed, and then used the ``scale-to-fit-components''-tool in Altium, with the Keepout-border selected.
 
 In the end we remapped some pins to increase physical proximity, and to untangle the amount of crossing wires. Although care was taken during this process, we accidentally managed to disconnect one pin in the schematic while reordering. We did notice this before production, and were able to correct the mistake by manually routing the connection. Finally, we did some manual routing to reduce the amount of unnecessary vias. \TODO{Restructure process/discussion} 
 
