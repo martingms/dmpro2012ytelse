@@ -45,7 +45,9 @@ Forresten, da vart det så kort at jeg bare tødde det in i avsnittet over. Må 
 Our initial plans were to create our own \ac{VGA} controller in the \ac{FPGA}, but since having video-output was mission-critical
 for our project, we really wanted to have a fallback-solution in case our own
 \ac{VGA} controller solution ended up not working.
-To allow for this fallback, we added the necessary connectors for the external \ac{VGA} module that Festina Lente used last year.
+To allow for this fallback, we added the necessary connectors for the external \ac{VGA} module that Festina Lente used last year,
+even though that module was known to be too slow to be able to display images at our required speeds, it would atleast give us
+some way of outputting anything at all if our own solution failed.
 
 \subsection {Communication}
 The intention was to use the \ac{SD} card reader as our main source of data/instructions, however, as our system would
