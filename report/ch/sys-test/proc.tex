@@ -1,6 +1,6 @@
 \section{Test Procedures}
 
-Some of these tests are strictly dependent on other\TODO{Other what?}. In theory, all the
+Some of these tests are strictly dependent on other tests. In theory, all the
 different tests could be done in any order to test the correctness of the
 system. However, some of the functional requirements makes it easy to test other
 functional requirements. Therefore, we have decided to let some of these tests
@@ -12,20 +12,22 @@ correctly.
 {\sc Test 1 - Functional Requirement 5}
 
 {\em \FRV}
-Write an AVR program to:
+
+Write a \ac{SCU} program to:
 \begin{enumerate}
-\item Activate LEDs
-\item Wait a while
-\item Deactivate leds
+\item Activate \acp{LED}.
+\item Wait a specified amount of time.
+\item Deactivate leds.
 \end{enumerate}
 
 {\sc Test 2 - Functional Requirement 4}
 
 {\em \FRIV}
-Write an AVR program to:
+
+Write a \ac{SCU} program to:
 \begin{enumerate}
-\item Set up button interrupts
-\item Flips led X when button X is pressed
+\item Set up button interrupts.
+\item Flip led X when button X is pressed.
 \end{enumerate}
 
 {\sc Test 3 - Functional Requirement 6}
@@ -42,12 +44,14 @@ Write an AVR program to:
 {\sc Test 4 - Functional Requirement 3}
 
 {\em \FRIII}
-Write an AVR program to:
+
+Write a \ac{SCU} program to:
 \begin{enumerate}
-\item Load the LENA with a program that just copies an image out to the VGA
-\item Read an image from the SD card
-\item Load the image onto the LENA
-\item Start the LENA
+\item Load the \ac{LENA} with a program that just copies an image out to the
+  \ac{VGA}.
+\item Read an image from the \ac{SD} card.
+\item Load the image onto the \ac{LENA}.
+\item Start the \ac{LENA}.
 \end{enumerate}
 
 {\sc Test 5 - Functional Requirement 7}
@@ -64,14 +68,16 @@ Write an AVR program to:
 {\sc Test 6 - Functional Requirement 1}
 
 {\em \FRI}
-Write and AVR program to:
+
+Write an \ac{SCU} program to:
 \begin{enumerate}
-\item Load the LENA with a program that copies images out to the VGA as they are loaded
-\item Read an image from the SD card
-\item Load the image onto the LENA
-\item Start the LENA
-\item repeat 2-4 until out of pictures
-\item measure speed.
+\item Load the \ac{LENA} with a program that copies images out to the \ac{VGA}
+  as they are loaded.
+\item Read an image from the \ac{SD} card.
+\item Load the image onto the \ac{LENA}.
+\item Start the \ac{LENA}.
+\item Repeat stage 2 to 4 until we are out of pictures.
+\item Measure speed.
 \end{enumerate}
 
 {\sc Test 7 - Functional Requirement 2}
