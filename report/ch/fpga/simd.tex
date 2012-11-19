@@ -3,8 +3,7 @@
 \ac{SIMD} nodes are the main processing cores of the image processor and are
 responsible for carrying out data processing instructions in parallel. They
 share the same instruction set and executes the same instruction, hence
-\acf{SIMD}. It operates on an 8-bit word size, as most of the
-architecture\TODO{architecture/machine question again} does.
+\acf{SIMD}. It operates on an 8-bit word size, as most of the architecture does.
 
 Each \ac{SIMD} node is fully equipped with a register bank, an \ac{ALU}, message
 passing with adjacent nodes and an instruction decoder for the \ac{SIMD} node
@@ -13,7 +12,7 @@ instruction set, explained in detail in subsequent sections.
 The schematic of a single \ac{SIMD} node is shown in Figure
 \ref{fig:fpga-simd-arch}, and details the entire data path for the
 node. Different parts of the instruction and other inputs and outputs to and
-from the node are all labeled with \TODO{Again, colour print}red labels. In this
+from the node are all labeled with \CHECK{Again, colour print}red labels. In this
 section we will refer to this image when explaining the different components.
 
 \TODO{Fix signal labels in architecture image to differentiate between input,
@@ -73,13 +72,13 @@ registers and writing 1 register within one clock cycle.
 
 \subsubsection{Arithmetic Logic Unit}
 
-\TODO{List the 8 ALU functions somewhere with their binary representations.}
-
 The \ac{ALU} implemented is a very simple {\tt 8}-bit \ac{ALU} supporting only 8
-instructions. The main reason for only implementing the most basic arithmetic
-instruction was to save space in the instruction set. All \ac{SIMD} node
-instructions carries the 3-bit \ac{ALU} function at the end, which reduces the
-physical size of the node.
+instructions: addition ({\sc add}), subtraction ({\sc sub}), set less than ({\sc
+  slt}), {\sc and}, {\sc or}, equality check ({\sc eq}), shift logical left
+({\sc sll}) and shift logical right ({\sc slr}). The main reason for only
+implementing the most basic arithmetic instruction was to save space in the
+instruction set. All \ac{SIMD} node instructions carries the 3-bit \ac{ALU}
+function at the end, which reduces the physical size of the node.
 
 \TODO{Add some supporting references!!!}
 
