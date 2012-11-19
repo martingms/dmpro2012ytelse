@@ -140,6 +140,7 @@ void bus_send_program(U8 *program, size_t bytes) {
 	}
 }
 
+
 //void bus_send_instr_word(U32 instr) {
 //	// high byte of instr is not used (only 2..0)
 //	// 2 is "first"

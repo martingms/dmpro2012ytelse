@@ -1,10 +1,3 @@
-/*
- * bus.c
- *
- *  Created on: Oct 11, 2012
- *      Author: erik
- */
-
 #include "fpga.h"
 #include "bus.h"
 #include "serial.h"
@@ -21,6 +14,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
 
 
 #include "led.h"
@@ -105,20 +99,6 @@ void fpga_send_data_from_memory(U8 *data, size_t size) {
 // ------[DATA SOURCE FUNCTIONS]------ //
 U8 *data_buffer;
 size_t n_bytes;
-/**
- * Takes one byte from 'data_buffer'.
- * Will not exceed 'n_bytes'.
- * Returns number of bytes read.
- *//*
-int byte_count;
-int data_from_memory(U32 *buffer) {
-	*buffer = 0;
-	if (byte_count < n_bytes) {
-		*buffer = data_buffer[byte_count++];
-		return DATA_WORD_LENGTH;
-	}
-	return 0;
-}*/
 
 /**
  * Takes 3 bytes from 'data_buffer' and puts it in the U32 buffer,
@@ -142,20 +122,7 @@ int program_from_memory(U32 *buffer) {
 	}
 	return j - INSTRUCTION_WORD_LENGTH;
 }
-// ----------------------------------- //
-
-// ----[SPECIALIZED SEND FUNCTIONS]----//
-/*int fpga_send_data_from_memory_old(U8 *data, size_t size) { //TODO gammel, fjern
-	data_buffer = data;
-	n_bytes = size;
-	byte_count = 0;
-	return fpga_send(&data_from_memory, FPGA_STATE_LOAD_DATA, DATA_WORD_LENGTH);
-}*/
-
-
-// ------[GENERIC SEND FUNCTION]-------//
 int fpga_send_program(const char *program_path) {
-
 	// Wait for SD card
 	while (mmc_status() != CTRL_GOOD);
 	LED_On(LED1);
@@ -183,6 +150,9 @@ int fpga_send_program(const char *program_path) {
 
 	fpga_set_state(FPGA_STATE_STOP);
 	close(fd);
+
+	bus_flush_data_bus();
+
 	return 0;
 }
 

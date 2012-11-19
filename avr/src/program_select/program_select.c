@@ -31,6 +31,8 @@
 
 #define ROOT_DIRECTORY "A:/"
 
+#define FPGA_PROGRAM_SHOW_PICTURE	"A:/show_video.bin"
+
 //char selected_data_unit_path[DEFAULT_STRING_MAX_LENGTH] = "A:/";
 
 enum data_type current_type;
@@ -50,6 +52,7 @@ volatile U8 v_button;
 void program_select_start(void) {
 
 	button_reg_listener(&button_push); 	// Set button listener
+	fpga_send_program(FPGA_PROGRAM_SHOW_PICTURE);
 	while (TRUE) {
 		load_menu(STATE_SELECT_PROGRAM); 	// Load menu
 		busy = FALSE; 						// Start listening on buttons
