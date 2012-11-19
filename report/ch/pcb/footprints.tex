@@ -12,14 +12,13 @@ relative to each other, or running the IPC wizard.
 \\
   With the pin-designations selected by googling the pinouts for
   \ac{SD} cards in general, and comparing a few of those hits to make sure that
-  the results agreed
-  this\footnote{\url{http://pinouts.ru/Memory/sdcard_pinout.shtml}} ended up
-  being what we based the schematic-component based on. This
+  the results agreed with eachother. Finally we selected a single hit\footnote{\url{http://pinouts.ru/Memory/sdcard_pinout.shtml}}
+  to base the pinout on. The
   schematic\footnote{\url{http://katalog.we-online.de/em/datasheet/693063010911.pdf}}
-  schematic was particularly hard to read, to the point that we had to ask Tufte
-  for help to understand it, and even after that, there was no way to be sure
+  for the reader itself was particularly hard to read, to the point that we had to ask Tufte
+  for help to understand it. Even after that, there was no way to be sure
   precisely where the grounding pads were relative to the rest of the \ac{SD}
-  card reader. We thus ended doing some guesswork, and added a decent amount
+  card reader. Thus we did some guesswork, and added a decent amount
   of slack to the ground pads by adding extra tin to these pads.
 \item[Memory (TSOP54/TSOP44)] \hfill
 \\
@@ -37,7 +36,7 @@ after talking to Tufte, to use their Footprints\footnote{\url{http://org.ntnu.no
 The oscillator had one issue last year, the footprint for it was mirrored
 , noting this from Festina Lente's report, we read
 through the datasheet, and remapped the pin-numbering (taking care to understand
-why it was read mirrored last year) on the foot-print 
+why it was mirrored last year) on the foot-print 
 before using this footprint.
 
 After reading the Festina Lente report\cite{berg2011festinalente}, we decided to
