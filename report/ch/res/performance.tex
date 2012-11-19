@@ -3,13 +3,13 @@
 \subsection{SD Card Performance}
 \label{sec:performance-sd-card}
 
-As mentioned in section \ref{sec:avr-spi-issues}, reading data from an
+As mentioned in Section \ref{sec:avr-spi-issues}, reading data from an
 SD card over SPI turned out to be the biggest bottleneck for throughput
 in our system. In this section, we will document the optimizations we
 made to improve the SD card's read performance.
 
 Table \ref{tab:spi-optimizations-table} shows the gradually improving
-performance as we optimized the code. This is also shown in figure
+performance as we optimized the code. This is also shown in Figure
 \ref{fig:spi-optimizations-plot}. Each of the optimizations are
 explained in greater detail below.
 
