@@ -1,85 +1,79 @@
 \section{SIMD nodes}
 
-\ac{SIMD} nodes are the main processing cores of the image processor and are
-responsible for carrying out data processing instructions in parallel. They
-share the same instruction set and executes the same instruction, hence
+\ac{SIMD} nodes are the main processing elements of the image processor and are
+responsible for carrying out image processing instructions in parallel. They
+share the same instruction set and executes them in parallel, hence
 \acf{SIMD}.
 
-Each \ac{SIMD} node is fully equipped with a 8-bit register bank, an \ac{ALU} and data exchange with adjacent nodes. Everything are operated through the SIMD node instruction set explained in detail in subsequent sections.
+Each \ac{SIMD} node is fully equipped with a register bank,
+an \ac{ALU} and data exchange with adjacent nodes.
+Everything inside the node is operated through the SIMD node
+instruction set explained in \ref{subsection:}.
 
 The schematic of a single \ac{SIMD} node is shown in Figure
-\ref{fig:fpga-simd-arch}, and details the entire data path for the
-node. Different parts of the instruction and other inputs and outputs to and
-from the node are all labeled with \CHECK{Again, color print}red labels. In this
-section we will refer to this image when explaining the different components.
+\ref{fig:fpga-simd-arch}, and details the entire data-path for the
+node. External inputs to the node are drawn on the left side. Data-buses are 
+marked as blue lines while control signals are red dashed lines. In the 
+following section we will refer to this image when explaining the different 
+components.
 
 \input{fig/fpga/fpga-simd-arch}
 
 \subsection{Components}
-
-We wanted to keep the amount of intermediate signals to a minimum, as well as
-give better reusability across other parts of the processor. Therefore the SIMD
-nodes have been nicely divided into separate, stand-alone components which make
-up the data path of a node when linked together.
+In this section we briefly describe the different components, their purpose, and
+how they together form the data-path for the node. All components has been thoroughly
+thought out and design to suit the \ac{SIMD} nodes.  
 
 \subsubsection{Instruction Decoder}
+Whenever a new instruction is received by the \ac{SIMD} node it is immediately 
+decoded by the instruction decoder. Based on the enable-bit, mask-bit and OP-code
+of the instruction correct control signals are set up for the remaining components
+throughout the node.
 
-When an instruction is first received by a \ac{SIMD} node, the first 5 bits
-(enable, mask and opcode) are fed directly into the Instruction Decoder. The
-decoder will then set up the correct control signals other components based on
-the current state of the \ac{SIMD} node and instruction opcode. For a list all
-\ac{SIMD} instructions, see Appendix \ref{apx:simd-instruction-set}.
+For a list of all \ac{SIMD} instructions, see Appendix \ref{apx:simd-instruction-set}.
 
 \subsubsection{Communication}
-The communication component controls outbound data from the \ac{SIMD} node to
-adjacent \ac{SIMD} nodes in the grid array. It can either send data from 4
-registers out on north-, south-, east- and westbound links, forward incoming
-links in a clockwise spiral as in Figure \ref{fig:fpga-simd-datacom}, or keep
-the previously outgoing data. The latter is critical to ensure correctness when
-branching. \ac{SIMD} nodes may store incoming data, depending on their
-state. For instance, one group of \ac{SIMD} nodes may store incoming data in one
-register, whereas other \ac{SIMD} nodes may place them in another register, or
-perhaps not at all.
-
-The clockwise spiral forwarding is an optimized way of distributing a 3$\times$3
-array of source data to all the \ac{SIMD} nodes in the grid array using only 3
-clock cycles, compared to ??? cycles when not using the clockwise
-spiral. \TODO{We made this one ourselves! note that down. Jahre vil at dette
-  skal forklares bedre}
+The communication component controls outbound data to adjacent \ac{SIMD} nodes in 
+the grid array; north, south, east and west. The communication component is fairly 
+simple and can either send register data or forward inbound data according to the counterclockwise forwarding scheme described in \ref{sec:simd-com}.
 
 \subsubsection{Register Bank}
-Each \ac{SIMD} node is equipped with $2^4 = 16$ general purpose registers, 14 of
+Each \ac{SIMD} node is equipped with $2^4 = 16$ 8-bit general purpose registers, 14 of
 which are available for general storage during execution. The remaining 2 are
 reserved for the special purpose registers {\tt \$zero} and {\tt \$state}.
 
 \input{fig/fpga/simd-registers}
 
-The register bank has been specially designed with the four-way data transfer in
-mind. It supports reading or writing 4 registers at once, or reading 2
-registers and writing 1 register within one clock cycle.
+The register bank has been specially designed to suit the four-way data transfer by
+allowing 4 registers to be read, or written, at during one clock-cycle.
 
-\subsubsection{Arithmetic Logic Unit}
+\subsubsection{ALU}
+Each \ac{SIMD} node has an 8-bit simple ALU supporting 8 arithmetic instructions: 
+addition ({\sc add}), subtraction ({\sc sub}), set less than ({\sc slt}), {\sc and}, 
+{\sc or}, equality check ({\sc eq}), shift logical left ({\sc sll}) and shift logical 
+right ({\sc slr}). 
 
-The \ac{ALU} implemented is a very simple {\tt 8}-bit \ac{ALU} supporting only 8
-instructions: addition ({\sc add}), subtraction ({\sc sub}), set less than ({\sc
-  slt}), {\sc and}, {\sc or}, equality check ({\sc eq}), shift logical left
-({\sc sll}) and shift logical right ({\sc slr}). The main reason for only
-implementing the most basic arithmetic instruction was to save space in the
-instruction set. All \ac{SIMD} node instructions carry the 3-bit \ac{ALU}
-function at the end, which reduces the physical size of the node.
+The main reason for only implementing the most basic arithmetic instruction was to save
+space in the instruction set since addition, subtract, equality and less then are 
+supported by special hardware inside the FPGA. All \ac{SIMD} node instructions carries
+a 3-bit \ac{ALU} function at the end.
 
-\TODO{Add some supporting references!!!}
-
-Upon investigating image processing algorithms, we found that many of these need
-only 8 \ac{ALU} operations in order to perform their work. As an example, Median
-Filter, Salt and Pepper noise reduction, {\color{red} add more here}. More high
+Upon researching image processing algorithms well suited for parallel processing, we
+found that most of then could be implemented using only these 8 \ac{ALU} operations. 
+Image processing algorithms such as median filter, various blur filters, edge detection, 
+color manipulation such as inversion and thresholding are fully feasible using. More high
 level arithmetic, such as multiply and divide by constants, can be implemented
-through a series of additions, subtractions and shifts. \TODO{Jahre skriver: "2
-  Er ikke mange. Hvilke andre har dere kikket på?"}
+through a series of additions, subtractions and shifts.
+
+\CHECK{Proof-read this section!}
+\CHECK{Add reffernces?}
+\CHECK{Talk about general programability?}
 
 \subsubsection{Source Data Register}
-The source data register (S REG), is a special purpose register within the
-\ac{SIMD} node which holds the next source data for the \ac{SIMD} node. It is
+The source data register, or just \ac{S REG} for short, is a special purpose
+register within the \ac{SIMD} node. It is a communication unit, separate form
+the node itself, and is used to push new and processed image data through the
+array while the \ac{SIMD} node is otherwise busy  which holds the next source data for the \ac{SIMD} node. It is
 partly controlled by the \ac{SIMD} node instruction set and partly by a special
 {\tt step} signal sent from the \ac{DMA}.
 
@@ -99,11 +93,23 @@ The state register can be written and read as any other register in the register
 bank and the state can hence be shifted left or right in order to achieve nested
 branches.
 
-\input{fig/fpga/fpga-simd-datacom}
-{\sc \color{red} Figur \ref{fig:fpga-simd-datacom} flyter i løse lufta. Plasser
-  den et eller annet sted.}
+\subsection{Communication}\label{sec:simd-com}
 
-\subsection{Branching}
+\input{fig/fpga/fpga-simd-datacom}
+
+\subsubsection{Forwarding}
+The clockwise spiral forwarding is an optimized way of distributing a 3$\times$3
+array of source data to all the \ac{SIMD} nodes in the grid array using only 3
+clock cycles, compared to ??? cycles when not using the clockwise
+spiral.
+
+\TODO{We made this one ourselves! note that down. Jahre vil at dette skal forklares bedre}
+
+\subsection{Instructions}
+Something about ideology...++
+
+
+\subsubsection{Branching}
 Since all nodes run the same instructions, both parts of a branch must be
 executed. Nodes are setting the {\tt state} to 1 in order to indicate that they
 are executing within that part of the branch. An example of single branching is
