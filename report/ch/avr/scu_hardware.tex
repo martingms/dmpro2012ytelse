@@ -1,9 +1,8 @@
 \section{SCU hardware}
 
 This section documents the hardware considerations we had to make in relation
-to the the microcontroller used in the SCU, the AVR AT32UC3A0, hereby referred
-to as AVR. Also included are specifics in regard to what choices were made in
-terms of AVR specific hardware. 
+to the the microcontroller used in the SCUAlso included are specifics in regard
+to what choices were made in terms of AVR specific hardware. 
 
 Trying to design and plan some of the hardware associated with the AVR, it was
 plain that while some components could be connected to arbitrary GPIO pins,
@@ -22,8 +21,8 @@ have to take that into account mapping pins as they could be fitted on any
 \ac{GPIO} pin. This allowed us greater flexibility in terms of what had to go
 where and made it possible to fit the other interfaces on the AVR better.
 
-Same goes for the \ac{VGA} controller we had mapped up to the AVR. Seeing
-as this didn't require any specific ports on the AVR, we fit this in where
+The same goes for the \ac{VGA} controller we had mapped up to the AVR. Seeing
+as this didn't require any specific ports on the AVR, we fitted this in where
 there were leftover pins when the rest was mapped out.
 
 For the actual pinout of the AVR, see Appendix \ref{app:schematics}.
@@ -76,5 +75,8 @@ on the \ac{LENA}, we thought it was wise to have a backup in case this would fai
 has been used in previous projects with some success. In the backup solution, \ac{LENA} 
 would pipe data back to the AVR for display on screen, should
 the \ac{LENA} \ac{VGA} controller fail.
+
+As the \ac{VGA} controller on the LENA worked as intended, this was not
+needed and never tested.
 
 \end{description}
