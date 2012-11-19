@@ -1,8 +1,11 @@
 \subsection {Schematics}
 
 We decided to design the entire \ac{PCB} in one schematic, as the Festina Lente
-report\TODO{Repeteres under} mentioned that using multiple schematics might give
-some interesting issues.
+report mentioned that Festina Lente-report does mention that 
+``The decision to make the central components appear in multiple schematic
+sheets made Altium issue a lot of warnings and errors during the design rule 
+check''\cite[p.~49]{berg2011festinalente}. Something we avoided from day one, 
+as we never attempted to use multiple schematics-documents.
 
 A major downside of this approach was the fact that this completely serialized
 our work on the Schematic, since we could not make concurrent changes to our
@@ -14,20 +17,14 @@ sheets) Since the schematic was the biggest amount of work, this produced
 something of a bottleneck for the schematic work.
 
 However, having the overall control of the entire thing in one document
-did help to smooth out some of the issues we met along the road. For instance,
-we were having quite a few issues with net labels. This was easy to
+did help to smooth out some issues we met along the road. For instance,
+we were having quite a few issues with net labels. This was quite easy to
 untangle when everything was in one document with 0 ports, as getting the
 complete overview was very readable with this approach. We also avoided the need
-to use any buses this way, although we did end up with one or two for the sake
+to use any buses, although we did end up with one or two for the sake
 of readability.
 
-\TODO{Fill in a bit of details about pros for one-document vs multi.}  The
-Festina Lente-report does mention that having multiple schematic documents
-``made Altium issue a lot of warnings and errors during the design rule
-check''\cite[p.~49]{berg2011festinalente}. Something we avoided from day one, as
-we never attempted to use multiple schematics-documents. \TODO{Repeteres over}
-
-The overall layout of the schematic is logically grouped ``geographically'', to
+The overall layout of the Schematic \ref{app:schematics} is logically grouped ``geographically'', to
 allow for easy reading of the schematic.
 
 \subsubsection {Buses/Wirelabels}
