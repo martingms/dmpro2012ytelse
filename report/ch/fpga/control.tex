@@ -7,9 +7,9 @@ Figure \ref{fig:control-module}.
 
 \input{fig/fpga/control_module}
 
-The control module decodes the state signal set by the AVR, and enables,
+The control module decodes the state signal set by the SCU, and enables,
 disables and resets components accordingly. It is responsible for performing
-data transfers between the AVR and the program and data memories, and for
+data transfers between the SCU and the program and data memories, and for
 transferring data internally between the \ac{SIMD} node array, data \ac{RAM}
 and the \ac{VGA} screen buffer. \TODO{Isn't this the DMA's work?}
 
@@ -24,7 +24,7 @@ data to the \ac{VGA} controller.
 The operation of the image processor is fully controlled by the \ac{SCU}. The
 \ac{SCU} sets a state value that is used by the control module to select which
 components of the image processor are active. This is indicated by the red
-signals\TODO{Må skrives ut i farge om vi skal ha dette med} in Figure
+signals\CHECK{Må skrives ut i farge om vi skal ha dette med} in Figure
 \ref{fig:control-module}.
 
 The states recognized by the image processor are listed in Table
@@ -42,7 +42,6 @@ This allows the control core to do pointer arithmetic referring to
 arbitrary words in the data \ac{RAM}.
 
 \input{fig/fpga/fpga_ctrl_core}
-\TODO{Jahre syntes Figur \ref{fig:fpga-ctrl-core} ble for liten}
 To send pixels to the \ac{VGA} controller, two of the registers are dedicated to
 contain an address and a pixel value, respectively. The contents of these
 registers are constantly sent to the \ac{VGA} controller. By incrementing and
@@ -74,11 +73,9 @@ computation and communication.
 
 The \ac{DMA} module performs loading of new \ac{SIMD} data planes and storing of
 processed \ac{SIMD} data planes \emph{in parallel} with the normal execution of
-program instructions. The nodes of the \ac{SIMD} array have a separate register
-| the S register\TODO{Second time S register is introduced.} | that is reserved
-for the \ac{DMA} module. The S registers are connected in a left-to-right
-direction throughout the array. The \ac{DMA} module can send the contents of the
-S registers one step to the right by setting a \emph{step S} signal.
+program instructions. The S registers in the \ac{SIMD} nodes are reserved for
+the \ac{DMA} module, and the module can send the contents of the S registers one
+step to the right by setting a \emph{step S} signal.
 
 With these accommodations of the \ac{SIMD} array, the \ac{DMA} module can load
 new data values to the S registers at the left edge of the \ac{SIMD} array, send
@@ -91,9 +88,7 @@ During \ac{DMA} transfer, the data \ac{RAM} is reserved for the \ac{DMA} module
 and is not available for the control core. To initiate a \ac{DMA} transfer, the
 control core sets \emph{base addresses} for the reading of new data and for the
 writing of old data, in addition to address increments to be used for moving
-along the columns and rows of the current slice\TODO{Why not use the commonly
-  used stride? It is already defined, and is probably known to the reader} of
-the data. These parameters allow flexibility in how the data slices are laid out
-in memory.
+along the columns and rows of the current slice of the data. These parameters
+allow flexibility in how the data slices are laid out in memory.
 % to be loaded into and stored out of the \ac{SIMD} array, 
 % ^ dragged out, as it is implicit.

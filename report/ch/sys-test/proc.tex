@@ -1,6 +1,6 @@
 \section{Test Procedures}
 
-Some of these tests are strictly dependent on other. In theory, all the
+Some of these tests are strictly dependent on other tests. In theory, all the
 different tests could be done in any order to test the correctness of the
 system. However, some of the functional requirements makes it easy to test other
 functional requirements. Therefore, we have decided to let some of these tests
@@ -12,20 +12,28 @@ correctly.
 {\sc Test 1 - Functional Requirement 5}
 
 {\em \FRV}
-Write an AVR program to:
+
 \begin{enumerate}
-\item Activate LEDs
-\item Wait a while
-\item Deactivate leds
+\item Program the \ac{SCU} with a program which lights up the \acp{LED} in every
+  binary representation of the numbers 0 to 255.
+\item Wait a specified amount of time between \ac{LED} updates.
+\begin{comment}
+{\sc \color{red}
+  TODO: Is this needed?}
+yes, else it would be done so fast we couldn't possibly see the results.
+\end{comment}
+\item Verify that the observed pattern is the correct representation of binary
+  numbers.
 \end{enumerate}
 
 {\sc Test 2 - Functional Requirement 4}
 
 {\em \FRIV}
-Write an AVR program to:
+
 \begin{enumerate}
-\item Set up button interrupts
-\item Flips led X when button X is pressed
+\item Program the \ac{SCU} with a program which toggles a \ac{LED} when a button
+  is pushed.
+\item Verify that the buttons toggle the \acp{LED} when pushed.
 \end{enumerate}
 
 {\sc Test 3 - Functional Requirement 6}
@@ -33,27 +41,31 @@ Write an AVR program to:
 {\em \FRVI}
 
 \begin{enumerate}
-\item Foo
-\item Baz
-\item Spam
-\item Egg
+\item Write a correct program utilizing every available instruction and
+  combinations thereof, and run it through the assembler.
+\item Use a program such as \tt{hexdump} to verify that the binary output
+  corresponds to the specification, and that jump targets are the correct
+  addresses.
 \end{enumerate}
 
 {\sc Test 4 - Functional Requirement 3}
 
 {\em \FRIII}
-Write an AVR program to:
+
 \begin{enumerate}
-\item Load the LENA with a program that just copies an image out to the VGA
-\item Read an image from the SD card
-\item Load the image onto the LENA
-\item Start the LENA
+\item Load the \ac{LENA} with a program which copies an image out to the
+  \ac{VGA}.
+\item Read an image from the \ac{SD} card.
+\item Load the image from the \ac{SCU} onto the \ac{LENA}.
+\item Start the \ac{LENA}.
+\item Verify that the image shows correctly on the screen.
 \end{enumerate}
 
 {\sc Test 5 - Functional Requirement 7}
 
 {\em \FRVII}
 
+\TODO{Remember this.}
 \begin{enumerate}
 \item Foo
 \item Baz
@@ -64,20 +76,22 @@ Write an AVR program to:
 {\sc Test 6 - Functional Requirement 1}
 
 {\em \FRI}
-Write and AVR program to:
+
 \begin{enumerate}
-\item Load the LENA with a program that copies images out to the VGA as they are loaded
-\item Read an image from the SD card
-\item Load the image onto the LENA
-\item Start the LENA
-\item repeat 2-4 until out of pictures
-\item measure speed.
+\item Load the \ac{LENA} with a program which copies images out to the \ac{VGA}
+  as they are loaded.
+\item Read an image from the \ac{SD} card.
+\item Load the image onto the \ac{LENA}.
+\item Start the \ac{LENA}.
+\item Repeat stage 2 to 4 until the video has finished.
+\item Measure the frame rate.
 \end{enumerate}
 
 {\sc Test 7 - Functional Requirement 2}
 
 {\em \FRII}
 
+\TODO{Remember this.}
 \begin{enumerate}
 \item Foo
 \item Baz

@@ -10,8 +10,6 @@ start:
 	ctrl addi R3 R4 0
 	ctrl addi R4 R5 0
 	
-	ctrl dma set_read_active0
-	
 	node add R1 R2 R3
 	
 whiteblack:

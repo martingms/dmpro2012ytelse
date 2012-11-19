@@ -1,30 +1,38 @@
 \chapter{Results}\label{ch:res}
 
 \begin{flushright}{\slshape
-    In which the end product is analysed\\
-    tested, measured and compared\\
-    and is translated to information
-}
+    If it's not on fire, it's a software problem.\\ \medskip
+    --- Unknown}
 \end{flushright}
 
 When designing a system aimed for performance, one has to test the system and
 compare it to other solutions to see whether we have gained any mentionable
-speedup. As the assignment was to create an array-based image processor, it
-would be interesting to see how much more efficient our design is, depending on
-the amount of cores the system has.
+speedup.
 
-The first section will go in detail on the performance aspect of the results. We
-will here look at throughput, total processing time and other aspects related to
-performance, and compare them based on the number of cores we use. In the
-following section, we will have a look at the power consumption. We will measure
-how much power the system requires running with different cores, and how much
-power the system requires to process a single task with different amount of
-cores.
+As the assignment was to create an array-based
+image processor, it is interesting to see how our system performs
+at typical image processing tasks, and whether utilizing the \ac{SIMD}
+array yields any performance advantages over doing everything in the
+control core.
 
-{\sc fancy image here}
+%As the assignment was to create an array-based image processor, it
+%would be interesting to see how much more efficient our design is, depending on
+%the amount of cores the system has.
 
-\input{ch/res/performance}
-\input{ch/res/power}
+In this chapter, we will present the results of our benchmarks of two
+critical parts of the system; the SD card read performance of the
+\ac{SCU} and the image processing performance of LENA. We will also show
+screen shots from the system running several different image processing
+programs.
 
-\TODO{Some summary section where we compare our results with the other group
-  would be interesting.}
+%The first section will go into detail on the performance aspect of the results. We
+%will here look at throughput, total processing time and other aspects related to
+%performance, and compare them based on the number of cores we use. In the
+%following section, we will have a look at the power consumption. We will measure
+%how much power the system requires running with different cores, and how much
+%power the system requires to process a single task with different amount of
+%cores.
+
+\input{ch/res/sdcard}
+\input{ch/res/lena}
+\input{ch/res/images}

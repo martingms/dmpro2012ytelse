@@ -1,9 +1,15 @@
 \section{Introduction}
 
-We have named our image processor \acs{LENA} (\acl{LENA}) and it is implemented
-on the \ac{FPGA}. Its main components are a \ac{SIMD} array consisting of 4
-cores, a control module to manage the data, and a \ac{VGA} controller. \ac{LENA}
-is responsible for receiving data from the AVR, processing it and sending the
-output to the \ac{VGA} port.
+We have named our image processor \acs{LENA} (\acl{LENA}). Its main
+components are a \ac{SIMD} array consisting of 6 cores, a control module
+to manage the data, and a \ac{VGA} controller. \ac{LENA} is responsible
+for receiving data from the SCU, processing it and sending the output to
+the \ac{VGA} port.
 
-{\sc Should an briefing on the sections be here?}
+LENA is implemented on a Xilinx Spartan-3E XC3S500E PQG208 FPGA. The
+FPGA uses a clock rate of 50 MHz for the VGA memory controller and 25
+MHz for the VGA signal generator and the processor cores.
+
+The first section in this chapter gives an overview of the image
+processor architecture. The following sections describe the SIMD array,
+the control module and the VGA controller in further detail.

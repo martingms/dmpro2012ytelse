@@ -4,12 +4,12 @@
 #include "pm.h"
 #include "serial.h"
 
-#define SERIAL_USART AVR32_USART1
+#define SERIAL_USART AVR32_USART0
 #define SERIAL_GPIO_MAP USART1_GPIO_MAP
 
 
 static const usart_options_t default_uart_opts = {
-		.baudrate = 38400,
+		.baudrate = 9600,
 		.channelmode = USART_NORMAL_CHMODE,
 		.charlength = 8,
 		.paritytype = USART_NO_PARITY,
@@ -17,16 +17,15 @@ static const usart_options_t default_uart_opts = {
 };
 
 
-static const gpio_map_t USART1_GPIO_MAP = {
-		{ AVR32_USART1_RXD_0_0_PIN, AVR32_USART1_RXD_0_0_FUNCTION },
-		{ AVR32_USART1_TXD_0_0_PIN, AVR32_USART1_TXD_0_0_FUNCTION },
-		{ AVR32_USART1_CLK_0_PIN, AVR32_USART1_CLK_0_FUNCTION }
+static const gpio_map_t USART0_GPIO_MAP = {
+		{ 0, 0 },
+		{ 1, 0 }
 };
 
 
 int serial_init()
 {
-	gpio_enable_module(USART1_GPIO_MAP, sizeof(USART1_GPIO_MAP) / sizeof(USART1_GPIO_MAP[0]));
+	gpio_enable_module(USART0_GPIO_MAP, sizeof(USART0_GPIO_MAP) / sizeof(USART0_GPIO_MAP[0]));
 	return usart_init_rs232(&SERIAL_USART, &default_uart_opts, FOSC0);
 }
 

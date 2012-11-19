@@ -216,6 +216,9 @@ void set_file_type(enum data_type type) {
  * Final stage: Run FPGA program with data from outside FAT
  */
 const char *osd(int i, int num_frames) {
+	if (num_frames < 2)
+		return NULL;
+
 	// used for FPS counter
 	static double last_time = 0;
 	static double total_time = 0;

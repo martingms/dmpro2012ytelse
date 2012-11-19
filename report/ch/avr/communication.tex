@@ -4,8 +4,8 @@
 This section documents how the \ac{SCU} communicates and controls the
 \ac{LENA}. The communication is usually performed by the \ac{SCU} assigning a
 state to the \ac{LENA}, followed by some data transfer. The communication utilizes three buses: 
-the LENA out bus, the LENA in bus, and the LENA state bus. A full pin reference of theese buses can
-be found in appendix \ref{app:lena-scu-bus}.
+the LENA out bus, the LENA in bus, and the LENA state bus. A full pin reference of these buses can
+be found in Appendix \ref{app:lena-scu-bus}.
 
 \subsection{LENA states}
 
@@ -13,13 +13,13 @@ The \ac{SCU} can set \ac{LENA} to 5 different states, controlling \ac{LENA}'s
 behavior. The states are set with a 3-line bus and a fourth line which when
 toggled, indicates that the \ac{LENA} should set its state to the state
 currently on the bus. The three state lines represent a binary number referring
-to one of the states. The different states are listed in table \ref{tab:states}.
+to one of the states. The different states are listed in Table \ref{tab:states}.
 
 \input{fig/avr/lena-states}
 
 \subsection{Data transfer from SCU to LENA}
 When the \ac{SCU} transfers data, it first sets the \ac{LENA} state to {\tt
-  LOAD\_DATA} or {\tt LOAD\_INSTRUCTION} to load data or instructions
+  LOAD\_DATA} or {\tt LOAD\_INSTRUCTION} to load data or instructions,
 respectively. The procedure for the \ac{SCU} is then to put one word on the bus,
 toggle the data ready line and repeat. The \ac{LENA} state STOP is used to signal the
 end of transfer. When the data are simply data, the first 8 lines of

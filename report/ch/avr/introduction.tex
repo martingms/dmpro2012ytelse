@@ -1,13 +1,10 @@
-The \acf{SCU} is implemented with a AT32UC3A0512 AVR microcontroller. This was both an advantage and a disadvantage to us. The same AVR had been used in several previous projects which allowed us to learn from their success and failures to a greater degree. However, this specific AVR also gave us some issues, especially in regard to performance on the \ac{SD} card.
+The \acf{SCU} is implemented on a AT32UC3A0512 AVR microcontroller. This was both an advantage and a disadvantage to us. The same AVR had been used in several previous projects which allowed us to learn from their successes and failures to some degree. However, this specific AVR also gave us some issues, especially in regard to performance of the \ac{SD} card.
 
 As the name implies, the \ac{SCU} is the controlling unit in
 our system. The \ac{SCU} is in charge of setting up both \ac{LENA}'s instruction
-and data memory. The \ac{SCU} can start \ac{LENA} by setting it to a run state. 
-After the processing is done for one frame, \ac{LENA} will let the \ac{SCU} know
-that the work has been completed by setting an interrupt bit. It is then up to
-the \ac{SCU} to decide what to do next.
+and data memory. The \ac{SCU} can start \ac{LENA} by putting it in a run state.
 
 The \ac{SCU} also implements the user interface for the project. With the help
-of the \ac{VGA} implementation on the \ac{LENA} it is able to display a menu to
-the user which allows for selection of a program and data set from the \ac{SD}
+of the \ac{VGA} implementation on the \ac{LENA}, it is able to display a menu to
+the user which allows for selection of a program and data source from the \ac{SD}
 card connected to the \ac{SCU}.

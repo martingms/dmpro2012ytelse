@@ -1,11 +1,13 @@
 \section{SCU hardware}
 
-This section documents the hardware considerations we had to make in relation to
-the the microcontroller used in the SCU, the AVR AT32UC3A0, hereby refered to as AVR. 
-Also included are specifics in regard to what choices
-were made in terms of AVR specific hardware. 
+This section documents the hardware considerations we had to make in relation
+to the the microcontroller used in the SCU, the AVR AT32UC3A0, hereby referred
+to as AVR. Also included are specifics in regard to what choices were made in
+terms of AVR specific hardware. 
 
-Trying to design and plan the hardware associated with the AVR we quickly realized that there were some components that required more planning and more careful placing than the rest. Mostly this was because they either had to be connected to special hardware (spesific pins) or needed physical proximity in order to be as effective as possible. To mention some of these:
+Trying to design and plan some of the hardware associated with the AVR, it was
+plain that while some components could be connected to arbitrary GPIO pins,
+others would require specific pins. To mention some of these:\TODO{only mention some, not all?}
 
 \begin{enumerate}
 \item Serial port
@@ -16,22 +18,21 @@ Trying to design and plan the hardware associated with the AVR we quickly realiz
 
 We also wanted to have some visual input and debugging tools for the project
 (buttons and LEDs). These were also connected to the AVR. We did however not
-have to take that into account mapping pins as they can be fitted on any
+have to take that into account mapping pins as they could be fitted on any
 \ac{GPIO} pin. This allowed us greater flexibility in terms of what had to go
 where and made it possible to fit the other interfaces on the AVR better.
 
 Same goes for the \ac{VGA} controller we had mapped up to the AVR. Seeing
-as this neither required specific ports on the AVR, we fit this in where
+as this didn't require any specific ports on the AVR, we fit this in where
 there were leftover pins when the rest was mapped out.
 
-As for the actual pinout of the AVR, refer to the appendix.
-\TODO{Add appendix on this}
+For the actual pinout of the AVR, see Appendix \ref{app:schematics}.
 
 \begin{description}
 
 \item[AVR crystal] \hfill
 
-Previous projects have chosen to use multiple crystals on their AVR. Our AVR has support for up to 3 crystals, where 2 are high frequency crystals that can be used as external clocks for the AVR. The last crystal is a low frequency crystal that is needed if one intends to make use of power saving functions in the AVR or are in need of real time measurement on the AVR. \TODO{dette kan også gjøres med interne klokker på hhv. 115kHz og 32kHz. skrive om?}
+Previous projects have chosen to use multiple crystals on their AVR. Our AVR has support for up to 3 crystals, where 2 are high frequency crystals that can be used as external clocks for the AVR. The last crystal is a low frequency crystal that can replace an internal clock for power saving functions and real time measurement for greater accuracy, since the internal clock speed may vary by temperature.
 
 As we were to optimize for performance we tried to use the most of the given resources. This included saving pins wherever we could, and as such we have gone with only one crystal. This crystal is connected to port 0 on the AVR and has a socket. We ordered a number of crystals in order to make sure that we could adapt to most any requirements that may or may not have been clear to us at the time of the design.
 
@@ -39,18 +40,30 @@ As we were to optimize for performance we tried to use the most of the given res
 
 We also needed a storage medium. Since previous projects have had good results with
 using \ac{SD} cards, this was what we chose as well. However, working on the
-design we encountered a few problemswith this, mostly in
-regard to performance. This problem is elaborated in the \ac{SD} card implementation
-section. \TODO {fix reference}
+design we encountered a few problems with this, mostly in
+regard to performance. This problem is elaborated in Section
+\ref{sec:performance-sd-card}.
 
 \item[Serial port]  \hfill
 
 The serial feature was implemented as a way of debugging. This is connected to
-\ac{USART} 0 on the AVR and was not a crucial part of the design, but rather a way for us to communicate and get quantitative data from the AVR. We decided that having serial access would be handy as there is only so much information you can get out of 8 blinking LEDs. The serial implementation had some issues in regard to our mapping of the lines to the port, this was partly tried to solve by remapping the lines over the header.
+\ac{USART} 0 on the AVR and was not a crucial part of the design, but rather a
+way for us to communicate and get quantitative data from the \ac{SCU}. We
+decided that having serial access would be handy as there is only so much
+information you can get out of 8 blinking \acp{LED}. The serial had some
+implementation issues in regard to our mapping of the lines to the port. Since
+we had the ability to debug from the \ac{VGA} controller, we did not prioritize
+fixing the serial until later. In the end, we never had to use it, more than to
+test whether it worked or not.
 
 \item[USB connectivity]  \hfill 
 
-Our AVR also supports \ac{USB}. We decided to map up the \ac{USB} even though we were doubtful we would have much use for it, due to both having \ac{SD} card and serial for debugging purposes. This feature therefore was given a low priority and was not implemented in the final design due to time constraints.
+Our AVR supports \ac{USB}, but it was not implemented in the \ac{SCU}. As both
+the serial and the \ac{SD} card reader was supposedly easier to
+implement\cite{berg2011festinalente}, we decided to defer the implementation
+until other \ac{I/O} components were implemented. This feature was therefore
+given a low priority and was not implemented in the final design due to time
+constraints.
  
 \item[External Bus Interface - AVR Memory]  \hfill 
 

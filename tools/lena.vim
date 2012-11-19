@@ -20,7 +20,7 @@ syn keyword lenaNode node
 
 syn keyword lenaInstr nop add sub eq slt and or addi subi eqi slti
 syn keyword lenaInstr andi ori sll srl beq branch jump move swap send
-syn keyword lenaInstr store fwrd lw dma
+syn keyword lenaInstr store fwrd lw dma mask
 
 syn keyword lenaDmaInstr set_read_active set_read_base_addr
 syn keyword lenaDmaInstr set_read_horizontal_incr set_read_vertical_incr
@@ -28,7 +28,7 @@ syn keyword lenaDmaInstr set_write_active set_write_base_addr set_write_horizont
 syn keyword lenaDmaInstr set_write_vertical_incr start
 
 syn keyword lenaReg R0 R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12 R13 R14
-syn keyword lenaReg R15 VDATA VADDR ZERO DMA
+syn keyword lenaReg R15 VDATA VADDR ZERO DMA STATE
 
 syn match lenaError "[^ \t]"
 

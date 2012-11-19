@@ -1,0 +1,53 @@
+\begin{table}[H]
+  \centering
+  \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+  \begin{tabularx}{\textwidth}{l l R}
+    \toprule
+    \thx{To component} & \thx{Pin type} & \thx{Pins} \\
+    \toprule
+    Crystal & Total & 2\\
+    \midrule
+    \multirow{6}{*}{FPGA} & Data & 32 \\
+    & Interrupt & 1 \\
+    & State & 3 \\
+    & Data ready & 1 \\
+    & State changed & 1 \\
+    \cmidrule(r){2-3}
+    & Total & 38 \\
+    \midrule
+    \multirow{4}{*}{Memory} & Data & 8 \\
+    & Address & 19 \\
+    & WE & 1 \\
+    \cmidrule(r){2-3}
+    & Total & 28 \\
+    \midrule
+    \multirow{4}{*}{VGA} & Data & 16 \\
+    & TX & 1 \\
+    & RX & 1 \\
+    \cmidrule(r){2-3}
+    & Total & 18 \\
+    \midrule
+    \multirow{4}{*}{SD-card} & Data & 4 \\
+    & $\overline{SS}$ & 1 \\
+    & SCLK & 1 \\
+    \cmidrule(r){2-3}
+    & Total & 6 \\
+    \midrule
+    \multirow{3}{*}{RS232} & RXD & 1 \\
+    & TXD & 1 \\
+    & RTS & 1 \\
+    & CTS & 1 \\
+    \cmidrule(r){2-3}
+    & Total & 4 \\
+    \midrule
+    \multirow{3}{*}{Buttons and LEDs} & Buttons & 4\\
+    & LEDs & 8 \\
+    \cmidrule(r){2-3}
+    & Total & 12 \\
+    \midrule
+    \midrule
+    \multicolumn{2}{l}{\thx{Used}} & 108 \\
+    \multicolumn{2}{l}{\thx{Free}} & 1 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
