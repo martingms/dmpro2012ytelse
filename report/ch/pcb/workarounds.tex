@@ -1,5 +1,6 @@
 \section {Problems and Workarounds}
 \subsection{Serial port}
+\label{sec:serial}
 We found many pin mappings for the serial port on the web, which turned out to
 be different from Festina Lente's serial system. After some discussion, we chose
 the one on the web, and figured that if anything did not work, we could just
@@ -21,11 +22,24 @@ Other reasons might be the fact that we did not experiment enough with different
 
 \subsection{Soldering}
 Soldering was the biggest problem that we faced, as none of the members of the
-\ac{PCB} group member had any experience with it beforehand. We managed to
+\ac{PCB} group had any experience with it beforehand. We managed to
 destroy our first board, as we used too much tin on one of the AVR pins, and
 ruined them by using the tin removal unit wrongly.
 
-However, the next attempt proved to be successful. But there still remained some
+However, the second attempt was more successful. But there still remained some
 minor problems. Problems we found were lack of tin on the oscillator, as well as
 a few of the \ac{FPGA} pins. They were, as opposed to our problem with the first
 board, easily fixed, once discovered.
+
+\subsection{The third board}
+After using the second board for development for about a week, several problems started appearing.
+
+First, we discovered that one of the connections between the AVR and FPGA was broken. We managed to work around this by replacing it with another previously unused connection.
+
+Second, we discovered that one of the voltage regulators was a bit loose. Touching it could make the whole machine stop working.
+
+If these had been the only problems, we could have avoided them by making sure not to touch the voltage regulator. We did however also discover a problem with the VGA memory. It would randomly stop working or misbehave, visible as noisy images on the screen.
+
+We therefore decided that we had to make another board. To be able to do this we had to order some spare components. After the components arrived, we soldered the new board.
+
+The testing of this board was done by running code on it. The programs that ran on the second board, also worked on the third board. The problem with the VGA memory was gone, and the voltage regulator seemed to be stable.

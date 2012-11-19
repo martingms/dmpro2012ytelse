@@ -5,7 +5,7 @@ This section documents how the \ac{SCU} communicates and controls the
 \ac{LENA}. The communication is usually performed by the \ac{SCU} assigning a
 state to the \ac{LENA}, followed by some data transfer. The communication utilizes three buses: 
 the LENA out bus, the LENA in bus, and the LENA state bus. A full pin reference of these buses can
-be found in appendix \ref{app:lena-scu-bus}.
+be found in Appendix \ref{app:lena-scu-bus}.
 
 \subsection{LENA states}
 
@@ -13,7 +13,7 @@ The \ac{SCU} can set \ac{LENA} to 5 different states, controlling \ac{LENA}'s
 behavior. The states are set with a 3-line bus and a fourth line which when
 toggled, indicates that the \ac{LENA} should set its state to the state
 currently on the bus. The three state lines represent a binary number referring
-to one of the states. The different states are listed in table \ref{tab:states}.
+to one of the states. The different states are listed in Table \ref{tab:states}.
 
 \input{fig/avr/lena-states}
 

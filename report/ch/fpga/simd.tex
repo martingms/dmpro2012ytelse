@@ -20,7 +20,6 @@ components.
 \input{fig/fpga/fpga-simd-arch}
 
 \subsection{Components}
-
 In this section we briefly describe the different components, their purpose, and
 how they together form the data-path for the node. All components has been thoroughly
 thought out and design to suit the \ac{SIMD} nodes.  
@@ -76,9 +75,7 @@ register within the \ac{SIMD} node. It is a communication unit, separate form
 the node itself, and is used to push new and processed image data through the
 array while the \ac{SIMD} node is otherwise busy  which holds the next source data for the \ac{SIMD} node. It is
 partly controlled by the \ac{SIMD} node instruction set and partly by a special
-{\tt step} signal sent from the \ac{DMA}. \TODO{Og her er det tredje gangen vi
-  introduserer dette S registeret vårt. Vi må plassere det et sted, og kun nevne
-  det andre steder.}
+{\tt step} signal sent from the \ac{DMA}.
 
 An important attribute of the S REG is its capability to receive data from the
 left node and passing it along to node on the right when instructed by the {\tt
