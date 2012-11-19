@@ -22,18 +22,19 @@ dependencies\footnotemark. If so, they are specified.
   {\sc Dependencies:} FR3, FR5
 \end{Test}
 
-{\sc Functional Requirement 2}
+{\sc Functional Requirement 7 and Functional Requirement 2}
 \begin{Test}
-  {\em \FRII}
+  {\em \FRVII}
   
-  {\sc Test:} Create a program which views a grid of $x \times y$ pixels, each
-  corresponding to a cell in Conway's Game of
-  Life\cite{gardner1970mathematical}. The game should run at least $N$ turns.
+  {\sc Test:} Create a $3\times3$ edge detection filter in the instruction set
+  of the machine, load it up on the machine along with one or several image
+  files or videos, and make it run. It should view the video or image with a
+  edge detection filter applied.
 
-  {\sc Pass criteria:} The Game of Life runs as defined, and is shown properly
-  on the device connected to the \ac{VGA} port.
+  {\sc Pass criteria:} The edge detection filter is visibly applied on the
+  image or video chosen.
 
-  {\sc Dependencies:} FR3, FR5
+  {\sc Dependencies:} FR3
 \end{Test}
 
 {\sc Functional Requirement 3}
@@ -84,20 +85,6 @@ dependencies\footnotemark. If so, they are specified.
   set specification, and should jump to labels correctly.
 \end{Test}
 
-{\sc Functional Requirement 7}
-\begin{Test}
-  {\em \FRVII}
-  
-  {\sc Test:} Create a $3\times3$ edge detection filter in the instruction set
-  of the machine, load it up on the machine along with one or several image
-  files or videos, and make it run. It should view the video or image with a
-  edge detection filter applied.
-
-  {\sc Pass criteria:} The edge detection filter is visibly applied on the
-  image or video chosen.
-
-  {\sc Dependencies:} FR3
-\end{Test}
 
 %%% Template below:
 %%{\sc Functional Requirement 7}
