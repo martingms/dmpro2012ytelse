@@ -1,16 +1,16 @@
 \section {Problems and Workarounds}
 \subsection{Serial port}
 We found many pin mappings for the serial port on the web, which turned out to
-be different from Festina lentes serial system. After some discussion, we chose
+be different from Festina Lente's serial system. After some discussion, we chose
 the one on the web, and figured that if anything did not work, we could just
 use our header to change the mapping.  Yet as we had not thought of the fact
 that the footprint for male and female serial ports have mirrored numbering,
 we ended up with a male pin mapping and a female footprint.  Obviously,
-this did not work very well, yet as the TXD pin is the only one we actually
+this did not work very well. Yet as the TXD pin is the only one we actually
 need, we used a female plug, and dragged a wire over the header pins so that
 the TXD data from SCU were mapped to the original RXD. This workaround made it
 possible to send data from the system and out to a computer, yet as we had no
-need for this option, our final card do not have the serial soldered on.
+need for this option, our final card does not have the serial system soldered on.
 
 \subsection{Routing}
 Routing was the first problem we confronted during the designing the \ac{PCB}
