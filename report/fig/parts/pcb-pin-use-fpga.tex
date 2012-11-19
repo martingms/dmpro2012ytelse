@@ -1,0 +1,48 @@
+\begin{table}[H]
+  \centering
+  \begin{tabular}{l l r r}
+    \toprule
+    \thx{To component} & \thx{Pin type} & \thx{Generic pins} & \thx{Input pins} \\
+    \toprule
+    Flash & Total & 6 & 1 \\
+    \midrule
+    Oscillator & Total & 0 & 1 \\
+    \midrule
+    \multirow{6}{*}{AVR} & Data & 8 & 24 \\
+    & Interrupt & 1 & 0 \\
+    & State & 0 & 3 \\
+    & Data ready & 0 & 1 \\
+    & State changed & 0 & 1 \\
+    \cmidrule(r){2-4}
+    & Total & 9 & 29 \\
+    \midrule
+    \multirow{4}{*}{Program memory} & Data & 24 & 0 \\
+    & Address & 16 & 0 \\
+    & WE & 1 & 0 \\
+    \cmidrule(r){2-4}
+    & Total & 41 & 0 \\
+    \midrule
+    \multirow{4}{*}{Data memory} & Data & 8 & 0 \\
+    & Address & 21 & 0 \\
+    & WE & 1 & 0 \\
+    \cmidrule(r){2-4}
+    & Total & 30 & 0 \\
+    \midrule
+    \multirow{4}{*}{VGA memory} & Data & 8 & 0 \\
+    & Address & 19 & 0 \\
+    & WE & 1 & 0 \\
+    \cmidrule(r){2-4}
+    & Total & 28 & 0 \\
+    \midrule
+    \multirow{4}{*}{VGA} & Hsync & 1 & 0 \\
+    & Vsync & 1 & 0 \\
+    & Value & 10 & 0 \\
+    \cmidrule(r){2-4}
+    & Total & 12 & 0 \\
+    \midrule
+    \midrule
+    \multicolumn{2}{l}{\thx{Used}} & 126 & 31 \\
+    \multicolumn{2}{l}{\thx{Free}} & 0 & 1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
