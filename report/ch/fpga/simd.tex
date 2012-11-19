@@ -3,21 +3,15 @@
 \ac{SIMD} nodes are the main processing cores of the image processor and are
 responsible for carrying out data processing instructions in parallel. They
 share the same instruction set and executes the same instruction, hence
-\acf{SIMD}. It operates on an 8-bit word size, as most of the architecture does.
+\acf{SIMD}.
 
-Each \ac{SIMD} node is fully equipped with a register bank, an \ac{ALU}, message
-passing with adjacent nodes and an instruction decoder for the \ac{SIMD} node
-instruction set, explained in detail in subsequent sections.
+Each \ac{SIMD} node is fully equipped with a 8-bit register bank, an \ac{ALU} and data exchange with adjacent nodes. Everything are operated through the SIMD node instruction set explained in detail in subsequent sections.
 
 The schematic of a single \ac{SIMD} node is shown in Figure
 \ref{fig:fpga-simd-arch}, and details the entire data path for the
 node. Different parts of the instruction and other inputs and outputs to and
-from the node are all labeled with \CHECK{Again, colour print}red labels. In this
+from the node are all labeled with \CHECK{Again, color print}red labels. In this
 section we will refer to this image when explaining the different components.
-
-\TODO{Fix signal labels in architecture image to differentiate between input,
-  output and instruction. Jahre nevner at det må tydeligjøres hva
-  som er busser og hva som er signaler}
 
 \input{fig/fpga/fpga-simd-arch}
 
