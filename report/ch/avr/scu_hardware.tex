@@ -46,7 +46,7 @@ regard to performance. This problem is elaborated in Section
 \item[Serial port]  \hfill
 
 The serial feature was implemented as a way of debugging. This is connected to
-\ac{USART} 0 on the AVR and was not a crucial part of the design, but rather a way for us to communicate and get quantitative data from the AVR. We decided that having serial access would be handy as there is only so much information you can get out of 8 blinking LEDs. The serial implementation had some issues in regard to our mapping of the lines to the port, this was partly tried to solve by remapping the lines over the header.
+\ac{USART} 0 on the AVR and was not a crucial part of the design, but rather a way for us to communicate and get quantitative data from the AVR. We decided that having serial access would be handy as there is only so much information you can get out of 8 blinking LEDs. The serial did, however, have some implementation issues in regard to our mapping of the lines to the port, and since we had the ability to debug from the VGA controller, we did not prioritize fixing the serial until later. In the end, we never had to use it, more that to test whether it worked or not.
 
 \item[USB connectivity]  \hfill 
 
