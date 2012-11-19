@@ -25,18 +25,17 @@
     ctrl dma set_read_vertical_incr
     ctrl nop
 
-    ctrl addi R4 ZERO 160           # R4 = 320
+    ctrl addi R4 ZERO 160           # DMA = 1281
     ctrl sll R4 R4
-    ctrl add DMA ZERO R4            # DMA = R4 * 3 + 1 = 640 + 320 + 1
-    ctrl add DMA DMA R4
-    ctrl add DMA DMA R4
-    ctrl addi DMA DMA 1
+    ctrl sll R4 R4
+    ctrl sll R4 R4
+    ctrl addi DMA R4 1
     ctrl dma set_write_horizontal_incr
     ctrl dma set_read_horizontal_incr
     ctrl nop
 
     ctrl addi R7 ZERO 3             # R7: Row start address accumulator
-    ctrl addi R8 ZERO 118           # R8: Row counter
+    ctrl addi R8 ZERO 79            # R8: Row counter
 
 dma_loop:
     ctrl addi R6 ZERO 159           # R6: Column counter
@@ -44,8 +43,9 @@ dma_loop:
     ctrl addi R7 R7 160
     ctrl addi R7 R7 160
     ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
     ctrl addi DMA R7 0
-    node addi R4 ZERO 255
 
 dma_row_loop:
     ctrl dma set_read_base_addr     # write base addr = 19328
@@ -55,11 +55,18 @@ dma_row_loop:
     ctrl addi DMA DMA 2
     ctrl nop
 
-    node swap R3 R3
-    ctrl nop
-    node swap R3 R3
+    #node swap R3 R3
+    #ctrl nop
+    #node swap R3 R3
+    #ctrl nop
 
     ctrl dma start
+
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    ctrl nop
 
     ctrl nop
     ctrl nop

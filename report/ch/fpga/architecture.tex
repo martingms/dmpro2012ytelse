@@ -11,7 +11,7 @@ flows mostly through it in one direction. Data is received from the AVR and
 stored to the data memory. The data is then read in parts from the data memory
 and sent through the \ac{SIMD} array for processing. The result from the
 \ac{SIMD} array is stored to the data memory again. \TODO {Say why the DMA 
-doesen't send data to both data and VGA ram, yet have to use control core 
+doesn't send data to both data and VGA ram, yet have to use control core 
 instead. (Supposedly because  the output image it's more stable this way?
  )} At last, the data is copied
 from the data memory to the \ac{VGA} memory and shown on screen.

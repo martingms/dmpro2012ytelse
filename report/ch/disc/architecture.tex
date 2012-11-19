@@ -23,7 +23,7 @@ frequently, the \ac{VGA} needed its own memory, rather than sharing memory with
 the SCU itself. As we were supposed to optimize for performance, we had to take
 possible bottlenecks into consideration. We therefore invested in an extra
 memory chip. For the VGA we chose an 8-bit word memory that was big enough to
-hold atleast a full screen-frame, at 8-bit per pixel (since each pixel is an 8-bit greyscale pixel).
+hold at least a full screen-frame, at 8-bit per pixel (since each pixel is an 8-bit greyscale pixel).
 
 Lastly, to reduce the possibility of having too slow data-access from the SCU, (it had only 64kb on-chip memory) 
 an extra memory was added to work as a buffer for the SCU as well. This design choice was made {\em after} ordering, 
