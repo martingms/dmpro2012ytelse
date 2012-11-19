@@ -11,3 +11,4 @@ report.pdf
 *.dvi
 *.ps
 *.gz
+*.pyg

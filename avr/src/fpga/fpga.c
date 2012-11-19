@@ -181,7 +181,7 @@ int fpga_send_program(const char *program_path) {
 		bus_send_program(FRAME_BUFFER, rd);
 	}
 
-	//fpga_set_state(FPGA_STATE_STOP);
+	fpga_set_state(FPGA_STATE_STOP);
 	close(fd);
 	return 0;
 }

@@ -43,9 +43,9 @@ Trygve Aaberge\\
 \newcommand{\thx}[1]{\spacedlowsmallcaps{#1}}
 \newcommand{\thxc}[1]{\multicolumn{1}{c}{\spacedlowsmallcaps{#1}}}
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}}
-\newcommand{\TODO}[1]{\marginpar{\color{red}{\sc TODO:} #1}}
-\newcommand{\NOTE}[1]{\marginpar{\bfseries \color{Bittersweet} #1}}
-\newcommand{\CHECK}[1]{\marginpar{\color{ForestGreen}{\sc CHECK:} #1}}
+\newcommand{\TODO}[1]{}
+\newcommand{\NOTE}[1]{}
+\newcommand{\CHECK}[1]{}
 \newcommand{\acfoot}[1]{\acsu{#1}\footnote{\acl*{#1}}}
 
 %%% Util environments
@@ -55,18 +55,19 @@ Trygve Aaberge\\
 
 %%% Packages
 
+
 \usepackage{scrextend}
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{comment}
+\usepackage{caption}
 \usepackage{hyperref}
 \usepackage{appendix}
 \usepackage[nohyperlinks]{acronym}
 
 %%% Fine-tuning of this classicthesis
-
 \newcounter{dummy} % Fikser hyperref-feil (?)
 \usepackage{textcomp} % Fikser feilmelding om at fonter er bytta ut
 \usepackage{scrhack} % Fikser warnings i listings
@@ -96,16 +97,22 @@ Trygve Aaberge\\
 
 \renewcommand{\bflabel}[1]{{#1}\hfill}
 
-%\usepackage{listings} % loaded by classicthesis
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[chapter]{minted}
+\usemintedstyle{soderberg}
+\newenvironment{code}{\captionsetup{type=listing}\centering}{}
+\renewcommand\listoflistingscaption{List of Listings}
+
+\newminted{lena}{frame=single,linenos}
 
 \usepackage{amsmath, amssymb}
 %% Note: eulermath is sweet for equations, but requires a 500 mb font bundle
 %% installed. Better leave it off and remember to flip it on before sending.
-\usepackage[dottedtoc,listings,%eulermath,
-            floatperchapter,drafting % remember to remove this one
+\usepackage[dottedtoc,%eulermath,%listings,
+            floatperchapter,%drafting
             ]{classicthesis}
 \setlength{\parskip}{\bigskipamount}
 \setlength{\parindent}{0pt}
 \usepackage{tikz}
 
-\renewcommand{\lstlistlistingname}{List of Listings}
+%\renewcommand{\lstlistlistingname}{List of Listings}

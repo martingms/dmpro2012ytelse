@@ -1,7 +1,8 @@
 LATEX = pdflatex
+LATEXFLAGS = -shell-escape
 BIBTEX = bibtex
 REPORT = report
-TEMPS = toc bbl blg log out lof lot lol aux
+TEMPS = toc bbl blg log out lof lot lol aux pyg
 SUBDIRS = fb
 
 .PHONY: clean remake purge
@@ -9,10 +10,10 @@ SUBDIRS = fb
 all: $(REPORT).pdf
 
 %.pdf:
-	$(LATEX) $*.tex
+	$(LATEX) $(LATEXFLAGS) $*.tex
 	$(BIBTEX) $*.aux
-	$(LATEX) $*.tex
-	$(LATEX) $*.tex
+	$(LATEX) $(LATEXFLAGS) $*.tex
+	$(LATEX) $(LATEXFLAGS) $*.tex
 
 clean:
 	for s in $(TEMPS); do rm -f $(REPORT).$$s; done

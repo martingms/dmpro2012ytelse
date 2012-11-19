@@ -71,15 +71,15 @@ through a series of additions, subtractions and shifts.
 \CHECK{Talk about general programability?}
 
 \subsubsection{Source Data Register}
-The source data register, or just \ac{S-REG} for short, is a special purpose
+The source data register, or just S REG for short, is a special purpose
 register within the \ac{SIMD} node. It is a communication unit, separated form
 the rest of the node so it can transfer new and processed image data through the
 array while the \ac{SIMD} node is otherwise busy executing instructions.
 
 \input{fig/fpga/fpga-simd-s-reg} 
 
-The \ac{S-REG} is partly controlled by the \ac{SIMD} node instruction set where it
-can swap data in and out from the \ac{S-REG} and partly by a special {\tt step} signal
+The S REG is partly controlled by the \ac{SIMD} node instruction set where it
+can swap data in and out from the S REG and partly by a special {\tt step} signal
 sent from the \ac{DMA}.
 
 \subsubsection{State Register}
@@ -110,25 +110,26 @@ and store.
 \TODO{We invented this one by ourselves! Should we brag some more?}
 
 \subsection{Instruction Set}
-The \ac{SIMD} node instruction set, detailed in Appendix \ref{apx:simd-instruction-set}, 
-controls all aspects of the \ac{SIMD} node. It has been designed with regularity in mind 
-in order to keep the number of special cases in the hardware to a minimum with as few 
-formats as possible.
+The \ac{SIMD} node instruction set, detailed in Appendix
+\ref{apx:simd-instruction-set}, controls all aspects of the \ac{SIMD} node. It
+has been designed with regularity in mind in order to keep the number of special
+cases in the hardware to a minimum with as few formats as possible.
 
-Much of the design behind the instruction set is borrowed from \ac{MIPS} which also 
-favors regularity in order to simplify the hardware, thus enhancing the performance.
+Much of the design behind the instruction set is borrowed from MIPS which also
+favors regularity in order to simplify the hardware, thus enhancing the
+performance.
 
 \subsubsection{Branching}
 Since all nodes run the same instructions, both parts of a branch must be
 executed. Nodes are setting the {\tt state} to 1 in order to indicate that they
 are executing within that part of the branch. An example of single branching is
-shown in Listing \ref{lst:single-branch}.
+shown in Listing \ref{lst:single-level-branching}.
 
-{\sc \color{green} LENA-assembly here (fixed)}
+\input{lst/fpga/single-level-branching}
 
 Since the state register is 8 bits, it is possible to have up to 8 nested
 branches by shifting the current state left and adding the new state to the
-end. Listing \ref{lst:multibranch} contains code which performs such a
+end. Listing \ref{lst:multilevel-branching} contains code which performs such a
 multilevel branch.
 
-{\sc \color{green} LENA-assembly here (fixed)}
+\input{lst/fpga/multilevel-branching}
