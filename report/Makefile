@@ -2,7 +2,7 @@ LATEX = pdflatex
 LATEXFLAGS = -shell-escape
 BIBTEX = bibtex
 REPORT = report
-TEMPS = toc bbl blg log out lof lot lol aux
+TEMPS = toc bbl blg log out lof lot lol aux pyg
 SUBDIRS = fb
 
 .PHONY: clean remake purge
