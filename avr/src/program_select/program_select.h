@@ -4,10 +4,9 @@
 #include "compiler.h"
 
 // FILE SUFFICES
-#define LENA_EXECUTABLE_SUFFIX 	"lena"
-#define DATA_FILE_SUFFIX 		"data"
-//#define BMP_FILE_SUFFIX			"bmp"
-#define SCRIPT_FILE_SUFFIX 		"script"
+#define LENA_EXECUTABLE_SUFFIX 	"bin"
+#define DATA_FILE_SUFFIX 		"cfg"
+//#define SCRIPT_FILE_SUFFIX 		"script"
 
 // STRINGS AND ARRAY MAXIMUMS
 #define N_FILES_MAX_DIGITS 					20
