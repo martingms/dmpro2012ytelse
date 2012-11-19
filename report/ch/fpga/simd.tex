@@ -35,7 +35,8 @@ For a list of all \ac{SIMD} instructions, see Appendix \ref{apx:simd-instruction
 \subsubsection{Communication}
 The communication component controls outbound data to adjacent \ac{SIMD} nodes in 
 the grid array; north, south, east and west. The communication component is fairly 
-simple and can either send register data or forward inbound data according to the counterclockwise forwarding scheme described in \ref{sec:simd-com}.
+simple and can either send register data or forward inbound data according to the 
+counterclockwise forwarding scheme described in \ref{sec:simd-com}.
 
 \subsubsection{Register Bank}
 Each \ac{SIMD} node is equipped with $2^4 = 16$ 8-bit general purpose registers, 14 of
@@ -82,7 +83,7 @@ can swap data in and out from the \ac{S-REG} and partly by a special {\tt step} 
 sent from the \ac{DMA}.
 
 \subsubsection{State Register}
-In order to handle branches, thrugh masked instructions, each \ac{SIMD} must have an
+In order to handle branches, through masked instructions, each \ac{SIMD} must have an
 internal state register. Even though the register is 8-bit wide only the least 
 significant bit is the current state for the node.
 
@@ -92,19 +93,30 @@ branches.
 
 \subsection{Communication}\label{sec:simd-com}
 
-\input{fig/fpga/fpga-simd-datacom}
+Data exchange between \ac{SIMD} nodes are multiplexed in all directions. \ac{SIMD} nodes
+are capable of sending source data in all directions during one clock cycle and storing
+them within the next as shown in Figure \ref{fig:fpga-simd-send}.
+
+\input{fig/fpga/fpga-simd-send}
 
 \subsubsection{Forwarding}
-The clockwise spiral forwarding is an optimized way of distributing a 3$\times$3
-array of source data to all the \ac{SIMD} nodes in the grid array using only 3
-clock cycles, compared to ??? cycles when not using the clockwise
-spiral.
+The counterclockwise forwarding, illustrated by Figure \ref{fig:fpga-simd-fwrd}, is an 
+optimized way we devised for distributing a 3$\times$3 array of source data to all 
+\ac{SIMD} nodes in the \ac{SIMD} array using only 3 clock cycles; send, forward and sore, 
+and store.
 
-\TODO{We made this one ourselves! note that down. Jahre vil at dette skal forklares bedre}
+\input{fig/fpga/fpga-simd-fwrd}
 
-\subsection{Instructions}
-Something about ideology...++
+\TODO{We invented this one by ourselves! Should we brag some more?}
 
+\subsection{Instruction Set}
+The \ac{SIMD} node instruction set, detailed in Appendix \ref{apx:simd-instruction-set}, 
+controls all aspects of the \ac{SIMD} node. It has been designed with regularity in mind 
+in order to keep the number of special cases in the hardware to a minimum with as few 
+formats as possible.
+
+Much of the design behind the instruction set is borrowed from \ac{MIPS} which also 
+favors regularity in order to simplify the hardware, thus enhancing the performance.
 
 \subsubsection{Branching}
 Since all nodes run the same instructions, both parts of a branch must be

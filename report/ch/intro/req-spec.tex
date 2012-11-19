@@ -14,20 +14,19 @@ important than having developer tools for the machine ({\sc FR6}).
 up with a system which is not generally programmable. This is important, as a
 computer specialized for image processing has less usability than a generally
 programmable computer. {\sc FR3} and {\sc FR7} makes it easier to show that the
-computer is capable of processing images, whereas {\sc FR4 - FR6} makes it
+computer is capable of processing images, whereas {\sc FR4} through {\sc FR6} makes it
 easier to use, debug and create programs for the computer.
 
 \input{fig/intro/nonfunc}
 
 Table \ref{fig:nonfunc-req} shows the non-functional requirements. These were
-all determined by the assignment. They are all treated as absolute requirements,
+all determined by the assignment. They were all treated as absolute requirements,
 and our design has been centered around those. {\sc NFR1} and {\sc NFR2} gave us
-little choice in what hardware to use, and naturally these have been used. {\sc
-  NFR3} limits what components we can use to cheaper ones. {\sc NFR4} Constraints our
+little choice in what hardware to use, and naturally this hardware have been used. {\sc
+  NFR3} limits what components we can use to the cheaper ones. {\sc NFR4} Constraints our
 design choices when designing the image processor. We could not make any type of core
-organization, we have to make this specific type. {\sc NFR5} leads to some
-design choices for the entire system. Our goal is performance, and we do not
-have to care about other concerns such as energy consumption, just to
-get performance as good as possible without the system
-burning up. However, we may have to sacrifice some simplicity in our design for
+organization, we had to make this specific type. {\sc NFR5} leads to some
+design choices for the entire system. Our goal was to get the best possible performance, and we did not
+have to care about concerns such as energy consumption. 
+However, we may have sacrificed some simplicity in our design for
 the sake of performance.
