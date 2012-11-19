@@ -21,7 +21,7 @@ we selected the cheaper alternative.
 In addition, we figured a shared \ac{VGA} and data memory would obstruct the flow
 of data from the \ac{SCU}. Since data for the \ac{VGA} would be both read and written
 frequently, the \ac{VGA} needed its own memory, rather than sharing memory with
-the SCU itself. As we were supposed to optimize for performance, we had to take
+the rest of the LENA architecture. As we were supposed to optimize for performance, we had to take
 possible bottlenecks into consideration. We therefore invested in an extra
 memory chip. For the VGA we chose an 8-bit word memory that was big enough to
 hold at least a full screen-frame, at 8 bits per pixel (since each pixel is an 8-bit greyscale pixel).
