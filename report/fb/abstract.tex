@@ -8,11 +8,11 @@
 As heat generation and power consumption starts to limit speed and effectiveness
 of single core architectures, parallelism is becoming more and more important
 within all performance demanding computing. Everything from cellphones to
-desktop computers now carry multiple processing cores to perform their
+desktop computers now carries multiple processing cores to perform their
 functions. Parallelism is of course not a new concept; for many decades
 exploiting the parallel nature of certain data to effectivize computation has
-been a known tactic. Especially within the field of image processing has
-parallelism proved itself an extremely effective tool.
+been a known tactic. Especially within the field of image processing
+parallelism has proved itself to be an extremely effective tool.
 
 While MIMD systems are dominant within general computing, we wanted to explore
 alternatives which may work better for certain applications. The result of this
@@ -28,7 +28,7 @@ output through a custom VGA controller.
 We have been inspired by the Goodyear MPP architecture, which clearly shows in
 our design. Our main focus was performance, and because of that simplicity in
 design has been strived for in order to fit as many parallel cores on our FPGA
-as possible. As such, the SIMD nodes have been stripped of many of the more
+as possible. As such, the SIMD nodes have been stripped of many
 complex instructions, such as integer multiplication and division, as well as
 all floating point capabilities. The SIMD array is controlled by a control core
 that handles I/O and memory access through a DMA unit.
