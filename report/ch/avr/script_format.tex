@@ -18,7 +18,7 @@ To ease the handling of data on the SD card, we chose to use the FAT
 file system. The file system contains files such as scripts, \ac{LENA}
 programs and data pointers. Because of the performance limitations of
 the \ac{ASF} FAT driver in conjunction with multiple block
-reads\footnote{See section \ref{sec:performance-sd-card} for details}, the
+reads\footnote{See Section \ref{sec:performance-sd-card} for details}, the
 data is actually placed outside of the file system. The transfer speed
 of data is crucial to our system's performance, and this increased the
 frame rate substantially. We were still able to use the file system to
