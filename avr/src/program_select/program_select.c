@@ -33,13 +33,11 @@
 
 #define FPGA_PROGRAM_SHOW_PICTURE	"A:/show_video.bin"
 
-//char selected_data_unit_path[DEFAULT_STRING_MAX_LENGTH] = "A:/";
-
 enum data_type current_type;
 int current_state;
 int menu_item_selected;
 int menu_size;
-char selected_program[DEFAULT_STRING_MAX_LENGTH] = "A:/";
+char selected_program[DEFAULT_STRING_MAX_LENGTH];
 
 volatile bool busy = TRUE;
 volatile bool reset;
@@ -52,8 +50,9 @@ volatile U8 v_button;
 void program_select_start(void) {
 
 	button_reg_listener(&button_push); 	// Set button listener
-	fpga_send_program(FPGA_PROGRAM_SHOW_PICTURE);
 	while (TRUE) {
+		LED_Off(0xff);
+		fpga_send_program(FPGA_PROGRAM_SHOW_PICTURE);
 		load_menu(STATE_SELECT_PROGRAM); 	// Load menu
 		busy = FALSE; 						// Start listening on buttons
 		reset = FALSE;
@@ -72,7 +71,6 @@ void program_select_start(void) {
 			v_button = 0;
 
 		}
-		screen_display_error_message(" resets...");
 	}
 }
 
@@ -131,7 +129,7 @@ void send_selected_file(void) {
  * Go to next state of program
  */
 void next_state(void) {
-	int rc;
+	//int rc;
 	char *file;
 
 	// Load script and go to the select data screen
@@ -139,20 +137,14 @@ void next_state(void) {
 		//set_file_type(PROGRAM);
 		fb_iterator_seek(menu_item_selected);	// Seeks to selected item
 		file = fb_iterator_next();
-		fb_iterator_terminate();
+		//fb_iterator_terminate();
+		selected_program[0] = 'A';
+		selected_program[1] = ':';
+		selected_program[2] = '/';
+		selected_program[3] = '\0';
 		strcat(selected_program, file);
-		/*char file_full[strlen(file)+4];
-		file_full[0] = 'A';
-		file_full[1] = ':';
-		file_full[2] = '/';
-		file_full[3] = '\0';
-		rc = load_script(strcpy(file_full, file)); // Tries to load the program script
-		if (!rc) {
-			//screen_display_error_messagef("Lines in selected script\n1. %s\n2. %s\n3. %d\n", selected_script.description, selected_script.fpga_bin_path, selected_script.transfer_delay);
-			*/load_menu(STATE_SELECT_DATA);/*
-		} else {
-			screen_display_error_messagef("Could not load script\n%s\n", file_full);
-		}*/
+		load_menu(STATE_SELECT_DATA);
+
 	}
 
 	// Load data, run FPGA and reset
@@ -166,17 +158,14 @@ void next_state(void) {
 		file_full[1] = ':';
 		file_full[2] = '/';
 		file_full[3] = '\0';
-
-		strcpy(file_full, file);
+		strcat(file_full, file);
 
 		data_blk_src_t data_info;
 		if (data_file_parse(file_full, &data_info) == 0) {
 			run_fpga_program_from_sd(&data_info);
 		} else {
 			screen_display_error_messagef("Could not parse data file %s", file_full);
-			//run_fpga_program_from_file();
 		}
-		fb_iterator_terminate();
 		reset = TRUE;
 	}
 }
@@ -267,7 +256,7 @@ void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 	str2img_osd_init(FRAME_BUFFER);
 
 	// send the program
-	fpga_send_program(selected_program);//selected_script.fpga_bin_path);
+	fpga_send_program(selected_program);
 
 	unsigned int blocks_per_frame = 150; // 320*240/512
 	unsigned int first_block = data_info->block_addr; // start reads here

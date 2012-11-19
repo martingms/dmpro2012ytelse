@@ -165,14 +165,17 @@ int data_file_parse(const char *path, data_blk_src_t *result) {
 	sscanf(buf, "%u %u %f", &ba, &fc, &target_fps);
 
 	if (ba < SD_RAW_ACCESS_MIN_BLOCK || ba > SD_RAW_ACCESS_MAX_BLOCK) {
+		close(fd);
 		return 1;
 	}
 	if (fc <= 0) {
+		close(fd);
 		return 2;
 	}
 
 	result->block_addr = ba;
 	result->frame_count = fc;
 	result->target_fps = (double)target_fps;
+	close(fd);
 	return 0;
 }
