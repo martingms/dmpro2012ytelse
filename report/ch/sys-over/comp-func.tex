@@ -28,7 +28,6 @@ data to the \ac{SIMD} nodes and the \ac{VGA} controller, whereas the \ac{DMA} is
 responsible for writing data from the \ac{SIMD} nodes back into memory. The
 \ac{VGA} controller is responsible for handling the \ac{VGA} memory and sending
 the correct signals to the \ac{VGA} port. In addition, as the \ac{SIMD} nodes
-usually depend heavily on their neighbor's data, we decided to have ``dummy
-nodes'' outside the real \ac{SIMD} nodes. Their only function is to transmit
-data to the edge nodes. As such, we can still utilize the edge nodes for
+usually depend heavily on their neighbor's data, we decided to have \emph{edge nodes} outside the real \ac{SIMD} nodes. Their only function is to transmit
+data to the real nodes. As such, we can still utilize the edge nodes for
 computation when neighbor data is needed.

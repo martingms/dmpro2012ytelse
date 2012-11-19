@@ -31,7 +31,7 @@ special register.
 
 The control core then sends the instruction the \ac{SIMD} nodes should use
 next. In parallel, the \ac{DMA} starts sending in new data into the \ac{SIMD}
-nodes, to minimise latency. When the \ac{SIMD} nodes have finished processing
+nodes, to minimize latency. When the \ac{SIMD} nodes have finished processing
 this data, they swap the finished result with the new data on the ``conveyor
 belt''. The \ac{DMA} puts on new data, and the finished results are moved on and
 out of the ``conveyor belt''. The \ac{DMA} takes the finished result and puts it
