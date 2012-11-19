@@ -3,7 +3,7 @@
 \subsection {Memory}
 The overall design for our machine specifies various different, separate memories. One for data,
 one for instructions and one for the VGA. The data, VGA and AVR memories use 8-bit chips to match
-their word size. And the instruction memory uses 2x16-bit chips with address-lines connected
+their word size. And the instruction memory uses 2x16-bit chips with address lines connected
 together and 8 ignored I/O-pins, to match its 24-bit word size.
 \begin{comment}
 Tok dette ut siden dette allerede er diskutert tidligere i rapporten
@@ -23,7 +23,7 @@ Since the requirements for the data/instruction memories differed in both size a
 we wound up with not only separate, but also different chips for this purpose (The data-memory required
 8-bit words, the instruction-width was 24-bit, and since we wanted to avoid using multiple memory accesses
 to get a complete instruction, we needed a wide enough memory chip for that purpose. 24-bit chips were out of
-production, and 32-bit memory was too expensive, thus the solution became 2x16-bit chips with their address-lines
+production, and 32-bit memory was too expensive, thus the solution became 2x16-bit chips with their address lines
 connected together and 8 ignored I/O-pins, effectively making them a 24-bit memory).
 
 Since we wanted to reduce the sharing of memories as much as possible, we also needed a separate memory for
@@ -42,11 +42,11 @@ Forresten, da vart det så kort at jeg bare tødde det in i avsnittet over. Må 
 \end{comment}
 
 \subsection{VGA}
-Our initial plans were to create our own \ac{VGA} controller in the \ac{FPGA}, but since having video-output was mission-critical
-for our project, we really wanted to have a fallback-solution in case our own
+Our initial plans were to create our own \ac{VGA} controller in the \ac{FPGA}, but since having video output was mission-critical
+for our project, we really wanted to have a fallback solution in case our own
 \ac{VGA} controller solution ended up not working.
 To allow for this fallback, we added the necessary connectors for the external \ac{VGA} module that Festina Lente used last year,
-even though that module was known to be too slow to be able to display images at our required speeds, it would atleast give us
+even though that module was known to be too slow to be able to display images at our required speeds, it would at least give us
 some way of outputting anything at all if our own solution failed.
 
 \subsection {Communication}
