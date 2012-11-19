@@ -1,7 +1,7 @@
 \section{Control Module}
 
 The control module is responsible for coordinating the activity of the
-other parts of the image processor and for data transfer into and within
+other parts of the image processor and transferring data into 
 the image processor. A visual overview of the control module is given in
 Figure \ref{fig:control-module}.
 
@@ -9,9 +9,9 @@ Figure \ref{fig:control-module}.
 
 The control module decodes the state signal set by the SCU, and enables,
 disables and resets components accordingly. It is responsible for performing
-data transfers between the SCU and the program and data memories, and for
+data transfers between the SCU, the program and data memories, and for
 transferring data internally between the \ac{SIMD} node array, data \ac{RAM}
-and the \ac{VGA} screen buffer. \TODO{Isn't this the DMA's work?}
+and the \ac{VGA} screen buffer. %\TODO{Isn't this the DMA's work?}
 
 The control module contains the \ac{CPU} that is used for the non-\ac{SIMD}
 instructions embedded in a program. This \ac{CPU}, henceforth referred to as the
