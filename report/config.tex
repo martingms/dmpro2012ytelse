@@ -60,6 +60,7 @@ Trygve Aaberge\\
 \usepackage{graphicx}
 \usepackage{tabularx}
 \usepackage{comment}
+\usepackage{caption}
 \usepackage{hyperref}
 \usepackage{appendix}
 \usepackage[nohyperlinks]{acronym}
@@ -97,6 +98,7 @@ Trygve Aaberge\\
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage[chapter]{minted}
 \usemintedstyle{soderberg}
+\newenvironment{code}{\captionsetup{type=listing}\centering}{}
 \renewcommand\listoflistingscaption{List of Listings}
 
 \newminted{lena}{frame=single,linenos}
