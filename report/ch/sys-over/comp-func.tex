@@ -34,27 +34,28 @@ data to the edge nodes. As such, we can still utilize the edge nodes for
 computation when neighbor data is needed.
 
 \subsubsection{Memory}
-\TODO{Should memory be here? I believe it is an important aspect of the whole
-  machine, but maybe others disagree \ldots} The memory is split over three
-different chips: The data memory, the instruction memory and the \ac{VGA}
-memory. All of the \ac{RAM} is asynchronous \ac{SRAM}, based on previous
-projects success with it\cite{berg2011festinalente} along with the speed. The
-main reason for this choice was mostly due to frequent reading and writing, but
-also because a larger \ac{SRAM} module was more costly than multiple smaller
-\ac{SRAM} modules per \ac{MB}. An additional benefit from this is that the
-complexity is lowered: Fewer potential collisions on \ac{RAM} reading and
-writing occurs since fewer parts read and write to the different \ac{RAM} chips.
+The memory is split over three different chips: The data memory, the
+instruction memory and the \ac{VGA} memory. All of the \ac{RAM} is asynchronous
+\ac{SRAM}, based on previous projects success with
+it\cite{berg2011festinalente} along with the speed. The main reason for this
+choice was mostly due to frequent reading and writing, but also because a
+larger \ac{SRAM} module was more costly than multiple smaller \ac{SRAM} modules
+per \ac{MB}. An additional benefit from this is that the complexity is lowered:
+Fewer potential collisions on \ac{RAM} reading and writing occurs since fewer
+parts read and write to the different \ac{RAM} chips.
 
 \subsubsection*{Instruction Memory}
 We ended up with a 24-bit instruction set for both \ac{SIMD} nodes and the
 control core. As we ended up with a 16-bit program counter, the maximal
 instruction count would be 64,000 and the memory chip size is chosen on that
-basis. While it may sound like few operations, especially considering how the
-\ac{SIMD} nodes cannot jump or branch, it is still more than enough. To see why,
-note that the control core can simulate loops and may start the image processing
-algorithm from the beginning when the \ac{SIMD} nodes have finished processing
-the current data.
+basis. While it may sound little, it is still more than enough. To see why,
+note that the control core can start the image processing algorithm from the
+beginning when the \ac{SIMD} nodes have finished processing the current data.
+Also, we usually define algorithms for a single frame, without any concern
+for the one coming after it. The program is simply restarted for every new frame,
+reducing the amount of code needed and the complexity of the programs.
 
+\todo{Isn't both data- and vga memory discussed in length later in the report?}
 \subsubsection*{Data Memory}
 
 \subsubsection*{VGA Memory}
