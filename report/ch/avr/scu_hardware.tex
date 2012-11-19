@@ -5,11 +5,9 @@ to the the microcontroller used in the SCU, the AVR AT32UC3A0, hereby referred
 to as AVR. Also included are specifics in regard to what choices were made in
 terms of AVR specific hardware. 
 
-Trying to design and plan the hardware associated with the AVR, we quickly
-realized that there were some components that required more planning and more
-careful placing than the rest. This was mostly because they either had to be
-connected to special hardware (specific pins) or needed physical proximity in
-order to be as effective as possible. To mention some of these: \TODO{physcal proximity, really?}
+Trying to design and plan some of the hardware associated with the AVR, it was
+plain that while some components could be connected to arbitrary GPIO pins,
+others would require specific pins. To mention some of these:\TODO{only mention some, not all?}
 
 \begin{enumerate}
 \item Serial port
@@ -25,16 +23,16 @@ have to take that into account mapping pins as they could be fitted on any
 where and made it possible to fit the other interfaces on the AVR better.
 
 Same goes for the \ac{VGA} controller we had mapped up to the AVR. Seeing
-as this neither required specific ports on the AVR, we fit this in where
+as this didn't require any specific ports on the AVR, we fit this in where
 there were leftover pins when the rest was mapped out.
 
-As for the actual pinout of the AVR, see appendix \ref{app:schematics}.
+For the actual pinout of the AVR, see appendix \ref{app:schematics}.
 
 \begin{description}
 
 \item[AVR crystal] \hfill
 
-Previous projects have chosen to use multiple crystals on their AVR. Our AVR has support for up to 3 crystals, where 2 are high frequency crystals that can be used as external clocks for the AVR. The last crystal is a low frequency crystal that is needed if one intends to make use of power saving functions in the AVR or are in need of real time measurement on the AVR.
+Previous projects have chosen to use multiple crystals on their AVR. Our AVR has support for up to 3 crystals, where 2 are high frequency crystals that can be used as external clocks for the AVR. The last crystal is a low frequency crystal that can replace an internal clock for power saving functions and real time measurement for greater accuracy, since the internal clock speed may vary by temperature.
 
 As we were to optimize for performance we tried to use the most of the given resources. This included saving pins wherever we could, and as such we have gone with only one crystal. This crystal is connected to port 0 on the AVR and has a socket. We ordered a number of crystals in order to make sure that we could adapt to most any requirements that may or may not have been clear to us at the time of the design.
 
