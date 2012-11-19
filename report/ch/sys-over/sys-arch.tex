@@ -1,10 +1,10 @@
 \section{System Architecture}
 
 A general concern when designing large systems is the accidental
-complexity\cite[p.~8-9]{holt2004uml} one may create by poor design choices early
+complexity\cite[p.~8-9]{holt2004uml} one may create by making poor design choices early
 on. Many solutions designed to reduce accidental complexity are based around
-software systems, and sacrifices performance in both the time domain and in the
-space domain\cite{moseley2006out}. While these solutions may be applicable
+software systems, and sacrifices performance in the domains of both time and
+space\cite{moseley2006out}. While these solutions may be applicable
 within hardware systems where these kinds of performance degradations are not a
 problem, it is unacceptable in systems where one or multiple of the system
 requirements are a performance increase in one or both of these domains. As one
@@ -13,8 +13,8 @@ level of inherent complexity.
 \input{fig/sys-over/arch-fig}
 
 To remedy the complexity which inevitably follows from our requirements, we
-focused on making it possible to isolate errors and make it possible to test
-the individual components as early as possible: The \ac{LENA} architecture was
+focused on making it possible to both isolate errors and test
+individual components as early as possible: The \ac{LENA} architecture was
 tested through \ac{VHDL} test benches, the \ac{VGA} component was tested with
 prototypes on a breadboard, and the \ac{SCU} was tested with an EVK1100 development
 board as well as with the buttons and \ac{LED}s on the PCB once it arrived.
@@ -27,7 +27,7 @@ should fail to implement its \ac{VGA} module.
 
 To be able to process data, we needed an \ac{I/O} device which could serve the machine
 with data it should process. To ensure that we would have at least one
-functional \ac{I/O} component,\CHECK{Sounds okay now?} we included both a serial
+functional \ac{I/O} component, we included both a serial
 port, a \ac{USB} port and an \ac{SD} card reader on the \ac{PCB}. In addition,
 to be able to keep enough data in memory and allow full overlap of different memory
 transactions to make processing fast, the \ac{LENA} architecture has three separate

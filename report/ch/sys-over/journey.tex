@@ -8,7 +8,7 @@ used to simplify complex parts of the system.
 At first, the machine is powered up, and all the components wake up from their
 sleep. \ac{LENA} will reload its \ac{FPGA} setup from flash, and the \ac{SCU}
 will do the same. When these are ready to run, the \ac{SCU} creates a menu and
-sends it to \ac{LENA}, which will in turn show the menu trough the \ac{VGA} port
+sends it to \ac{LENA}, which will in turn show the menu through the \ac{VGA} port
 it has control over. Whenever a user pushes any of the buttons, the menu is
 updated and a new menu image is sent over to \ac{LENA}.
 
@@ -31,7 +31,7 @@ special register.
 
 The control core then sends the instruction the \ac{SIMD} nodes should use
 next. In parallel, the \ac{DMA} starts sending in new data into the \ac{SIMD}
-nodes, to minimise latency. When the \ac{SIMD} nodes have finished processing
+nodes, to minimize latency. When the \ac{SIMD} nodes have finished processing
 this data, they swap the finished result with the new data on the ``conveyor
 belt''. The \ac{DMA} puts on new data, and the finished results are moved on and
 out of the ``conveyor belt''. The \ac{DMA} takes the finished result and puts it
