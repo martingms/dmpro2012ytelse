@@ -1,19 +1,23 @@
-ctrl nop
-ctrl addi R1 ZERO 150           # R1 = 320*240
-ctrl sll R1 R1
-ctrl sll R1 R1
-ctrl sll R1 R1
-ctrl sll R1 R1
-ctrl sll R1 R1
-ctrl sll R1 R1
-ctrl sll R1 R1
-ctrl sll R1 R1
-ctrl sll R1 R1
+    ctrl nop
 
-ctrl add R2 ZERO ZERO
-ctrl add R3 R1 ZERO
+    # R1: Size of a screen buffer (320*240)
+    ctrl addi R1 ZERO 150
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+    ctrl sll R1 R1
+
+    # R2 and R3: Offsets for the memory locations we're alternating read and write to
+    ctrl add R2 ZERO ZERO
+    ctrl add R3 R1 ZERO
 
 vgacopy:
+    # R10: Read address from data memory
     ctrl add R10 R2 ZERO
     ctrl add VADDR ZERO ZERO
 
@@ -44,14 +48,17 @@ dma_start:
 
     ctrl nop
 
+    # Set DMA read to active
     ctrl addi DMA ZERO 1
     ctrl dma set_read_active
     ctrl nop
 
+    # Set DMA write to active
     ctrl addi DMA ZERO 1
     ctrl dma set_write_active
     ctrl nop
 
+    # Set DMA read and write increments to 320
     ctrl addi DMA ZERO 160
     ctrl sll DMA DMA
     ctrl dma set_write_vertical_incr
@@ -60,23 +67,19 @@ dma_start:
 
     ctrl addi R4 ZERO 160           # R4 = 320
     ctrl sll R4 R4
-    ctrl add DMA ZERO R4            # DMA = R4 * 3 + 1 = 640 + 320 + 1
-    ctrl add DMA DMA R4
-    ctrl add DMA DMA R4
+    ctrl sll R4 R4
+    ctrl sll R4 R4
+    ctrl add DMA ZERO R4            # DMA = R4 + 1 = 1280 + 1 = 1281
     ctrl addi DMA DMA 1
     ctrl dma set_write_horizontal_incr
     ctrl dma set_read_horizontal_incr
     ctrl nop
 
-    ctrl addi R7 ZERO 3             # R7: Row start address accumulator
-    ctrl addi R8 ZERO 118           # R8: Row counter
+    ctrl addi R7 ZERO 0             # R7: Row start address accumulator
+    ctrl addi R8 ZERO 80            # R8: Row counter
 
 dma_loop:
-    ctrl addi R6 ZERO 159           # R6: Column counter
-    ctrl addi R7 R7 160
-    ctrl addi R7 R7 160
-    ctrl addi R7 R7 160
-    ctrl addi R7 R7 160
+    ctrl addi R6 ZERO 160           # R6: Column counter
     ctrl addi DMA R7 0
 
 dma_row_loop:
@@ -179,6 +182,13 @@ dma_row_loop:
     ctrl beq dma_row_loop
     ctrl slt ZERO ZERO R6
     ctrl nop
+
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
+    ctrl addi R7 R7 160
 
     ctrl subi R8 R8 1
     ctrl beq dma_loop
