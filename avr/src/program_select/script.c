@@ -148,6 +148,7 @@ int data_file_parse(const char *path, data_blk_src_t *result) {
 	int fd = open(path, O_RDONLY);
 	if (fd < 0) {
 		LED_On((1 << LED_COUNT) - 1);
+
 		while(1);
 		return fd;
 	}
