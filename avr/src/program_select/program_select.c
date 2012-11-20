@@ -94,11 +94,11 @@ void button_push(U8 button) {
 	static double last_btn_click_time = -1000;
 
 	// to prevent "double clicks"
-	if (timer_get_ms() - last_btn_click_time > 100) {
+	if (timer_get_ms() - last_btn_click_time > 200) {
 		v_button = button;
 		LED_Toggle(LED1);
 
-		if (send_in_progress) {
+		if (send_in_progress/* && button == ENTER_BUTTON*/) {
 			restart_send = TRUE;
 		}
 	}
@@ -184,15 +184,23 @@ void next_state(void) {
 
 		data_blk_src_t data_info;
 		if (data_file_parse(file_full, &data_info) == 0) {
-			do {
-				restart_send = FALSE;
-				run_fpga_program_from_sd(&data_info);
-			} while (restart_send);
+			while (1) {
+				do {
+					restart_send = FALSE;
+					run_fpga_program_from_sd(&data_info);
+				} while (restart_send);
 
-			// don't go back to menu if one frame
-			if (data_info.frame_count == 1) {
-				fpga_set_state(FPGA_STATE_RUN);
-				while (1);
+				// don't restart if one frame
+				if (data_info.frame_count == 1) {
+
+					// because we're in state stop if frame count == 1
+					fpga_set_state(FPGA_STATE_RUN);
+
+					// wait for user to restart
+					send_in_progress = TRUE; // need to be in a state where restart_send is changed
+					while (!restart_send);
+					send_in_progress = FALSE;
+				}
 			}
 
 		} else {
