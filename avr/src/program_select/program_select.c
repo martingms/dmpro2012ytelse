@@ -184,14 +184,12 @@ void next_state(void) {
 
 		data_blk_src_t data_info;
 		if (data_file_parse(file_full, &data_info) == 0) {
-			while (1) {
-				do {
+
+			// don't restart if one frame
+			if (data_info.frame_count == 1) {
+				while (1) {
 					restart_send = FALSE;
 					run_fpga_program_from_sd(&data_info);
-				} while (restart_send);
-
-				// don't restart if one frame
-				if (data_info.frame_count == 1) {
 
 					// because we're in state stop if frame count == 1
 					fpga_set_state(FPGA_STATE_RUN);
@@ -201,6 +199,11 @@ void next_state(void) {
 					while (!restart_send);
 					send_in_progress = FALSE;
 				}
+			} else {
+				do {
+					restart_send = FALSE;
+					run_fpga_program_from_sd(&data_info);
+				} while (restart_send);
 			}
 
 		} else {
