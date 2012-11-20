@@ -2,7 +2,7 @@
 
 Some of these tests are strictly dependent on other tests. In theory, all the
 different tests could be done in any order to test the correctness of the
-system. However, some of the functional requirements makes it easy to test other
+system. However, some of the functional requirements make it easy to test other
 functional requirements. Therefore, we have decided to let some of these tests
 have dependencies. In addition, their ordering is a natural way to approach and
 test such a system, mostly because some of the test have a slight overlap. For
@@ -36,6 +36,8 @@ yes, else it would be done so fast we couldn't possibly see the results.
 \item Verify that the buttons toggle the \acp{LED} when pushed.
 \end{enumerate}
 
+\clearpage
+
 {\sc Test 3 - Functional Requirement 6}
 
 {\em \FRVI}
@@ -53,7 +55,7 @@ yes, else it would be done so fast we couldn't possibly see the results.
 {\em \FRIII}
 
 \begin{enumerate}
-\item Load the \ac{LENA} with a program which copies an image out to the
+\item Load the \ac{LENA} with a program that copies an image out to the
   \ac{VGA}.
 \item Read an image from the \ac{SD} card.
 \item Load the image from the \ac{SCU} onto the \ac{LENA}.

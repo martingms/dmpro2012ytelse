@@ -39,7 +39,7 @@ class LenaLexer(RegexLexer):
 
             # DMA
             (r'\b(set_read_active|set_read_base_addr'
-             r'|set_read_horizontal_incr set_read_vertical_incr'
+             r'|set_read_horizontal_incr|set_read_vertical_incr'
              r'|set_write_active|set_write_base_addr|set_write_horizontal_incr'
              r'|set_write_vertical_incr|start|mask)\b', Keyword.Type), 
             #Using random token just to get some colors yo.

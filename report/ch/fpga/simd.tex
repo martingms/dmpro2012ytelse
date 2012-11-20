@@ -8,7 +8,7 @@ share the same instruction set and executes them in parallel, hence
 Each \ac{SIMD} node is fully equipped with a register bank,
 an \ac{ALU} and data exchange with adjacent nodes.
 Everything inside the node is operated through the SIMD node
-instruction set explained in \ref{subsection:}.
+instruction set explained in Appendix \ref{apx:simd-instruction-set}.
 
 The schematic of a single \ac{SIMD} node is shown in Figure
 \ref{fig:fpga-simd-arch}, and details the entire data-path for the
@@ -22,10 +22,10 @@ components.
 \subsection{Components}
 In this section we briefly describe the different components, their purpose, and
 how they together form the data-path for the node. All components has been thoroughly
-thought out and design to suit the \ac{SIMD} nodes.  
+thought out and designed to suit the \ac{SIMD} nodes.  
 
 \subsubsection{Instruction Decoder}
-Whenever a new instruction is received by the \ac{SIMD} node it is immediately 
+Whenever a new instruction is received by the \ac{SIMD} node, it is immediately 
 decoded by the instruction decoder. Based on the enable-bit, mask-bit and OP-code
 of the instruction correct control signals are set up for the remaining components
 throughout the node.
@@ -60,15 +60,15 @@ supported by special hardware inside the FPGA. All \ac{SIMD} node instructions c
 a 3-bit \ac{ALU} function at the end.
 
 Upon researching image processing algorithms well suited for parallel processing, we
-found that most of then could be implemented using only these 8 \ac{ALU} operations. 
+found that most of them could be implemented using only these 8 \ac{ALU} operations. 
 Image processing algorithms such as median filter, various blur filters, edge detection, 
 color manipulation such as inversion and thresholding are fully feasible using. More high
 level arithmetic, such as multiply and divide by constants, can be implemented
 through a series of additions, subtractions and shifts.
 
-\CHECK{Proof-read this section!}
-\CHECK{Add some reffernces?}
-\CHECK{Talk about general programability?}
+%\CHECK{Proof-read this section!}
+%\CHECK{Add some reffernces?}
+%\CHECK{Talk about general programability?}
 
 \subsubsection{Source Data Register}
 The source data register, or just S REG for short, is a special purpose

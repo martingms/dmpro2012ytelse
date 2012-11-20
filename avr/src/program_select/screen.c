@@ -21,8 +21,6 @@
 #define SCREEN_PREFIX_ITEM				' '
 #define SCREEN_PREFIX_SELECTED_ITEM 	'*'
 
-#define FPGA_PROGRAM_SHOW_PICTURE		"A:/show_video.bin" //TODO show_video.bin
-
 struct set {
 	int first;
 	int last;
@@ -64,7 +62,6 @@ void screen_display_error_message(char *message) {
 
 //#define BUFFER_ADRESS (SRAM + STR2IMG_BUFFER_SIZE)
 void screen_draw_bitmap_on_screen(void) {
-	fpga_send_program(FPGA_PROGRAM_SHOW_PICTURE);
 	U8 *buffer = SCREEN_BITMAP;
 	str2img_read_block(buffer);
 	fpga_send_data_from_memory(buffer, PICTURE_SIZE);

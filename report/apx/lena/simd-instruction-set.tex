@@ -2,8 +2,7 @@
 
 SIMD nodes operates on a {\tt 24 bit} instruction set divided in 2 main
 formats. Arithmetic instructions (R, I and S) and message passing instructions
-(M-send, M-store and M-forward).  \NOTE{Split this up into instruction set and
-  assembler section?}
+(M-send, M-store and M-forward).
 
 \subsection[R Format]{R Format (OP = 000)}
 Arithmetic register functions instructions
@@ -31,7 +30,7 @@ Immediate functions using constants.
 
 \begin{itemize}
 \item {\tt ctrl} must be set to 0 in order to be executed on the SIMD node.
-\item {\tt mask} is set to 1 for selectively enabling the node when executing
+\item {\tt mask} must be set to 1 for selectively enabling the node when executing
   conditional branches.
 \item {\tt op} the instruction opcode.
 \item {\tt rs} write data register address.
@@ -50,7 +49,7 @@ register.
 
 \begin{itemize}
 \item {\tt ctrl} must be set to 0 in order to be executed on the SIMD node.
-\item {\tt mask} set to 1 for selectively enabling the node when executing
+\item {\tt mask} must be set to 1 for selectively enabling the node when executing
   conditional branches.
 \item {\tt op} the instruction opcode.
 \item {\tt rs} new source data register address.
@@ -70,7 +69,7 @@ Send, receive and forward data from and to neighbor nodes in all directions
 
 \begin{itemize}
 \item {\tt ctrl} must be set to 0 in order to be executed on the SIMD node.
-\item {\tt mask} set to 1 for selectively enabling the node when executing
+\item {\tt mask} must be set to 1 for selectively enabling the node when executing
   conditional branches.
 \item {\tt op} the instruction opcode.
 \item {\tt n} north data write or read register address.
@@ -82,11 +81,11 @@ Send, receive and forward data from and to neighbor nodes in all directions
 
 \input{fig/fpga/m-instructions}
 
-In Table \ref{tab:m-instructions} we see the different \TODO{Something's amiss
-  here} \ldots. \thx{store \& forward} forwards according to the 4-way data
-exchange patterns (N $\rightarrow$ E, E $\rightarrow$ S, S $\rightarrow$ W, W
-$\rightarrow$ N).
+In Table \ref{tab:m-instructions} we see the different registers will be sent and
+where they are ultimately stored when received. \thx{store \& forward} 
+forwards according to the 4-way data exchange patterns (N $\rightarrow$ E, E 
+$\rightarrow$ S, S $\rightarrow$ W, W $\rightarrow$ N).
 
-M-instructions must be issued with mask bit set to 0 in order to get data from
+M instructions must be issued with mask bit set to 0 in order to get data from
 all the nodes. Otherwise, one will only get proper data from the ones executing
-within a conditional branch. \CHECK{Should this be in an appendix, or?}
+within a conditional branch.

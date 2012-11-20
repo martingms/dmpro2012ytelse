@@ -9,6 +9,7 @@
 #include "timer.h"
 #include "sram.h"
 #include "bus.h"
+#include "gpio.h"
 #include "sd_mmc_spi.h"
 #include "mmc.h"
 
@@ -31,16 +32,20 @@
 
 #define ROOT_DIRECTORY "A:/"
 
-//char selected_data_unit_path[DEFAULT_STRING_MAX_LENGTH] = "A:/";
+#define FPGA_PROGRAM_SHOW_PICTURE	"A:/show_video.bin"
 
 enum data_type current_type;
 int current_state;
 int menu_item_selected;
 int menu_size;
-char selected_program[DEFAULT_STRING_MAX_LENGTH] = "A:/";
+char selected_program[DEFAULT_STRING_MAX_LENGTH];
 
 volatile bool busy = TRUE;
 volatile bool reset;
+
+// any button click during movie playback should resend program + data
+static volatile int send_in_progress = FALSE;
+static volatile int restart_send = FALSE;
 
 volatile U8 v_button;
 
@@ -51,17 +56,27 @@ void program_select_start(void) {
 
 	button_reg_listener(&button_push); 	// Set button listener
 	while (TRUE) {
+		LED_Off(0xff);
+		fpga_send_program(FPGA_PROGRAM_SHOW_PICTURE);
 		load_menu(STATE_SELECT_PROGRAM); 	// Load menu
 		busy = FALSE; 						// Start listening on buttons
 		reset = FALSE;
 		while (reset == FALSE){				// Wait for reset
 			if (v_button == 0) continue;
 
-			if ((v_button == UP_BUTTON) && (menu_item_selected > 0)) {
-				screen_move_cursor(-1);
+			if (v_button == UP_BUTTON) {
+				if (menu_item_selected == 0) {
+					screen_move_cursor(menu_size - 1);
+				} else {
+					screen_move_cursor(-1);
+				}
 			}
-			else if ((v_button == DOWN_BUTTON) && (menu_item_selected + 1 < menu_size)) {
-				screen_move_cursor(1);
+			else if (v_button == DOWN_BUTTON) {
+				if (menu_item_selected == (menu_size - 1)) {
+					screen_move_cursor(1 - menu_size);
+				} else {
+					screen_move_cursor(1);
+				}
 			}
 			else if (v_button == ENTER_BUTTON) {
 				next_state();
@@ -69,7 +84,6 @@ void program_select_start(void) {
 			v_button = 0;
 
 		}
-		screen_display_error_message(" resets...");
 	}
 }
 
@@ -77,9 +91,18 @@ void program_select_start(void) {
  * Button interrupt routine
  */
 void button_push(U8 button) {
-	v_button = button;
-	LED_Toggle(LED1);
-	return;
+	static double last_btn_click_time = -1000;
+
+	// to prevent "double clicks"
+	if (timer_get_ms() - last_btn_click_time > 200) {
+		v_button = button;
+		LED_Toggle(LED1);
+
+		if (send_in_progress/* && button == ENTER_BUTTON*/) {
+			restart_send = TRUE;
+		}
+	}
+	last_btn_click_time = timer_get_ms();
 }
 
 void set_file_type(enum data_type type);
@@ -128,7 +151,7 @@ void send_selected_file(void) {
  * Go to next state of program
  */
 void next_state(void) {
-	int rc;
+	//int rc;
 	char *file;
 
 	// Load script and go to the select data screen
@@ -136,20 +159,14 @@ void next_state(void) {
 		//set_file_type(PROGRAM);
 		fb_iterator_seek(menu_item_selected);	// Seeks to selected item
 		file = fb_iterator_next();
-		fb_iterator_terminate();
+		//fb_iterator_terminate();
+		selected_program[0] = 'A';
+		selected_program[1] = ':';
+		selected_program[2] = '/';
+		selected_program[3] = '\0';
 		strcat(selected_program, file);
-		/*char file_full[strlen(file)+4];
-		file_full[0] = 'A';
-		file_full[1] = ':';
-		file_full[2] = '/';
-		file_full[3] = '\0';
-		rc = load_script(strcpy(file_full, file)); // Tries to load the program script
-		if (!rc) {
-			//screen_display_error_messagef("Lines in selected script\n1. %s\n2. %s\n3. %d\n", selected_script.description, selected_script.fpga_bin_path, selected_script.transfer_delay);
-			*/load_menu(STATE_SELECT_DATA);/*
-		} else {
-			screen_display_error_messagef("Could not load script\n%s\n", file_full);
-		}*/
+		load_menu(STATE_SELECT_DATA);
+
 	}
 
 	// Load data, run FPGA and reset
@@ -163,17 +180,32 @@ void next_state(void) {
 		file_full[1] = ':';
 		file_full[2] = '/';
 		file_full[3] = '\0';
-
-		strcpy(file_full, file);
+		strcat(file_full, file);
 
 		data_blk_src_t data_info;
 		if (data_file_parse(file_full, &data_info) == 0) {
-			run_fpga_program_from_sd(&data_info);
+			while (1) {
+				do {
+					restart_send = FALSE;
+					run_fpga_program_from_sd(&data_info);
+				} while (restart_send);
+
+				// don't restart if one frame
+				if (data_info.frame_count == 1) {
+
+					// because we're in state stop if frame count == 1
+					fpga_set_state(FPGA_STATE_RUN);
+
+					// wait for user to restart
+					send_in_progress = TRUE; // need to be in a state where restart_send is changed
+					while (!restart_send);
+					send_in_progress = FALSE;
+				}
+			}
+
 		} else {
 			screen_display_error_messagef("Could not parse data file %s", file_full);
-			//run_fpga_program_from_file();
 		}
-		fb_iterator_terminate();
 		reset = TRUE;
 	}
 }
@@ -223,23 +255,17 @@ const char *osd(int i, int num_frames) {
 	static double last_time = 0;
 	static double total_time = 0;
 
-	static char txt[80];
+//	static char txt[80];
+	static char txt[5];
 
 	str2img_osd_reset();
-	str2img_osd_set_cursor(0, 17);
+	str2img_osd_set_cursor(0, 33);
+	//str2img_osd_set_cursor(0, 36);
 	double time = timer_get_ms();
-	sprintf(txt, "FPS %2.2f [ETA %ds]\n", 1000.0 / (time - last_time),
-			(int)((total_time / i) * (num_frames - i) / 1000));
-
+//	sprintf(txt, "FPS %2.2f [ETA %ds]\n", 1000.0 / (time - last_time),
+//			(int)((total_time / i) * (num_frames - i) / 1000));
+	sprintf(txt, "%2.1f", 1000.0 / (time - last_time));
 	str2img_osd_write(txt);
-	str2img_osd_putc('[');
-
-	int foo = 38 * i / num_frames;
-	int ctr;
-	for (ctr = 0; ctr < 38; ctr++) {
-		str2img_osd_putc(ctr < foo ? '|' : '-');
-	}
-	str2img_osd_putc(']');
 
 	total_time += time - last_time;
 	last_time = time;
@@ -260,11 +286,14 @@ void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 	// stop listening on buttons
 	busy = TRUE;
 
+	// tell button listener that we're busy
+	send_in_progress = TRUE;
+
 	// where to put OSD
 	str2img_osd_init(FRAME_BUFFER);
 
 	// send the program
-	fpga_send_program(selected_program);//selected_script.fpga_bin_path);
+	fpga_send_program(selected_program);
 
 	unsigned int blocks_per_frame = 150; // 320*240/512
 	unsigned int first_block = data_info->block_addr; // start reads here
@@ -273,6 +302,11 @@ void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 
 	int i;
 	for (i=0; i < num_frames; i++) {
+
+		// user clicked a button during playback
+		if (restart_send) {
+			break;
+		}
 
 		// run if the FPGA has data to run on
 		fpga_set_state(i > 0 ? FPGA_STATE_RUN : FPGA_STATE_STOP);
@@ -290,6 +324,10 @@ void run_fpga_program_from_sd(data_blk_src_t *data_info) {
 
 		LED_Toggle(LED2);
 	}
+
+	// tell button listener that we're no longer busy
+	send_in_progress = FALSE;
+
 	fpga_set_state(FPGA_STATE_STOP);
 	LED_On(LED0|LED1|LED2|LED3|LED4|LED5|LED6|LED7);
 }
