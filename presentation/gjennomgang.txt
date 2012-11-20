@@ -14,22 +14,22 @@ LENA - implementert på fpga
 
 Bildets vei gjennom systemet:
 
-Program / data:
-	SCU - Sd kort til AVR
-	SCU - BUffret i minne
-	SCU - Ut på buss
+	Program / data:
+		SCU - Sd kort til AVR
+		SCU - BUffret i minne
+		SCU - Ut på buss
 
 
-LENA program
-	Ta imot program 
-	Ta imot data
-	Kontrollkjerne / DMA
-	Behandling av data i SIMD noder
-	Veien til VGA
-	Ut VGA
-
-VGA:
-	Selvimplementert VGA
+	LENA program
+		Ta imot program 
+		Ta imot data
+		Kontrollkjerne / DMA
+		Behandling av data i SIMD noder
+		Veien til VGA
+		Ut VGA
+	
+	VGA:
+		Selvimplementert VGA
 
 Resultat:
  	FPS
