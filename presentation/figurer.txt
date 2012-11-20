@@ -1,0 +1,16 @@
+Introduksjon:
+Bilde av kortet (hele med tittel)*
+Oversiktfigur over systemet*
+
+SCU:
+Bilde av kortet med AVR*
+
+LENA:
+SIMD nodes
+
+VGA:
+bilde av VGA-løsningen*
+
+Resultat:
+Grafer
+
