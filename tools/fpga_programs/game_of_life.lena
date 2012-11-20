@@ -25,9 +25,13 @@ pixel_loop:
     ctrl lw R12 R10
     ctrl nop
 
-    ctrl beq after_add_vdata
-    ctrl eqi ZERO R12 0
+    ctrl beq vdata_to_white
+    ctrl eqi ZERO R12 1
     ctrl nop
+    ctrl addi R12 ZERO 0
+    ctrl jump after_add_vdata
+
+vdata_to_white:
     ctrl addi R12 ZERO 255
 
 after_add_vdata:
