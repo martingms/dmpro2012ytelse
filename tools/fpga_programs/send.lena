@@ -22,9 +22,13 @@ pixel_loop:
     ctrl lw R12 R10
     ctrl nop
 
-    ctrl beq after_add_vdata
-    ctrl eqi ZERO R12 0
+    ctrl beq vdata_to_white
+    ctrl eqi ZERO R12 1
     ctrl nop
+    ctrl addi R12 ZERO 0
+    ctrl jump after_add_vdata
+
+vdata_to_white:
     ctrl addi R12 ZERO 255
 
 after_add_vdata:
@@ -107,16 +111,16 @@ dma_row_loop:
 
 
 
-    #node send R1 R1 R1 R1
-    #node fwrd R2 R3 R4 R5
-    #node store R6 R7 R8 R9 # N S E W
-    ctrl nop
-    ctrl nop
-    ctrl nop
     node send R1 R1 R1 R1
-    node store R2 R3 R4 R5
-    node send R5 R4 R2 R3
-    node store R6 R7 R8 R9
+    node fwrd R2 R3 R4 R5
+    node store R6 R7 R8 R9 # N S E W
+    ctrl nop
+    ctrl nop
+    ctrl nop
+    #node send R1 R1 R1 R1
+    #node store R2 R3 R4 R5
+    #node send R5 R4 R2 R3
+    #node store R6 R7 R8 R9
 
     node add R1 R6 ZERO
 
