@@ -23,6 +23,7 @@ vgacopy:
 
 pixel_loop:
     ctrl lw R12 R10
+    ctrl lw R12 R10
     ctrl nop
 
     ctrl beq vdata_to_white
@@ -122,6 +123,12 @@ dma_row_loop:
     node mask addi R1 ZERO 0
     node add STATE ZERO ZERO
 
+    ctrl nop
+    ctrl nop
+    ctrl nop
+
+    ctrl nop
+    ctrl nop
     ctrl nop
     ctrl nop
     ctrl nop
