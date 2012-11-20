@@ -93,9 +93,8 @@ dma_row_loop:
     ctrl add DMA DMA R2
     ctrl subi DMA DMA 4
     ctrl dma set_write_base_addr    # write base addr = 19328
-    ctrl addi DMA DMA 4
+    ctrl addi DMA DMA 6
     ctrl sub DMA DMA R2
-    ctrl addi DMA DMA 2
     ctrl nop
 
     node swap R1 R1
@@ -123,38 +122,6 @@ dma_row_loop:
     node mask addi R1 ZERO 0
     node add STATE ZERO ZERO
 
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-    ctrl nop
-
-    ctrl nop
-    ctrl nop
     ctrl nop
     ctrl nop
     ctrl nop
