@@ -1,0 +1,53 @@
+Introduksjon:
+
+Introduserer gruppa
+Presenter oppgaven
+Vår tolkning av oppgavne (målene våre)
+Presentasjonsflyt presenteres
+
+Oversikt over systemet:
+
+Snakk om de komponentene vi har, litt om minner hvorfor vi har så mange, hvordan vi plasserte dem i forhold til hva vi skal snakke om, I/O-redundans.
+
+SCU - implementert på en avr
+LENA - implementert på fpga
+
+Bildets vei gjennom systemet:
+
+Program / data:
+	SCU - Sd kort til AVR
+	SCU - BUffret i minne
+	SCU - Ut på buss
+
+
+LENA program
+	Ta imot program 
+	Ta imot data
+	Kontrollkjerne / DMA
+	Behandling av data i SIMD noder
+	Veien til VGA
+	Ut VGA
+
+VGA:
+	Selvimplementert VGA
+
+Resultat:
+ 	FPS
+	Flyt
+	Program
+	SIMD-størrelser
+
+DEMO/DEMO/DEMO:
+	Presentere ett filter om gangen
+	Vise ett stillbilde med og uten filter (gjerne samtidig)
+	Presentere løsningen for hvordan vi har gjort det (algoritme / SIMD node)
+	Kjøre video (filtrert og ufiltrert)
+	Game of life
+
+	Notater:
+		Forskjellig video til hvert filter (big buck bunny til invers, gangam blur / gloss / edge)
+			
+Spørsmål!?
+
+	
+	
