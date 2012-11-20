@@ -1,0 +1,17 @@
+PROMGEN: Xilinx Prom Generator M.81d
+Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
+
+promgen -w -p mcs -c FF -o C:\Users\martigam\dmpro\dmpro2012ytelse\fpga\//Untitled -x xcf04s -u 00000000 C:/Users/martigam/Documents/bitfiles/toplevel_2x3_4_25MHz.bit 
+
+PROM C:\Users\martigam\dmpro\dmpro2012ytelse\fpga\Untitled.prm map: Tue Nov 20 14:34:39 2012
+
+Calculating PROM checksum with fill value ff
+
+Format        Mcs86 (32-bit)
+Size          512K
+PROM start    0000:0000
+PROM end      0007:ffff
+PROM checksum 04331cae
+
+        Addr1        Addr2                     Date File(s)
+    0000:0000    0004:547f     Nov 20 14:01:23 2012 C:/Users/martigam/Documents/bitfiles/toplevel_2x3_4_25MHz.bit

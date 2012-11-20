@@ -1,11 +1,9 @@
 #	-- 50 MHz oscillator
-
 #	clk : in std_logic;
 NET "clk" LOC = P80;
 
 
 #	-- Program RAM
-
 #	prog_ram_addr : out std_logic_vector(15 downto 0);
 NET "prog_ram_addr[15]" LOC = P134;
 NET "prog_ram_addr[14]" LOC = P133;
@@ -55,7 +53,6 @@ NET "prog_ram_write" LOC = P153;
 
 
 #	-- Data RAM
-
 #	data_ram_addr : out std_logic_vector(20 downto 0);
 NET "data_ram_addr[20]" LOC = P50;
 NET "data_ram_addr[19]" LOC = P35;
@@ -94,7 +91,6 @@ NET "data_ram_write" LOC = P55;
 
 
 #	-- VGA RAM
-
 #	vga_ram_addr : out std_logic_vector(18 downto 0);
 NET "vga_ram_addr[18]" LOC = P94;
 NET "vga_ram_addr[17]" LOC = P96;
@@ -131,7 +127,6 @@ NET "vga_ram_write" LOC = P115;
 
 
 #	-- VGA signals
-
 #	vga_h_sync : out std_logic;
 NET "vga_h_sync" LOC = P76;
 
@@ -152,7 +147,6 @@ NET "vga_value[0]" LOC = P75;
 
 
 #	-- AVR data transfer
-
 #	avr_data_in : in std_logic_vector(23 downto 0);		-- FPGA_IN_[23-0]
 NET "avr_data_in[23]" LOC = P169;
 NET "avr_data_in[22]" LOC = P118;
@@ -191,13 +185,11 @@ NET "avr_data_in_ready" LOC = P174;
 #NET "avr_data_out[2]" LOC = P202;
 #NET "avr_data_out[1]" LOC = P200;
 #NET "avr_data_out[0]" LOC = P199;
-
 #	avr_interrupt : out std_logic;							-- FPGA_IO_CTRL
 NET "avr_interrupt" LOC = P5;
 
 
 #	-- AVR state control
-
 #	state : in std_logic_vector(2 downto 0);				-- FPGA_IN_[28-26]
 NET "state[2]" LOC = P194;
 NET "state[1]" LOC = P184;
@@ -205,7 +197,34 @@ NET "state[0]" LOC = P183;
 #NET "state[2]" LOC = P81;
 #NET "state[1]" LOC = P84;
 #NET "state[0]" LOC = P86;
-
 #	state_ready : in std_logic);								-- FPGA_IN_25
 #NET "state_ready" LOC = P175;
 #NET "state_ready" CLOCK_DEDICATED_ROUTE = FALSE;
+#Created by Constraints Editor (xc3s500e-pq208-4) - 2012/11/20
+INST "avr_data_in<0>" TNM = avr;
+INST "avr_data_in<1>" TNM = avr;
+INST "avr_data_in<2>" TNM = avr;
+INST "avr_data_in<3>" TNM = avr;
+INST "avr_data_in<4>" TNM = avr;
+INST "avr_data_in<5>" TNM = avr;
+INST "avr_data_in<6>" TNM = avr;
+INST "avr_data_in<7>" TNM = avr;
+INST "avr_data_in<8>" TNM = avr;
+INST "avr_data_in<9>" TNM = avr;
+INST "avr_data_in<10>" TNM = avr;
+INST "avr_data_in<11>" TNM = avr;
+INST "avr_data_in<12>" TNM = avr;
+INST "avr_data_in<13>" TNM = avr;
+INST "avr_data_in<14>" TNM = avr;
+INST "avr_data_in<15>" TNM = avr;
+INST "avr_data_in<16>" TNM = avr;
+INST "avr_data_in<17>" TNM = avr;
+INST "avr_data_in<18>" TNM = avr;
+INST "avr_data_in<19>" TNM = avr;
+INST "avr_data_in<20>" TNM = avr;
+INST "avr_data_in<21>" TNM = avr;
+INST "avr_data_in<22>" TNM = avr;
+INST "avr_data_in<23>" TNM = avr;
+#Created by Constraints Editor (xc3s500e-pq208-4) - 2012/11/20
+#Created by Constraints Editor (xc3s500e-pq208-4) - 2012/11/20
+TIMEGRP "avr" OFFSET = IN 1 ps VALID 100 ns BEFORE "avr_data_in_ready";
