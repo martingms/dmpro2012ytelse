@@ -110,12 +110,13 @@ dma_row_loop:
     node add R10 R10 R8
     node add R10 R10 R9
 
-    node add R1 ZERO ZERO
     node eqi R11 R10 3
     node add R10 R10 R1
     node eqi R12 R10 3
     node or STATE R11 R12
     node mask addi R1 ZERO 1 # branch taken
+    node eq STATE STATE ZERO
+    node mask addi R1 ZERO 0
     node add STATE ZERO ZERO
 
     ctrl nop
